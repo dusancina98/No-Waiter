@@ -2,6 +2,7 @@ import React from "react";
 import CreateRestaurantForm from "../components/CreateRestaurantForm";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
+import ObjectContextProvider from "../contexts/ObjectContext";
 
 const HomePage = () => {
 	return (
@@ -11,7 +12,9 @@ const HomePage = () => {
 				<div className="container-fluid page-body-wrapper">
 					<Header />
 					<div className="main-panel">
-						<CreateRestaurantForm />
+						<ObjectContextProvider>
+							<CreateRestaurantForm />
+						</ObjectContextProvider>
 					</div>
 				</div>
 			</div>

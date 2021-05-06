@@ -19,7 +19,7 @@ public class ObjectServiceImpl implements ObjectService {
 
     @Override
     public UUID Create(ObjectDTO entity) {
-        Object object = new Object(entity.Name, new Address("Nova"), new Contact(entity.Email, entity.PhoneNumber), "ccc");
+        Object object = new Object(entity.Name, new Address("Nova"), new Contact(entity.PhoneNumber, entity.Email), "ccc");
         objectRepository.save(object);
 
         return object.getId();
