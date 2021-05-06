@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const SideBar = () => {
 	return (
 		<nav className="sidebar sidebar-offcanvas" id="sidebar">
@@ -24,10 +26,25 @@ const SideBar = () => {
 					</a>
 				</li>
 				<li className="nav-item">
-					<a className="nav-link" href="index.html">
+					<a className="nav-link" data-toggle="collapse" href="#object-menu" aria-expanded="false" aria-controls="ui-basic">
 						<i className="mdi mdi-home menu-icon"></i>
-						<span className="menu-title">Dashboard</span>
+						<span className="menu-title">Objects</span>
+						<i className="menu-arrow"></i>
 					</a>
+					<div className="collapse" id="object-menu">
+						<ul className="nav flex-column sub-menu">
+							<li className="nav-item">
+								<Link className="nav-link" to="/objects">
+									All Objects
+								</Link>
+							</li>
+							<li className="nav-item">
+								<Link className="nav-link" to="/add-object">
+									Add Object
+								</Link>
+							</li>
+						</ul>
+					</div>
 				</li>
 				<li className="nav-item">
 					<a className="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">

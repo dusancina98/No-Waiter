@@ -28,6 +28,7 @@ public class Api {
     }
 
     @GetMapping
+    @CrossOrigin
     public ResponseEntity<?> FindAllObjects() {
 
         try {

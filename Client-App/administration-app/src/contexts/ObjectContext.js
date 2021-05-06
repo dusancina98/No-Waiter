@@ -10,6 +10,9 @@ const ObjectContextProvider = (props) => {
 			errorMessage: "",
 			showSuccessMessage: false,
 		},
+		objects: [],
+		showError: false,
+		errorMessage: "",
 	});
 
 	return <ObjectContext.Provider value={{ objectState, dispatch }}>{props.children}</ObjectContext.Provider>;
