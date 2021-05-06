@@ -18,7 +18,7 @@ const Header = () => {
 							<h6 className="p-3 mb-0">Notifications</h6>
 							<a className="dropdown-item preview-item" href="/#">
 								<div className="preview-thumbnail">
-									<img src="assets/images/faces/face4.jpg" alt="" className="profile-pic" />
+									<img src="assets/images/faces/face1.jpg" alt="" className="profile-pic" />
 								</div>
 								<div className="preview-item-content">
 									<p className="mb-0">
