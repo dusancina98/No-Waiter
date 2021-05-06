@@ -1,10 +1,12 @@
 const ObjectItem = ({ imagePath, name }) => {
 	return (
-		<div className="col-md-3 grid-margin stretch-card">
+		<div className="col-md-4 col-lg-3 grid-margin stretch-card">
 			<div className="card">
 				<div className="card-body">
 					<img src={imagePath} alt="restaurant" className="img-fluid" />
-					<h1 className="display-4 mt-4">{name}</h1>
+					<p className="display-4 mt-4" style={{ fontSize: "1.5rem" }}>
+						{name}
+					</p>
 				</div>
 			</div>
 		</div>
