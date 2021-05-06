@@ -15,11 +15,12 @@ public class Api {
     private ObjectService objectService;
 
     @PostMapping()
+    @CrossOrigin
     public ResponseEntity<?> CreateObject(@RequestBody ObjectDTO objectDTO) {
 
         try {
             objectService.Create(objectDTO);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.CREATED);
 
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -27,6 +28,7 @@ public class Api {
     }
 
     @GetMapping
+    @CrossOrigin
     public ResponseEntity<?> FindAllObjects() {
 
         try {
