@@ -8,11 +8,17 @@ public class ObjectDTO {
 
     public String PhoneNumber;
 
+    public String ImagePath;
+
+    public String Address;
+
     public ObjectDTO() { }
 
-    public ObjectDTO(String name, String email, String phoneNumber) {
+    public ObjectDTO(String name, String email, String phoneNumber, String imagePath, String address) {
         Name = name;
         Email = email;
         PhoneNumber = phoneNumber;
+        ImagePath = imagePath;
+        Address = address;
     }
 }

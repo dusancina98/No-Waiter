@@ -1,13 +1,15 @@
 package NoWaiter.ObjectService.services.contracts;
 
-import NoWaiter.ObjectService.entities.Object;
+import java.util.UUID;
+
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
-
-import java.util.UUID;
 
 public interface ObjectService {
 
     UUID Create(ObjectDTO entity);
+
+    IdentifiableDTO<ObjectDTO> FindById(UUID id);
+
     Iterable<IdentifiableDTO<ObjectDTO>> FindAll();
 }
