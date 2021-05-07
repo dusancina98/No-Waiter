@@ -14,6 +14,7 @@ const ObjectAdminTable = () => {
 									<th>Email</th>
 									<th>Name</th>
 									<th>Surname</th>
+									<th>Address</th>
 									<th>Object name</th>
 								</tr>
 							</thead>

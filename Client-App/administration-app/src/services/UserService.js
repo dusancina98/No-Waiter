@@ -42,6 +42,9 @@ function validateObjectAdmin(objectAdmin, dispatch) {
 	} else if (objectAdmin.Surname.length < 2) {
 		dispatch(validatioFailure("Admin surname must contain minimum two letters"));
 		return false;
+	} else if (objectAdmin.Address.length < 5) {
+		dispatch(validatioFailure("Admin address must contain minimum five letters"));
+		return false;
 	} else if (objectAdmin.ObjectId === "") {
 		dispatch(validatioFailure("Restaurant must be selected"));
 		return false;

@@ -13,11 +13,12 @@ const CreateObjectAdminForm = () => {
 	const [surname, setSurname] = useState("");
 	const [objectId, setObjectId] = useState("");
 	const [objectName, setObjectName] = useState("");
+	const [address, setAddress] = useState("");
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		let objectAdmin = { Email: email, Name: name, Surname: surname, ObjectId: objectId, ObjectName: objectName };
+		let objectAdmin = { Email: email, Name: name, Surname: surname, Address: address, ObjectId: objectId, ObjectName: objectName };
 		userService.createObjectAdmin(objectAdmin, dispatch);
 	};
 
@@ -43,6 +44,10 @@ const CreateObjectAdminForm = () => {
 				<div className="form-group">
 					<label for="surname">Surname</label>
 					<input type="text" required className="form-control" id="surname" placeholder="Surname" onChange={(e) => setSurname(e.target.value)} />
+				</div>
+				<div className="form-group">
+					<label for="address">Address</label>
+					<input type="text" required className="form-control" id="address" placeholder="Address" onChange={(e) => setAddress(e.target.value)} />
 				</div>
 				<div className="form-group">
 					<label for="name">Select restaurant</label>
