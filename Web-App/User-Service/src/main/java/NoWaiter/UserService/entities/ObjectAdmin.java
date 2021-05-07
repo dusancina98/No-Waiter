@@ -9,20 +9,24 @@ public class ObjectAdmin extends User{
     private UUID objectId;
     
     private String objectName;
+    
+    private String address;
 
     public ObjectAdmin() {
     }
 
-    public ObjectAdmin(UUID id, String email, String password, String name, String surname, UUID objectId, String objectName) {
+    public ObjectAdmin(UUID id, String email, String password, String name, String surname, UUID objectId, String objectName, String address) {
         super(id, email, password, name, surname);
         this.objectId = objectId;
         this.objectName = objectName;
+        this.address = address;
     }
 
-    public ObjectAdmin(String email, String password, String name, String surname, UUID objectId, String objectName) {
+    public ObjectAdmin(String email, String password, String name, String surname, UUID objectId, String objectName, String address) {
         super(email, password, name, surname);
         this.objectId = objectId;
         this.objectName = objectName;
+        this.address = address;
     }
 
     public UUID getObjectId() {
@@ -39,5 +43,13 @@ public class ObjectAdmin extends User{
 
 	public void setObjectName(String objectName) {
 		this.objectName = objectName;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 }
