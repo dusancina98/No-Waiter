@@ -1,10 +1,9 @@
 import React from "react";
-import CreateRestaurantForm from "../components/CreateRestaurantForm";
 import Header from "../components/Header";
+import ObjectAdminTable from "../components/ObjectAdminTable";
 import SideBar from "../components/SideBar";
-import ObjectContextProvider from "../contexts/ObjectContext";
 
-const AddObjectPage = () => {
+const ListObjectAdminsPage = () => {
 	return (
 		<React.Fragment>
 			<div className="container-scroller">
@@ -12,9 +11,7 @@ const AddObjectPage = () => {
 				<div className="container-fluid page-body-wrapper">
 					<Header />
 					<div className="main-panel">
-						<ObjectContextProvider>
-							<CreateRestaurantForm />
-						</ObjectContextProvider>
+						<ObjectAdminTable />
 					</div>
 				</div>
 			</div>
@@ -22,4 +19,4 @@ const AddObjectPage = () => {
 	);
 };
 
-export default AddObjectPage;
+export default ListObjectAdminsPage;

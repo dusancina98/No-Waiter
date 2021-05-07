@@ -28,13 +28,13 @@ public class Api {
     @Autowired
     private ObjectClient objectClient;
 
-    @PostMapping("/restaurant-admin")
+    @PostMapping("/object-admin")
     @CrossOrigin
     public ResponseEntity<?> CreateRestaurantAdmin(@RequestBody ObjectAdminDTO objectAdminDTO) {
         try {
         	
             objectClient.checkObject(objectAdminDTO.ObjectId);
-            UUID adminId = userService.createRestaurantAdmin(objectAdminDTO);
+            UUID adminId = userService.CreateRestaurantAdmin(objectAdminDTO);
             objectClient.addAdminToObject(new AddAdminDTO(objectAdminDTO.ObjectId, adminId));
             
             return new ResponseEntity<>(adminId, HttpStatus.CREATED);
@@ -43,6 +43,17 @@ public class Api {
                 return new ResponseEntity<>("Invalid restaurant id: " + objectAdminDTO.ObjectId, HttpStatus.BAD_REQUEST);
         	
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @GetMapping("/object-admin")
+    @CrossOrigin
+    public ResponseEntity<?> FindAllObjectAdmins() {
+        try {
+            return new ResponseEntity<>(userService.FindAllObjectAdmins(), HttpStatus.OK);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

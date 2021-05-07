@@ -1,11 +1,13 @@
 package NoWaiter.UserService.services.contracts;
 
-import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
-import NoWaiter.UserService.services.contracts.dto.UserDTO;
-
 import java.util.UUID;
+
+import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
+import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 
 public interface UserService {
 
-    UUID createRestaurantAdmin(ObjectAdminDTO entity);
+    UUID CreateRestaurantAdmin(ObjectAdminDTO entity);
+    
+    Iterable<IdentifiableDTO<ObjectAdminDTO>> FindAllObjectAdmins();
 }

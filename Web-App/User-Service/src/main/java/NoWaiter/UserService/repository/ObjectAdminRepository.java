@@ -5,5 +5,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.UUID;
 
-public interface RestaurantAdminRepository extends PagingAndSortingRepository<ObjectAdmin, UUID> {
+public interface ObjectAdminRepository extends PagingAndSortingRepository<ObjectAdmin, UUID> {
 }

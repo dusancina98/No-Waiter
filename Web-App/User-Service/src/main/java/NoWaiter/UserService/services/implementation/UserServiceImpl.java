@@ -1,8 +1,9 @@
 package NoWaiter.UserService.services.implementation;
 
 import NoWaiter.UserService.entities.ObjectAdmin;
-import NoWaiter.UserService.repository.RestaurantAdminRepository;
+import NoWaiter.UserService.repository.ObjectAdminRepository;
 import NoWaiter.UserService.services.contracts.UserService;
+import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.implementation.util.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +15,17 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private RestaurantAdminRepository restaurantAdminRepository;
+    private ObjectAdminRepository objectAdminRepository;
 
     @Override
-    public UUID createRestaurantAdmin(ObjectAdminDTO entity) {
+    public UUID CreateRestaurantAdmin(ObjectAdminDTO entity) {
         ObjectAdmin restaurantAdmin = UserMapper.MapRestaurantAdminDTOToRestaurantAdmin(entity);
-        restaurantAdminRepository.save(restaurantAdmin);
+        objectAdminRepository.save(restaurantAdmin);
         return restaurantAdmin.getId();
     }
+
+	@Override
+	public Iterable<IdentifiableDTO<ObjectAdminDTO>> FindAllObjectAdmins() {
+		return UserMapper.MapObjectAdminCollectionToIdentifiableObjectAdminDTOCollection(objectAdminRepository.findAll());
+	}
 }
