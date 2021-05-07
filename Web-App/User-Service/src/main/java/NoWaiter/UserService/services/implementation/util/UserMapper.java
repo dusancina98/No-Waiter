@@ -1,14 +1,14 @@
 package NoWaiter.UserService.services.implementation.util;
 
-import NoWaiter.UserService.entities.RestaurantAdmin;
-import NoWaiter.UserService.services.contracts.dto.RestaurantAdminDTO;
+import NoWaiter.UserService.entities.ObjectAdmin;
+import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 
 public class UserMapper {
 
-    public static RestaurantAdmin MapRestaurantAdminDTOToRestaurantAdmin(RestaurantAdminDTO restaurantAdminDTO){
+    public static ObjectAdmin MapRestaurantAdminDTOToRestaurantAdmin(ObjectAdminDTO restaurantAdminDTO){
         if (restaurantAdminDTO == null) throw new IllegalArgumentException();
 
-        return new RestaurantAdmin(restaurantAdminDTO.Email, "", restaurantAdminDTO.Name, restaurantAdminDTO.Surname, restaurantAdminDTO.RestaurantId);
+        return new ObjectAdmin(restaurantAdminDTO.Email, "", restaurantAdminDTO.Name, restaurantAdminDTO.Surname, restaurantAdminDTO.ObjectId);
     }
 
 }

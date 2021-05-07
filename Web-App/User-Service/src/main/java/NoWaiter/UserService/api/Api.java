@@ -1,5 +1,7 @@
 package NoWaiter.UserService.api;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import NoWaiter.UserService.intercomm.ObjectClient;
 import NoWaiter.UserService.services.contracts.UserService;
-import NoWaiter.UserService.services.contracts.dto.RestaurantAdminDTO;
+import NoWaiter.UserService.services.contracts.dto.AddAdminDTO;
+import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import feign.FeignException;
 
 @RestController
@@ -27,20 +30,18 @@ public class Api {
 
     @PostMapping("/restaurant-admin")
     @CrossOrigin
-    public ResponseEntity<?> CreateRestaurantAdmin(@RequestBody RestaurantAdminDTO restaurantAdminDTO) {
-    	System.out.println("USAOOOOOO\n\n\n\n USAOOOOOO");
+    public ResponseEntity<?> CreateRestaurantAdmin(@RequestBody ObjectAdminDTO objectAdminDTO) {
         try {
-        	System.out.println("Rest " + restaurantAdminDTO.RestaurantId);
-            if(!objectClient.checkObject(restaurantAdminDTO.RestaurantId))
-                return new ResponseEntity<>("Invalid restaurant id",HttpStatus.BAD_REQUEST);
-
-            userService.createRestaurantAdmin(restaurantAdminDTO);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-
+        	
+            objectClient.checkObject(objectAdminDTO.ObjectId);
+            UUID adminId = userService.createRestaurantAdmin(objectAdminDTO);
+            objectClient.addAdminToObject(new AddAdminDTO(objectAdminDTO.ObjectId, adminId));
+            
+            return new ResponseEntity<>(adminId, HttpStatus.CREATED);
         } catch (FeignException e) {
-        	System.out.println(e.getMessage());
-        	System.out.println(e.status());
-
+        	if(e.status() == HttpStatus.NOT_FOUND.value())
+                return new ResponseEntity<>("Invalid restaurant id: " + objectAdminDTO.ObjectId, HttpStatus.BAD_REQUEST);
+        	
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
         	e.printStackTrace();

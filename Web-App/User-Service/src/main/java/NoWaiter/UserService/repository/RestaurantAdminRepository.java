@@ -1,9 +1,9 @@
 package NoWaiter.UserService.repository;
 
-import NoWaiter.UserService.entities.RestaurantAdmin;
+import NoWaiter.UserService.entities.ObjectAdmin;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.UUID;
 
-public interface RestaurantAdminRepository extends PagingAndSortingRepository<RestaurantAdmin, UUID> {
+public interface RestaurantAdminRepository extends PagingAndSortingRepository<ObjectAdmin, UUID> {
 }

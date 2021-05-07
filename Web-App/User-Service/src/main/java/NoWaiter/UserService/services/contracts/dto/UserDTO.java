@@ -1,9 +1,5 @@
 package NoWaiter.UserService.services.contracts.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.Column;
-
 public class UserDTO {
 
     public String Email;

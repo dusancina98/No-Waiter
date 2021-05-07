@@ -16,8 +16,4 @@ public class Address {
     public String getAddress() {
         return address;
     }
-
-    private void setAddress(String address) {
-        this.address = address;
-    }
 }
