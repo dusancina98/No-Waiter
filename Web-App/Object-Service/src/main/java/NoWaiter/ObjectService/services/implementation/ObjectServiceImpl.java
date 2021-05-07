@@ -1,46 +1,53 @@
 package NoWaiter.ObjectService.services.implementation;
 
-import NoWaiter.ObjectService.entities.Address;
-import NoWaiter.ObjectService.entities.Contact;
-import NoWaiter.ObjectService.entities.Object;
-import NoWaiter.ObjectService.repository.ObjectRepository;
-import NoWaiter.ObjectService.services.contracts.ObjectService;
-import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
-import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import NoWaiter.ObjectService.entities.Object;
+import NoWaiter.ObjectService.entities.ObjectAdmin;
+import NoWaiter.ObjectService.repository.ObjectAdminRepository;
+import NoWaiter.ObjectService.repository.ObjectRepository;
+import NoWaiter.ObjectService.services.contracts.ObjectService;
+import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
+import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
+import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
+import NoWaiter.ObjectService.services.implementation.util.ObjectMapper;
 
 @Service
 public class ObjectServiceImpl implements ObjectService {
 
     @Autowired
     private ObjectRepository objectRepository;
+    
+    @Autowired
+    private ObjectAdminRepository objectAdminRepository;
 
     @Override
     public UUID Create(ObjectDTO entity) {
-        Object object = new Object(entity.Name, new Address("Nova"), new Contact(entity.PhoneNumber, entity.Email), "ccc");
+        Object object = ObjectMapper.MapObjectDTOToObject(entity);
         objectRepository.save(object);
-
         return object.getId();
     }
 
     @Override
+    public IdentifiableDTO<ObjectDTO> FindById(UUID id) {
+        return ObjectMapper.MapObjectToIdentifiableObjectDTO(objectRepository.findById(id).get());
+    }
+
+    @Override
     public Iterable<IdentifiableDTO<ObjectDTO>> FindAll() {
-        return converter(objectRepository.findAll());
+        return ObjectMapper.MapObjectCollectionToIdentifiableObjectDTOCollection(objectRepository.findAll());
     }
 
-    private Iterable<IdentifiableDTO<ObjectDTO>> converter(Iterable<Object> objects){
-        List<IdentifiableDTO<ObjectDTO>> retVal = new ArrayList<IdentifiableDTO<ObjectDTO>>();
-
-        for (Object object :objects) {
-            retVal.add(new IdentifiableDTO<ObjectDTO>(object.getId(), new ObjectDTO(object.getName(), object.getContact().getEmail(), object.getContact().getPhoneNumber())));
-        }
-
-        return retVal;
-    }
+	@Override
+	public void AddAdminToObject(AddAdminDTO addAdminDTO) {
+		
+		ObjectAdmin objectAdmin = new ObjectAdmin(addAdminDTO.AdminId);
+		objectAdminRepository.save(objectAdmin);
+		Object object = objectRepository.findById(addAdminDTO.ObjectId).get();
+		object.addAmin(objectAdmin);
+		objectRepository.save(object);
+	}
 }

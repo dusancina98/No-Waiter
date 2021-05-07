@@ -48,26 +48,21 @@ const SideBar = () => {
 				</li>
 				<li className="nav-item">
 					<a className="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-						<i className="mdi mdi-crosshairs-gps menu-icon"></i>
-						<span className="menu-title">Basic UI Elements</span>
+						<i className="mdi mdi-account-plus menu-icon"></i>
+						<span className="menu-title">Object Admins</span>
 						<i className="menu-arrow"></i>
 					</a>
 					<div className="collapse" id="ui-basic">
 						<ul className="nav flex-column sub-menu">
 							<li className="nav-item">
-								<a className="nav-link" href="pages/ui-features/buttons.html">
-									Buttons
-								</a>
+								<Link className="nav-link" to="/object-admins">
+									All Object Admins
+								</Link>
 							</li>
 							<li className="nav-item">
-								<a className="nav-link" href="pages/ui-features/dropdowns.html">
-									Dropdowns
-								</a>
-							</li>
-							<li className="nav-item">
-								<a className="nav-link" href="pages/ui-features/typography.html">
-									Typography
-								</a>
+								<Link className="nav-link" to="/add-object-admin">
+									Add Object Admin
+								</Link>
 							</li>
 						</ul>
 					</div>

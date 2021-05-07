@@ -20,15 +20,7 @@ public class Contact {
         return phoneNumber;
     }
 
-    private void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    private void setEmail(String email) {
-        this.email = email;
     }
 }

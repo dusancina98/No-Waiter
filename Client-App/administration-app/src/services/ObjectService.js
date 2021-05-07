@@ -11,7 +11,7 @@ function createObject(object, dispatch) {
 	if (validateObject(object, dispatch)) {
 		dispatch(request());
 
-		Axios.post(`${config.API_URL}/api/objects`, object, { validateStatus: () => true })
+		Axios.post(`${config.API_URL}/object-api/api/objects`, object, { validateStatus: () => true })
 			.then((res) => {
 				if (res.status === 201) {
 					dispatch(success());
@@ -38,18 +38,18 @@ function createObject(object, dispatch) {
 async function findAll(dispatch) {
 	dispatch(request());
 
-	await Axios.get(`${config.API_URL}/api/objects`, { validateStatus: () => true })
+	await Axios.get(`${config.API_URL}/object-api/api/objects`, { validateStatus: () => true })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
 				dispatch(success(res.data));
 			} else {
-				dispatch(failure("Greska"));
+				dispatch(failure("Error"));
 			}
 		})
 		.catch((err) => {
 			console.log(err);
-			dispatch(failure("Greska"));
+			dispatch(failure("Error"));
 		});
 
 	function request() {
@@ -64,8 +64,13 @@ async function findAll(dispatch) {
 }
 
 function validateObject(object, dispatch) {
+	const phoneRegex = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/;
+
 	if (object.Name.length < 2) {
-		dispatch(validatioFailure("Restaurant name must contain minimum three letters"));
+		dispatch(validatioFailure("Restaurant name must contain minimum two letters"));
+		return false;
+	} else if (phoneRegex.test(object.PhoneNumber) === true) {
+		dispatch(validatioFailure("Invalid phone number"));
 		return false;
 	}
 
