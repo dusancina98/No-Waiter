@@ -3,14 +3,22 @@ package NoWaiter.UserService.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name="USERS")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User {
+public class User implements UserDetails{
 
-    @Id
+	private static final long serialVersionUID = 1L;
+
+	@Id
     @Column(name = "id")
     private UUID id;
 
@@ -26,6 +34,12 @@ public class User {
 
     @Column(name = "surname", nullable = false)
     private String surname;
+    
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_authority",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+    private List<Authority> authorities;
 
     public User() { }
 
@@ -76,4 +90,51 @@ public class User {
     public void setSurname(String surname) {
         this.surname = surname;
     }
+
+	@Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.authorities;
+    }
+
+	public void setAuthorities(List<Authority> authorities) {
+		this.authorities = authorities;
+	}
+	
+    public List<Authority> getUserAuthorities() {
+        return this.authorities;
+    }
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return this.email;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 }
