@@ -108,10 +108,14 @@ public class Api {
 			System.out.println("test1235");
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			User user = (User) authentication.getPrincipal();
-			jwt = tokenUtils.generateToken(user.getUsername()); // username
-			expiresIn = tokenUtils.getExpiredIn();
 			user.getUserAuthorities().forEach((a) -> roles.add(a.getName()));
+			jwt = tokenUtils.generateToken(user.getUsername(),roles); // username
+			expiresIn = tokenUtils.getExpiredIn();
 
+			List<String> getRoles= tokenUtils.getAuthorities(jwt);
+			for(String s : getRoles) {
+				System.out.println("ROLAA: " + s);
+			}
 		} catch (BadCredentialsException e) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		} catch (Exception e) {
