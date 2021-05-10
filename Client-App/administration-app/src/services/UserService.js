@@ -11,7 +11,8 @@ function createObjectAdmin(objectAdmin, dispatch) {
 	if (validateObjectAdmin(objectAdmin, dispatch)) {
 		dispatch(request());
 
-		Axios.post(`${config.API_URL}/user-api/api/users/object-admin`, objectAdmin, { validateStatus: () => true })
+		Axios.post(`${config.API_URL}/user-api/api/users/object-admin`, objectAdmin, { validateStatus: () => true ,
+			})
 			.then((res) => {
 				if (res.status === 201) {
 					dispatch(success());

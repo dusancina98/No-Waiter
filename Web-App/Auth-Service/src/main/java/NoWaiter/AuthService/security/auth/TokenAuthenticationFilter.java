@@ -1,4 +1,4 @@
-package NoWaiter.UserService.security.auth;
+package NoWaiter.AuthService.security.auth;
 
 import java.io.IOException;
 
@@ -12,11 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import NoWaiter.UserService.security.TokenUtils;
+import NoWaiter.AuthService.security.TokenUtils;
 
 
-//Filter koji ce presretati svaki zahtev klijenta ka serveru
-//Sem nad putanjama navedenim u WebSecurityConfig.configure(WebSecurity web)
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
 	private TokenUtils tokenUtils;

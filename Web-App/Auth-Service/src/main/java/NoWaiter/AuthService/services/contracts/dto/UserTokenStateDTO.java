@@ -1,4 +1,4 @@
-package NoWaiter.UserService.services.contracts.dto;
+package NoWaiter.AuthService.services.contracts.dto;
 
 import java.util.List;
 

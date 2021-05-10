@@ -1,4 +1,4 @@
-package NoWaiter.UserService.security.auth;
+package NoWaiter.AuthService.services.contracts.dto;
 
 public class JwtAuthenticationRequest {
 	private String username;
