@@ -5,12 +5,14 @@ import CreateObjectPage from "./pages/CreateObjectPage";
 import HomePage from "./pages/HomePage";
 import ListObjectAdminsPage from "./pages/ListObjectAdminsPage";
 import ListObjectPage from "./pages/ListObjectsPage";
+import LoginPage from "./pages/Login";
 
 function App() {
 	return (
 		<Router>
 			<Switch>
 				<Route exact path="/" component={HomePage} />
+				<Route path="/login" component={LoginPage}/>
 				<Route path="/add-object" component={CreateObjectPage} />
 				<Route path="/objects" component={ListObjectPage} />
 				<Route path="/add-object-admin" component={CreateObjectAdminPage} />
