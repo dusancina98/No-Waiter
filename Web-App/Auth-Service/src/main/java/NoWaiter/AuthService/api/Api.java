@@ -1,6 +1,7 @@
 package NoWaiter.AuthService.api;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -59,14 +60,15 @@ public class Api {
 			jwt = tokenUtils.generateToken(user.getUsername(),roles); // username
 			expiresIn = tokenUtils.getExpiredIn();
 		} catch (BadCredentialsException e) {
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			System.out.println("TESTT");
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
         response.addHeader(HEADER, HEADER_VALUE_PREFIX + " " + jwt);
 		
-		return new ResponseEntity<UserTokenStateDTO>(new UserTokenStateDTO(jwt, expiresIn, roles), HttpStatus.OK);
+		return new ResponseEntity<UserTokenStateDTO>(new UserTokenStateDTO(jwt, new Date().getTime() + expiresIn, roles), HttpStatus.OK);
 	}
     
     @PostMapping("/parse-jwt")
