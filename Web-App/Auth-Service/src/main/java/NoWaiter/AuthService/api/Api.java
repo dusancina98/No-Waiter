@@ -58,18 +58,6 @@ public class Api {
 			user.getUserAuthorities().forEach((a) -> roles.add(a.getName()));
 			jwt = tokenUtils.generateToken(user.getUsername(),roles); // username
 			expiresIn = tokenUtils.getExpiredIn();
-
-			//TODO: delete this code after finish
-			List<String> getRoles= tokenUtils.getAuthorities(jwt);
-			for(String s : getRoles) {
-				System.out.println("ROLAA: " + s);
-			}
-			
-			//JwtParseResponseDTO dto = tokenUtils.parseJwt(jwt);
-			//System.out.println(dto.getUsername());
-			//for(String s : dto.getAuthorities()) {
-			//	System.out.println("ROLAA: " + s);
-			//}
 		} catch (BadCredentialsException e) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		} catch (Exception e) {
@@ -77,11 +65,6 @@ public class Api {
 		}
 		
         response.addHeader(HEADER, HEADER_VALUE_PREFIX + " " + jwt);
-
-		//if (userService.IsFirstPassword(authenticationRequest))
-		//	return new ResponseEntity<>(HttpStatus.FOUND);
-		// mozemo ovde vratiti response header jwt token
-		
 		
 		return new ResponseEntity<UserTokenStateDTO>(new UserTokenStateDTO(jwt, expiresIn, roles), HttpStatus.OK);
 	}
@@ -89,8 +72,6 @@ public class Api {
     @PostMapping("/parse-jwt")
     @CrossOrigin
 	public ResponseEntity<?> parseJWTToken(@RequestBody JwtParseRequestDTO requestDto) {
-		System.out.println("USAOOO: ");
-
     	try {
             JwtParseResponseDTO jwtParseResponseDto = tokenUtils.parseJwt(requestDto.getToken());
             return new ResponseEntity<>(jwtParseResponseDto, HttpStatus.OK);
