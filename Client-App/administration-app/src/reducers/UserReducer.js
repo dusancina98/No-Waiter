@@ -50,6 +50,33 @@ export const userReducer = (state, action) => {
 				errorMessage: action.errorMessage,
 				objectAdmins: [],
 			};
+		case userConstants.WAITER_CREATE_REQUEST:
+			return {
+				...state,
+				createWaiter: {
+					showError: false,
+					errorMessage: "",
+					showSuccessMessage: false,
+				},
+			};
+		case userConstants.WAITER_CREATE_SUCCESS:
+			return {
+				...state,
+				createWaiter: {
+					showError: false,
+					errorMessage: "",
+					showSuccessMessage: true,
+				},
+			};
+		case userConstants.WAITER_CREATE_FAILURE:
+			return {
+				...state,
+				createWaiter: {
+					showError: true,
+					errorMessage: action.errorMessage,
+					showSuccessMessage: false,
+				},
+			};
 
 		default:
 			return state;

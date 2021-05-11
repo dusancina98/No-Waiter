@@ -5,6 +5,7 @@ import { userConstants } from "../constants/UserConstants";
 export const userService = {
 	createObjectAdmin,
 	findAllObjectAdmins,
+	createWaiter,
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -83,4 +84,51 @@ async function findAllObjectAdmins(dispatch) {
 	function failure(message) {
 		return { type: userConstants.SET_OBJECT_ADMINS_ERROR, errorMessage: message };
 	}
+}
+
+function createWaiter(waiter, dispatch) {
+	if (validateWaiter(waiter, dispatch)) {
+		dispatch(request());
+
+		Axios.post(`${config.API_URL}/user-api/api/users/employee/waiter`, waiter, { validateStatus: () => true })
+			.then((res) => {
+				if (res.status === 201) {
+					dispatch(success());
+				} else {
+					dispatch(failure(res.data.message));
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}
+
+	function request() {
+		return { type: userConstants.WAITER_CREATE_REQUEST };
+	}
+	function success() {
+		return { type: userConstants.WAITER_CREATE_SUCCESS };
+	}
+	function failure(message) {
+		return { type: userConstants.WAITER_CREATE_FAILURE, errorMessage: message };
+	}
+}
+
+function validateWaiter(waiter, dispatch) {
+	if (waiter.Name.length < 2) {
+		dispatch(validatioFailure("Admin name must contain minimum two letters"));
+		return false;
+	} else if (waiter.Surname.length < 2) {
+		dispatch(validatioFailure("Admin surname must contain minimum two letters"));
+		return false;
+	} else if (waiter.Address.length < 5) {
+		dispatch(validatioFailure("Admin address must contain minimum five letters"));
+		return false;
+	}
+
+	function validatioFailure(message) {
+		return { type: userConstants.WAITER_CREATE_FAILURE, errorMessage: message };
+	}
+
+	return true;
 }

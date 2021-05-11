@@ -16,6 +16,7 @@ import NoWaiter.UserService.intercomm.ObjectClient;
 import NoWaiter.UserService.services.contracts.UserService;
 import NoWaiter.UserService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
+import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
 import feign.FeignException;
 
 @RestController
@@ -54,6 +55,17 @@ public class Api {
     public ResponseEntity<?> FindAllObjectAdmins() {
         try {
             return new ResponseEntity<>(userService.FindAllObjectAdmins(), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PostMapping("/employee/waiter")
+    @CrossOrigin
+    public ResponseEntity<?> CreateWaiter(@RequestBody WaiterDTO waiterDTO) {
+        try {
+            return new ResponseEntity<>(userService.CreateWaiter(waiterDTO), HttpStatus.CREATED);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
