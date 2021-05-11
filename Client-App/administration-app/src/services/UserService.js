@@ -65,7 +65,6 @@ async function findAllObjectAdmins(dispatch) {
 
 	await Axios.get(`${config.API_URL}/user-api/api/users/object-admin`, { validateStatus: () => true })
 		.then((res) => {
-			console.log(res);
 			if (res.status === 200) {
 				dispatch(success(res.data));
 			} else {
@@ -93,6 +92,7 @@ function login(loginRequest, dispatch) {
 
 	Axios.post(`${config.API_URL}/auth-api/api/auth/login`, loginRequest, { validateStatus: () => true })
 		.then((res) => {
+
 			if (res.status === 200) {
 				setAuthInLocalStorage(res.data);
 				dispatch(success());

@@ -60,7 +60,8 @@ public class Api {
 			jwt = tokenUtils.generateToken(user.getUsername(),roles); // username
 			expiresIn = tokenUtils.getExpiredIn();
 		} catch (BadCredentialsException e) {
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			System.out.println("TESTT");
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}

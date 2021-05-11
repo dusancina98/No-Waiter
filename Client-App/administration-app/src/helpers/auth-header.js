@@ -21,15 +21,11 @@ export function hasRoles(desiredRoles) {
 	let roles = localStorage.getItem("roles"); //JSON.parse(localStorage.getItem("roles"));
 	let retVal = false;
 	if (roles) {		
-		console.log(desiredRoles,roles)
-
-		alert(desiredRoles)
-		alert(roles)
-		console.log(desiredRoles,roles)
-
 		if (desiredRoles === "*" || desiredRoles === roles) {
 			retVal = true;
 		}
+	}else if (desiredRoles === "") {
+		retVal = true;
 	}
 
 	return retVal;
@@ -39,7 +35,6 @@ export function hasPermissions(desiredPermissions) {
 	validateAccessToken();
 	let roles = JSON.parse(localStorage.getItem("roles"));
 	let retVal = false;
-	alert('test')
 	if (roles) {
 		roles.forEach((role) => {
 			role.permissions.forEach((permission) => {

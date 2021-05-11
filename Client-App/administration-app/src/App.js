@@ -12,7 +12,7 @@ function App() {
 	return (
 		<Router>
 			<Switch>
-				<ProtectedRoute roles={[]} redirectTo="/" path="/login" component={LoginPage} />
+				<ProtectedRoute roles={""} redirectTo="/" path="/login" component={LoginPage} />
 				<ProtectedRoute roles={"ROLE_SYSADMIN"} exact path="/" redirectTo="/unauthorized" component={HomePage} />
 				<Route path="/add-object" component={CreateObjectPage} />
 				<Route path="/objects" component={ListObjectPage} />

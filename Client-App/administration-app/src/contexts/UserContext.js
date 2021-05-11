@@ -5,6 +5,10 @@ export const UserContext = createContext();
 
 const UserContextProvider = (props) => {
 	const [userState, dispatch] = useReducer(userReducer, {
+		loginError: {
+			showError: false,
+			errorMessage: "",
+		},
 		createObjectAdmin: {
 			showError: false,
 			errorMessage: "",
@@ -13,10 +17,6 @@ const UserContextProvider = (props) => {
 		objectAdmins: [],
 		showError: false,
 		errorMessage: "",
-		loginError: {
-			showError: false,
-			errorMessage: "",
-		},
 	});
 
 	return <UserContext.Provider value={{ userState, dispatch }}>{props.children}</UserContext.Provider>;
