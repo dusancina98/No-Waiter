@@ -1,7 +1,9 @@
 import React from "react";
 import Header from "../components/Header";
+import ObjectDetailsModal from "../components/modals/ObjectDetailsModal";
 import ObjectList from "../components/ObjectList";
 import SideBar from "../components/SideBar";
+import ModalContextProvider from "../contexts/ModalContext";
 import ObjectContextProvider from "../contexts/ObjectContext";
 
 const ListObjectPage = () => {
@@ -12,9 +14,13 @@ const ListObjectPage = () => {
 				<div className="container-fluid page-body-wrapper">
 					<Header />
 					<div className="main-panel">
-						<ObjectContextProvider>
-							<ObjectList />
-						</ObjectContextProvider>
+						<ModalContextProvider>
+							<ObjectContextProvider>
+								<ObjectList />
+							</ObjectContextProvider>
+
+							<ObjectDetailsModal />
+						</ModalContextProvider>
 					</div>
 				</div>
 			</div>

@@ -13,6 +13,7 @@ import NoWaiter.ObjectService.services.contracts.ObjectService;
 import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
+import NoWaiter.ObjectService.services.contracts.dto.ObjectWithStatusDTO;
 import NoWaiter.ObjectService.services.implementation.util.ObjectMapper;
 
 @Service
@@ -36,10 +37,6 @@ public class ObjectServiceImpl implements ObjectService {
         return ObjectMapper.MapObjectToIdentifiableObjectDTO(objectRepository.findById(id).get());
     }
 
-    @Override
-    public Iterable<IdentifiableDTO<ObjectDTO>> FindAll() {
-        return ObjectMapper.MapObjectCollectionToIdentifiableObjectDTOCollection(objectRepository.findAll());
-    }
 
 	@Override
 	public void AddAdminToObject(AddAdminDTO addAdminDTO) {
@@ -49,5 +46,11 @@ public class ObjectServiceImpl implements ObjectService {
 		Object object = objectRepository.findById(addAdminDTO.ObjectId).get();
 		object.addAmin(objectAdmin);
 		objectRepository.save(object);
+	}
+
+	@Override
+	public Iterable<IdentifiableDTO<ObjectWithStatusDTO>> FindAllForAdmin() {
+        return ObjectMapper.MapObjectCollectionToIdentifiableObjectWithStatusDTOCollection(objectRepository.findAll());
+
 	}
 }

@@ -56,7 +56,7 @@ public class Api {
     public ResponseEntity<?> FindAllObjects() {
 
         try {
-            return new ResponseEntity<>(objectService.FindAll(), HttpStatus.OK);
+            return new ResponseEntity<>(objectService.FindAllForAdmin(), HttpStatus.OK);
 
         } catch (Exception e) {
         	e.printStackTrace();

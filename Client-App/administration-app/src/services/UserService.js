@@ -116,13 +116,13 @@ function createWaiter(waiter, dispatch) {
 
 function validateWaiter(waiter, dispatch) {
 	if (waiter.Name.length < 2) {
-		dispatch(validatioFailure("Admin name must contain minimum two letters"));
+		dispatch(validatioFailure("Waiter name must contain minimum two letters"));
 		return false;
 	} else if (waiter.Surname.length < 2) {
-		dispatch(validatioFailure("Admin surname must contain minimum two letters"));
+		dispatch(validatioFailure("Waiter surname must contain minimum two letters"));
 		return false;
 	} else if (waiter.Address.length < 5) {
-		dispatch(validatioFailure("Admin address must contain minimum five letters"));
+		dispatch(validatioFailure("Waiter address must contain minimum five letters"));
 		return false;
 	}
 
