@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useContext,useState } from "react";
+import { UserContext } from "../contexts/UserContext";
+import { userService } from "../services/UserService";
 
 const LoginForm = () => {
+    const { userState, dispatch } = useContext(UserContext);
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
@@ -8,10 +12,11 @@ const LoginForm = () => {
 		e.preventDefault();
 
 		let loginRequest = {
-			email,
+			username: email,
 			password,
 		};
 
+        userService.login(loginRequest, dispatch);
 	};
 
 	return (
@@ -44,13 +49,15 @@ const LoginForm = () => {
 							</button>
 						</div>
 					</div>
-
+                    <div className="form-group text-center" style={{ color: "red", fontSize: "0.8em" }} hidden={!userState.loginError.showError}>
+				        {userState.loginError.errorMessage}
+			        </div>
 					<div class="text-center p-t-55">
 						<span class="txt1">
                             Forgot your password?
 						</span>
 
-						<a class="txt2 p-l-10" href="#">
+						<a class="txt2 p-l-10" href="#reset">
 							Reset password
 						</a>
 					</div>

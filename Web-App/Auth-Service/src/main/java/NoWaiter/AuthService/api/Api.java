@@ -1,6 +1,7 @@
 package NoWaiter.AuthService.api;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -66,7 +67,7 @@ public class Api {
 		
         response.addHeader(HEADER, HEADER_VALUE_PREFIX + " " + jwt);
 		
-		return new ResponseEntity<UserTokenStateDTO>(new UserTokenStateDTO(jwt, expiresIn, roles), HttpStatus.OK);
+		return new ResponseEntity<UserTokenStateDTO>(new UserTokenStateDTO(jwt, new Date().getTime() + expiresIn, roles), HttpStatus.OK);
 	}
     
     @PostMapping("/parse-jwt")
