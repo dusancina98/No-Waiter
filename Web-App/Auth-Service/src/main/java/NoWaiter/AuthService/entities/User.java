@@ -1,16 +1,31 @@
-package NoWaiter.UserService.entities;
+package NoWaiter.AuthService.entities;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
-
-import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name="USERS")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User{
+public class User implements UserDetails{
+	private static final long serialVersionUID = 1L;
 
 	@Id
     @Column(name = "id")
@@ -28,7 +43,7 @@ public class User{
 
     @Column(name = "surname", nullable = false)
     private String surname;
-
+    
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_authority",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -85,12 +100,50 @@ public class User{
         this.surname = surname;
     }
 
-	public List<Authority> getAuthorities() {
-		return authorities;
-	}
+	@Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.authorities;
+    }
 
 	public void setAuthorities(List<Authority> authorities) {
 		this.authorities = authorities;
 	}
 	
+    public List<Authority> getUserAuthorities() {
+        return this.authorities;
+    }
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return this.email;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 }
