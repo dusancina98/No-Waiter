@@ -26,6 +26,7 @@ const ObjectAdminList = () => {
 						<td>{objectAdmin.EntityDTO.Name}</td>
 						<td>{objectAdmin.EntityDTO.Surname}</td>
 						<td>{objectAdmin.EntityDTO.Address}</td>
+						<td>{objectAdmin.EntityDTO.PhoneNumber}</td>
 						<td>
 							<label className="badge badge-info">{objectAdmin.EntityDTO.ObjectName}</label>
 						</td>
