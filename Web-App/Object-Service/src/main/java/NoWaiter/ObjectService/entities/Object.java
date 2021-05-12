@@ -46,7 +46,7 @@ public class Object {
     }
 
     public Object(String name, Address address, Contact contact, String imagePath) {
-        this (UUID.randomUUID(), name, address, contact, imagePath, false, true, new ArrayList<ObjectAdmin>());
+        this (UUID.randomUUID(), name, address, contact, imagePath, false, false, new ArrayList<ObjectAdmin>());
     }
 
     public Object() { }
