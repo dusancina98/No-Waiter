@@ -28,6 +28,9 @@ public class User{
 
     @Column(name = "surname", nullable = false)
     private String surname;
+    
+    @Column(name = "active", nullable = false)
+    private boolean active;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_authority",
@@ -43,6 +46,7 @@ public class User{
         this.password = password;
         this.name = name;
         this.surname = surname;
+        this.active=false; 
     }
 
     public User(String email, String password, String name, String surname) {
@@ -92,5 +96,12 @@ public class User{
 	public void setAuthorities(List<Authority> authorities) {
 		this.authorities = authorities;
 	}
-	
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 }

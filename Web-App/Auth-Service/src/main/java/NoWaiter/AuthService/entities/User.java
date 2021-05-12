@@ -44,6 +44,9 @@ public class User implements UserDetails{
     @Column(name = "surname", nullable = false)
     private String surname;
     
+    @Column(name = "active", nullable = false)
+    private boolean active;
+    
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_authority",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -58,6 +61,7 @@ public class User implements UserDetails{
         this.password = password;
         this.name = name;
         this.surname = surname;
+        this.active=false;
     }
 
     public User(String email, String password, String name, String surname) {
@@ -144,6 +148,6 @@ public class User implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return true;
+		return active;
 	}
 }

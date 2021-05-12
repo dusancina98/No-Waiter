@@ -71,6 +71,15 @@ export const userReducer = (state, action) => {
 						errorMessage: "",
 					},
 				};
+			case userConstants.INACTIVE_USER_EMAIL_REQUEST:
+				return {
+					inActiveUser: {
+						showError: false,
+						errorMessage: "",
+						showSuccessMessage: false,
+						emailAddress: action.emailAddress,
+					},
+				};
 		default:
 			return state;
 	}

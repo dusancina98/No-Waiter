@@ -7,6 +7,7 @@ export const userService = {
 	createObjectAdmin,
 	findAllObjectAdmins,
 	login,
+	checkIfUserIdExist
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -99,6 +100,8 @@ function login(loginRequest, dispatch) {
 				window.location = "#/";
 			} else if (res.status === 401) {
 				dispatch(failure(res.data.message));
+			}else if (res.status === 403) {
+				window.location = "#/inactive-user/" + res.data;
 			} else {
 				dispatch({ type: userConstants.LOGIN_FAILURE });
 			}
@@ -115,3 +118,20 @@ function login(loginRequest, dispatch) {
 		return { type: userConstants.LOGIN_FAILURE, error };
 	}
 }
+
+function checkIfUserIdExist(userId, dispatch) {
+	Axios.get(`${config.API_URL}/user-api/api/users/check-existence/` + userId, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else if (res.status === 404) {
+				window.location = "#/404";
+			}
+		})
+		.catch((err) => {});
+
+	function success(emailAddress) {
+		return { type: userConstants.INACTIVE_USER_EMAIL_REQUEST, emailAddress };
+	}
+}
+

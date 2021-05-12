@@ -10,4 +10,6 @@ public interface UserService {
     UUID CreateRestaurantAdmin(ObjectAdminDTO entity);
     
     Iterable<IdentifiableDTO<ObjectAdminDTO>> FindAllObjectAdmins();
+
+	String checkUserExistance(UUID userId);
 }

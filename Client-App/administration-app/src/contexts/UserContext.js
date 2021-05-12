@@ -14,6 +14,12 @@ const UserContextProvider = (props) => {
 			errorMessage: "",
 			showSuccessMessage: false,
 		},
+		inActiveUser: {
+			showError: false,
+			errorMessage: "",
+			showSuccessMessage: false,
+			emailAddress: "",
+		},
 		objectAdmins: [],
 		showError: false,
 		errorMessage: "",
