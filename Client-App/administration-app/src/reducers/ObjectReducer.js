@@ -1,3 +1,4 @@
+import { modalConstants } from "../constants/ModalConstants";
 import { objectConstants } from "../constants/ObjectConstants";
 
 export const objectReducer = (state, action) => {
@@ -69,6 +70,11 @@ export const objectReducer = (state, action) => {
 					showErrorMessage: false,
 					errorMessage: "",
 				},
+				objectDetails: {
+					showModal: true,
+					readOnly: true,
+					object: action.object,
+				},
 			};
 		case objectConstants.OBJECT_ACTIVATION_FAILURE:
 			return {
@@ -99,6 +105,11 @@ export const objectReducer = (state, action) => {
 					showErrorMessage: false,
 					errorMessage: "",
 				},
+				objectDetails: {
+					showModal: true,
+					readOnly: true,
+					object: action.object,
+				},
 			};
 		case objectConstants.OBJECT_DEACTIVATION_FAILURE:
 			return {
@@ -128,6 +139,11 @@ export const objectReducer = (state, action) => {
 					successMessage: action.successMessage,
 					showErrorMessage: false,
 					errorMessage: "",
+				},
+				objectDetails: {
+					showModal: true,
+					readOnly: true,
+					object: action.object,
 				},
 			};
 		case objectConstants.OBJECT_BLOCKING_FAILURE:
@@ -160,6 +176,11 @@ export const objectReducer = (state, action) => {
 					showErrorMessage: false,
 					errorMessage: "",
 				},
+				objectDetails: {
+					showModal: true,
+					readOnly: true,
+					object: action.object,
+				},
 			};
 		case objectConstants.OBJECT_UNBLOCKING_FAILURE:
 			return {
@@ -171,6 +192,68 @@ export const objectReducer = (state, action) => {
 					errorMessage: action.errorMessage,
 				},
 			};
+		case objectConstants.HIDE_OBJECT_EDIT_SUCCESS:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+				objectDetails: {
+					showModal: true,
+					readOnly: true,
+					object: action.object,
+				},
+			};
+		case objectConstants.HIDE_OBJECT_EDIT_FAILURE:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case modalConstants.SHOW_OBJECT_DETAILS:
+			return {
+				...state,
+				objectDetails: {
+					showModal: true,
+					readOnly: true,
+					object: action.object,
+				},
+			};
+		case modalConstants.HIDE_OBJECT_DETAILS:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+				objectDetails: {
+					showModal: false,
+					readOnly: true,
+					object: {
+						Id: "",
+						EntityDTO: {
+							Email: "",
+							Name: "",
+							Address: "",
+							PhoneNumber: "",
+							ImagePath: "",
+						},
+					},
+				},
+			};
+		case modalConstants.ALLOW_OBJECT_DETAILS_INPUT_FIELDS:
+			let prom = { ...state };
+			prom.objectDetails.readOnly = false;
+			return prom;
 
 		default:
 			return state;

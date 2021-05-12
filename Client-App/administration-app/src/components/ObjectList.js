@@ -1,13 +1,11 @@
 import React, { useContext, useEffect } from "react";
 import { modalConstants } from "../constants/ModalConstants";
-import { ModalContext } from "../contexts/ModalContext";
 import { ObjectContext } from "../contexts/ObjectContext";
 import { objectService } from "../services/ObjectService";
 import ObjectItem from "./ObjectItem";
 
 const ObjectList = () => {
 	const { objectState, dispatch } = useContext(ObjectContext);
-	const modalContext = useContext(ModalContext);
 
 	useEffect(() => {
 		const getObjectsHandler = async () => {
@@ -17,7 +15,7 @@ const ObjectList = () => {
 	}, [dispatch]);
 
 	const handleObjectClick = (object) => {
-		modalContext.dispatch({ type: modalConstants.SHOW_OBJECT_DETAILS, object });
+		dispatch({ type: modalConstants.SHOW_OBJECT_DETAILS, object });
 	};
 
 	return (

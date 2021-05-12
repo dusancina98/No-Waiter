@@ -16,6 +16,20 @@ const ObjectContextProvider = (props) => {
 			showErrorMessage: false,
 			errorMessage: "",
 		},
+		objectDetails: {
+			showModal: false,
+			readOnly: true,
+			object: {
+				Id: "",
+				EntityDTO: {
+					Email: "",
+					Name: "",
+					Address: "",
+					PhoneNumber: "",
+					ImagePath: "",
+				},
+			},
+		},
 		objects: [],
 		showError: false,
 		errorMessage: "",

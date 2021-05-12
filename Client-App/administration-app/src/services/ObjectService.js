@@ -85,14 +85,15 @@ function validateObject(object, dispatch) {
 	return true;
 }
 
-function activateObject(objectId, dispatch) {
+function activateObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`${config.API_URL}/object-api/api/objects/${objectId}/activate`, { validateStatus: () => true })
+	Axios.put(`${config.API_URL}/object-api/api/objects/${object.Id}/activate`, { validateStatus: () => true })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
-				dispatch(success("Object successfully activated"));
+				object.EntityDTO.Active = true;
+				dispatch(success("Object successfully activated", object));
 			} else {
 				dispatch(failure("Error"));
 			}
@@ -105,22 +106,23 @@ function activateObject(objectId, dispatch) {
 	function request() {
 		return { type: objectConstants.OBJECT_ACTIVATION_REQUEST };
 	}
-	function success(message) {
-		return { type: objectConstants.OBJECT_ACTIVATION_SUCCESS, successMessage: message };
+	function success(message, object) {
+		return { type: objectConstants.OBJECT_ACTIVATION_SUCCESS, successMessage: message, object };
 	}
 	function failure(message) {
 		return { type: objectConstants.OBJECT_ACTIVATION_FAILURE, errorMessage: message };
 	}
 }
 
-function deactivateObject(objectId, dispatch) {
+function deactivateObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`${config.API_URL}/object-api/api/objects/${objectId}/deactivate`, { validateStatus: () => true })
+	Axios.put(`${config.API_URL}/object-api/api/objects/${object.Id}/deactivate`, { validateStatus: () => true })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
-				dispatch(success("Object successfully deactivated"));
+				object.EntityDTO.Active = false;
+				dispatch(success("Object successfully deactivated", object));
 			} else {
 				dispatch(failure("Error"));
 			}
@@ -133,22 +135,23 @@ function deactivateObject(objectId, dispatch) {
 	function request() {
 		return { type: objectConstants.OBJECT_DEACTIVATION_REQUEST };
 	}
-	function success(message) {
-		return { type: objectConstants.OBJECT_DEACTIVATION_SUCCESS, successMessage: message };
+	function success(message, object) {
+		return { type: objectConstants.OBJECT_DEACTIVATION_SUCCESS, successMessage: message, object };
 	}
 	function failure(message) {
 		return { type: objectConstants.OBJECT_DEACTIVATION_FAILURE, errorMessage: message };
 	}
 }
 
-function blockObject(objectId, dispatch) {
+function blockObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`${config.API_URL}/object-api/api/objects/${objectId}/block`, { validateStatus: () => true })
+	Axios.put(`${config.API_URL}/object-api/api/objects/${object.Id}/block`, { validateStatus: () => true })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
-				dispatch(success("Object successfully blocked"));
+				object.EntityDTO.Blocked = true;
+				dispatch(success("Object successfully blocked", object));
 			} else {
 				dispatch(failure("Error"));
 			}
@@ -161,22 +164,23 @@ function blockObject(objectId, dispatch) {
 	function request() {
 		return { type: objectConstants.OBJECT_BLOCKING_REQUEST };
 	}
-	function success(message) {
-		return { type: objectConstants.OBJECT_BLOCKING_SUCCESS, successMessage: message };
+	function success(message, object) {
+		return { type: objectConstants.OBJECT_BLOCKING_SUCCESS, successMessage: message, object };
 	}
 	function failure(message) {
 		return { type: objectConstants.OBJECT_BLOCKING_FAILURE, errorMessage: message };
 	}
 }
 
-function unblockObject(objectId, dispatch) {
+function unblockObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`${config.API_URL}/object-api/api/objects/${objectId}/unblock`, { validateStatus: () => true })
+	Axios.put(`${config.API_URL}/object-api/api/objects/${object.Id}/unblock`, { validateStatus: () => true })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
-				dispatch(success("Object successfully unblocked"));
+				object.EntityDTO.Blocked = false;
+				dispatch(success("Object successfully unblocked", object));
 			} else {
 				dispatch(failure("Error"));
 			}
@@ -189,8 +193,8 @@ function unblockObject(objectId, dispatch) {
 	function request() {
 		return { type: objectConstants.OBJECT_UNBLOCKING_REQUEST };
 	}
-	function success(message) {
-		return { type: objectConstants.OBJECT_UNBLOCKING_SUCCESS, successMessage: message };
+	function success(message, object) {
+		return { type: objectConstants.OBJECT_UNBLOCKING_SUCCESS, successMessage: message, object };
 	}
 	function failure(message) {
 		return { type: objectConstants.OBJECT_UNBLOCKING_FAILURE, errorMessage: message };
