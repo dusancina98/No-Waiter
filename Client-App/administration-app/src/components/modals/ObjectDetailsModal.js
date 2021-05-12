@@ -73,7 +73,7 @@ const ObjectDetailsModal = () => {
 					<div className="col-md-6 grid-margin stretch-card">
 						<div className="card" style={{ border: "0" }}>
 							<div className="card-body">
-								<form className="forms-sample" method="post">
+								<form className="forms-sample">
 									<div className="form-group">
 										<label for="restaurantName">Restaurant name</label>
 										<input
