@@ -1,8 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
+import { userConstants } from "../constants/UserConstants";
 import { ObjectContext } from "../contexts/ObjectContext";
 import { UserContext } from "../contexts/UserContext";
 import { objectService } from "../services/ObjectService";
 import { userService } from "../services/UserService";
+import FailureAlert from "./FailureAlert";
+import SuccessAlert from "./SuccessAlert";
 
 const CreateObjectAdminForm = () => {
 	const { userState, dispatch } = useContext(UserContext);
@@ -32,6 +35,18 @@ const CreateObjectAdminForm = () => {
 
 	return (
 		<React.Fragment>
+			<SuccessAlert
+				hidden={!userState.createObjectAdmin.showSuccessMessage}
+				header="Success"
+				message="You successfully created new object admin"
+				handleCloseAlert={() => dispatch({ type: userConstants.OBJECT_ADMIN_CREATE_REQUEST })}
+			/>
+			<FailureAlert
+				hidden={!userState.createObjectAdmin.showError}
+				header="Error"
+				message={userState.createObjectAdmin.errorMessage}
+				handleCloseAlert={() => dispatch({ type: userConstants.OBJECT_ADMIN_CREATE_REQUEST })}
+			/>
 			<form className="forms-sample" method="post" onSubmit={handleSubmit}>
 				<div className="form-group">
 					<label for="emailAddress">Email address</label>
@@ -80,12 +95,6 @@ const CreateObjectAdminForm = () => {
 					Submit
 				</button>
 			</form>
-			<div hidden={!userState.createObjectAdmin.showSuccessMessage} className="form-group text-center" style={{ fontSize: "1.3rem" }}>
-				You successfully created new object admin
-			</div>
-			<div hidden={!userState.createObjectAdmin.showError} className="form-group text-center text-danger" style={{ fontSize: "1.1rem" }}>
-				{userState.createObjectAdmin.errorMessage}
-			</div>
 		</React.Fragment>
 	);
 };

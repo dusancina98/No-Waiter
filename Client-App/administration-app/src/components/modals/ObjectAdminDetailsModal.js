@@ -34,7 +34,7 @@ const ObjectAdminDetailsModal = () => {
 				/>
 				<FailureAlert
 					hidden={!userState.editObjectAdmin.showErrorMessage}
-					header="Failure"
+					header="Error"
 					message={userState.editObjectAdmin.successMessage}
 					handleCloseAlert={() => dispatch({ type: userConstants.HIDE_OBJECT_ADMIN_EDIT_FAILURE })}
 				/>

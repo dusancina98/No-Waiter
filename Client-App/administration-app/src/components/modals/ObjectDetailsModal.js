@@ -49,7 +49,7 @@ const ObjectDetailsModal = () => {
 				/>
 				<FailureAlert
 					hidden={!objectState.editObject.showErrorMessage}
-					header="Failure"
+					header="Error"
 					message={objectState.editObject.successMessage}
 					handleCloseAlert={() => dispatch({ type: objectConstants.HIDE_OBJECT_EDIT_FAILURE })}
 				/>
