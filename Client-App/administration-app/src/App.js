@@ -14,7 +14,7 @@ function App() {
 		<Router>
 			<Switch>
 				<ProtectedRoute roles={""} redirectTo="/" path="/login" component={LoginPage} />
-				<ProtectedRoute roles={"ROLE_SYSADMIN"} exact path="/" redirectTo="/unauthorized" component={HomePage} />
+				<ProtectedRoute roles={""} exact path="/" redirectTo="/unauthorized" component={HomePage} />
 				<Route path="/add-object" component={CreateObjectPage} />
 				<Route path="/objects" component={ListObjectPage} />
 				<Route path="/add-object-admin" component={CreateObjectAdminPage} />

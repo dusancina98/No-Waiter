@@ -5,13 +5,14 @@ import { setAuthInLocalStorage } from "../helpers/auth-header";
 
 export const userService = {
 	createObjectAdmin,
+	updateObjectAdmin,
 	findAllObjectAdmins,
 	createWaiter,
 	login,
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
-	if (validateObjectAdmin(objectAdmin, dispatch)) {
+	if (validateObjectAdmin(objectAdmin, dispatch, userConstants.OBJECT_ADMIN_CREATE_FAILURE)) {
 		dispatch(request());
 
 		Axios.post(`${config.API_URL}/user-api/api/users/object-admin`, objectAdmin, { validateStatus: () => true })
@@ -38,7 +39,40 @@ function createObjectAdmin(objectAdmin, dispatch) {
 	}
 }
 
-function validateObjectAdmin(objectAdmin, dispatch) {
+function updateObjectAdmin(objectAdmin, dispatch) {
+	let objectAdminDTO = {
+		Id: objectAdmin.Id,
+		EntityDTO: { Name: objectAdmin.EntityDTO.Name, Surname: objectAdmin.EntityDTO.Surname, Address: objectAdmin.EntityDTO.Address, PhoneNumber: objectAdmin.EntityDTO.PhoneNumber },
+	};
+
+	if (validateObjectAdmin(objectAdminDTO.EntityDTO, dispatch, userConstants.OBJECT_ADMIN_UPDATE_FAILURE)) {
+		dispatch(request());
+
+		Axios.put(`${config.API_URL}/user-api/api/users/object-admin`, objectAdminDTO, { validateStatus: () => true })
+			.then((res) => {
+				if (res.status === 200) {
+					dispatch(success("Object admin successfully updated", objectAdmin));
+				} else {
+					dispatch(failure("Error while updating object admin"));
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}
+
+	function request() {
+		return { type: userConstants.OBJECT_ADMIN_UPDATE_REQUEST };
+	}
+	function success(message, objectAdmin) {
+		return { type: userConstants.OBJECT_ADMIN_UPDATE_SUCCESS, successMessage: message, objectAdmin };
+	}
+	function failure(message) {
+		return { type: userConstants.OBJECT_ADMIN_UPDATE_FAILURE, errorMessage: message };
+	}
+}
+
+function validateObjectAdmin(objectAdmin, dispatch, type) {
 	if (objectAdmin.Name.length < 2) {
 		dispatch(validatioFailure("Admin name must contain minimum two letters"));
 		return false;
@@ -54,7 +88,7 @@ function validateObjectAdmin(objectAdmin, dispatch) {
 	}
 
 	function validatioFailure(message) {
-		return { type: userConstants.OBJECT_ADMIN_CREATE_FAILURE, errorMessage: message };
+		return { type, errorMessage: message };
 	}
 
 	return true;

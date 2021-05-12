@@ -14,10 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import NoWaiter.ObjectService.intercomm.UserClient;
 import NoWaiter.ObjectService.services.contracts.ObjectService;
 import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
+import NoWaiter.ObjectService.services.contracts.dto.UserClientObjectDTO;
+import feign.FeignException;
 
 @RestController
 @RequestMapping(value = "api/objects")
@@ -25,6 +28,9 @@ public class Api {
 
     @Autowired
     private ObjectService objectService;
+    
+    @Autowired
+    private UserClient userClient;
 
     @PostMapping
     @CrossOrigin
@@ -71,9 +77,15 @@ public class Api {
     public ResponseEntity<?> UpdateObject(@RequestBody IdentifiableDTO<ObjectDTO> objectDTO) {
 
         try {
+        	IdentifiableDTO<ObjectDTO> objDto = objectService.FindById(objectDTO.Id);
+        	if(!objDto.EntityDTO.Name.equals(objectDTO.EntityDTO.Name))
+        		userClient.updateObject(new UserClientObjectDTO(objectDTO.Id, objectDTO.EntityDTO.Name));
         	objectService.Update(objectDTO);
             return new ResponseEntity<>(HttpStatus.OK);
 
+        } catch (FeignException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

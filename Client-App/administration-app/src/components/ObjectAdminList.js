@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from "react";
+import { modalConstants } from "../constants/ModalConstants";
 import { UserContext } from "../contexts/UserContext";
 import { userService } from "../services/UserService";
 
@@ -12,11 +13,15 @@ const ObjectAdminList = () => {
 		getUsersHandler();
 	}, [dispatch]);
 
+	const handleObjectAdminClick = (objectAdmin) => {
+		dispatch({ type: modalConstants.SHOW_OBJECT_ADMIN_DETAILS, objectAdmin });
+	};
+
 	return (
 		<React.Fragment>
 			{userState.objectAdmins.map((objectAdmin) => {
 				return (
-					<tr key={objectAdmin.Id}>
+					<tr key={objectAdmin.Id} onClick={() => handleObjectAdminClick(objectAdmin)} style={{ cursor: "pointer" }}>
 						<td>{objectAdmin.EntityDTO.Email}</td>
 						<td>{objectAdmin.EntityDTO.Name}</td>
 						<td>{objectAdmin.EntityDTO.Surname}</td>

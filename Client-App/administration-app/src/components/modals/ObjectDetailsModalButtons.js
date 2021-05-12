@@ -8,18 +8,10 @@ const ObjectDetailsModalButtons = (props) => {
 
 	return (
 		<React.Fragment>
-			<button
-				onClick={props.handleUpdate}
-				className="btn btn-success mt-2"
-				hidden={objectState.objectDetails.readOnly}
-				style={{ background: colorConstants.COLOR_GREEN, borderColor: colorConstants.COLOR_GREEN }}
-			>
-				Save
-			</button>
-			<button className="btn btn-primary mt-2" hidden={!objectState.objectDetails.readOnly} onClick={() => dispatch({ type: modalConstants.ALLOW_OBJECT_DETAILS_INPUT_FIELDS })}>
+			<button className="btn btn-primary mt-2 mr-3" hidden={!objectState.objectDetails.readOnly} onClick={() => dispatch({ type: modalConstants.ALLOW_OBJECT_DETAILS_INPUT_FIELDS })}>
 				Edit
 			</button>
-			<button className="btn btn-danger ml-3 mt-2" style={{ background: colorConstants.COLOR_RED, borderColor: colorConstants.COLOR_RED }}>
+			<button className="btn btn-danger mt-2" style={{ background: colorConstants.COLOR_RED, borderColor: colorConstants.COLOR_RED }}>
 				Delete
 			</button>
 			<button onClick={props.handleUnblock} hidden={!objectState.objectDetails.object.EntityDTO.Blocked} className="btn btn-dark ml-3 mt-2">
