@@ -11,6 +11,8 @@ public interface ObjectService {
 
     UUID Create(ObjectDTO entity);
     
+    void Update(IdentifiableDTO<ObjectDTO> entity);
+    
     void AddAdminToObject(AddAdminDTO addAdminDTO);
 
     IdentifiableDTO<ObjectDTO> FindById(UUID id);

@@ -30,6 +30,45 @@ export const objectReducer = (state, action) => {
 					showSuccessMessage: false,
 				},
 			};
+		case objectConstants.OBJECT_UPDATE_REQUEST:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case objectConstants.OBJECT_UPDATE_SUCCESS:
+			let pom = {
+				...state,
+				editObject: {
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+				objectDetails: {
+					showModal: true,
+					readOnly: true,
+					object: action.object,
+				},
+			};
+			var foundIndex = pom.objects.findIndex((object) => object.Id == action.object.Id);
+			pom.objects[foundIndex] = action.object;
+
+			return pom;
+		case objectConstants.OBJECT_UPDATE_FAILURE:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+			};
 		case objectConstants.SET_OBJECTS_REQUEST:
 			return {
 				...state,

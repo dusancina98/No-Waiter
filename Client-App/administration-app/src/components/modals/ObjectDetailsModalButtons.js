@@ -8,7 +8,12 @@ const ObjectDetailsModalButtons = (props) => {
 
 	return (
 		<React.Fragment>
-			<button className="btn btn-success mt-2" hidden={objectState.objectDetails.readOnly} style={{ background: colorConstants.COLOR_GREEN, borderColor: colorConstants.COLOR_GREEN }}>
+			<button
+				onClick={props.handleUpdate}
+				className="btn btn-success mt-2"
+				hidden={objectState.objectDetails.readOnly}
+				style={{ background: colorConstants.COLOR_GREEN, borderColor: colorConstants.COLOR_GREEN }}
+			>
 				Save
 			</button>
 			<button className="btn btn-primary mt-2" hidden={!objectState.objectDetails.readOnly} onClick={() => dispatch({ type: modalConstants.ALLOW_OBJECT_DETAILS_INPUT_FIELDS })}>

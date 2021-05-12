@@ -37,6 +37,11 @@ const ObjectDetailsModal = () => {
 		objectService.unblockObject(objectState.objectDetails.object, dispatch);
 	};
 
+	const handleObjectUpdate = () => {
+		let object = { Id: objectState.objectDetails.object.Id, EntityDTO: { Name: name, Email: email, PhoneNumber: phoneNumber, ImagePath: "assets/images/restaurant.jpg", Address: address } };
+		objectService.updateObject(object, dispatch);
+	};
+
 	useEffect(() => {
 		setEmail(objectState.objectDetails.object.EntityDTO.Email);
 		setName(objectState.objectDetails.object.EntityDTO.Name);
@@ -127,6 +132,7 @@ const ObjectDetailsModal = () => {
 									handleUnblock={handleObjectUnblock}
 									handleActivation={handleObjectActivation}
 									handleDeactivation={handleObjectDeactivation}
+									handleUpdate={handleObjectUpdate}
 								/>
 							</div>
 						</div>
@@ -135,7 +141,7 @@ const ObjectDetailsModal = () => {
 					<div className="col-md-6 grid-margin stretch-card">
 						<div className="card">
 							<div className="card-body">
-								<img src="assets/images/restaurant.jpg" alt="restaurant" className="img-fluid" />
+								<img src={objectState.objectDetails.object.EntityDTO.ImagePath} alt="restaurant" className="img-fluid" />
 							</div>
 						</div>
 					</div>

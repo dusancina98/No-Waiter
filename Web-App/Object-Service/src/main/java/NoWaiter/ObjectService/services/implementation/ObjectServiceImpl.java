@@ -5,6 +5,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import NoWaiter.ObjectService.entities.Address;
+import NoWaiter.ObjectService.entities.Contact;
 import NoWaiter.ObjectService.entities.Object;
 import NoWaiter.ObjectService.entities.ObjectAdmin;
 import NoWaiter.ObjectService.repository.ObjectAdminRepository;
@@ -75,5 +77,17 @@ public class ObjectServiceImpl implements ObjectService {
 		
 		objectRepository.save(object);
 		
+	}
+
+	@Override
+	public void Update(IdentifiableDTO<ObjectDTO> entity) {
+
+		Object object = objectRepository.findById(entity.Id).get();
+		object.setAddress(new Address(entity.EntityDTO.Address));
+		object.setContact(new Contact(entity.EntityDTO.PhoneNumber, entity.EntityDTO.Email));
+		object.setImagePath(entity.EntityDTO.ImagePath);
+		object.setName(entity.EntityDTO.Name);
+		
+		objectRepository.save(object);
 	}
 }

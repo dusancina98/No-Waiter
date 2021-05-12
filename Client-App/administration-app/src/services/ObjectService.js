@@ -4,6 +4,7 @@ import { objectConstants } from "../constants/ObjectConstants";
 
 export const objectService = {
 	createObject,
+	updateObject,
 	findAll,
 	activateObject,
 	deactivateObject,
@@ -12,7 +13,7 @@ export const objectService = {
 };
 
 function createObject(object, dispatch) {
-	if (validateObject(object, dispatch)) {
+	if (validateObject(object, dispatch, objectConstants.OBJECT_CREATE_FAILURE)) {
 		dispatch(request());
 
 		Axios.post(`${config.API_URL}/object-api/api/objects`, object, { validateStatus: () => true })
@@ -36,6 +37,34 @@ function createObject(object, dispatch) {
 	}
 	function failure(message) {
 		return { type: objectConstants.OBJECT_CREATE_FAILURE, errorMessage: message };
+	}
+}
+
+function updateObject(object, dispatch) {
+	if (validateObject(object.EntityDTO, dispatch, objectConstants.OBJECT_UPDATE_FAILURE)) {
+		dispatch(request());
+
+		Axios.put(`${config.API_URL}/object-api/api/objects`, object, { validateStatus: () => true })
+			.then((res) => {
+				if (res.status === 200) {
+					dispatch(success("Object successfully updated", object));
+				} else {
+					dispatch(failure(res.data.message));
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}
+
+	function request() {
+		return { type: objectConstants.OBJECT_UPDATE_REQUEST };
+	}
+	function success(message, object) {
+		return { type: objectConstants.OBJECT_UPDATE_SUCCESS, successMessage: message, object };
+	}
+	function failure(message) {
+		return { type: objectConstants.OBJECT_UPDATE_FAILURE, errorMessage: message };
 	}
 }
 
@@ -67,7 +96,7 @@ async function findAll(dispatch) {
 	}
 }
 
-function validateObject(object, dispatch) {
+function validateObject(object, dispatch, type) {
 	const phoneRegex = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/;
 
 	if (object.Name.length < 2) {
@@ -79,7 +108,7 @@ function validateObject(object, dispatch) {
 	}
 
 	function validatioFailure(message) {
-		return { type: objectConstants.OBJECT_CREATE_FAILURE, errorMessage: message };
+		return { type, errorMessage: message };
 	}
 
 	return true;

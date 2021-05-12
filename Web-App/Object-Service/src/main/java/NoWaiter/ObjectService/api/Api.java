@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import NoWaiter.ObjectService.services.contracts.ObjectService;
 import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
+import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
 
 @RestController
@@ -58,6 +59,20 @@ public class Api {
 
         try {
             return new ResponseEntity<>(objectService.FindAllForAdmin(), HttpStatus.OK);
+
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PutMapping
+    @CrossOrigin
+    public ResponseEntity<?> UpdateObject(@RequestBody IdentifiableDTO<ObjectDTO> objectDTO) {
+
+        try {
+        	objectService.Update(objectDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
 
         } catch (Exception e) {
         	e.printStackTrace();
