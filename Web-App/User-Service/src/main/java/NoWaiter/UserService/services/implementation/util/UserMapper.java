@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import NoWaiter.UserService.entities.ObjectAdmin;
+import NoWaiter.UserService.entities.Waiter;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
+import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
 
 public class UserMapper {
 
@@ -31,4 +33,9 @@ public class UserMapper {
         return retVal;
     }
 
+    public static Waiter MapWaiterDTOToWaiter(WaiterDTO waiterDTO) {
+    	if (waiterDTO == null) throw new IllegalArgumentException();
+    	
+    	return new Waiter(waiterDTO.Email, "", waiterDTO.Name, waiterDTO.Surname, waiterDTO.Address, waiterDTO.PhoneNumber);
+    }
 }

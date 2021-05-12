@@ -14,6 +14,11 @@ const UserContextProvider = (props) => {
 			errorMessage: "",
 			showSuccessMessage: false,
 		},
+		createWaiter: {
+			showError: false,
+			errorMessage: "",
+			showSuccessMessage: false,
+		},
 		objectAdmins: [],
 		showError: false,
 		errorMessage: "",

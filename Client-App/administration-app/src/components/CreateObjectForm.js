@@ -13,7 +13,7 @@ const CreateObjectForm = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		let object = { Name: name, Email: email, PhoneNumber: phoneNumber, ImagePath: "asdsad", Address: address };
+		let object = { Name: name, Email: email, PhoneNumber: phoneNumber, ImagePath: "assets/images/restaurant.jpg", Address: address };
 		objectService.createObject(object, dispatch);
 	};
 

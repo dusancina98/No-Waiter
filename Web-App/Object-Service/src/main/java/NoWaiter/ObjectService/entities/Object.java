@@ -46,7 +46,7 @@ public class Object {
     }
 
     public Object(String name, Address address, Contact contact, String imagePath) {
-        this (UUID.randomUUID(), name, address, contact, imagePath, false, true, new ArrayList<ObjectAdmin>());
+        this (UUID.randomUUID(), name, address, contact, imagePath, false, false, new ArrayList<ObjectAdmin>());
     }
 
     public Object() { }
@@ -90,19 +90,28 @@ public class Object {
     public boolean isActive() {
         return active;
     }
-
-    public void setActive(boolean active) {
-        this.active = active;
+    
+    public void Activate() {
+    	this.active = true;
     }
+  
+    public void Deactivate() {
+    	this.active = false;
+    }
+
 
     public boolean isBlocked() {
         return blocked;
     }
 
-    public void setBlocked(boolean blocked) {
-        this.blocked = blocked;
+    public void Block() {
+    	this.blocked = true;
     }
-
+    
+    public void Unblock() {
+    	this.blocked = false;
+    }
+    
 	public List<ObjectAdmin> getAdmins() {
 		return admins;
 	}

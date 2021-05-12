@@ -50,27 +50,55 @@ export const userReducer = (state, action) => {
 				errorMessage: action.errorMessage,
 				objectAdmins: [],
 			};
-			case userConstants.LOGIN_REQUEST:
-				return {
-					loginError: {
-						showError: false,
-						errorMessage: "",
-					},
-				};
-			case userConstants.LOGIN_FAILURE:
-				return {
-					loginError: {
-						showError: true,
-						errorMessage: "Sorry, your email or password was incorrect. Please double-check your password.",
-					},
-				};
-			case userConstants.LOGIN_SUCCESS:
-				return {
-					loginError: {
-						showError: false,
-						errorMessage: "",
-					},
-				};
+		case userConstants.WAITER_CREATE_REQUEST:
+			return {
+				...state,
+				createWaiter: {
+					showError: false,
+					errorMessage: "",
+					showSuccessMessage: false,
+				},
+			};
+		case userConstants.WAITER_CREATE_SUCCESS:
+			return {
+				...state,
+				createWaiter: {
+					showError: false,
+					errorMessage: "",
+					showSuccessMessage: true,
+				},
+			};
+		case userConstants.WAITER_CREATE_FAILURE:
+			return {
+				...state,
+				createWaiter: {
+					showError: true,
+					errorMessage: action.errorMessage,
+					showSuccessMessage: false,
+				},
+			};
+
+		case userConstants.LOGIN_REQUEST:
+			return {
+				loginError: {
+					showError: false,
+					errorMessage: "",
+				},
+			};
+		case userConstants.LOGIN_FAILURE:
+			return {
+				loginError: {
+					showError: true,
+					errorMessage: "Sorry, your email or password was incorrect. Please double-check your password.",
+				},
+			};
+		case userConstants.LOGIN_SUCCESS:
+			return {
+				loginError: {
+					showError: false,
+					errorMessage: "",
+				},
+			};
 		default:
 			return state;
 	}
