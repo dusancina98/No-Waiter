@@ -7,7 +7,8 @@ export const userService = {
 	createObjectAdmin,
 	findAllObjectAdmins,
 	login,
-	checkIfUserIdExist
+	checkIfUserIdExist,
+	resendActivationLinkRequest,
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -132,6 +133,31 @@ function checkIfUserIdExist(userId, dispatch) {
 
 	function success(emailAddress) {
 		return { type: userConstants.INACTIVE_USER_EMAIL_REQUEST, emailAddress };
+	}
+}
+
+function resendActivationLinkRequest(userId, dispatch){
+	dispatch(request());
+	Axios.post(`${config.API_URL}/user-api/api/users/activation-link-request`, userId, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 201) {
+				dispatch(success());
+			} else {
+				dispatch(failure("Activation mail was not sent. Please, try again."));
+			}
+		})
+		.catch((err) => {
+			dispatch(failure("Activation mail was not sent. Please, try again."))
+		});
+
+	function request() {
+		return { type: userConstants.RESEND_ACTIVATION_LINK_REQUEST };
+	}
+	function success() {
+		return { type: userConstants.RESEND_ACTIVATION_LINK_SUCCESS };
+	}
+	function failure(error) {
+		return { type: userConstants.RESEND_ACTIVATION_LINK_FAILURE, errorMessage: error };
 	}
 }
 

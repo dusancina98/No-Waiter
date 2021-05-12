@@ -29,7 +29,6 @@ import NoWaiter.AuthService.services.contracts.dto.JwtAuthenticationRequest;
 import NoWaiter.AuthService.services.contracts.dto.JwtParseRequestDTO;
 import NoWaiter.AuthService.services.contracts.dto.JwtParseResponseDTO;
 import NoWaiter.AuthService.services.contracts.dto.UserTokenStateDTO;
-import NoWaiter.AuthService.services.implementation.CustomUserDetailsService;
 
 @RestController
 @RequestMapping(value = "api/auth")
@@ -68,7 +67,6 @@ public class Api {
 			jwt = tokenUtils.generateToken(user.getUsername(),roles); // username
 			expiresIn = tokenUtils.getExpiredIn();
 		} catch (BadCredentialsException e) {
-			System.out.println("TESTT222");
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} catch (DisabledException e) {
 			UUID id = userService.GetUserIdByEmail(authenticationRequest.getUsername());
