@@ -10,13 +10,16 @@ public class ObjectAdminDTO extends UserDTO {
     
     public String ObjectName;
     
+    public String PhoneNumber;
+    
     public ObjectAdminDTO() {
     }
 
-    public ObjectAdminDTO(String email, String name, String surname, UUID objectId, String objectName, String address) {
+    public ObjectAdminDTO(String email, String name, String surname, UUID objectId, String objectName, String address, String phoneNumber) {
         super(email, name, surname);
         ObjectId = objectId;
         ObjectName = objectName;
         Address = address;
+        PhoneNumber = phoneNumber;
     }
 }

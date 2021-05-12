@@ -1,6 +1,9 @@
 import React, { useContext, useState } from "react";
+import { userConstants } from "../constants/UserConstants";
 import { UserContext } from "../contexts/UserContext";
 import { userService } from "../services/UserService";
+import FailureAlert from "./FailureAlert";
+import SuccessAlert from "./SuccessAlert";
 
 const CreateWaiterForm = () => {
 	const { userState, dispatch } = useContext(UserContext);
@@ -20,6 +23,18 @@ const CreateWaiterForm = () => {
 
 	return (
 		<React.Fragment>
+			<SuccessAlert
+				hidden={!userState.createWaiter.showSuccessMessage}
+				header="Success"
+				message="You successfully added new waiter"
+				handleCloseAlert={() => dispatch({ type: userConstants.WAITER_CREATE_REQUEST })}
+			/>
+			<FailureAlert
+				hidden={!userState.createWaiter.showError}
+				header="Error"
+				message={userState.createWaiter.errorMessage}
+				handleCloseAlert={() => dispatch({ type: userConstants.WAITER_CREATE_REQUEST })}
+			/>
 			<form className="forms-sample" method="post" onSubmit={handleSubmit}>
 				<div className="form-group">
 					<label for="emailAddress">Email address</label>
@@ -46,12 +61,6 @@ const CreateWaiterForm = () => {
 					Submit
 				</button>
 			</form>
-			<div hidden={!userState.createWaiter.showSuccessMessage} className="form-group text-center" style={{ fontSize: "1.3rem" }}>
-				You successfully added new waiter
-			</div>
-			<div hidden={!userState.createWaiter.showError} className="form-group text-center text-danger" style={{ fontSize: "1.1rem" }}>
-				{userState.createWaiter.errorMessage}
-			</div>
 		</React.Fragment>
 	);
 };

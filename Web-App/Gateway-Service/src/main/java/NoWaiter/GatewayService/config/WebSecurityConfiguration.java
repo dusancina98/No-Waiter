@@ -30,6 +30,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/auth-api/**").permitAll()
                     .antMatchers("/object-api/**").permitAll()
+                    .antMatchers("/user-api/**").permitAll()
                     .anyRequest().hasRole("SYSADMIN");
     }
 }

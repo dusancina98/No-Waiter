@@ -1,8 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
+import { userConstants } from "../constants/UserConstants";
 import { ObjectContext } from "../contexts/ObjectContext";
 import { UserContext } from "../contexts/UserContext";
 import { objectService } from "../services/ObjectService";
 import { userService } from "../services/UserService";
+import FailureAlert from "./FailureAlert";
+import SuccessAlert from "./SuccessAlert";
 
 const CreateObjectAdminForm = () => {
 	const { userState, dispatch } = useContext(UserContext);
@@ -14,11 +17,12 @@ const CreateObjectAdminForm = () => {
 	const [objectId, setObjectId] = useState("");
 	const [objectName, setObjectName] = useState("");
 	const [address, setAddress] = useState("");
+	const [phoneNumber, setPhoneNumber] = useState("");
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		let objectAdmin = { Email: email, Name: name, Surname: surname, Address: address, ObjectId: objectId, ObjectName: objectName };
+		let objectAdmin = { Email: email, Name: name, Surname: surname, Address: address, ObjectId: objectId, ObjectName: objectName, PhoneNumber: phoneNumber };
 		userService.createObjectAdmin(objectAdmin, dispatch);
 	};
 
@@ -31,6 +35,18 @@ const CreateObjectAdminForm = () => {
 
 	return (
 		<React.Fragment>
+			<SuccessAlert
+				hidden={!userState.createObjectAdmin.showSuccessMessage}
+				header="Success"
+				message="You successfully created new object admin"
+				handleCloseAlert={() => dispatch({ type: userConstants.OBJECT_ADMIN_CREATE_REQUEST })}
+			/>
+			<FailureAlert
+				hidden={!userState.createObjectAdmin.showError}
+				header="Error"
+				message={userState.createObjectAdmin.errorMessage}
+				handleCloseAlert={() => dispatch({ type: userConstants.OBJECT_ADMIN_CREATE_REQUEST })}
+			/>
 			<form className="forms-sample" method="post" onSubmit={handleSubmit}>
 				<div className="form-group">
 					<label for="emailAddress">Email address</label>
@@ -48,6 +64,10 @@ const CreateObjectAdminForm = () => {
 				<div className="form-group">
 					<label for="address">Address</label>
 					<input type="text" required className="form-control" id="address" placeholder="Address" onChange={(e) => setAddress(e.target.value)} />
+				</div>
+				<div className="form-group">
+					<label for="phoneNumber">Phone number</label>
+					<input type="text" required className="form-control" id="phoneNumber" placeholder="Phone number" onChange={(e) => setPhoneNumber(e.target.value)} />
 				</div>
 				<div className="form-group">
 					<label for="name">Select restaurant</label>
@@ -75,12 +95,6 @@ const CreateObjectAdminForm = () => {
 					Submit
 				</button>
 			</form>
-			<div hidden={!userState.createObjectAdmin.showSuccessMessage} className="form-group text-center" style={{ fontSize: "1.3rem" }}>
-				You successfully created new object admin
-			</div>
-			<div hidden={!userState.createObjectAdmin.showError} className="form-group text-center text-danger" style={{ fontSize: "1.1rem" }}>
-				{userState.createObjectAdmin.errorMessage}
-			</div>
 		</React.Fragment>
 	);
 };

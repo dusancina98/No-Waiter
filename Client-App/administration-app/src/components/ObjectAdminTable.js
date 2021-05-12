@@ -1,4 +1,3 @@
-import UserContextProvider from "../contexts/UserContext";
 import ObjectAdminList from "./ObjectAdminList";
 
 const ObjectAdminTable = () => {
@@ -15,13 +14,12 @@ const ObjectAdminTable = () => {
 									<th>Name</th>
 									<th>Surname</th>
 									<th>Address</th>
+									<th>Phone number</th>
 									<th>Object name</th>
 								</tr>
 							</thead>
 							<tbody>
-								<UserContextProvider>
-									<ObjectAdminList />
-								</UserContextProvider>
+								<ObjectAdminList />
 							</tbody>
 						</table>
 					</div>
