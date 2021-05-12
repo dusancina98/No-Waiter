@@ -3,14 +3,16 @@ package NoWaiter.UserService.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name="USERS")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User {
+public class User{
 
-    @Id
+	@Id
     @Column(name = "id")
     private UUID id;
 
@@ -26,6 +28,12 @@ public class User {
 
     @Column(name = "surname", nullable = false)
     private String surname;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_authority",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+    private List<Authority> authorities;
 
     public User() { }
 
@@ -76,4 +84,13 @@ public class User {
     public void setSurname(String surname) {
         this.surname = surname;
     }
+
+	public List<Authority> getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(List<Authority> authorities) {
+		this.authorities = authorities;
+	}
+	
 }

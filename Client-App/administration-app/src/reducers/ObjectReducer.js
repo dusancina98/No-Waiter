@@ -55,7 +55,7 @@ export const objectReducer = (state, action) => {
 					object: action.object,
 				},
 			};
-			var foundIndex = pom.objects.findIndex((object) => object.Id == action.object.Id);
+			var foundIndex = pom.objects.findIndex((object) => object.Id === action.object.Id);
 			pom.objects[foundIndex] = action.object;
 
 			return pom;

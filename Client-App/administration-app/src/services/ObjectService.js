@@ -16,7 +16,8 @@ function createObject(object, dispatch) {
 	if (validateObject(object, dispatch, objectConstants.OBJECT_CREATE_FAILURE)) {
 		dispatch(request());
 
-		Axios.post(`${config.API_URL}/object-api/api/objects`, object, { validateStatus: () => true })
+		Axios.post(`${config.API_URL}/object-api/api/objects`, object, { validateStatus: () => true,
+		})
 			.then((res) => {
 				if (res.status === 201) {
 					dispatch(success());

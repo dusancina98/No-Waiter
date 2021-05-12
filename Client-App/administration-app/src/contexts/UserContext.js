@@ -5,6 +5,10 @@ export const UserContext = createContext();
 
 const UserContextProvider = (props) => {
 	const [userState, dispatch] = useReducer(userReducer, {
+		loginError: {
+			showError: false,
+			errorMessage: "",
+		},
 		createObjectAdmin: {
 			showError: false,
 			errorMessage: "",

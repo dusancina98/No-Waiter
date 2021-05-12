@@ -6,12 +6,15 @@ import CreateWaiterPage from "./pages/CreateWaiterPage";
 import HomePage from "./pages/HomePage";
 import ListObjectAdminsPage from "./pages/ListObjectAdminsPage";
 import ListObjectPage from "./pages/ListObjectsPage";
+import LoginPage from "./pages/Login";
+import { ProtectedRoute } from "./router/ProtectedRouter";
 
 function App() {
 	return (
 		<Router>
 			<Switch>
-				<Route exact path="/" component={HomePage} />
+				<ProtectedRoute roles={""} redirectTo="/" path="/login" component={LoginPage} />
+				<ProtectedRoute roles={"ROLE_SYSADMIN"} exact path="/" redirectTo="/unauthorized" component={HomePage} />
 				<Route path="/add-object" component={CreateObjectPage} />
 				<Route path="/objects" component={ListObjectPage} />
 				<Route path="/add-object-admin" component={CreateObjectAdminPage} />

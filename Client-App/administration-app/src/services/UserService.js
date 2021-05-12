@@ -1,11 +1,13 @@
 import Axios from "axios";
 import { config } from "../config/config";
 import { userConstants } from "../constants/UserConstants";
+import { setAuthInLocalStorage } from "../helpers/auth-header";
 
 export const userService = {
 	createObjectAdmin,
 	findAllObjectAdmins,
 	createWaiter,
+	login,
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -63,7 +65,6 @@ async function findAllObjectAdmins(dispatch) {
 
 	await Axios.get(`${config.API_URL}/user-api/api/users/object-admin`, { validateStatus: () => true })
 		.then((res) => {
-			console.log(res);
 			if (res.status === 200) {
 				dispatch(success(res.data));
 			} else {
@@ -131,4 +132,32 @@ function validateWaiter(waiter, dispatch) {
 	}
 
 	return true;
+}
+
+function login(loginRequest, dispatch) {
+	dispatch(request());
+
+	Axios.post(`${config.API_URL}/auth-api/api/auth/login`, loginRequest, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 200) {
+				setAuthInLocalStorage(res.data);
+				dispatch(success());
+				window.location = "#/";
+			} else if (res.status === 401) {
+				dispatch(failure(res.data.message));
+			} else {
+				dispatch({ type: userConstants.LOGIN_FAILURE });
+			}
+		})
+		.catch((err) => console.error(err));
+
+	function request() {
+		return { type: userConstants.LOGIN_REQUEST };
+	}
+	function success() {
+		return { type: userConstants.LOGIN_SUCCESS };
+	}
+	function failure(error) {
+		return { type: userConstants.LOGIN_FAILURE, error };
+	}
 }
