@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,6 +58,62 @@ public class Api {
 
         try {
             return new ResponseEntity<>(objectService.FindAllForAdmin(), HttpStatus.OK);
+
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PutMapping("/{objectId}/activate")
+    @CrossOrigin
+    public ResponseEntity<?> ActivateObject(@PathVariable UUID objectId) {
+
+        try {
+        	objectService.ToggleObjectActivation(objectId, true);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PutMapping("/{objectId}/deactivate")
+    @CrossOrigin
+    public ResponseEntity<?> DeactivateObject(@PathVariable UUID objectId) {
+
+        try {
+        	objectService.ToggleObjectActivation(objectId, false);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PutMapping("/{objectId}/block")
+    @CrossOrigin
+    public ResponseEntity<?> BlockObject(@PathVariable UUID objectId) {
+
+        try {
+        	objectService.ToggleObjectBlock(objectId, true);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PutMapping("/{objectId}/unblock")
+    @CrossOrigin
+    public ResponseEntity<?> UnblockObject(@PathVariable UUID objectId) {
+
+        try {
+        	objectService.ToggleObjectBlock(objectId, false);
+            return new ResponseEntity<>(HttpStatus.OK);
 
         } catch (Exception e) {
         	e.printStackTrace();

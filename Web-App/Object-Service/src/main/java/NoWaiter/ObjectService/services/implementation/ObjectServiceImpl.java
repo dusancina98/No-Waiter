@@ -53,4 +53,27 @@ public class ObjectServiceImpl implements ObjectService {
         return ObjectMapper.MapObjectCollectionToIdentifiableObjectWithStatusDTOCollection(objectRepository.findAll());
 
 	}
+
+	@Override
+	public void ToggleObjectActivation(UUID id, boolean status) {
+		
+		Object object = objectRepository.findById(id).get();
+		
+		if (status == true) object.Activate();
+		else object.Deactivate();
+		
+		objectRepository.save(object);
+	}
+
+	@Override
+	public void ToggleObjectBlock(UUID id, boolean status) {
+		
+		Object object = objectRepository.findById(id).get();
+		
+		if (status == true) object.Block();
+		else object.Unblock();
+		
+		objectRepository.save(object);
+		
+	}
 }

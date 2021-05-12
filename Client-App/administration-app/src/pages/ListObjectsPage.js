@@ -17,9 +17,9 @@ const ListObjectPage = () => {
 						<ModalContextProvider>
 							<ObjectContextProvider>
 								<ObjectList />
-							</ObjectContextProvider>
 
-							<ObjectDetailsModal />
+								<ObjectDetailsModal />
+							</ObjectContextProvider>
 						</ModalContextProvider>
 					</div>
 				</div>

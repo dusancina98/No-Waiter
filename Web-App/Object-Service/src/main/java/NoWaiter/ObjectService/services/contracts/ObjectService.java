@@ -16,4 +16,8 @@ public interface ObjectService {
     IdentifiableDTO<ObjectDTO> FindById(UUID id);
 
     Iterable<IdentifiableDTO<ObjectWithStatusDTO>> FindAllForAdmin();
+    
+    void ToggleObjectBlock(UUID id, boolean status);
+    
+    void ToggleObjectActivation(UUID id, boolean status);
 }

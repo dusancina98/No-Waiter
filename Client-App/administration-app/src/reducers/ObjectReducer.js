@@ -50,6 +50,127 @@ export const objectReducer = (state, action) => {
 				errorMessage: action.errorMessage,
 				objects: [],
 			};
+		case objectConstants.OBJECT_ACTIVATION_REQUEST:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case objectConstants.OBJECT_ACTIVATION_SUCCESS:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case objectConstants.OBJECT_ACTIVATION_FAILURE:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+			};
+		case objectConstants.OBJECT_DEACTIVATION_REQUEST:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case objectConstants.OBJECT_DEACTIVATION_SUCCESS:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case objectConstants.OBJECT_DEACTIVATION_FAILURE:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+			};
+		case objectConstants.OBJECT_BLOCKING_REQUEST:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case objectConstants.OBJECT_BLOCKING_SUCCESS:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case objectConstants.OBJECT_BLOCKING_FAILURE:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+			};
+
+		case objectConstants.OBJECT_UNBLOCKING_REQUEST:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case objectConstants.OBJECT_UNBLOCKING_SUCCESS:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case objectConstants.OBJECT_UNBLOCKING_FAILURE:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+			};
 
 		default:
 			return state;

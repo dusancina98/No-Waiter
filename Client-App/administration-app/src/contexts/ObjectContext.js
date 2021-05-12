@@ -10,6 +10,12 @@ const ObjectContextProvider = (props) => {
 			errorMessage: "",
 			showSuccessMessage: false,
 		},
+		editObject: {
+			showSuccessMessage: false,
+			successMessage: "",
+			showErrorMessage: false,
+			errorMessage: "",
+		},
 		objects: [],
 		showError: false,
 		errorMessage: "",
