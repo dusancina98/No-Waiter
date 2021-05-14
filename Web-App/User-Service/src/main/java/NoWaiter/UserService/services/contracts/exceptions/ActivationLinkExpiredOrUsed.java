@@ -10,5 +10,4 @@ public class ActivationLinkExpiredOrUsed extends Exception {
 	public ActivationLinkExpiredOrUsed(String s){  
 		  super(s);  
 	}
-
 }

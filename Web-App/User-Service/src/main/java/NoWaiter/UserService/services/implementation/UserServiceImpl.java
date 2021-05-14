@@ -7,13 +7,19 @@ import NoWaiter.UserService.repository.AccountActivationRepository;
 import NoWaiter.UserService.repository.ObjectAdminRepository;
 import NoWaiter.UserService.repository.UserRepository;
 import NoWaiter.UserService.services.contracts.UserService;
+import NoWaiter.UserService.services.contracts.dto.ChangeFirstPasswordDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsed;
+import NoWaiter.UserService.services.contracts.exceptions.PasswordIsNotStrongException;
+import NoWaiter.UserService.services.contracts.exceptions.PasswordsIsNotTheSameException;
 import NoWaiter.UserService.services.contracts.exceptions.UserIsActiveException;
 import NoWaiter.UserService.services.implementation.util.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.mail.MailException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -36,7 +42,15 @@ public class UserServiceImpl implements UserService {
     
     @Autowired
     private EmailServiceImpl emailService;
+    
+    @Autowired
+	private PasswordEncoder passwordEncoder;
 
+    @Bean
+    PasswordEncoder getEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+    
     @Override
     public UUID CreateRestaurantAdmin(ObjectAdminDTO entity) throws Exception {
         ObjectAdmin restaurantAdmin = UserMapper.MapRestaurantAdminDTOToRestaurantAdmin(entity);
@@ -104,12 +118,34 @@ public class UserServiceImpl implements UserService {
 
 		List<AccountActivation> accountActivations =  accountActivationRepository.getUsedActivationsForUser(accountActivation.getUserId().getId());
 		
-		if(accountActivations.size()==0)
+		if(accountActivations.size()==0) {
+			accountActivation.setUsed(true);
+			accountActivationRepository.save(accountActivation);
 			return accountActivation.getUserId().getId();
+
+		}
 		else
 			return null;
+	}
+
+	@Override
+	public void changeFirstPassword(ChangeFirstPasswordDTO changeFirstPasswordDTO) throws PasswordsIsNotTheSameException, PasswordIsNotStrongException {
+		String newPassword = HashAndSaltPasswordIfStrongAndMatching(changeFirstPasswordDTO.password,changeFirstPasswordDTO.repeatedPassword);
 		
+		User user= userRepository.getOne(changeFirstPasswordDTO.userId);
+		user.setPassword(newPassword);
+		user.setActive(true);
+		userRepository.save(user);
+	}
+	
+	private String HashAndSaltPasswordIfStrongAndMatching(String password, String repeatedPassword) throws PasswordsIsNotTheSameException, PasswordIsNotStrongException {
 		
+		if(!password.equals(repeatedPassword))
+			throw new PasswordsIsNotTheSameException("Difference passwords");
 		
+		if(password.matches("^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[^!@#$%^&*(),.?\":{}|<>~'_+=]*)$"))
+			throw new PasswordIsNotStrongException("password must contain minimum eight characters, at least one capital letter, one number and one special character");
+				
+		return passwordEncoder.encode(password);
 	}
 }

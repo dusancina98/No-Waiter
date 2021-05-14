@@ -9,6 +9,8 @@ export const userService = {
 	login,
 	checkIfUserIdExist,
 	resendActivationLinkRequest,
+	changeFirstPassword,
+
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -158,6 +160,51 @@ function resendActivationLinkRequest(userId, dispatch){
 	}
 	function failure(error) {
 		return { type: userConstants.RESEND_ACTIVATION_LINK_FAILURE, errorMessage: error };
+	}
+}
+
+function changeFirstPassword(changePasswordRequest, dispatch){
+	let [passwordValid, passwordErrorMessage] = validatePasswords(changePasswordRequest.password, changePasswordRequest.repeatedPassword);
+
+	if (passwordValid === true) {
+		dispatch(request());
+
+		Axios.post(`${config.API_URL}/user-api/api/users/change-first-password`, changePasswordRequest, { validateStatus: () => true })
+			.then((res) => {
+				if (res.status === 200) {
+					dispatch(success());
+				} else {
+					console.log(res);
+					dispatch(failure(res.data.message));
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	} else {
+		dispatch(failure(passwordErrorMessage));
+	}
+
+	function request() {
+		return { type: userConstants.FIRST_ACTIVATION_PASSWORD_CHANGE_REQUEST };
+	}
+	function success() {
+		return { type: userConstants.FIRST_ACTIVATION_PASSWORD_CHANGE_SUCCESS };
+	}
+	function failure(error) {
+		return { type: userConstants.FIRST_ACTIVATION_PASSWORD_CHANGE_FAILURE, errorMessage: error };
+	}
+}
+
+function validatePasswords(password, repeatedPassword) {
+	const regexPassword = /^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[^!@#$%^&*(),.?":{}|<>~'_+=]*)$/;
+
+	if (regexPassword.test(password) === true) {
+		return [false, "Password must contain minimum eight characters, at least one capital letter, one number and one special character."];
+	} else if (password !== repeatedPassword) {
+		return [false, "Passwords must be the same."];
+	} else {
+		return [true, ""];
 	}
 }
 

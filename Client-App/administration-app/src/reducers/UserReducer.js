@@ -80,30 +80,54 @@ export const userReducer = (state, action) => {
 						emailAddress: action.emailAddress,
 					},
 				};
-				case userConstants.RESEND_ACTIVATION_LINK_REQUEST:
-					return {
-						inActiveUser: {
-							showError: false,
-							errorMessage: "",
-							showSuccessMessage: false,
-						},
-					};
-				case userConstants.RESEND_ACTIVATION_LINK_SUCCESS:
-					return {
-						inActiveUser: {
-							showError: false,
-							errorMessage: "",
-							showSuccessMessage: true,
-						},
-					};
-				case userConstants.RESEND_ACTIVATION_LINK_FAILURE:
-					return {
-						inActiveUser: {
-							showError: true,
-							errorMessage: action.errorMessage,
-							showSuccessMessage: false,
-						},
-					};
+			case userConstants.RESEND_ACTIVATION_LINK_REQUEST:
+				return {
+					inActiveUser: {
+						showError: false,
+						errorMessage: "",
+						showSuccessMessage: false,
+					},
+				};
+			case userConstants.RESEND_ACTIVATION_LINK_SUCCESS:
+				return {
+					inActiveUser: {
+						showError: false,
+						errorMessage: "",
+						showSuccessMessage: true,
+					},
+				};
+			case userConstants.RESEND_ACTIVATION_LINK_FAILURE:
+				return {
+					inActiveUser: {
+						showError: true,
+						errorMessage: action.errorMessage,
+						showSuccessMessage: false,
+					},
+				};
+			case userConstants.FIRST_ACTIVATION_PASSWORD_CHANGE_REQUEST:
+				return {
+					changePassword: {
+						showError: false,
+						errorMessage: "",
+						showSuccessMessage: false,
+					},
+				};
+			case userConstants.FIRST_ACTIVATION_PASSWORD_CHANGE_SUCCESS:
+				return {
+					changePassword: {
+						showError: false,
+						errorMessage: "",
+						showSuccessMessage: true,
+					},
+				};
+			case userConstants.FIRST_ACTIVATION_PASSWORD_CHANGE_FAILURE:
+				return {
+					changePassword: {
+						showError: true,
+						errorMessage: action.errorMessage,
+						showSuccessMessage: false,
+					},
+				};
 		default:
 			return state;
 	}

@@ -1,6 +1,7 @@
 import { useContext,useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { userService } from "../services/UserService";
+import { Link } from "react-router-dom";
 
 const FirstActivationPasswordChangeForm = (props) => {
     const { userState, dispatch } = useContext(UserContext);
@@ -13,13 +14,13 @@ const FirstActivationPasswordChangeForm = (props) => {
     const handleSubmit = (e) => {
 		e.preventDefault();
 
-		let loginRequest = {
+		let changePasswordRequest = {
 			password,
 			repeatedPassword,
             userId
 		};
 
-        userService.login(loginRequest, dispatch);
+        userService.changeFirstPassword(changePasswordRequest, dispatch);
 	};
 
 	return (
@@ -31,7 +32,7 @@ const FirstActivationPasswordChangeForm = (props) => {
 						<i className="zmdi zmdi-font"/>
 					</span>
 
-                    <div className="wrap-input100">
+                    <div hidden={userState.changePassword.showSuccessMessage} className="wrap-input100">
                         <span class="btn-show-pass">
 							<i class="zmdi zmdi-eye"></i>
 						</span>
@@ -39,7 +40,8 @@ const FirstActivationPasswordChangeForm = (props) => {
                         <span class="focus-input100"></span>
                     </div>
 
-			        <div className="wrap-input100">
+
+			        <div hidden={userState.changePassword.showSuccessMessage} className="wrap-input100">
                         <span class="btn-show-pass">
 							<i class="zmdi zmdi-eye"></i>
 						</span>
@@ -47,7 +49,11 @@ const FirstActivationPasswordChangeForm = (props) => {
                         <span class="focus-input100"></span>
                     </div>
 
-					<div class="container-login100-form-btn">
+                    <div className="form-group text-center" style={{ color: "red", fontSize: "0.8em" }} hidden={!userState.changePassword.showError}>
+				        {userState.changePassword.errorMessage}
+			        </div>
+
+					<div hidden={userState.changePassword.showSuccessMessage} class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
 							<button class="login100-form-btn">
@@ -56,8 +62,13 @@ const FirstActivationPasswordChangeForm = (props) => {
 						</div>
 					</div>
 
-                    <div className="form-group text-center p-t-25" style={{ color: "red", fontSize: "1em" }} hidden={!userState.loginError.showError}>
-				        {userState.loginError.errorMessage}
+                    <div hidden={!userState.changePassword.showSuccessMessage} className="form-group text-center" style={{ fontSize: "1.3em" }}>
+				        You successfully changed your password.
+			        </div>
+			        <div hidden={!userState.changePassword.showSuccessMessage} className="form-group">
+				        <Link className="btn btn-primary btn-block" to="/login">
+					        Back to login
+				        </Link>
 			        </div>
 				</form>
 	);

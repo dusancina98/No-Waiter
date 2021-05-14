@@ -19,9 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 import NoWaiter.UserService.intercomm.ObjectClient;
 import NoWaiter.UserService.services.contracts.UserService;
 import NoWaiter.UserService.services.contracts.dto.AddAdminDTO;
+import NoWaiter.UserService.services.contracts.dto.ChangeFirstPasswordDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestIdDTO;
 import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsed;
+import NoWaiter.UserService.services.contracts.exceptions.PasswordIsNotStrongException;
+import NoWaiter.UserService.services.contracts.exceptions.PasswordsIsNotTheSameException;
 import NoWaiter.UserService.services.contracts.exceptions.UserIsActiveException;
 import feign.FeignException;
 
@@ -89,7 +92,6 @@ public class Api {
     @CrossOrigin
     public ResponseEntity<?> createActivationLink(@RequestBody RequestIdDTO requestIdDTO) {
         try {
-        	System.out.println("TESTTT");
         	userService.createActivationLink(requestIdDTO.id);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }catch(UserIsActiveException ee) {
@@ -120,6 +122,21 @@ public class Api {
             httpServletResponse.setStatus(302);
             return new ResponseEntity<>(HttpStatus.PERMANENT_REDIRECT);
         }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PostMapping("/change-first-password")
+    @CrossOrigin
+    public ResponseEntity<?> changeFirstPassword(@RequestBody ChangeFirstPasswordDTO changeFirstPasswordDTO) {
+        try {
+        	userService.changeFirstPassword(changeFirstPasswordDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch(PasswordsIsNotTheSameException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }catch(PasswordIsNotStrongException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }catch(Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
