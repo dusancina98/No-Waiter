@@ -2,6 +2,7 @@ import { HashRouter as Router, Switch, Route, Redirect } from "react-router-dom"
 import "./App.css";
 import CreateObjectAdminPage from "./pages/CreateObjectAdminPage";
 import CreateObjectPage from "./pages/CreateObjectPage";
+import FirstActivationPasswordChangePage from "./pages/FirstActivationPasswordChangePage";
 import HomePage from "./pages/HomePage";
 import ListObjectAdminsPage from "./pages/ListObjectAdminsPage";
 import ListObjectPage from "./pages/ListObjectsPage";
@@ -21,6 +22,7 @@ function App() {
 				<Route path="/object-admins" component={ListObjectAdminsPage} />
 
 				<ProtectedRoute roles={""} redirectTo="/" path="/inactive-user/:id" component={UserActivateRequestPage} />
+				<ProtectedRoute roles={""} redirectTo="/" path="/first-login-password/:id" component={FirstActivationPasswordChangePage} />
 
 
 			</Switch>

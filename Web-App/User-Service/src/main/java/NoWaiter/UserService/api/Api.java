@@ -89,8 +89,9 @@ public class Api {
     @CrossOrigin
     public ResponseEntity<?> createActivationLink(@RequestBody RequestIdDTO requestIdDTO) {
         try {
+        	System.out.println("TESTTT");
         	userService.createActivationLink(requestIdDTO.id);
-            return new ResponseEntity<>(null, HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         }catch(UserIsActiveException ee) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch(Exception e) {
@@ -102,9 +103,17 @@ public class Api {
     @CrossOrigin
     public ResponseEntity<?> activateUser(@PathVariable UUID activationId,HttpServletResponse httpServletResponse) {
         try {
-        	userService.activateUser(activationId);
-            httpServletResponse.setHeader("Location", "http://localhost:3000/index.html#/login");
-            httpServletResponse.setStatus(302);
+        	
+        	UUID userId = userService.isUserFirstLogin(activationId);
+        	if(userId!=null) {
+        		httpServletResponse.setHeader("Location", "http://localhost:3000/index.html#/first-login-password/" + userId);
+                httpServletResponse.setStatus(302);
+        	}else {
+            	userService.activateUser(activationId);
+            	httpServletResponse.setHeader("Location", "http://localhost:3000/index.html#/login");
+                httpServletResponse.setStatus(302);
+        	}
+
             return new ResponseEntity<>(HttpStatus.PERMANENT_REDIRECT);
         } catch(ActivationLinkExpiredOrUsed e) {
             httpServletResponse.setHeader("Location", "http://localhost:3000/index.html#/404");

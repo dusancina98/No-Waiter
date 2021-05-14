@@ -84,4 +84,10 @@ public class AccountActivation {
 	private Date generateExpirationDate(Date generationDate) {
 		return new Date(generationDate.getTime() + (30 * 60 * 1000));
 	}
+
+	public UUID getId() {
+		return id;
+	}
+	
+	
 }

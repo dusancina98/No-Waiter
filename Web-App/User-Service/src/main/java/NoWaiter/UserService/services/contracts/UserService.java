@@ -17,4 +17,6 @@ public interface UserService {
 	void createActivationLink(UUID userId) throws Exception;
 
 	void activateUser(UUID activationId) throws ActivationLinkExpiredOrUsed;
+
+	UUID isUserFirstLogin(UUID activationId);
 }

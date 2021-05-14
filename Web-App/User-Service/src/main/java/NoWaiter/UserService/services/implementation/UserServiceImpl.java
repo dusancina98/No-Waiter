@@ -13,10 +13,14 @@ import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredO
 import NoWaiter.UserService.services.contracts.exceptions.UserIsActiveException;
 import NoWaiter.UserService.services.implementation.util.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
+
+import javax.mail.MessagingException;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,6 +33,9 @@ public class UserServiceImpl implements UserService {
     
     @Autowired
     private AccountActivationRepository accountActivationRepository;
+    
+    @Autowired
+    private EmailServiceImpl emailService;
 
     @Override
     public UUID CreateRestaurantAdmin(ObjectAdminDTO entity) throws Exception {
@@ -53,9 +60,19 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.getOne(userId);
 		if(user.isActive())
 			throw new UserIsActiveException("User was activated");
-		
+				
 		AccountActivation accountActivation = new AccountActivation(user, new Date(System.currentTimeMillis()));
 		accountActivationRepository.save(accountActivation);
+		
+		try {
+			emailService.sendActivationLinkAsync(user, accountActivation.getId());
+		} catch (MailException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -63,7 +80,8 @@ public class UserServiceImpl implements UserService {
 		AccountActivation accountActivation = isValidAccountActivationLink(activationId);
 		if(accountActivation==null)
 			throw new ActivationLinkExpiredOrUsed("User was activated");
-
+				
+		
 		User user = userRepository.getOne(accountActivation.getUserId().getId());
 		user.setActive(true);
 		userRepository.save(user);
@@ -78,5 +96,20 @@ public class UserServiceImpl implements UserService {
 			return null;
 		
 		return accountActivation;
+	}
+
+	@Override
+	public UUID isUserFirstLogin(UUID activationId) {
+		AccountActivation accountActivation = accountActivationRepository.getOne(activationId);
+
+		List<AccountActivation> accountActivations =  accountActivationRepository.getUsedActivationsForUser(accountActivation.getUserId().getId());
+		
+		if(accountActivations.size()==0)
+			return accountActivation.getUserId().getId();
+		else
+			return null;
+		
+		
+		
 	}
 }
