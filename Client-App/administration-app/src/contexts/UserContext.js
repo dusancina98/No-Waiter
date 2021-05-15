@@ -25,6 +25,33 @@ const UserContextProvider = (props) => {
 			errorMessage: "",
 			showSuccessMessage: false,
 		},
+		createWaiter: {
+			showError: false,
+			errorMessage: "",
+			showSuccessMessage: false,
+		},
+		editObjectAdmin: {
+			showSuccessMessage: false,
+			successMessage: "",
+			showErrorMessage: false,
+			errorMessage: "",
+		},
+		objectAdminDetails: {
+			showModal: false,
+			readOnly: true,
+			objectAdmin: {
+				Id: "",
+				EntityDTO: {
+					Email: "",
+					Name: "",
+					Surname: "",
+					Address: "",
+					ObjectName: "",
+					ObjectId: "",
+					PhoneNumber: "",
+				},
+			},
+		},
 		objectAdmins: [],
 		showError: false,
 		errorMessage: "",

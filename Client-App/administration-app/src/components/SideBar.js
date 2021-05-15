@@ -4,12 +4,12 @@ const SideBar = () => {
 	return (
 		<nav className="sidebar sidebar-offcanvas" id="sidebar">
 			<div className="text-center sidebar-brand-wrapper d-flex align-items-center">
-				<a className="sidebar-brand brand-logo" href="index.html">
+				<Link className="sidebar-brand brand-logo" to="/">
 					<img src="assets/images/logo.svg" alt="logo" />
-				</a>
-				<a className="sidebar-brand brand-logo-mini pl-4 pt-3" href="index.html">
+				</Link>
+				<Link className="sidebar-brand brand-logo-mini pl-4 pt-3" to="/">
 					<img src="assets/images/logo-mini.svg" alt="logo" />
-				</a>
+				</Link>
 			</div>
 			<ul className="nav">
 				<li className="nav-item nav-profile">
@@ -47,12 +47,12 @@ const SideBar = () => {
 					</div>
 				</li>
 				<li className="nav-item">
-					<a className="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+					<a className="nav-link" data-toggle="collapse" href="#admins" aria-expanded="false" aria-controls="admins">
 						<i className="mdi mdi-account-plus menu-icon"></i>
 						<span className="menu-title">Object Admins</span>
 						<i className="menu-arrow"></i>
 					</a>
-					<div className="collapse" id="ui-basic">
+					<div className="collapse" id="admins">
 						<ul className="nav flex-column sub-menu">
 							<li className="nav-item">
 								<Link className="nav-link" to="/object-admins">
@@ -62,6 +62,27 @@ const SideBar = () => {
 							<li className="nav-item">
 								<Link className="nav-link" to="/add-object-admin">
 									Add Object Admin
+								</Link>
+							</li>
+						</ul>
+					</div>
+				</li>
+				<li className="nav-item">
+					<a className="nav-link" data-toggle="collapse" href="#employees" aria-expanded="false" aria-controls="employees">
+						<i className="mdi mdi-account-plus menu-icon"></i>
+						<span className="menu-title">Employees</span>
+						<i className="menu-arrow"></i>
+					</a>
+					<div className="collapse" id="employees">
+						<ul className="nav flex-column sub-menu">
+							<li className="nav-item">
+								<Link className="nav-link" to="/object-admins">
+									All Employees
+								</Link>
+							</li>
+							<li className="nav-item">
+								<Link className="nav-link" to="/employees/add-waiter">
+									Add Employee
 								</Link>
 							</li>
 						</ul>

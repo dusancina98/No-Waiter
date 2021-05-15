@@ -6,6 +6,8 @@ import NoWaiter.UserService.entities.User;
 import NoWaiter.UserService.repository.AccountActivationRepository;
 import NoWaiter.UserService.repository.ObjectAdminRepository;
 import NoWaiter.UserService.repository.UserRepository;
+import NoWaiter.UserService.entities.Waiter;
+import NoWaiter.UserService.repository.WaiterRepository;
 import NoWaiter.UserService.services.contracts.UserService;
 import NoWaiter.UserService.services.contracts.dto.ChangeFirstPasswordDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
@@ -14,7 +16,11 @@ import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredO
 import NoWaiter.UserService.services.contracts.exceptions.PasswordIsNotStrongException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordsIsNotTheSameException;
 import NoWaiter.UserService.services.contracts.exceptions.UserIsActiveException;
+import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
+import NoWaiter.UserService.services.contracts.dto.UserClientObjectDTO;
+import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
 import NoWaiter.UserService.services.implementation.util.UserMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.MailException;
@@ -25,8 +31,12 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
 import javax.mail.MessagingException;
+
+import java.util.ArrayList;
+
+import javax.transaction.Transactional;
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -44,15 +54,18 @@ public class UserServiceImpl implements UserService {
     private EmailServiceImpl emailService;
     
     @Autowired
-	private PasswordEncoder passwordEncoder;
+    private WaiterRepository waiterRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
     @Bean
     PasswordEncoder getEncoder() {
         return new BCryptPasswordEncoder();
     }
     
     @Override
-    public UUID CreateRestaurantAdmin(ObjectAdminDTO entity) throws Exception {
+    public UUID CreateObjectAdmin(ObjectAdminDTO entity) throws Exception {
         ObjectAdmin restaurantAdmin = UserMapper.MapRestaurantAdminDTOToRestaurantAdmin(entity);
         objectAdminRepository.save(restaurantAdmin);
         createActivationLink(restaurantAdmin.getId());
@@ -147,5 +160,35 @@ public class UserServiceImpl implements UserService {
 			throw new PasswordIsNotStrongException("password must contain minimum eight characters, at least one capital letter, one number and one special character");
 				
 		return passwordEncoder.encode(password);
+	}
+	
+	@Override
+	public UUID CreateWaiter(WaiterDTO entity) {
+		Waiter waiter = UserMapper.MapWaiterDTOToWaiter(entity);
+		waiterRepository.save(waiter);
+		return waiter.getId();
+	}
+
+	@Override
+	public void UpdateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity) {
+
+		ObjectAdmin objectAdmin = objectAdminRepository.findById(entity.Id).get();
+		objectAdmin.setAddress(entity.EntityDTO.Address);
+		objectAdmin.setName(entity.EntityDTO.Name);
+		objectAdmin.setSurname(entity.EntityDTO.Surname);
+		objectAdmin.setPhoneNumber(entity.EntityDTO.PhoneNumber);
+		objectAdminRepository.save(objectAdmin);
+	}
+
+	@Override
+	@Transactional
+	public void UpdateObjects(UserClientObjectDTO entity) {
+		
+		ArrayList<ObjectAdmin> objectAdmins = (ArrayList<ObjectAdmin>) objectAdminRepository.findByObjectId(entity.Id);
+		for (ObjectAdmin objectAdmin : objectAdmins) {
+			objectAdmin.setObjectName(entity.Name);
+		}
+		
+		objectAdminRepository.saveAll(objectAdmins);
 	}
 }

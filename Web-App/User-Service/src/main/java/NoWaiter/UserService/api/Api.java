@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,10 @@ import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredO
 import NoWaiter.UserService.services.contracts.exceptions.PasswordIsNotStrongException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordsIsNotTheSameException;
 import NoWaiter.UserService.services.contracts.exceptions.UserIsActiveException;
+import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
+import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
+import NoWaiter.UserService.services.contracts.dto.UserClientObjectDTO;
+import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
 import feign.FeignException;
 
 @RestController
@@ -37,6 +42,18 @@ public class Api {
 
     @Autowired
     private ObjectClient objectClient;
+    
+    @PutMapping("/objects")
+    @CrossOrigin
+    public ResponseEntity<?> UpdateObjects(@RequestBody UserClientObjectDTO userObjectDTO) {
+        try {
+        	userService.UpdateObjects(userObjectDTO);       
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PostMapping("/object-admin")
     @CrossOrigin
@@ -44,7 +61,7 @@ public class Api {
         try {
         	
             objectClient.checkObject(objectAdminDTO.ObjectId);
-            UUID adminId = userService.CreateRestaurantAdmin(objectAdminDTO);
+            UUID adminId = userService.CreateObjectAdmin(objectAdminDTO);
             objectClient.addAdminToObject(new AddAdminDTO(objectAdminDTO.ObjectId, adminId));
             
             return new ResponseEntity<>(adminId, HttpStatus.CREATED);
@@ -59,11 +76,35 @@ public class Api {
         }
     }
     
+    @PutMapping("/object-admin")
+    @CrossOrigin
+    public ResponseEntity<?> UpdateRestaurantAdmin(@RequestBody IdentifiableDTO<UpdateObjectAdminRequestDTO> objectAdminDTO) {
+        try {
+        	userService.UpdateObjectAdmin(objectAdminDTO);       
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    
     @GetMapping("/object-admin")
     @CrossOrigin
     public ResponseEntity<?> FindAllObjectAdmins() {
         try {
             return new ResponseEntity<>(userService.FindAllObjectAdmins(), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PostMapping("/employee/waiter")
+    @CrossOrigin
+    public ResponseEntity<?> CreateWaiter(@RequestBody WaiterDTO waiterDTO) {
+        try {
+            return new ResponseEntity<>(userService.CreateWaiter(waiterDTO), HttpStatus.CREATED);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

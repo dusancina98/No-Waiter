@@ -1,6 +1,9 @@
 import React, { useContext, useState } from "react";
+import { objectConstants } from "../constants/ObjectConstants";
 import { ObjectContext } from "../contexts/ObjectContext";
 import { objectService } from "../services/ObjectService";
+import FailureAlert from "./FailureAlert";
+import SuccessAlert from "./SuccessAlert";
 
 const CreateObjectForm = () => {
 	const { objectState, dispatch } = useContext(ObjectContext);
@@ -13,12 +16,24 @@ const CreateObjectForm = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		let object = { Name: name, Email: email, PhoneNumber: phoneNumber, ImagePath: "asdsad", Address: address };
+		let object = { Name: name, Email: email, PhoneNumber: phoneNumber, ImagePath: "assets/images/restaurant.jpg", Address: address };
 		objectService.createObject(object, dispatch);
 	};
 
 	return (
 		<React.Fragment>
+			<SuccessAlert
+				hidden={!objectState.createObject.showSuccessMessage}
+				header="Success"
+				message="You successfully created new object"
+				handleCloseAlert={() => dispatch({ type: objectConstants.OBJECT_CREATE_REQUEST })}
+			/>
+			<FailureAlert
+				hidden={!objectState.createObject.showError}
+				header="Error"
+				message={objectState.createObject.errorMessage}
+				handleCloseAlert={() => dispatch({ type: objectConstants.OBJECT_CREATE_REQUEST })}
+			/>
 			<form className="forms-sample" method="post" onSubmit={handleSubmit}>
 				<div className="form-group">
 					<label for="restaurantName">Restaurant name</label>
@@ -40,12 +55,6 @@ const CreateObjectForm = () => {
 					Submit
 				</button>
 			</form>
-			<div hidden={!objectState.createObject.showSuccessMessage} className="form-group text-center" style={{ fontSize: "1.3rem" }}>
-				You successfully created new object
-			</div>
-			<div hidden={!objectState.createObject.showError} className="form-group text-center text-danger" style={{ fontSize: "1.1rem" }}>
-				{objectState.createObject.errorMessage}
-			</div>
 		</React.Fragment>
 	);
 };

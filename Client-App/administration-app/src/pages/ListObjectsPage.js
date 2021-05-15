@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "../components/Header";
+import ObjectDetailsModal from "../components/modals/ObjectDetailsModal";
 import ObjectList from "../components/ObjectList";
 import SideBar from "../components/SideBar";
 import ObjectContextProvider from "../contexts/ObjectContext";
@@ -14,6 +15,7 @@ const ListObjectPage = () => {
 					<div className="main-panel">
 						<ObjectContextProvider>
 							<ObjectList />
+							<ObjectDetailsModal />
 						</ObjectContextProvider>
 					</div>
 				</div>

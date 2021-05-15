@@ -5,6 +5,7 @@ import NoWaiter.ObjectService.entities.Contact;
 import NoWaiter.ObjectService.entities.Object;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
+import NoWaiter.ObjectService.services.contracts.dto.ObjectWithStatusDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,22 @@ public class ObjectMapper {
 
         List<IdentifiableDTO<ObjectDTO>> retVal = new ArrayList<>();
         objects.forEach((object) -> retVal.add(MapObjectToIdentifiableObjectDTO(object)));
+
+        return retVal;
+    }
+    
+    public static IdentifiableDTO<ObjectWithStatusDTO> MapObjectToIdentifiableObjectWithStatusDTO(Object object){
+        if (object == null) throw new IllegalArgumentException();
+        
+        return new IdentifiableDTO<ObjectWithStatusDTO>(object.getId(), new ObjectWithStatusDTO(object.getName(),
+                object.getContact().getEmail(), object.getContact().getPhoneNumber(), object.getImagePath(), object.getAddress().getAddress(), object.isActive(), object.isBlocked()));
+    }
+
+    public static Iterable<IdentifiableDTO<ObjectWithStatusDTO>> MapObjectCollectionToIdentifiableObjectWithStatusDTOCollection(Iterable<Object> objects){
+        if (objects == null) throw new IllegalArgumentException();
+
+        List<IdentifiableDTO<ObjectWithStatusDTO>> retVal = new ArrayList<>();
+        objects.forEach((object) -> retVal.add(MapObjectToIdentifiableObjectWithStatusDTO(object)));
 
         return retVal;
     }

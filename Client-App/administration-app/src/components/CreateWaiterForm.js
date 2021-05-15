@@ -1,51 +1,39 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { userConstants } from "../constants/UserConstants";
-import { ObjectContext } from "../contexts/ObjectContext";
 import { UserContext } from "../contexts/UserContext";
-import { objectService } from "../services/ObjectService";
 import { userService } from "../services/UserService";
 import FailureAlert from "./FailureAlert";
 import SuccessAlert from "./SuccessAlert";
 
-const CreateObjectAdminForm = () => {
+const CreateWaiterForm = () => {
 	const { userState, dispatch } = useContext(UserContext);
-	const objectContext = useContext(ObjectContext);
 
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [surname, setSurname] = useState("");
-	const [objectId, setObjectId] = useState("");
-	const [objectName, setObjectName] = useState("");
 	const [address, setAddress] = useState("");
 	const [phoneNumber, setPhoneNumber] = useState("");
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		let objectAdmin = { Email: email, Name: name, Surname: surname, Address: address, ObjectId: objectId, ObjectName: objectName, PhoneNumber: phoneNumber };
-		userService.createObjectAdmin(objectAdmin, dispatch);
+		let waiter = { Email: email, Name: name, Surname: surname, Address: address, PhoneNumber: phoneNumber };
+		userService.createWaiter(waiter, dispatch);
 	};
-
-	useEffect(() => {
-		const getObjectsHandler = async () => {
-			await objectService.findAll(objectContext.dispatch);
-		};
-		getObjectsHandler();
-	}, [objectContext.dispatch]);
 
 	return (
 		<React.Fragment>
 			<SuccessAlert
-				hidden={!userState.createObjectAdmin.showSuccessMessage}
+				hidden={!userState.createWaiter.showSuccessMessage}
 				header="Success"
-				message="You successfully created new object admin"
-				handleCloseAlert={() => dispatch({ type: userConstants.OBJECT_ADMIN_CREATE_REQUEST })}
+				message="You successfully added new waiter"
+				handleCloseAlert={() => dispatch({ type: userConstants.WAITER_CREATE_REQUEST })}
 			/>
 			<FailureAlert
-				hidden={!userState.createObjectAdmin.showError}
+				hidden={!userState.createWaiter.showError}
 				header="Error"
-				message={userState.createObjectAdmin.errorMessage}
-				handleCloseAlert={() => dispatch({ type: userConstants.OBJECT_ADMIN_CREATE_REQUEST })}
+				message={userState.createWaiter.errorMessage}
+				handleCloseAlert={() => dispatch({ type: userConstants.WAITER_CREATE_REQUEST })}
 			/>
 			<form className="forms-sample" method="post" onSubmit={handleSubmit}>
 				<div className="form-group">
@@ -69,28 +57,6 @@ const CreateObjectAdminForm = () => {
 					<label for="phoneNumber">Phone number</label>
 					<input type="text" required className="form-control" id="phoneNumber" placeholder="Phone number" onChange={(e) => setPhoneNumber(e.target.value)} />
 				</div>
-				<div className="form-group">
-					<label for="name">Select restaurant</label>
-					<select
-						className="custom-select my-1 mr-sm-2 "
-						id="select-restaurant"
-						onChange={(e) => {
-							setObjectId(e.target.value);
-							setObjectName(e.nativeEvent.target[e.nativeEvent.target.selectedIndex].text);
-						}}
-					>
-						<option disabled selected value="">
-							Select restaurant
-						</option>
-						{objectContext.objectState.objects.map((object) => {
-							return (
-								<option value={object.Id} key={object.Id}>
-									{object.EntityDTO.Name}
-								</option>
-							);
-						})}
-					</select>
-				</div>
 				<button type="submit" className="btn btn-primary mr-2">
 					Submit
 				</button>
@@ -99,4 +65,4 @@ const CreateObjectAdminForm = () => {
 	);
 };
 
-export default CreateObjectAdminForm;
+export default CreateWaiterForm;
