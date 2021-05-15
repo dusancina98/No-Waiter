@@ -14,6 +14,17 @@ const UserContextProvider = (props) => {
 			errorMessage: "",
 			showSuccessMessage: false,
 		},
+		inActiveUser: {
+			showError: false,
+			errorMessage: "",
+			showSuccessMessage: false,
+			emailAddress: "",
+		},
+		changePassword: {
+			showError: false,
+			errorMessage: "",
+			showSuccessMessage: false,
+		},
 		createWaiter: {
 			showError: false,
 			errorMessage: "",

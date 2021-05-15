@@ -9,6 +9,10 @@ export const userService = {
 	findAllObjectAdmins,
 	createWaiter,
 	login,
+	checkIfUserIdExist,
+	resendActivationLinkRequest,
+	changeFirstPassword,
+
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -179,6 +183,8 @@ function login(loginRequest, dispatch) {
 				window.location = "#/";
 			} else if (res.status === 401) {
 				dispatch(failure(res.data.message));
+			}else if (res.status === 403) {
+				window.location = "#/inactive-user/" + res.data;
 			} else {
 				dispatch({ type: userConstants.LOGIN_FAILURE });
 			}
@@ -195,3 +201,90 @@ function login(loginRequest, dispatch) {
 		return { type: userConstants.LOGIN_FAILURE, error };
 	}
 }
+
+function checkIfUserIdExist(userId, dispatch) {
+	Axios.get(`${config.API_URL}/user-api/api/users/check-existence/` + userId, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else if (res.status === 404) {
+				window.location = "#/404";
+			}
+		})
+		.catch((err) => {});
+
+	function success(emailAddress) {
+		return { type: userConstants.INACTIVE_USER_EMAIL_REQUEST, emailAddress };
+	}
+}
+
+function resendActivationLinkRequest(userId, dispatch){
+	dispatch(request());
+	Axios.post(`${config.API_URL}/user-api/api/users/activation-link-request`, userId, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 201) {
+				dispatch(success());
+			} else {
+				dispatch(failure("Activation mail was not sent. Please, try again."));
+			}
+		})
+		.catch((err) => {
+			dispatch(failure("Activation mail was not sent. Please, try again."))
+		});
+
+	function request() {
+		return { type: userConstants.RESEND_ACTIVATION_LINK_REQUEST };
+	}
+	function success() {
+		return { type: userConstants.RESEND_ACTIVATION_LINK_SUCCESS };
+	}
+	function failure(error) {
+		return { type: userConstants.RESEND_ACTIVATION_LINK_FAILURE, errorMessage: error };
+	}
+}
+
+function changeFirstPassword(changePasswordRequest, dispatch){
+	let [passwordValid, passwordErrorMessage] = validatePasswords(changePasswordRequest.password, changePasswordRequest.repeatedPassword);
+
+	if (passwordValid === true) {
+		dispatch(request());
+
+		Axios.post(`${config.API_URL}/user-api/api/users/change-first-password`, changePasswordRequest, { validateStatus: () => true })
+			.then((res) => {
+				if (res.status === 200) {
+					dispatch(success());
+				} else {
+					console.log(res);
+					dispatch(failure(res.data.message));
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	} else {
+		dispatch(failure(passwordErrorMessage));
+	}
+
+	function request() {
+		return { type: userConstants.FIRST_ACTIVATION_PASSWORD_CHANGE_REQUEST };
+	}
+	function success() {
+		return { type: userConstants.FIRST_ACTIVATION_PASSWORD_CHANGE_SUCCESS };
+	}
+	function failure(error) {
+		return { type: userConstants.FIRST_ACTIVATION_PASSWORD_CHANGE_FAILURE, errorMessage: error };
+	}
+}
+
+function validatePasswords(password, repeatedPassword) {
+	const regexPassword = /^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[^!@#$%^&*(),.?":{}|<>~'_+=]*)$/;
+
+	if (regexPassword.test(password) === true) {
+		return [false, "Password must contain minimum eight characters, at least one capital letter, one number and one special character."];
+	} else if (password !== repeatedPassword) {
+		return [false, "Passwords must be the same."];
+	} else {
+		return [true, ""];
+	}
+}
+

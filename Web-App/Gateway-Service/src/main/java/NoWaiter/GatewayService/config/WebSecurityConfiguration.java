@@ -31,6 +31,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers("/auth-api/**").permitAll()
                     .antMatchers("/object-api/**").permitAll()
                     .antMatchers("/user-api/**").permitAll()
+<<<<<<< HEAD
+                    .anyRequest().permitAll();
+=======
                     .anyRequest().hasRole("SYSADMIN");
+>>>>>>> develop
     }
 }

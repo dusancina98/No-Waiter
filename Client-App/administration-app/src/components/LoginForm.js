@@ -49,10 +49,10 @@ const LoginForm = () => {
 							</button>
 						</div>
 					</div>
-                    <div className="form-group text-center" style={{ color: "red", fontSize: "0.8em" }} hidden={!userState.loginError.showError}>
+                    <div className="form-group text-center p-t-25" style={{ color: "red", fontSize: "1em" }} hidden={!userState.loginError.showError}>
 				        {userState.loginError.errorMessage}
 			        </div>
-					<div class="text-center p-t-55">
+					<div class="text-center p-t-35">
 						<span class="txt1">
                             Forgot your password?
 						</span>

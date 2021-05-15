@@ -3,6 +3,7 @@ package NoWaiter.AuthService.api;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import NoWaiter.AuthService.entities.User;
 import NoWaiter.AuthService.security.TokenUtils;
+import NoWaiter.AuthService.services.contracts.UserService;
 import NoWaiter.AuthService.services.contracts.dto.JwtAuthenticationRequest;
 import NoWaiter.AuthService.services.contracts.dto.JwtParseRequestDTO;
 import NoWaiter.AuthService.services.contracts.dto.JwtParseResponseDTO;
@@ -41,9 +44,12 @@ public class Api {
 	@Autowired
 	private TokenUtils tokenUtils;
 	
+	@Autowired
+	private UserService userService;
+	
 	@PostMapping("/login")
     @CrossOrigin
-	public ResponseEntity<UserTokenStateDTO> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
 			HttpServletResponse response) {
 		String jwt;
 		int expiresIn;
@@ -54,15 +60,19 @@ public class Api {
 					.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
 							authenticationRequest.getPassword()));
 
+			System.out.println("TESTT222");
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			User user = (User) authentication.getPrincipal();
 			user.getUserAuthorities().forEach((a) -> roles.add(a.getName()));
 			jwt = tokenUtils.generateToken(user.getUsername(),roles); // username
 			expiresIn = tokenUtils.getExpiredIn();
 		} catch (BadCredentialsException e) {
-			System.out.println("TESTT");
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		} catch (Exception e) {
+		} catch (DisabledException e) {
+			UUID id = userService.GetUserIdByEmail(authenticationRequest.getUsername());
+			return new ResponseEntity<>(id,HttpStatus.FORBIDDEN);
+		}catch (Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
