@@ -58,6 +58,11 @@ const UserContextProvider = (props) => {
 			showSuccessMessage: false,
 			emailAddress: "",
 		},
+		resetPassword: {
+			showError: false,
+			errorMessage: "",
+			showSuccessMessage: false,
+		},
 		objectAdmins: [],
 		showError: false,
 		errorMessage: "",

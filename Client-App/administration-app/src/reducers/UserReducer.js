@@ -261,6 +261,30 @@ export const userReducer = (state, action) => {
 					emailAddress: "",
 				},
 			};
+		case userConstants.RESET_PASSWORD_REQUEST:
+			return {
+				resetPassword: {
+					showError: false,
+					errorMessage: "",
+					showSuccessMessage: false,
+				},
+			};
+		case userConstants.RESET_PASSWORD_SUCCESS:
+			return {
+				resetPassword: {
+					showError: false,
+					errorMessage: "",
+					showSuccessMessage: true,
+				},
+			};
+		case userConstants.RESET_PASSWORD_FAILURE:
+			return {
+				resetPassword: {
+					showError: true,
+					errorMessage: action.errorMessage,
+					showSuccessMessage: false,
+				},
+			};
 		default:
 			return state;
 	}

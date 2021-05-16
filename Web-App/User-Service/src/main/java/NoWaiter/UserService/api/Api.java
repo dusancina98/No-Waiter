@@ -24,10 +24,12 @@ import NoWaiter.UserService.services.contracts.dto.ChangeFirstPasswordDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestEmailDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestIdDTO;
+import NoWaiter.UserService.services.contracts.dto.ResetPasswordDTO;
 import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsed;
 import NoWaiter.UserService.services.contracts.exceptions.NonExistentUserEmailException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordIsNotStrongException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordsIsNotTheSameException;
+import NoWaiter.UserService.services.contracts.exceptions.ResetPasswordTokenExpiredOrUsedException;
 import NoWaiter.UserService.services.contracts.exceptions.UserIsActiveException;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
@@ -192,6 +194,25 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.OK);
         }catch(NonExistentUserEmailException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PostMapping("/reset-password")
+    @CrossOrigin
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
+        try {
+        	userService.resetPassword(resetPasswordDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch(PasswordsIsNotTheSameException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }catch(PasswordIsNotStrongException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }catch(ResetPasswordTokenExpiredOrUsedException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
         catch(Exception e) {
         	e.printStackTrace();

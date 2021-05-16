@@ -15,10 +15,12 @@ import NoWaiter.UserService.services.contracts.dto.ChangeFirstPasswordDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestEmailDTO;
+import NoWaiter.UserService.services.contracts.dto.ResetPasswordDTO;
 import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsed;
 import NoWaiter.UserService.services.contracts.exceptions.NonExistentUserEmailException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordIsNotStrongException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordsIsNotTheSameException;
+import NoWaiter.UserService.services.contracts.exceptions.ResetPasswordTokenExpiredOrUsedException;
 import NoWaiter.UserService.services.contracts.exceptions.UserIsActiveException;
 import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
 import NoWaiter.UserService.services.contracts.dto.UserClientObjectDTO;
@@ -219,4 +221,33 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public void resetPassword(ResetPasswordDTO resetPasswordDTO) throws ResetPasswordTokenExpiredOrUsedException, PasswordsIsNotTheSameException, PasswordIsNotStrongException {
+		ResetPasswordToken resetPasswordToken = isValidResetPasswordToken(resetPasswordDTO.resetPasswordId);
+		
+		if(resetPasswordToken==null)
+			throw new ResetPasswordTokenExpiredOrUsedException("Reset password token expired or used");
+		
+		String password = HashAndSaltPasswordIfStrongAndMatching(resetPasswordDTO.password,resetPasswordDTO.passwordRepeat);
+		
+		User user = userRepository.getOne(resetPasswordToken.getUserId().getId());
+		user.setPassword(password);
+		userRepository.save(user);
+		resetPasswordToken.setUsed(true);
+		resetPasswordTokenRepository.save(resetPasswordToken);
+	}
+	
+	private ResetPasswordToken isValidResetPasswordToken(UUID resetPasswordId) {
+		ResetPasswordToken resetPasswordToken = resetPasswordTokenRepository.getOne(resetPasswordId);
+		
+		if(resetPasswordToken.getExpirationDate().before(new Date()) || resetPasswordToken.isUsed())
+			return null;
+		
+		return resetPasswordToken;	
+	}
+
+
+
+
 }

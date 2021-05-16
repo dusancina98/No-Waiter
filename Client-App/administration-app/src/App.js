@@ -11,6 +11,7 @@ import LoginPage from "./pages/Login";
 import UserActivateRequestPage from "./pages/UserActivateRequestPage";
 import { ProtectedRoute } from "./router/ProtectedRouter";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 function App() {
 	return (
@@ -26,7 +27,7 @@ function App() {
 				<ProtectedRoute roles={""} redirectTo="/" path="/first-login-password/:id" component={FirstActivationPasswordChangePage} />
 				<Route path="/employees/add-waiter" component={CreateWaiterPage} />
 				<ProtectedRoute roles={""} exact path="/reset-password-request" redirectTo="/unauthorized" component={ForgotPasswordPage} />
-				<ProtectedRoute roles={""} exact path="/reset-password/:id" redirectTo="/unauthorized" component={ForgotPasswordPage} />
+				<ProtectedRoute roles={""} exact path="/reset-password/:id" redirectTo="/unauthorized" component={ResetPasswordPage} />
 			</Switch>
 		</Router>
 	);
