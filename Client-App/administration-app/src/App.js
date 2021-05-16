@@ -26,6 +26,7 @@ function App() {
 				<ProtectedRoute roles={""} redirectTo="/" path="/first-login-password/:id" component={FirstActivationPasswordChangePage} />
 				<Route path="/employees/add-waiter" component={CreateWaiterPage} />
 				<ProtectedRoute roles={""} exact path="/reset-password-request" redirectTo="/unauthorized" component={ForgotPasswordPage} />
+				<ProtectedRoute roles={""} exact path="/reset-password/:id" redirectTo="/unauthorized" component={ForgotPasswordPage} />
 			</Switch>
 		</Router>
 	);

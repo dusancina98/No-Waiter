@@ -234,6 +234,33 @@ export const userReducer = (state, action) => {
 			let prom = { ...state };
 			prom.objectAdminDetails.readOnly = false;
 			return prom;
+		case userConstants.RESET_PASSWORD_LINK_REQUEST:
+			return {
+				forgotPasswordRequestLinkError: {
+					showError: false,
+					errorMessage: "",
+					showSuccessMessage: false,
+					emailAddress: "",
+				},
+			};
+		case userConstants.RESET_PASSWORD_LINK_SUCCESS:
+			return {
+				forgotPasswordRequestLinkError: {
+					showError: false,
+					errorMessage: "",
+					showSuccessMessage: true,
+					emailAddress: action.emailAddress,
+				},
+			};
+		case userConstants.RESET_PASSWORD_LINK_FAILURE:
+			return {
+				forgotPasswordRequestLinkError: {
+					showError: true,
+					errorMessage: action.errorMessage,
+					showSuccessMessage: false,
+					emailAddress: "",
+				},
+			};
 		default:
 			return state;
 	}

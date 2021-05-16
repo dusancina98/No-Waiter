@@ -22,8 +22,10 @@ import NoWaiter.UserService.services.contracts.UserService;
 import NoWaiter.UserService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.ChangeFirstPasswordDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
+import NoWaiter.UserService.services.contracts.dto.RequestEmailDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestIdDTO;
 import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsed;
+import NoWaiter.UserService.services.contracts.exceptions.NonExistentUserEmailException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordIsNotStrongException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordsIsNotTheSameException;
 import NoWaiter.UserService.services.contracts.exceptions.UserIsActiveException;
@@ -178,6 +180,21 @@ public class Api {
         }catch(PasswordIsNotStrongException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PostMapping("/reset-password-link-request")
+    @CrossOrigin
+    public ResponseEntity<?> resetPasswordLinkRequest(@RequestBody RequestEmailDTO requestEmailDTO) {
+        try {
+        	userService.resetPasswordLinkRequest(requestEmailDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch(NonExistentUserEmailException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e) {
+        	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

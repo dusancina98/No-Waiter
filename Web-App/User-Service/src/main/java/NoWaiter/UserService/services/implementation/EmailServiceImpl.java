@@ -21,6 +21,9 @@ public class EmailServiceImpl {
 	private JavaMailSender javaMailSender;
 	
 	private final String LOCAL_URL = "http://localhost:8082";
+	
+	private final String CLIENT_APP_URL = "http://localhost:3000";
+
 
 	@Autowired
 	private Environment env;
@@ -36,12 +39,31 @@ public class EmailServiceImpl {
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 		String htmlMsg = "<p>Hello " + user.getName() + ",</p>" +
 					"<p>You registered an account on PQuince portal, before being able to use your account you need to verify that this is your email address by clicking here:</p>"
-					+ "<a href=\"" + url + "\">Verify your account</a>.</p>" + "<p>Kind Regards, PQuince</p>"; 
+					+ "<a href=\"" + url + "\">Verify your account</a>.</p>" + "<p>Kind Regards, No-Waiter</p>"; 
 		helper.setText(htmlMsg, true);
 		helper.setTo(user.getEmail());
 		helper.setSubject("Activate account");
 		helper.setFrom(env.getProperty("spring.mail.username"));
 		javaMailSender.send(mimeMessage);
 		System.out.println("Email poslat!");
+	}
+
+	public void sendResetPasswordLinkAsync(User user, UUID resetPasswordId) throws MessagingException {
+		System.out.println("Slanje emaila...");
+		
+		String url = CLIENT_APP_URL + "#/reset-password/" + resetPasswordId;
+		
+		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+		String htmlMsg = "<p>Hello " + user.getName() + ",</p>" +
+					"<p>You registered an account on PQuince portal, before being able to use your account you need to verify that this is your email address by clicking here:</p>"
+					+ "<a href=\"" + url + "\">Verify your account</a>.</p>" + "<p>Kind Regards, No-Waiter</p>"; 
+		helper.setText(htmlMsg, true);
+		helper.setTo(user.getEmail());
+		helper.setSubject("Activate account");
+		helper.setFrom(env.getProperty("spring.mail.username"));
+		javaMailSender.send(mimeMessage);
+		System.out.println("Email poslat!");
+
 	}
 }
