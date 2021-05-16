@@ -52,6 +52,17 @@ const UserContextProvider = (props) => {
 				},
 			},
 		},
+		forgotPasswordRequestLinkError: {
+			showError: false,
+			errorMessage: "",
+			showSuccessMessage: false,
+			emailAddress: "",
+		},
+		resetPassword: {
+			showError: false,
+			errorMessage: "",
+			showSuccessMessage: false,
+		},
 		objectAdmins: [],
 		showError: false,
 		errorMessage: "",
