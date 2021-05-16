@@ -2,6 +2,7 @@ package NoWaiter.AuthService.security;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -38,7 +39,7 @@ public class TokenUtils {
 	// Algoritam za potpisivanje JWT
 	private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 	
-	public String generateToken(String username, List<String> authorities) {
+	public String generateToken(String username, UUID userId, List<String> authorities) {
 		return Jwts.builder()
 				.setIssuer(APP_NAME)
 				.setSubject(username)
@@ -46,6 +47,7 @@ public class TokenUtils {
 				.setIssuedAt(new Date())
 				.setExpiration(generateExpirationDate())
 				.claim("authorities", authorities) //moguce je postavljanje proizvoljnih podataka u telo JWT tokena
+				.claim("userId", userId) 
 				.signWith(SIGNATURE_ALGORITHM, SECRET).compact();
 	}
 	
@@ -95,6 +97,18 @@ public class TokenUtils {
 			return (username != null && username.equals(userDetails.getUsername()));
 		}
 
+		//TODO: Za dusana get userId from token
+		public UUID getUserIdFromToken(String token) {
+			UUID userId;
+			try {
+				final Claims claims = this.getAllClaimsFromToken(token);
+				userId = claims.get("userId", UUID.class);
+			} catch (Exception e) {
+				userId = null;
+			}
+			return userId;
+		}
+		
 		public String getUsernameFromToken(String token) {
 			String username;
 			try {
