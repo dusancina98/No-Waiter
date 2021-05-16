@@ -10,6 +10,7 @@ import ListObjectPage from "./pages/ListObjectsPage";
 import LoginPage from "./pages/Login";
 import UserActivateRequestPage from "./pages/UserActivateRequestPage";
 import { ProtectedRoute } from "./router/ProtectedRouter";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 function App() {
 	return (
@@ -24,6 +25,7 @@ function App() {
 				<ProtectedRoute roles={""} redirectTo="/" path="/inactive-user/:id" component={UserActivateRequestPage} />
 				<ProtectedRoute roles={""} redirectTo="/" path="/first-login-password/:id" component={FirstActivationPasswordChangePage} />
 				<Route path="/employees/add-waiter" component={CreateWaiterPage} />
+				<ProtectedRoute roles={""} exact path="/reset-password-request" redirectTo="/unauthorized" component={ForgotPasswordPage} />
 			</Switch>
 		</Router>
 	);
