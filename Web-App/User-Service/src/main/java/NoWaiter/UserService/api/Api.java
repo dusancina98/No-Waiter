@@ -112,9 +112,10 @@ public class Api {
     
     @PostMapping("/employee/waiter")
     @CrossOrigin
-    public ResponseEntity<?> CreateWaiter(@RequestBody WaiterDTO waiterDTO) {
+    public ResponseEntity<?> CreateWaiter(@RequestHeader("Authorization") String token, @RequestBody WaiterDTO waiterDTO) {
         try {
-            return new ResponseEntity<>(userService.CreateWaiter(waiterDTO), HttpStatus.CREATED);
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+            return new ResponseEntity<>(userService.CreateWaiter(waiterDTO, jwtResponse.getId()), HttpStatus.CREATED);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

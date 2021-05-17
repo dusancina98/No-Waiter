@@ -2,6 +2,7 @@ package NoWaiter.UserService.services.implementation.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import NoWaiter.UserService.entities.ObjectAdmin;
 import NoWaiter.UserService.entities.Waiter;
@@ -33,9 +34,10 @@ public class UserMapper {
         return retVal;
     }
 
-    public static Waiter MapWaiterDTOToWaiter(WaiterDTO waiterDTO) {
+    public static Waiter MapWaiterDTOToWaiter(WaiterDTO waiterDTO, UUID objectId) {
     	if (waiterDTO == null) throw new IllegalArgumentException();
     	
-    	return new Waiter(waiterDTO.Email, "", waiterDTO.Name, waiterDTO.Surname, waiterDTO.Address, waiterDTO.PhoneNumber);
+    	return new Waiter(waiterDTO.Email, "", waiterDTO.Name, waiterDTO.Surname, waiterDTO.Address, waiterDTO.PhoneNumber, objectId);
     }
+   
 }

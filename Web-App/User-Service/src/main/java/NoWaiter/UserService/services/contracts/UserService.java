@@ -19,12 +19,12 @@ import NoWaiter.UserService.services.contracts.exceptions.ResetPasswordTokenExpi
 public interface UserService {
 
     UUID CreateObjectAdmin(ObjectAdminDTO entity) throws Exception;
-    
+        
     void UpdateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity);
     
     void UpdateObjects(UserClientObjectDTO entity);
     
-    UUID CreateWaiter(WaiterDTO entity);
+    UUID CreateWaiter(WaiterDTO entity, UUID objectAdminId);
     
     Iterable<IdentifiableDTO<ObjectAdminDTO>> FindAllObjectAdmins();
 
