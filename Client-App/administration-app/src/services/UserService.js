@@ -177,7 +177,7 @@ function validateWaiter(waiter, dispatch) {
 function login(loginRequest, dispatch) {
 	dispatch(request());
 
-	Axios.post(`${config.API_URL}/auth-api/api/auth/login`, loginRequest, { validateStatus: () => true })
+	Axios.post(`/auth-api/api/auth/login`, loginRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				setAuthInLocalStorage(res.data);
@@ -205,7 +205,7 @@ function login(loginRequest, dispatch) {
 }
 
 function checkIfUserIdExist(userId, dispatch) {
-	Axios.get(`${config.API_URL}/user-api/api/users/check-existence/` + userId, { validateStatus: () => true })
+	Axios.get(`/user-api/api/users/check-existence/` + userId, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				dispatch(success(res.data));
@@ -222,7 +222,7 @@ function checkIfUserIdExist(userId, dispatch) {
 
 function resendActivationLinkRequest(userId, dispatch) {
 	dispatch(request());
-	Axios.post(`${config.API_URL}/user-api/api/users/activation-link-request`, userId, { validateStatus: () => true })
+	Axios.post(`/user-api/api/users/activation-link-request`, userId, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 201) {
 				dispatch(success());
