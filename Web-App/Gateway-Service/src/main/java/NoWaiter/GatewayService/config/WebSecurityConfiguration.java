@@ -20,8 +20,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final HttpSecurity http) throws Exception {
         http
-        //.cors().and()
-
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
@@ -29,6 +27,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
                 .exceptionHandling().authenticationEntryPoint((request, response, ex) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
         .and()
+        .cors().and()
                 .addFilterAfter(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 	.antMatchers("/auth-api/api/auth/login").permitAll()

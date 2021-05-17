@@ -47,7 +47,8 @@ public class EmailServiceImpl {
 		javaMailSender.send(mimeMessage);
 		System.out.println("Email poslat!");
 	}
-
+	
+	@Async
 	public void sendResetPasswordLinkAsync(User user, UUID resetPasswordId) throws MessagingException {
 		System.out.println("Slanje emaila...");
 		

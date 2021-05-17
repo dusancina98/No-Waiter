@@ -1,5 +1,4 @@
 import Axios from "axios";
-import { config } from "../config/config";
 import { authHeader } from "../helpers/auth-header";
 import { userConstants } from "../constants/UserConstants";
 import { setAuthInLocalStorage } from "../helpers/auth-header";
@@ -22,7 +21,7 @@ function createObjectAdmin(objectAdmin, dispatch) {
 	if (validateObjectAdmin(objectAdmin, dispatch, userConstants.OBJECT_ADMIN_CREATE_FAILURE)) {
 		dispatch(request());
 
-		Axios.post(`${config.API_URL}/user-api/api/users/object-admin`, objectAdmin, { validateStatus: () => true })
+		Axios.post(`/user-api/api/users/object-admin`, objectAdmin, { validateStatus: () => true })
 			.then((res) => {
 				if (res.status === 201) {
 					dispatch(success());
@@ -55,7 +54,7 @@ function updateObjectAdmin(objectAdmin, dispatch) {
 	if (validateObjectAdmin(objectAdminDTO.EntityDTO, dispatch, userConstants.OBJECT_ADMIN_UPDATE_FAILURE)) {
 		dispatch(request());
 
-		Axios.put(`${config.API_URL}/user-api/api/users/object-admin`, objectAdminDTO, { validateStatus: () => true })
+		Axios.put(`/user-api/api/users/object-admin`, objectAdminDTO, { validateStatus: () => true })
 			.then((res) => {
 				if (res.status === 200) {
 					dispatch(success("Object admin successfully updated", objectAdmin));
@@ -104,7 +103,7 @@ function validateObjectAdmin(objectAdmin, dispatch, type) {
 async function findAllObjectAdmins(dispatch) {
 	dispatch(request());
 
-	await Axios.get(`${config.API_URL}/user-api/api/users/object-admin`, { validateStatus: () => true })
+	await Axios.get(`/user-api/api/users/object-admin`, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				dispatch(success(res.data));
@@ -132,7 +131,7 @@ function createWaiter(waiter, dispatch) {
 	if (validateWaiter(waiter, dispatch)) {
 		dispatch(request());
 
-		Axios.post(`${config.API_URL}/user-api/api/users/employee/waiter`, waiter, { validateStatus: () => true, headers: authHeader() })
+		Axios.post(`/user-api/api/users/employee/waiter`, waiter, { validateStatus: () => true, headers: authHeader() })
 			.then((res) => {
 				if (res.status === 201) {
 					dispatch(success());
@@ -205,7 +204,7 @@ function validateWaiter(waiter, dispatch) {
 function login(loginRequest, dispatch) {
 	dispatch(request());
 
-	Axios.post(`${config.API_URL}/auth-api/api/auth/login`, loginRequest, { validateStatus: () => true })
+	Axios.post(`/auth-api/api/auth/login`, loginRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				setAuthInLocalStorage(res.data);
@@ -233,7 +232,7 @@ function login(loginRequest, dispatch) {
 }
 
 function checkIfUserIdExist(userId, dispatch) {
-	Axios.get(`${config.API_URL}/user-api/api/users/check-existence/` + userId, { validateStatus: () => true })
+	Axios.get(`/user-api/api/users/check-existence/` + userId, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				dispatch(success(res.data));
@@ -250,7 +249,7 @@ function checkIfUserIdExist(userId, dispatch) {
 
 function resendActivationLinkRequest(userId, dispatch) {
 	dispatch(request());
-	Axios.post(`${config.API_URL}/user-api/api/users/activation-link-request`, userId, { validateStatus: () => true })
+	Axios.post(`/user-api/api/users/activation-link-request`, userId, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 201) {
 				dispatch(success());
@@ -279,7 +278,7 @@ function changeFirstPassword(changePasswordRequest, dispatch) {
 	if (passwordValid === true) {
 		dispatch(request());
 
-		Axios.post(`${config.API_URL}/user-api/api/users/change-first-password`, changePasswordRequest, { validateStatus: () => true })
+		Axios.post(`/user-api/api/users/change-first-password`, changePasswordRequest, { validateStatus: () => true })
 			.then((res) => {
 				if (res.status === 200) {
 					dispatch(success());
@@ -321,7 +320,7 @@ function validatePasswords(password, repeatedPassword) {
 function resetPasswordLinkRequest(resetPasswordLinkRequest, dispatch) {
 	dispatch(request());
 
-	Axios.post(`${config.API_URL}/user-api/api/users/reset-password-link-request`, resetPasswordLinkRequest, { validateStatus: () => true })
+	Axios.post(`/user-api/api/users/reset-password-link-request`, resetPasswordLinkRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				dispatch(success(resetPasswordLinkRequest.email));
@@ -352,7 +351,7 @@ function resetPassword(resetPasswordRequest, dispatch) {
 	if (passwordValid === true) {
 		dispatch(request());
 
-		Axios.post(`${config.API_URL}/user-api/api/users/reset-password`, resetPasswordRequest, { validateStatus: () => true })
+		Axios.post(`/user-api/api/users/reset-password`, resetPasswordRequest, { validateStatus: () => true })
 			.then((res) => {
 				if (res.status === 200) {
 					dispatch(success());

@@ -65,11 +65,15 @@ const FirstActivationPasswordChangeForm = (props) => {
                     <div hidden={!userState.changePassword.showSuccessMessage} className="form-group text-center" style={{ fontSize: "1.3em" }}>
 				        You successfully changed your password.
 			        </div>
-			        <div hidden={!userState.changePassword.showSuccessMessage} className="form-group">
-				        <Link className="btn btn-primary btn-block" to="/login">
-					        Back to login
-				        </Link>
-			        </div>
+
+					<div hidden={!userState.changePassword.showSuccessMessage} class="container-login100-form-btn">
+						<div class="wrap-login100-form-btn">
+							<div class="login100-form-bgbtn"></div>
+							<Link className="login100-form-btn" to="/login">
+					        	Back to login
+				        	</Link>
+						</div>
+					</div> 
 				</form>
 	);
 };

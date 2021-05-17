@@ -15479,4 +15479,8 @@ dl {
   -ms-flex-positive: 1;
   flex-grow: 1; }
 
+  .not-found-image {
+    background: url(../../assets/images/404errorMessage.jpg);
+  }
+
 /*# sourceMappingURL=style.css.map */
