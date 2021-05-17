@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,19 @@ public class Api {
         } catch (Exception ex) {
             ex.printStackTrace();
 
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+	}
+    
+    @PostMapping("/user-jwt")
+    @CrossOrigin
+	public ResponseEntity<?> parseJWTToken(HttpServletRequest request) {
+    	try {
+            JwtParseResponseDTO jwtParseResponseDto = tokenUtils.parseJwt(tokenUtils.getToken(request));
+            return new ResponseEntity<>(jwtParseResponseDto, HttpStatus.OK);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
 	}

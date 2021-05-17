@@ -172,8 +172,9 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public UUID CreateWaiter(WaiterDTO entity) {
-		Waiter waiter = UserMapper.MapWaiterDTOToWaiter(entity);
+	public UUID CreateWaiter(WaiterDTO entity, UUID objectAdminId) {
+		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
+		Waiter waiter = UserMapper.MapWaiterDTOToWaiter(entity, objectAdmin.getObjectId());
 		waiterRepository.save(waiter);
 		return waiter.getId();
 	}

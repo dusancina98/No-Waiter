@@ -2,6 +2,7 @@ package NoWaiter.GatewayService.config;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -19,6 +20,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final HttpSecurity http) throws Exception {
         http
+        .cors().and()
+
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
@@ -28,9 +31,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
                 .addFilterAfter(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                    .antMatchers("/auth-api/**").permitAll()
-                    .antMatchers("/object-api/**").permitAll()
-                    .antMatchers("/user-api/**").permitAll()
+                	.antMatchers("/auth-api/api/auth/login").permitAll()
+                	.antMatchers(HttpMethod.POST ,"/user-api/api/users/employee/waiter").hasRole("OBJADMIN")
+                    //.antMatchers("/auth-api/**").permitAll()
+                    //.antMatchers("/object-api/**").permitAll()
+                    //.antMatchers("/user-api/**").permitAll()
                     .anyRequest().permitAll();
     }
 }
