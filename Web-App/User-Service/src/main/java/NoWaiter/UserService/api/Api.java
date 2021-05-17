@@ -14,27 +14,30 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import NoWaiter.UserService.intercomm.AuthClient;
 import NoWaiter.UserService.intercomm.ObjectClient;
 import NoWaiter.UserService.services.contracts.UserService;
 import NoWaiter.UserService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.ChangeFirstPasswordDTO;
+import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
+import NoWaiter.UserService.services.contracts.dto.JwtParseResponseDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestEmailDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestIdDTO;
 import NoWaiter.UserService.services.contracts.dto.ResetPasswordDTO;
+import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
+import NoWaiter.UserService.services.contracts.dto.UserClientObjectDTO;
+import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
 import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsed;
 import NoWaiter.UserService.services.contracts.exceptions.NonExistentUserEmailException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordIsNotStrongException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordsIsNotTheSameException;
 import NoWaiter.UserService.services.contracts.exceptions.ResetPasswordTokenExpiredOrUsedException;
 import NoWaiter.UserService.services.contracts.exceptions.UserIsActiveException;
-import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
-import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
-import NoWaiter.UserService.services.contracts.dto.UserClientObjectDTO;
-import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
 import feign.FeignException;
 
 @RestController
@@ -46,6 +49,9 @@ public class Api {
 
     @Autowired
     private ObjectClient objectClient;
+    
+    @Autowired
+    private AuthClient authClient;
     
     @PutMapping("/objects")
     @CrossOrigin
@@ -117,7 +123,10 @@ public class Api {
     
     @GetMapping
     @CrossOrigin
-    public ResponseEntity<?> test() {
+    public ResponseEntity<?> test(@RequestHeader("Authorization") String token) {
+    	System.out.println(token);
+    	JwtParseResponseDTO parse = authClient.getLoggedUserInfo(token);
+    	System.out.println(parse.getUsername() + "\n\n" + parse.getId());
     	return new ResponseEntity<>("USAO",HttpStatus.CREATED);
     }
     

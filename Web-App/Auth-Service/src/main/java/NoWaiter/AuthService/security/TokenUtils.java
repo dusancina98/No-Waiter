@@ -47,7 +47,7 @@ public class TokenUtils {
 				.setIssuedAt(new Date())
 				.setExpiration(generateExpirationDate())
 				.claim("authorities", authorities) //moguce je postavljanje proizvoljnih podataka u telo JWT tokena
-				.claim("userId", userId) 
+				.claim("userId", userId.toString()) 
 				.signWith(SIGNATURE_ALGORITHM, SECRET).compact();
 	}
 	
@@ -99,14 +99,14 @@ public class TokenUtils {
 
 		//TODO: Za dusana get userId from token
 		public UUID getUserIdFromToken(String token) {
-			UUID userId;
+			String userId;
 			try {
 				final Claims claims = this.getAllClaimsFromToken(token);
-				userId = claims.get("userId", UUID.class);
+				userId = claims.get("userId", String.class);
 			} catch (Exception e) {
 				userId = null;
 			}
-			return userId;
+			return userId == null ? null : UUID.fromString(userId);
 		}
 		
 		public String getUsernameFromToken(String token) {
@@ -216,6 +216,6 @@ public class TokenUtils {
 
 		public JwtParseResponseDTO parseJwt(String token) {
 			// TODO Auto-generated method stub
-			return new JwtParseResponseDTO(getUsernameFromToken(token),getAuthorities(token));
+			return new JwtParseResponseDTO(getUserIdFromToken(token),getUsernameFromToken(token),getAuthorities(token));
 		}
 }

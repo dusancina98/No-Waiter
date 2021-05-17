@@ -28,9 +28,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
                 .addFilterAfter(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                    .antMatchers("/auth-api/**").permitAll()
-                    .antMatchers("/object-api/**").permitAll()
-                    .antMatchers("/user-api/**").permitAll()
-                    .anyRequest().permitAll();
+                	.antMatchers("/auth-api/api/auth/login").permitAll()
+                    //.antMatchers("/auth-api/**").permitAll()
+                    //.antMatchers("/object-api/**").permitAll()
+                    //.antMatchers("/user-api/**").permitAll()
+                    .anyRequest().hasRole("SYSADMIN");
     }
 }
