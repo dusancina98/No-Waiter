@@ -14,6 +14,7 @@ import { ProtectedRoute } from "./router/ProtectedRouter";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import PageNotFoundPage from "./pages/PageNotFoundPage";
+import ListTablesPage from "./pages/ListTablesPage";
 
 function App() {
 	return (
@@ -23,6 +24,8 @@ function App() {
 				<ProtectedRoute roles={""} exact path="/" redirectTo="/unauthorized" component={HomePage} />
 				<Route path="/add-object" component={CreateObjectPage} />
 				<Route path="/objects" component={ListObjectPage} />
+				<Route path="/tables" component={ListTablesPage} />
+
 				<Route path="/add-object-admin" component={CreateObjectAdminPage} />
 				<Route path="/object-admins" component={ListObjectAdminsPage} />
 				<ProtectedRoute roles={""} redirectTo="/" path="/inactive-user/:id" component={UserActivateRequestPage} />

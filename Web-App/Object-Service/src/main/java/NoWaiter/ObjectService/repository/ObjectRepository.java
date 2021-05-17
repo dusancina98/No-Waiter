@@ -1,6 +1,7 @@
 package NoWaiter.ObjectService.repository;
 
 import NoWaiter.ObjectService.entities.Object;
+
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.UUID;
