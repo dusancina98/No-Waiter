@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public UUID CreateObjectAdmin(ObjectAdminDTO entity) throws Exception {
+    public UUID createObjectAdmin(ObjectAdminDTO entity) throws Exception {
         ObjectAdmin restaurantAdmin = UserMapper.MapRestaurantAdminDTOToRestaurantAdmin(entity);
         objectAdminRepository.save(restaurantAdmin);
         createActivationLink(restaurantAdmin.getId());
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
     }
 
 	@Override
-	public Iterable<IdentifiableDTO<ObjectAdminDTO>> FindAllObjectAdmins() {
+	public Iterable<IdentifiableDTO<ObjectAdminDTO>> findAllObjectAdmins() {
 		return UserMapper.MapObjectAdminCollectionToIdentifiableObjectAdminDTOCollection(objectAdminRepository.findAll());
 	}
 
@@ -172,14 +172,15 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public UUID CreateWaiter(WaiterDTO entity) {
-		Waiter waiter = UserMapper.MapWaiterDTOToWaiter(entity);
+	public UUID createWaiter(WaiterDTO entity, UUID objectAdminId) {
+		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
+		Waiter waiter = UserMapper.MapWaiterDTOToWaiter(entity, objectAdmin.getObjectId());
 		waiterRepository.save(waiter);
 		return waiter.getId();
 	}
 
 	@Override
-	public void UpdateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity) {
+	public void updateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity) {
 
 		ObjectAdmin objectAdmin = objectAdminRepository.findById(entity.Id).get();
 		objectAdmin.setAddress(entity.EntityDTO.Address);
@@ -191,7 +192,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public void UpdateObjects(UserClientObjectDTO entity) {
+	public void updateObjects(UserClientObjectDTO entity) {
 		
 		ArrayList<ObjectAdmin> objectAdmins = (ArrayList<ObjectAdmin>) objectAdminRepository.findByObjectId(entity.Id);
 		for (ObjectAdmin objectAdmin : objectAdmins) {
@@ -245,6 +246,12 @@ public class UserServiceImpl implements UserService {
 			return null;
 		
 		return resetPasswordToken;	
+	}
+
+	@Override
+	public Iterable<IdentifiableDTO<WaiterDTO>> findAllWaiters(UUID objectAdminId) {
+		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
+		return UserMapper.MapWaiterCollectionToIdentifiableWaiterDTOCollection(waiterRepository.findAllByObjectId(objectAdmin.getObjectId()));
 	}
 
 

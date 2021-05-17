@@ -2,6 +2,7 @@ package NoWaiter.UserService.services.implementation.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import NoWaiter.UserService.entities.ObjectAdmin;
 import NoWaiter.UserService.entities.Waiter;
@@ -33,9 +34,27 @@ public class UserMapper {
         return retVal;
     }
 
-    public static Waiter MapWaiterDTOToWaiter(WaiterDTO waiterDTO) {
+    public static Waiter MapWaiterDTOToWaiter(WaiterDTO waiterDTO, UUID objectId) {
     	if (waiterDTO == null) throw new IllegalArgumentException();
     	
-    	return new Waiter(waiterDTO.Email, "", waiterDTO.Name, waiterDTO.Surname, waiterDTO.Address, waiterDTO.PhoneNumber);
+    	return new Waiter(waiterDTO.Email, "", waiterDTO.Name, waiterDTO.Surname, waiterDTO.Address, waiterDTO.PhoneNumber, objectId);
     }
+    
+    public static IdentifiableDTO<WaiterDTO> MapWaiterToIdentifiableWaiterDTO(Waiter waiter){
+        if (waiter == null) throw new IllegalArgumentException();
+
+        return new IdentifiableDTO<WaiterDTO>(waiter.getId(), new WaiterDTO(waiter.getEmail(), waiter.getName(),
+        		waiter.getSurname(), waiter.getAddress(), waiter.getPhoneNumber()));
+    }
+
+    public static Iterable<IdentifiableDTO<WaiterDTO>> MapWaiterCollectionToIdentifiableWaiterDTOCollection(Iterable<Waiter> waiters){
+        if (waiters == null) throw new IllegalArgumentException();
+
+        List<IdentifiableDTO<WaiterDTO>> retVal = new ArrayList<>();
+        waiters.forEach((waiter) -> retVal.add(MapWaiterToIdentifiableWaiterDTO(waiter)));
+
+        return retVal;
+    }
+    
+   
 }

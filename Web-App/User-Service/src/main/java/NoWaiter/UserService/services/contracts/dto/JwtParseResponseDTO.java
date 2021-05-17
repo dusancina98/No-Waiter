@@ -1,4 +1,4 @@
-package NoWaiter.AuthService.services.contracts.dto;
+package NoWaiter.UserService.services.contracts.dto;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,7 +15,6 @@ public class JwtParseResponseDTO {
     }
 
     public JwtParseResponseDTO(UUID id, String username, List<String> authorities) {
-    	this.id = id;
         this.username = username;
         this.authorities = authorities;
     }

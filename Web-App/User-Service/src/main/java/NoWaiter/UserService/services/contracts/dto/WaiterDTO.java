@@ -8,8 +8,8 @@ public class WaiterDTO extends UserDTO {
     
     public WaiterDTO() { }
 
-	public WaiterDTO(String address, String phoneNumber) {
-		super();
+	public WaiterDTO(String email, String name, String surname, String address, String phoneNumber) {
+		super(email, name, surname);
 		Address = address;
 		PhoneNumber = phoneNumber;
 	}
