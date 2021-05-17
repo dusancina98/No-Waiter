@@ -14,7 +14,7 @@ function createTable(dispatch) {
 	Axios.post(`/object-api/api/objects/tables`, {}, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 201) {
-				dispatch(success(res.data));
+				dispatch(success(res.data, "Table successfully added"));
 			} else {
 				dispatch(failure(res.data.message));
 			}
@@ -26,8 +26,34 @@ function createTable(dispatch) {
 	function request() {
 		return { type: tableConstants.TABLE_CREATE_REQUEST };
 	}
-	function success(table) {
-		return { type: tableConstants.TABLE_CREATE_SUCCESS, table };
+	function success(table, message) {
+		return { type: tableConstants.TABLE_CREATE_SUCCESS, table, successMessage: message };
+	}
+	function failure(message) {
+		return { type: tableConstants.TABLE_DELETE_FAILURE, errorMessage: message };
+	}
+}
+
+function deleteTable(tableId, dispatch) {
+	dispatch(request());
+
+	Axios.delete(`/object-api/api/objects/tables/${tableId}`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success("Table successfully deleted"));
+			} else {
+				dispatch(failure(res.data.message));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+
+	function request() {
+		return { type: tableConstants.TABLE_DELETE_REQUEST };
+	}
+	function success(message) {
+		return { type: tableConstants.TABLE_DELETE_SUCCESS, successMessage: message, tableId };
 	}
 	function failure(message) {
 		return { type: tableConstants.TABLE_DELETE_FAILURE, errorMessage: message };
@@ -60,5 +86,3 @@ async function findAll(dispatch) {
 		return { type: tableConstants.SET_TABLET_ERROR, errorMessage: message };
 	}
 }
-
-function deleteTable(dispatch) {}

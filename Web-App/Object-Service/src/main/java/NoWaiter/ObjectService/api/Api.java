@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -72,6 +73,18 @@ public class Api {
         try {
         	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
             return new ResponseEntity<>(tableService.findAllForObject(jwtResponse.getId()), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @DeleteMapping("/tables/{tableId}")
+    @CrossOrigin
+    public ResponseEntity<?> deleteTable(@RequestHeader("Authorization") String token, @PathVariable UUID tableId) {
+        try {
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+        	tableService.deleteTable(jwtResponse.getId(), tableId);
+            return new ResponseEntity<>( HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

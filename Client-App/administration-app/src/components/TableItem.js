@@ -1,6 +1,6 @@
 const TableItem = ({ deleteHandler, number }) => {
 	return (
-		<div className="col-md-3 col-lg-2 grid-margin stretch-card">
+		<div className="col-md-3 col-lg-3 grid-margin stretch-card">
 			<div className="card">
 				<div className="card-body">
 					<img src="assets/images/restaurantTable.png" alt="restaurant" className="img-fluid" />

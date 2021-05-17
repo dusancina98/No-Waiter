@@ -2,6 +2,8 @@ package NoWaiter.ObjectService.services.implementation;
 
 import java.util.UUID;
 
+import javax.security.auth.message.AuthException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +47,16 @@ public class TableServiceImpl implements TableService{
 
 		Object object = objectAdminRepository.findObjectByAdminId(objectAdminId);
 		return TableMapper.MapTableCollectionToIdentifiableTableDTOCollection(tableRepository.findAllByObjectId(object.getId()));
+	}
+
+	@Override
+	public void deleteTable(UUID objectAdminId, UUID tableId) throws AuthException {
+		
+		Object object = objectAdminRepository.findObjectByAdminId(objectAdminId);
+		Table table = tableRepository.findById(tableId).get();
+		if(!table.getObject().getId().equals(object.getId())) throw new AuthException("Unauthorized");
+		
+		tableRepository.deleteById(tableId);
 	}
 
 }

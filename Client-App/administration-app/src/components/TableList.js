@@ -13,18 +13,16 @@ const TableList = () => {
 		getObjectsHandler();
 	}, [dispatch]);
 
-	const handleTableDelete = (table) => {
-		//dispatch({ type: modalConstants.SHOW_OBJECT_DETAILS, object });
+	const handleTableDelete = (tableId) => {
+		tableService.deleteTable(tableId, dispatch);
 	};
 
 	return (
 		<React.Fragment>
-			<div className="content-wrapper">
-				<div className="row">
-					{tableState.tables.map((table) => {
-						return <TableItem key={table.Id} number={table.EntityDTO.Number} deleteHandler={() => handleTableDelete(table)} />;
-					})}
-				</div>
+			<div className="row mt-3">
+				{tableState.tables.map((table) => {
+					return <TableItem key={table.Id} number={table.EntityDTO.Number} deleteHandler={() => handleTableDelete(table.Id)} />;
+				})}
 			</div>
 		</React.Fragment>
 	);

@@ -14,8 +14,10 @@ const ListTablesPage = () => {
 					<Header />
 					<div className="main-panel">
 						<TableContextProvider>
-							<ListTableHeader />
-							<TableList />
+							<div className="content-wrapper">
+								<ListTableHeader />
+								<TableList />
+							</div>
 						</TableContextProvider>
 					</div>
 				</div>

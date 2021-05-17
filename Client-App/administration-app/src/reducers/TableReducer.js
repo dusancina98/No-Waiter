@@ -5,10 +5,11 @@ export const tableReducer = (state, action) => {
 		case tableConstants.TABLE_CREATE_REQUEST:
 			return {
 				...state,
-				createTable: {
+				crudTable: {
 					showError: false,
 					errorMessage: "",
 					showSuccessMessage: false,
+					successMessage: "",
 				},
 			};
 		case tableConstants.TABLE_CREATE_SUCCESS:
@@ -16,20 +17,22 @@ export const tableReducer = (state, action) => {
 			arrTables.push(action.table);
 			return {
 				...state,
-				createTable: {
+				crudTable: {
 					showError: false,
 					errorMessage: "",
 					showSuccessMessage: true,
+					successMessage: action.successMessage,
 				},
 				tables: arrTables,
 			};
 		case tableConstants.TABLE_CREATE_FAILURE:
 			return {
 				...state,
-				createTable: {
+				crudTable: {
 					showError: true,
 					errorMessage: action.errorMessage,
 					showSuccessMessage: false,
+					successMessage: "",
 				},
 			};
 		case tableConstants.SET_TABLES_REQUEST:
@@ -38,6 +41,39 @@ export const tableReducer = (state, action) => {
 			return { ...state, showError: false, errorMessage: "", tables: action.tables };
 		case tableConstants.SET_TABLET_ERROR:
 			return { ...state, showError: true, errorMessage: action.errorMessage, tables: [] };
+
+		case tableConstants.TABLE_DELETE_REQUEST:
+			return {
+				...state,
+				crudTable: {
+					showError: false,
+					errorMessage: "",
+					showSuccessMessage: false,
+					successMessage: "",
+				},
+			};
+		case tableConstants.TABLE_DELETE_SUCCESS:
+			let arTables = state.tables.filter((table) => table.Id !== action.tableId);
+			return {
+				...state,
+				crudTable: {
+					showError: false,
+					errorMessage: "",
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+				},
+				tables: arTables,
+			};
+		case tableConstants.TABLE_DELETE_FAILURE:
+			return {
+				...state,
+				crudTable: {
+					showError: true,
+					errorMessage: action.errorMessage,
+					showSuccessMessage: false,
+					successMessage: "",
+				},
+			};
 		default:
 			return state;
 	}

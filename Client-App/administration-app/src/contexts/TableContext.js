@@ -5,10 +5,11 @@ export const TableContext = createContext();
 
 const TableContextProvider = (props) => {
 	const [tableState, dispatch] = useReducer(tableReducer, {
-		createTable: {
+		crudTable: {
 			showError: false,
 			errorMessage: "",
 			showSuccessMessage: false,
+			successMessage: "",
 		},
 		tables: [],
 		showError: false,
