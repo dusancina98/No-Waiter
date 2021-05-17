@@ -8,6 +8,7 @@ import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestEmailDTO;
 import NoWaiter.UserService.services.contracts.dto.ResetPasswordDTO;
 import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
+import NoWaiter.UserService.services.contracts.dto.UpdateWaiterDTO;
 import NoWaiter.UserService.services.contracts.dto.UserClientObjectDTO;
 import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
 import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsed;
@@ -19,6 +20,8 @@ import NoWaiter.UserService.services.contracts.exceptions.ResetPasswordTokenExpi
 public interface UserService {
 
     UUID createObjectAdmin(ObjectAdminDTO entity) throws Exception;
+    
+    void updateWaiter(IdentifiableDTO<UpdateWaiterDTO> entity);
         
     void updateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity);
     

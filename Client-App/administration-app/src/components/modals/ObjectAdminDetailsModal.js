@@ -30,13 +30,13 @@ const ObjectAdminDetailsModal = () => {
 					hidden={!userState.editObjectAdmin.showSuccessMessage}
 					header="Success"
 					message={userState.editObjectAdmin.successMessage}
-					handleCloseAlert={() => dispatch({ type: userConstants.HIDE_OBJECT_ADMIN_EDIT_SUCCESS })}
+					handleCloseAlert={() => dispatch({ type: userConstants.OBJECT_ADMIN_UPDATE_REQUEST })}
 				/>
 				<FailureAlert
 					hidden={!userState.editObjectAdmin.showErrorMessage}
 					header="Error"
 					message={userState.editObjectAdmin.successMessage}
-					handleCloseAlert={() => dispatch({ type: userConstants.HIDE_OBJECT_ADMIN_EDIT_FAILURE })}
+					handleCloseAlert={() => dispatch({ type: userConstants.OBJECT_ADMIN_UPDATE_REQUEST })}
 				/>
 				<div className="row">
 					<div className="col-md-12 grid-margin stretch-card">

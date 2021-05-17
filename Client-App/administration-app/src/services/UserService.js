@@ -8,6 +8,8 @@ export const userService = {
 	updateObjectAdmin,
 	findAllObjectAdmins,
 	createWaiter,
+	updateWaiter,
+	findAllWaiters,
 	login,
 	checkIfUserIdExist,
 	resendActivationLinkRequest,
@@ -127,7 +129,7 @@ async function findAllObjectAdmins(dispatch) {
 }
 
 function createWaiter(waiter, dispatch) {
-	if (validateWaiter(waiter, dispatch)) {
+	if (validateWaiter(waiter, dispatch, userConstants.WAITER_CREATE_FAILURE)) {
 		dispatch(request());
 
 		Axios.post(`/user-api/api/users/employee/waiter`, waiter, { validateStatus: () => true, headers: authHeader() })
@@ -154,7 +156,67 @@ function createWaiter(waiter, dispatch) {
 	}
 }
 
-function validateWaiter(waiter, dispatch) {
+function updateWaiter(waiter, dispatch) {
+	let waiterDTO = {
+		Id: waiter.Id,
+		EntityDTO: { Name: waiter.EntityDTO.Name, Surname: waiter.EntityDTO.Surname, Address: waiter.EntityDTO.Address, PhoneNumber: waiter.EntityDTO.PhoneNumber },
+	};
+
+	if (validateWaiter(waiterDTO.EntityDTO, dispatch, userConstants.WAITER_UPDATE_FAILURE)) {
+		dispatch(request());
+
+		Axios.put(`/user-api/api/users/employee/waiter`, waiterDTO, { validateStatus: () => true })
+			.then((res) => {
+				if (res.status === 200) {
+					dispatch(success("Waiter successfully updated", waiter));
+				} else {
+					dispatch(failure("Error while updating waiter info"));
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}
+
+	function request() {
+		return { type: userConstants.WAITER_UPDATE_REQUEST };
+	}
+	function success(message, waiter) {
+		return { type: userConstants.WAITER_UPDATE_SUCCESS, successMessage: message, waiter };
+	}
+	function failure(message) {
+		return { type: userConstants.WAITER_UPDATE_FAILURE, errorMessage: message };
+	}
+}
+
+async function findAllWaiters(dispatch) {
+	dispatch(request());
+
+	await Axios.get(`/user-api/api/users/employee/waiter`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else {
+				dispatch(failure("Error"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function request() {
+		return { type: userConstants.SET_WAITERS_REQUEST };
+	}
+	function success(data) {
+		return { type: userConstants.SET_WAITERS_SUCCESS, waiters: data };
+	}
+	function failure(message) {
+		return { type: userConstants.SET_WAITERS_ERROR, errorMessage: message };
+	}
+}
+
+function validateWaiter(waiter, dispatch, type) {
 	if (waiter.Name.length < 2) {
 		dispatch(validatioFailure("Waiter name must contain minimum two letters"));
 		return false;
@@ -167,7 +229,7 @@ function validateWaiter(waiter, dispatch) {
 	}
 
 	function validatioFailure(message) {
-		return { type: userConstants.WAITER_CREATE_FAILURE, errorMessage: message };
+		return { type, errorMessage: message };
 	}
 
 	return true;

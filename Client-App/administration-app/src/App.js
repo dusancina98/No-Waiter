@@ -6,6 +6,7 @@ import FirstActivationPasswordChangePage from "./pages/FirstActivationPasswordCh
 import CreateWaiterPage from "./pages/CreateWaiterPage";
 import HomePage from "./pages/HomePage";
 import ListObjectAdminsPage from "./pages/ListObjectAdminsPage";
+import ListWaitersPage from "./pages/ListWaitersPage";
 import ListObjectPage from "./pages/ListObjectsPage";
 import LoginPage from "./pages/Login";
 import UserActivateRequestPage from "./pages/UserActivateRequestPage";
@@ -27,6 +28,8 @@ function App() {
 				<ProtectedRoute roles={""} redirectTo="/" path="/inactive-user/:id" component={UserActivateRequestPage} />
 				<ProtectedRoute roles={""} redirectTo="/" path="/first-login-password/:id" component={FirstActivationPasswordChangePage} />
 				<Route path="/employees/add-waiter" component={CreateWaiterPage} />
+				<Route path="/employees/waiter" component={ListWaitersPage} />
+
 				<ProtectedRoute roles={""} exact path="/reset-password-request" redirectTo="/unauthorized" component={ForgotPasswordPage} />
 				<ProtectedRoute roles={""} exact path="/reset-password/:id" redirectTo="/unauthorized" component={ResetPasswordPage} />
 
