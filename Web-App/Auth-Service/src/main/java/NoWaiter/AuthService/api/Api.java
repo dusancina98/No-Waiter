@@ -60,11 +60,10 @@ public class Api {
 					.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
 							authenticationRequest.getPassword()));
 
-			System.out.println("TESTT222");
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			User user = (User) authentication.getPrincipal();
 			user.getUserAuthorities().forEach((a) -> roles.add(a.getName()));
-			jwt = tokenUtils.generateToken(user.getUsername(),roles); // username
+			jwt = tokenUtils.generateToken(user.getUsername(), user.getId() ,roles); // username
 			expiresIn = tokenUtils.getExpiredIn();
 		} catch (BadCredentialsException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

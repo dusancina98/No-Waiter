@@ -57,7 +57,7 @@ const LoginForm = () => {
                             Forgot your password?
 						</span>
 
-						<a class="txt2 p-l-10" href="#reset">
+						<a class="txt2 p-l-10" href="#reset-password-request">
 							Reset password
 						</a>
 					</div>

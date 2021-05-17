@@ -12,7 +12,8 @@ export const userService = {
 	checkIfUserIdExist,
 	resendActivationLinkRequest,
 	changeFirstPassword,
-
+	resetPasswordLinkRequest,
+	resetPassword,
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -288,3 +289,62 @@ function validatePasswords(password, repeatedPassword) {
 	}
 }
 
+function resetPasswordLinkRequest(resetPasswordLinkRequest, dispatch) {
+	dispatch(request());
+
+	Axios.post(`${config.API_URL}/user-api/api/users/reset-password-link-request`, resetPasswordLinkRequest, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(resetPasswordLinkRequest.email));
+			} else if (res.status === 404) {
+				dispatch(failure("Sorry, your email was not found. Please double-check your email."));
+			} else {
+				dispatch(failure(res.data.message));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+
+	function request() {
+		return { type: userConstants.RESET_PASSWORD_LINK_REQUEST };
+	}
+	function success(emailAddress) {
+		return { type: userConstants.RESET_PASSWORD_LINK_SUCCESS, emailAddress };
+	}
+	function failure(error) {
+		return { type: userConstants.RESET_PASSWORD_LINK_FAILURE, errorMessage: error };
+	}
+}
+
+function resetPassword(resetPasswordRequest, dispatch) {
+	let [passwordValid, passwordErrorMessage] = validatePasswords(resetPasswordRequest.password, resetPasswordRequest.passwordRepeat);
+
+	if (passwordValid === true) {
+		dispatch(request());
+
+		Axios.post(`${config.API_URL}/user-api/api/users/reset-password`, resetPasswordRequest, { validateStatus: () => true })
+			.then((res) => {
+				if (res.status === 200) {
+					dispatch(success());
+				} else {
+					dispatch(failure("Reset password token expired or used"));
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	} else {
+		dispatch(failure(passwordErrorMessage));
+	}
+
+	function request() {
+		return { type: userConstants.RESET_PASSWORD_REQUEST };
+	}
+	function success() {
+		return { type: userConstants.RESET_PASSWORD_SUCCESS };
+	}
+	function failure(error) {
+		return { type: userConstants.RESET_PASSWORD_FAILURE, errorMessage: error };
+	}
+}
