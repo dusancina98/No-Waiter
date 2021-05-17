@@ -9,7 +9,7 @@ const FirstActivationPasswordChangePage = (props) => {
 		        <div className="container-login100">
 			        <div className="wrap-login100">
                         <UserContextProvider>
-                            <FirstActivationPasswordChangeForm id={props.match.params.id}/>
+                            <FirstActivationPasswordChangeForm id={props.match.params.id} token= {props.match.params.token}/>
                         </UserContextProvider>
 			        </div>
 		        </div>

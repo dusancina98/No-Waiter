@@ -21,6 +21,7 @@ const ResetPasswordForm = (props) => {
 
 		userService.resetPassword(resetPasswordRequest, dispatch);
 	};
+	
 
 	return (
 		<form className="login100-form" onSubmit={handleSubmit}>

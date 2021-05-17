@@ -1,10 +1,10 @@
 package NoWaiter.UserService.services.implementation;
 
-import NoWaiter.UserService.entities.AccountActivation;
+import NoWaiter.UserService.entities.AccountActivationToken;
 import NoWaiter.UserService.entities.ObjectAdmin;
 import NoWaiter.UserService.entities.ResetPasswordToken;
 import NoWaiter.UserService.entities.User;
-import NoWaiter.UserService.repository.AccountActivationRepository;
+import NoWaiter.UserService.repository.AccountActivationTokenRepository;
 import NoWaiter.UserService.repository.ObjectAdminRepository;
 import NoWaiter.UserService.repository.ResetPasswordTokenRepository;
 import NoWaiter.UserService.repository.UserRepository;
@@ -16,11 +16,12 @@ import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestEmailDTO;
 import NoWaiter.UserService.services.contracts.dto.ResetPasswordDTO;
-import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsed;
+import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsedException;
 import NoWaiter.UserService.services.contracts.exceptions.NonExistentUserEmailException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordIsNotStrongException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordsIsNotTheSameException;
 import NoWaiter.UserService.services.contracts.exceptions.ResetPasswordTokenExpiredOrUsedException;
+import NoWaiter.UserService.services.contracts.exceptions.TokenNotFoundException;
 import NoWaiter.UserService.services.contracts.exceptions.UserIsActiveException;
 import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
 import NoWaiter.UserService.services.contracts.dto.UserClientObjectDTO;
@@ -54,7 +55,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     
     @Autowired
-    private AccountActivationRepository accountActivationRepository;
+    private AccountActivationTokenRepository accountActivationTokenRepository;
     
     @Autowired
     private EmailServiceImpl emailService;
@@ -97,11 +98,11 @@ public class UserServiceImpl implements UserService {
 		if(user.isActive())
 			throw new UserIsActiveException("User was activated");
 				
-		AccountActivation accountActivation = new AccountActivation(user, new Date(System.currentTimeMillis()));
-		accountActivationRepository.save(accountActivation);
+		AccountActivationToken accountActivation = new AccountActivationToken(user, new Date(System.currentTimeMillis()));
+		accountActivationTokenRepository.save(accountActivation);
 		
 		try {
-			emailService.sendActivationLinkAsync(user, accountActivation.getId());
+			emailService.sendActivationLinkAsync(user, accountActivation.getToken());
 		} catch (MailException | InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -112,51 +113,52 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void activateUser(UUID activationId) throws ActivationLinkExpiredOrUsed {
-		AccountActivation accountActivation = isValidAccountActivationLink(activationId);
-		if(accountActivation==null)
-			throw new ActivationLinkExpiredOrUsed("User was activated");
-				
+	public void activateUser(String token) throws ActivationLinkExpiredOrUsedException, TokenNotFoundException {
+		AccountActivationToken accountActivation = isValidAccountActivationLink(token);
 		
 		User user = userRepository.getOne(accountActivation.getUserId().getId());
 		user.setActive(true);
 		userRepository.save(user);
 		accountActivation.setUsed(true);
-		accountActivationRepository.save(accountActivation);
-	}
-
-	private AccountActivation isValidAccountActivationLink(UUID activationId) {
-		AccountActivation accountActivation = accountActivationRepository.getOne(activationId);
-		
-		if(accountActivation.getExpirationDate().before(new Date()) || accountActivation.isUsed())
-			return null;
-		
-		return accountActivation;
+		accountActivationTokenRepository.save(accountActivation);
 	}
 
 	@Override
-	public UUID isUserFirstLogin(UUID activationId) {
-		AccountActivation accountActivation = accountActivationRepository.getOne(activationId);
-
-		List<AccountActivation> accountActivations =  accountActivationRepository.getUsedActivationsForUser(accountActivation.getUserId().getId());
+	public AccountActivationToken isValidAccountActivationLink(String token) throws TokenNotFoundException, ActivationLinkExpiredOrUsedException {
+		AccountActivationToken accountActivationToken = accountActivationTokenRepository.findToken(token);
 		
-		if(accountActivations.size()==0) {
-			accountActivation.setUsed(true);
-			accountActivationRepository.save(accountActivation);
-			return accountActivation.getUserId().getId();
+		if(accountActivationToken==null)
+			throw new TokenNotFoundException("Token not found");
+		
+		if(accountActivationToken.getExpirationDate().before(new Date()) || accountActivationToken.isUsed()) 
+			throw new ActivationLinkExpiredOrUsedException("Token expired or used");
+				
+		return accountActivationToken;
+	}
 
-		}
+	@Override
+	public UUID isUserFirstLogin(String token) {
+		AccountActivationToken accountActivation = accountActivationTokenRepository.findToken(token);
+
+		List<AccountActivationToken> accountActivations =  accountActivationTokenRepository.getUsedActivationsForUser(accountActivation.getUserId().getId());
+		
+		if(accountActivations.size()==0) 
+			return accountActivation.getUserId().getId();
 		else
 			return null;
 	}
 
 	@Override
-	public void changeFirstPassword(ChangeFirstPasswordDTO changeFirstPasswordDTO) throws PasswordsIsNotTheSameException, PasswordIsNotStrongException {
+	public void changeFirstPassword(ChangeFirstPasswordDTO changeFirstPasswordDTO) throws PasswordsIsNotTheSameException, PasswordIsNotStrongException, ActivationLinkExpiredOrUsedException, TokenNotFoundException {
 		String newPassword = HashAndSaltPasswordIfStrongAndMatching(changeFirstPasswordDTO.password,changeFirstPasswordDTO.repeatedPassword);
+		
+		AccountActivationToken token= isValidAccountActivationLink(changeFirstPasswordDTO.token);
 		
 		User user= userRepository.getOne(changeFirstPasswordDTO.userId);
 		user.setPassword(newPassword);
 		user.setActive(true);
+		token.setUsed(true);
+		accountActivationTokenRepository.save(token);
 		userRepository.save(user);
 	}
 	
@@ -253,8 +255,4 @@ public class UserServiceImpl implements UserService {
 		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
 		return UserMapper.MapWaiterCollectionToIdentifiableWaiterDTOCollection(waiterRepository.findAllByObjectId(objectAdmin.getObjectId()));
 	}
-
-
-
-
 }

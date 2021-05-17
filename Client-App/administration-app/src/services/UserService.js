@@ -14,6 +14,7 @@ export const userService = {
 	changeFirstPassword,
 	resetPasswordLinkRequest,
 	resetPassword,
+	checkIfTokenIsValid,
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -347,4 +348,17 @@ function resetPassword(resetPasswordRequest, dispatch) {
 	function failure(error) {
 		return { type: userConstants.RESET_PASSWORD_FAILURE, errorMessage: error };
 	}
+}
+
+function checkIfTokenIsValid(token) {
+	Axios.post(`/user-api/api/users/check-if-activation-token-valid`, token, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 400) {
+        		//TODO 1: izmeniti u neku stranicu za token je istekao
+				window.location = "#/404";
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+		});
 }

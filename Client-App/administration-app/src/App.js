@@ -25,7 +25,7 @@ function App() {
 				<Route path="/add-object-admin" component={CreateObjectAdminPage} />
 				<Route path="/object-admins" component={ListObjectAdminsPage} />
 				<ProtectedRoute roles={""} redirectTo="/" path="/inactive-user/:id" component={UserActivateRequestPage} />
-				<ProtectedRoute roles={""} redirectTo="/" path="/first-login-password/:id" component={FirstActivationPasswordChangePage} />
+				<ProtectedRoute roles={""} redirectTo="/" path="/first-login-password/:id/:token" component={FirstActivationPasswordChangePage} />
 				<Route path="/employees/add-waiter" component={CreateWaiterPage} />
 				<ProtectedRoute roles={""} exact path="/reset-password-request" redirectTo="/unauthorized" component={ForgotPasswordPage} />
 				<ProtectedRoute roles={""} exact path="/reset-password/:id" redirectTo="/unauthorized" component={ResetPasswordPage} />
