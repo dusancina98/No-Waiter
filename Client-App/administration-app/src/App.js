@@ -1,4 +1,4 @@
-import { HashRouter as Router, Switch, Route } from "react-router-dom";
+import { HashRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import "./App.css";
 import CreateObjectAdminPage from "./pages/CreateObjectAdminPage";
 import CreateObjectPage from "./pages/CreateObjectPage";
@@ -12,6 +12,7 @@ import UserActivateRequestPage from "./pages/UserActivateRequestPage";
 import { ProtectedRoute } from "./router/ProtectedRouter";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import PageNotFoundPage from "./pages/PageNotFoundPage";
 
 function App() {
 	return (
@@ -28,6 +29,9 @@ function App() {
 				<Route path="/employees/add-waiter" component={CreateWaiterPage} />
 				<ProtectedRoute roles={""} exact path="/reset-password-request" redirectTo="/unauthorized" component={ForgotPasswordPage} />
 				<ProtectedRoute roles={""} exact path="/reset-password/:id" redirectTo="/unauthorized" component={ResetPasswordPage} />
+
+				<Route path="/404" component={PageNotFoundPage} />
+				<Redirect to="/404" />
 			</Switch>
 		</Router>
 	);

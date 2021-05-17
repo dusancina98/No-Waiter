@@ -22,6 +22,7 @@ public class GatewayServiceApplication {
 		SpringApplication.run(GatewayServiceApplication.class, args);
 	}
 	
+	/*
 	@Bean
 	public CorsFilter corsFilter() {
 	    final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -38,5 +39,5 @@ public class GatewayServiceApplication {
 	    config.addAllowedMethod("PATCH");
 	    source.registerCorsConfiguration("/**", config);
 	    return new CorsFilter(source);
-	}
+	}*/
 }

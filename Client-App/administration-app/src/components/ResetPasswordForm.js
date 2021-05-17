@@ -13,7 +13,6 @@ const ResetPasswordForm = (props) => {
     const handleSubmit = (e) => {
 		e.preventDefault();
 
-
 		let resetPasswordRequest = {
 			resetPasswordId,
 			password,
@@ -48,7 +47,7 @@ const ResetPasswordForm = (props) => {
                         <span class="focus-input100"></span>
                     </div>
 
-					<div className="form-group text-center" style={{ color: "red", fontSize: "0.8em" }} hidden={!userState.resetPassword.showError}>
+					<div className="form-group text-center" style={{ color: "red", fontSize: "1em" }} hidden={!userState.resetPassword.showError}>
 						{userState.resetPassword.errorMessage}
 					</div>
 

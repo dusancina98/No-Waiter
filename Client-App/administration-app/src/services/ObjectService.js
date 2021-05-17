@@ -1,5 +1,4 @@
 import Axios from "axios";
-import { config } from "../config/config";
 import { objectConstants } from "../constants/ObjectConstants";
 
 export const objectService = {
@@ -16,7 +15,7 @@ function createObject(object, dispatch) {
 	if (validateObject(object, dispatch, objectConstants.OBJECT_CREATE_FAILURE)) {
 		dispatch(request());
 
-		Axios.post(`${config.API_URL}/object-api/api/objects`, object, { validateStatus: () => true,
+		Axios.post(`/object-api/api/objects`, object, { validateStatus: () => true,
 		})
 			.then((res) => {
 				if (res.status === 201) {
@@ -45,7 +44,7 @@ function updateObject(object, dispatch) {
 	if (validateObject(object.EntityDTO, dispatch, objectConstants.OBJECT_UPDATE_FAILURE)) {
 		dispatch(request());
 
-		Axios.put(`${config.API_URL}/object-api/api/objects`, object, { validateStatus: () => true })
+		Axios.put(`/object-api/api/objects`, object, { validateStatus: () => true })
 			.then((res) => {
 				if (res.status === 200) {
 					dispatch(success("Object successfully updated", object));
@@ -72,7 +71,7 @@ function updateObject(object, dispatch) {
 async function findAll(dispatch) {
 	dispatch(request());
 
-	await Axios.get(`${config.API_URL}/object-api/api/objects`, { validateStatus: () => true })
+	await Axios.get(`/object-api/api/objects`, { validateStatus: () => true })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -118,7 +117,7 @@ function validateObject(object, dispatch, type) {
 function activateObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`${config.API_URL}/object-api/api/objects/${object.Id}/activate`, { validateStatus: () => true })
+	Axios.put(`/object-api/api/objects/${object.Id}/activate`, { validateStatus: () => true })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -147,7 +146,7 @@ function activateObject(object, dispatch) {
 function deactivateObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`${config.API_URL}/object-api/api/objects/${object.Id}/deactivate`, { validateStatus: () => true })
+	Axios.put(`/object-api/api/objects/${object.Id}/deactivate`, { validateStatus: () => true })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -176,7 +175,7 @@ function deactivateObject(object, dispatch) {
 function blockObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`${config.API_URL}/object-api/api/objects/${object.Id}/block`, { validateStatus: () => true })
+	Axios.put(`/object-api/api/objects/${object.Id}/block`, { validateStatus: () => true })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -205,7 +204,7 @@ function blockObject(object, dispatch) {
 function unblockObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`${config.API_URL}/object-api/api/objects/${object.Id}/unblock`, { validateStatus: () => true })
+	Axios.put(`/object-api/api/objects/${object.Id}/unblock`, { validateStatus: () => true })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
