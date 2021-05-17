@@ -9,6 +9,7 @@ export const userService = {
 	updateObjectAdmin,
 	findAllObjectAdmins,
 	createWaiter,
+	findAllWaiters,
 	login,
 	checkIfUserIdExist,
 	resendActivationLinkRequest,
@@ -152,6 +153,33 @@ function createWaiter(waiter, dispatch) {
 	}
 	function failure(message) {
 		return { type: userConstants.WAITER_CREATE_FAILURE, errorMessage: message };
+	}
+}
+
+async function findAllWaiters(dispatch) {
+	dispatch(request());
+
+	await Axios.get(`${config.API_URL}/user-api/api/users/employee/waiter`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else {
+				dispatch(failure("Error"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function request() {
+		return { type: userConstants.SET_WAITERS_REQUEST };
+	}
+	function success(data) {
+		return { type: userConstants.SET_WAITERS_SUCCESS, waiters: data };
+	}
+	function failure(message) {
+		return { type: userConstants.SET_WAITERS_ERROR, errorMessage: message };
 	}
 }
 
