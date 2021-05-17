@@ -1,5 +1,6 @@
 import Axios from "axios";
 import { config } from "../config/config";
+import { authHeader } from "../helpers/auth-header";
 import { userConstants } from "../constants/UserConstants";
 import { setAuthInLocalStorage } from "../helpers/auth-header";
 
@@ -130,7 +131,7 @@ function createWaiter(waiter, dispatch) {
 	if (validateWaiter(waiter, dispatch)) {
 		dispatch(request());
 
-		Axios.post(`${config.API_URL}/user-api/api/users/employee/waiter`, waiter, { validateStatus: () => true })
+		Axios.post(`${config.API_URL}/user-api/api/users/employee/waiter`, waiter, { validateStatus: () => true, headers: authHeader() })
 			.then((res) => {
 				if (res.status === 201) {
 					dispatch(success());
@@ -184,7 +185,7 @@ function login(loginRequest, dispatch) {
 				window.location = "#/";
 			} else if (res.status === 401) {
 				dispatch(failure(res.data.message));
-			}else if (res.status === 403) {
+			} else if (res.status === 403) {
 				window.location = "#/inactive-user/" + res.data;
 			} else {
 				dispatch({ type: userConstants.LOGIN_FAILURE });
@@ -219,7 +220,7 @@ function checkIfUserIdExist(userId, dispatch) {
 	}
 }
 
-function resendActivationLinkRequest(userId, dispatch){
+function resendActivationLinkRequest(userId, dispatch) {
 	dispatch(request());
 	Axios.post(`${config.API_URL}/user-api/api/users/activation-link-request`, userId, { validateStatus: () => true })
 		.then((res) => {
@@ -230,7 +231,7 @@ function resendActivationLinkRequest(userId, dispatch){
 			}
 		})
 		.catch((err) => {
-			dispatch(failure("Activation mail was not sent. Please, try again."))
+			dispatch(failure("Activation mail was not sent. Please, try again."));
 		});
 
 	function request() {
@@ -244,7 +245,7 @@ function resendActivationLinkRequest(userId, dispatch){
 	}
 }
 
-function changeFirstPassword(changePasswordRequest, dispatch){
+function changeFirstPassword(changePasswordRequest, dispatch) {
 	let [passwordValid, passwordErrorMessage] = validatePasswords(changePasswordRequest.password, changePasswordRequest.repeatedPassword);
 
 	if (passwordValid === true) {
