@@ -158,7 +158,7 @@ function createWaiter(waiter, dispatch) {
 async function findAllWaiters(dispatch) {
 	dispatch(request());
 
-	await Axios.get(`${config.API_URL}/user-api/api/users/employee/waiter`, { validateStatus: () => true, headers: authHeader() })
+	await Axios.get(`/user-api/api/users/employee/waiter`, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 200) {
 				dispatch(success(res.data));

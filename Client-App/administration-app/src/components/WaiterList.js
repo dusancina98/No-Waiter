@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from "react";
+import { modalConstants } from "../constants/ModalConstants";
 import { UserContext } from "../contexts/UserContext";
 import { userService } from "../services/UserService";
 
@@ -13,13 +14,13 @@ const WaiterList = () => {
 	}, [dispatch]);
 
 	const handleObjectAdminClick = (waiter) => {
-		console.log(waiter);
-		//dispatch({ type: modalConstants.SHOW_OBJECT_ADMIN_DETAILS, objectAdmin });
+		dispatch({ type: modalConstants.SHOW_WAITER_DETAILS, waiter });
 	};
 
 	return (
 		<React.Fragment>
 			{userState.waiters.map((waiter) => {
+				console.log(waiter);
 				return (
 					<tr key={waiter.Id} onClick={() => handleObjectAdminClick(waiter)} style={{ cursor: "pointer" }}>
 						<td>{waiter.EntityDTO.Email}</td>

@@ -193,6 +193,37 @@ export const userReducer = (state, action) => {
 					},
 				},
 			};
+		case modalConstants.SHOW_WAITER_DETAILS:
+			return {
+				...state,
+				waiterDetails: {
+					showModal: true,
+					readOnly: true,
+					waiter: action.waiter,
+				},
+			};
+		case modalConstants.HIDE_WAITER_DETAILS:
+			return {
+				...state,
+				waiterDetails: {
+					showModal: false,
+					readOnly: true,
+					waiter: {
+						Id: "",
+						EntityDTO: {
+							Email: "",
+							Name: "",
+							Surname: "",
+							Address: "",
+							PhoneNumber: "",
+						},
+					},
+				},
+			};
+		case modalConstants.ALLOW_WAITER_DETAILS_INPUT_FIELDS:
+			let temp = { ...state };
+			temp.waiterDetails.readOnly = false;
+			return temp;
 		case userConstants.INACTIVE_USER_EMAIL_REQUEST:
 			return {
 				inActiveUser: {

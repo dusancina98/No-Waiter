@@ -52,6 +52,20 @@ const UserContextProvider = (props) => {
 				},
 			},
 		},
+		waiterDetails: {
+			showModal: false,
+			readOnly: true,
+			waiter: {
+				Id: "",
+				EntityDTO: {
+					Email: "",
+					Name: "",
+					Surname: "",
+					Address: "",
+					PhoneNumber: "",
+				},
+			},
+		},
 		forgotPasswordRequestLinkError: {
 			showError: false,
 			errorMessage: "",

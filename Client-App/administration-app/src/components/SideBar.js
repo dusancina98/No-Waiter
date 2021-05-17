@@ -76,7 +76,7 @@ const SideBar = () => {
 					<div className="collapse" id="employees">
 						<ul className="nav flex-column sub-menu">
 							<li className="nav-item">
-								<Link className="nav-link" to="/object-admins">
+								<Link className="nav-link" to="/employees/waiter">
 									All Employees
 								</Link>
 							</li>
