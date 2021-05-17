@@ -36,13 +36,19 @@ const ForgotPasswordForm = () => {
                 <span class="focus-input100"></span>
             </div>
 
-			<div className="form-group text-center p-t-25" style={{ color: "red", fontSize: "1em" }} hidden={!userState.forgotPasswordRequestLinkError.showSuccessMessage}>
+
+			<div hidden={!userState.forgotPasswordRequestLinkError.showSuccessMessage} className="text-center p-b-35 fs-20">
 				We sent an email to <b>{userState.forgotPasswordRequestLinkError.emailAddress}</b> with a link to get back into your account.
 			</div>
 
-			<div hidden={!userState.forgotPasswordRequestLinkError.showSuccessMessage} className="form-group">
-				<Link className="btn btn-primary btn-block" to="/login">Back to login</Link>
-			</div>
+			<div hidden={!userState.forgotPasswordRequestLinkError.showSuccessMessage} class="container-login100-form-btn">
+				<div class="wrap-login100-form-btn">
+					<div class="login100-form-bgbtn"></div>
+						<Link className="login100-form-btn" to="/login">
+					    	Back to login
+				        </Link>
+				</div>
+			</div> 
 
 
 			<div hidden={userState.forgotPasswordRequestLinkError.showSuccessMessage} class="container-login100-form-btn">
