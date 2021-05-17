@@ -31,10 +31,13 @@ public class Object {
 
     private boolean blocked;
     
-    @OneToMany	
+    @OneToMany(mappedBy = "object")
     private List<ObjectAdmin> admins;
+    
+    @OneToMany(mappedBy = "object")
+    private List<Table> tables;
 
-    public Object(UUID id, String name, Address address, Contact contact, String imagePath, boolean active, boolean blocked, List<ObjectAdmin> admins) {
+    public Object(UUID id, String name, Address address, Contact contact, String imagePath, boolean active, boolean blocked, List<ObjectAdmin> admins, List<Table> tables) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -43,10 +46,11 @@ public class Object {
         this.active = active;
         this.blocked = blocked;
         this.admins = admins;
+        this.tables = tables;
     }
 
     public Object(String name, Address address, Contact contact, String imagePath) {
-        this (UUID.randomUUID(), name, address, contact, imagePath, false, false, new ArrayList<ObjectAdmin>());
+        this (UUID.randomUUID(), name, address, contact, imagePath, false, false, new ArrayList<ObjectAdmin>(), new ArrayList<Table>());
     }
 
     public Object() { }
@@ -99,7 +103,6 @@ public class Object {
     	this.active = false;
     }
 
-
     public boolean isBlocked() {
         return blocked;
     }
@@ -121,5 +124,16 @@ public class Object {
 			admins = new ArrayList<ObjectAdmin>();
 		
 		admins.add(objectAdmin);		
+	}
+
+	public List<Table> getTables() {
+		return tables;
+	}
+
+	public void addTable(Table table) {
+		if(tables == null) 
+			tables = new ArrayList<Table>();
+		
+		tables.add(table);
 	}
 }

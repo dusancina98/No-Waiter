@@ -1,10 +1,11 @@
-package NoWaiter.UserService.intercomm;
+package NoWaiter.ObjectService.intercomm;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-import NoWaiter.UserService.services.contracts.dto.JwtParseResponseDTO;
+import NoWaiter.ObjectService.services.contracts.dto.JwtParseResponseDTO;
+
 
 @FeignClient("auth-service")
 public interface AuthClient {

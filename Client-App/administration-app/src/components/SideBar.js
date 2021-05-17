@@ -89,6 +89,12 @@ const SideBar = () => {
 					</div>
 				</li>
 				<li className="nav-item">
+					<Link className="nav-link" to="/tables">
+						<i className="mdi mdi-contacts menu-icon"></i>
+						<span className="menu-title">Tables</span>
+					</Link>
+				</li>
+				<li className="nav-item">
 					<a className="nav-link" href="pages/icons/mdi.html">
 						<i className="mdi mdi-contacts menu-icon"></i>
 						<span className="menu-title">Icons</span>
