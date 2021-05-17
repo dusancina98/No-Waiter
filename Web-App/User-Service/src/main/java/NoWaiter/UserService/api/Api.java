@@ -55,9 +55,9 @@ public class Api {
     
     @PutMapping("/objects")
     @CrossOrigin
-    public ResponseEntity<?> UpdateObjects(@RequestBody UserClientObjectDTO userObjectDTO) {
+    public ResponseEntity<?> updateObjects(@RequestBody UserClientObjectDTO userObjectDTO) {
         try {
-        	userService.UpdateObjects(userObjectDTO);       
+        	userService.updateObjects(userObjectDTO);       
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
         	e.printStackTrace();
@@ -67,11 +67,11 @@ public class Api {
 
     @PostMapping("/object-admin")
     @CrossOrigin
-    public ResponseEntity<?> CreateRestaurantAdmin(@RequestBody ObjectAdminDTO objectAdminDTO) {
+    public ResponseEntity<?> createRestaurantAdmin(@RequestBody ObjectAdminDTO objectAdminDTO) {
         try {
         	
             objectClient.checkObject(objectAdminDTO.ObjectId);
-            UUID adminId = userService.CreateObjectAdmin(objectAdminDTO);
+            UUID adminId = userService.createObjectAdmin(objectAdminDTO);
             objectClient.addAdminToObject(new AddAdminDTO(objectAdminDTO.ObjectId, adminId));
             
             return new ResponseEntity<>(adminId, HttpStatus.CREATED);
@@ -88,9 +88,9 @@ public class Api {
     
     @PutMapping("/object-admin")
     @CrossOrigin
-    public ResponseEntity<?> UpdateRestaurantAdmin(@RequestBody IdentifiableDTO<UpdateObjectAdminRequestDTO> objectAdminDTO) {
+    public ResponseEntity<?> updateRestaurantAdmin(@RequestBody IdentifiableDTO<UpdateObjectAdminRequestDTO> objectAdminDTO) {
         try {
-        	userService.UpdateObjectAdmin(objectAdminDTO);       
+        	userService.updateObjectAdmin(objectAdminDTO);       
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
         	e.printStackTrace();
@@ -101,9 +101,9 @@ public class Api {
     
     @GetMapping("/object-admin")
     @CrossOrigin
-    public ResponseEntity<?> FindAllObjectAdmins() {
+    public ResponseEntity<?> findAllObjectAdmins() {
         try {
-            return new ResponseEntity<>(userService.FindAllObjectAdmins(), HttpStatus.OK);
+            return new ResponseEntity<>(userService.findAllObjectAdmins(), HttpStatus.OK);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -112,10 +112,22 @@ public class Api {
     
     @PostMapping("/employee/waiter")
     @CrossOrigin
-    public ResponseEntity<?> CreateWaiter(@RequestHeader("Authorization") String token, @RequestBody WaiterDTO waiterDTO) {
+    public ResponseEntity<?> createWaiter(@RequestHeader("Authorization") String token, @RequestBody WaiterDTO waiterDTO) {
         try {
         	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
-            return new ResponseEntity<>(userService.CreateWaiter(waiterDTO, jwtResponse.getId()), HttpStatus.CREATED);
+            return new ResponseEntity<>(userService.createWaiter(waiterDTO, jwtResponse.getId()), HttpStatus.CREATED);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @GetMapping("/employee/waiter")
+    @CrossOrigin
+    public ResponseEntity<?> findAllWaitersForObject(@RequestHeader("Authorization") String token) {
+        try {
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+            return new ResponseEntity<>(userService.findAllWaiters(jwtResponse.getId()), HttpStatus.OK);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

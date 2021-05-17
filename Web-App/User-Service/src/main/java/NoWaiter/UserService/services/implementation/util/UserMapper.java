@@ -39,5 +39,22 @@ public class UserMapper {
     	
     	return new Waiter(waiterDTO.Email, "", waiterDTO.Name, waiterDTO.Surname, waiterDTO.Address, waiterDTO.PhoneNumber, objectId);
     }
+    
+    public static IdentifiableDTO<WaiterDTO> MapWaiterToIdentifiableWaiterDTO(Waiter waiter){
+        if (waiter == null) throw new IllegalArgumentException();
+
+        return new IdentifiableDTO<WaiterDTO>(waiter.getId(), new WaiterDTO(waiter.getEmail(), waiter.getName(),
+        		waiter.getSurname(), waiter.getAddress(), waiter.getPhoneNumber()));
+    }
+
+    public static Iterable<IdentifiableDTO<WaiterDTO>> MapWaiterCollectionToIdentifiableWaiterDTOCollection(Iterable<Waiter> waiters){
+        if (waiters == null) throw new IllegalArgumentException();
+
+        List<IdentifiableDTO<WaiterDTO>> retVal = new ArrayList<>();
+        waiters.forEach((waiter) -> retVal.add(MapWaiterToIdentifiableWaiterDTO(waiter)));
+
+        return retVal;
+    }
+    
    
 }

@@ -18,15 +18,17 @@ import NoWaiter.UserService.services.contracts.exceptions.ResetPasswordTokenExpi
 
 public interface UserService {
 
-    UUID CreateObjectAdmin(ObjectAdminDTO entity) throws Exception;
+    UUID createObjectAdmin(ObjectAdminDTO entity) throws Exception;
         
-    void UpdateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity);
+    void updateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity);
     
-    void UpdateObjects(UserClientObjectDTO entity);
+    void updateObjects(UserClientObjectDTO entity);
     
-    UUID CreateWaiter(WaiterDTO entity, UUID objectAdminId);
+    UUID createWaiter(WaiterDTO entity, UUID objectAdminId);
     
-    Iterable<IdentifiableDTO<ObjectAdminDTO>> FindAllObjectAdmins();
+    Iterable<IdentifiableDTO<ObjectAdminDTO>> findAllObjectAdmins();
+    
+    Iterable<IdentifiableDTO<WaiterDTO>> findAllWaiters(UUID objectAdminId);
 
 	String checkUserExistance(UUID userId);
 
