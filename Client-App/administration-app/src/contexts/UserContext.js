@@ -52,6 +52,12 @@ const UserContextProvider = (props) => {
 				},
 			},
 		},
+		editWaiter: {
+			showSuccessMessage: false,
+			successMessage: "",
+			showErrorMessage: false,
+			errorMessage: "",
+		},
 		waiterDetails: {
 			showModal: false,
 			readOnly: true,

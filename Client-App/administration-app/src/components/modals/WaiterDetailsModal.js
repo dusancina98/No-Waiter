@@ -1,8 +1,11 @@
 import { useContext } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { modalConstants } from "../../constants/ModalConstants";
+import { userConstants } from "../../constants/UserConstants";
 import { UserContext } from "../../contexts/UserContext";
 import EditWaiterForm from "../EditWaiterForm";
+import FailureAlert from "../FailureAlert";
+import SuccessAlert from "../SuccessAlert";
 import WaiterDetailsModalButtons from "./WaiterDetailsModalButtons";
 
 const WaiterDetailsModal = () => {
@@ -23,18 +26,18 @@ const WaiterDetailsModal = () => {
 				</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				{/* <SuccessAlert
-					hidden={!userState.editObjectAdmin.showSuccessMessage}
+				<SuccessAlert
+					hidden={!userState.editWaiter.showSuccessMessage}
 					header="Success"
-					message={userState.editObjectAdmin.successMessage}
-					handleCloseAlert={() => dispatch({ type: userConstants.HIDE_OBJECT_ADMIN_EDIT_SUCCESS })}
+					message={userState.editWaiter.successMessage}
+					handleCloseAlert={() => dispatch({ type: userConstants.WAITER_UPDATE_REQUEST })}
 				/>
 				<FailureAlert
-					hidden={!userState.editObjectAdmin.showErrorMessage}
+					hidden={!userState.editWaiter.showErrorMessage}
 					header="Error"
-					message={userState.editObjectAdmin.successMessage}
-					handleCloseAlert={() => dispatch({ type: userConstants.HIDE_OBJECT_ADMIN_EDIT_FAILURE })}
-				/> */}
+					message={userState.editWaiter.successMessage}
+					handleCloseAlert={() => dispatch({ type: userConstants.WAITER_UPDATE_REQUEST })}
+				/>
 				<div className="row">
 					<div className="col-md-12 grid-margin stretch-card">
 						<div className="card" style={{ border: "0" }}>

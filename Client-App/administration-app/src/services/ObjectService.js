@@ -15,8 +15,7 @@ function createObject(object, dispatch) {
 	if (validateObject(object, dispatch, objectConstants.OBJECT_CREATE_FAILURE)) {
 		dispatch(request());
 
-		Axios.post(`/object-api/api/objects`, object, { validateStatus: () => true,
-		})
+		Axios.post(`/object-api/api/objects`, object, { validateStatus: () => true })
 			.then((res) => {
 				if (res.status === 201) {
 					dispatch(success());
@@ -41,10 +40,21 @@ function createObject(object, dispatch) {
 }
 
 function updateObject(object, dispatch) {
+	let objectDTO = {
+		Id: object.Id,
+		EntityDTO: {
+			Name: object.EntityDTO.Name,
+			Email: object.EntityDTO.Email,
+			PhoneNumber: object.EntityDTO.PhoneNumber,
+			ImagePath: object.EntityDTO.ImagePath,
+			Address: object.EntityDTO.Address,
+		},
+	};
+
 	if (validateObject(object.EntityDTO, dispatch, objectConstants.OBJECT_UPDATE_FAILURE)) {
 		dispatch(request());
 
-		Axios.put(`/object-api/api/objects`, object, { validateStatus: () => true })
+		Axios.put(`/object-api/api/objects`, objectDTO, { validateStatus: () => true })
 			.then((res) => {
 				if (res.status === 200) {
 					dispatch(success("Object successfully updated", object));

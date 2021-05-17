@@ -41,7 +41,7 @@ export const userReducer = (state, action) => {
 				},
 			};
 		case userConstants.OBJECT_ADMIN_UPDATE_SUCCESS:
-			let pom = {
+			let stateCpy = {
 				...state,
 				editObjectAdmin: {
 					showSuccessMessage: true,
@@ -55,10 +55,10 @@ export const userReducer = (state, action) => {
 					objectAdmin: action.objectAdmin,
 				},
 			};
-			var foundIndex = pom.objectAdmins.findIndex((objectAdmin) => objectAdmin.Id === action.objectAdmin.Id);
-			pom.objectAdmins[foundIndex] = action.objectAdmin;
+			var foundIndex = stateCpy.objectAdmins.findIndex((objectAdmin) => objectAdmin.Id === action.objectAdmin.Id);
+			stateCpy.objectAdmins[foundIndex] = action.objectAdmin;
 
-			return pom;
+			return stateCpy;
 		case userConstants.OBJECT_ADMIN_UPDATE_FAILURE:
 			return {
 				...state,
@@ -115,6 +115,45 @@ export const userReducer = (state, action) => {
 					showError: true,
 					errorMessage: action.errorMessage,
 					showSuccessMessage: false,
+				},
+			};
+		case userConstants.WAITER_UPDATE_REQUEST:
+			return {
+				...state,
+				editWaiter: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case userConstants.WAITER_UPDATE_SUCCESS:
+			let pom = {
+				...state,
+				editWaiter: {
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+				waiterDetails: {
+					showModal: true,
+					readOnly: true,
+					waiter: action.waiter,
+				},
+			};
+			var foundIdx = pom.waiters.findIndex((waiter) => waiter.Id === action.waiter.Id);
+			pom.waiters[foundIdx] = action.waiter;
+
+			return pom;
+		case userConstants.WAITER_UPDATE_FAILURE:
+			return {
+				...state,
+				editWaiter: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
 				},
 			};
 		case userConstants.SET_WAITERS_REQUEST:
@@ -205,6 +244,12 @@ export const userReducer = (state, action) => {
 		case modalConstants.HIDE_WAITER_DETAILS:
 			return {
 				...state,
+				editWaiter: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
 				waiterDetails: {
 					showModal: false,
 					readOnly: true,

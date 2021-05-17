@@ -21,12 +21,12 @@ const EditWaiterForm = () => {
 	}, [userState.waiterDetails.waiter]);
 
 	const handleSubmit = (e) => {
-		// e.preventDefault();
-		// let objectAdmin = {
-		// 	Id: userState.objectAdminDetails.objectAdmin.Id,
-		// 	EntityDTO: { Email: email, Name: name, ObjectId: objectId, ObjectName: objectName, Surname: surname, Address: address, PhoneNumber: phoneNumber },
-		// };
-		//userService.updateObjectAdmin(objectAdmin, dispatch);
+		e.preventDefault();
+		let waiter = {
+			Id: userState.waiterDetails.waiter.Id,
+			EntityDTO: { Email: email, Name: name, Surname: surname, Address: address, PhoneNumber: phoneNumber },
+		};
+		userService.updateWaiter(waiter, dispatch);
 	};
 
 	return (
