@@ -1,7 +1,5 @@
 package NoWaiter.UserService.services.implementation;
 
-import java.util.UUID;
-
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
@@ -29,11 +27,11 @@ public class EmailServiceImpl {
 	private Environment env;
 	
 	@Async
-	public void sendActivationLinkAsync(User user, UUID activationId)
+	public void sendActivationLinkAsync(User user, String token)
 			throws MailException, InterruptedException, MessagingException {
 		System.out.println("Slanje emaila...");
 		
-		String url = LOCAL_URL + "/api/users/activate-user/" + activationId;
+		String url = LOCAL_URL + "/api/users/activate-user/token=" + token;
 		
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
@@ -49,10 +47,10 @@ public class EmailServiceImpl {
 	}
 	
 	@Async
-	public void sendResetPasswordLinkAsync(User user, UUID resetPasswordId) throws MessagingException {
+	public void sendResetPasswordLinkAsync(User user, String token) throws MessagingException {
 		System.out.println("Slanje emaila...");
 		
-		String url = CLIENT_APP_URL + "#/reset-password/" + resetPasswordId;
+		String url = CLIENT_APP_URL + "#/reset-password/" + user.getId() +"/"+ token;
 		
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");

@@ -1,4 +1,4 @@
-import { useContext,useState } from "react";
+import { useContext,useState, useEffect } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { userService } from "../services/UserService";
 import { Link } from "react-router-dom";
@@ -10,6 +10,7 @@ const FirstActivationPasswordChangeForm = (props) => {
     const [repeatedPassword, setRepeatedPassword] = useState("");
 
     const userId = props.id;
+	const token= props.token;
 
     const handleSubmit = (e) => {
 		e.preventDefault();
@@ -17,11 +18,22 @@ const FirstActivationPasswordChangeForm = (props) => {
 		let changePasswordRequest = {
 			password,
 			repeatedPassword,
-            userId
+            userId,
+			token
 		};
 
         userService.changeFirstPassword(changePasswordRequest, dispatch);
 	};
+
+	useEffect(() => {
+
+		let tokenDTO = {
+			token
+		}
+
+		userService.checkIfActivationTokenIsValid(tokenDTO);
+	});
+
 
 	return (
 		<form className="login100-form" onSubmit={handleSubmit}>

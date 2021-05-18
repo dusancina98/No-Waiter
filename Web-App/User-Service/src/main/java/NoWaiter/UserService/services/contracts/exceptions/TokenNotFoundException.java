@@ -1,13 +1,14 @@
 package NoWaiter.UserService.services.contracts.exceptions;
 
-public class ActivationLinkExpiredOrUsed extends Exception {
+public class TokenNotFoundException extends Exception {
 	private static final long serialVersionUID = 1L;
 
-	public ActivationLinkExpiredOrUsed(){
+	public TokenNotFoundException(){
 		super();
 	}
 	
-	public ActivationLinkExpiredOrUsed(String s){  
+	public TokenNotFoundException(String s){  
 		  super(s);  
 	}
+
 }

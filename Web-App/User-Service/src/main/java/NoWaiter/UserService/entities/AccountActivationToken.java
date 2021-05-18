@@ -1,5 +1,7 @@
 package NoWaiter.UserService.entities;
 
+import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.UUID;
 
@@ -9,11 +11,16 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.google.common.hash.Hashing;
+
 @Entity
-public class AccountActivation {
+public class AccountActivationToken {
 	@Id
     @Column(name = "id")
 	private UUID id;
+	
+    @Column(name = "token")
+	private String token;
 	
     @ManyToOne(fetch = FetchType.EAGER)
     private User userId;
@@ -27,26 +34,37 @@ public class AccountActivation {
     @Column(name="used", nullable = false)
     private boolean used;
 
-	public AccountActivation() {
+	public AccountActivationToken() {
 		super();
 	}
 
-	public AccountActivation(UUID id, User userId, Date generationDate, Date expirationDate, boolean used) {
+	public AccountActivationToken(UUID id,String token, User userId, Date generationDate, Date expirationDate, boolean used) {
 		super();
 		this.id = id;
+		this.token=token;
 		this.userId = userId;
 		this.generationDate = generationDate;
 		this.expirationDate = expirationDate;
 		this.used = used;
 	}
 	
-	public AccountActivation(User userId, Date generationDate) {
+	public AccountActivationToken(User userId, Date generationDate) throws NoSuchAlgorithmException {
 		super();
 		this.id = UUID.randomUUID();
+		this.token= generateToken();
 		this.userId = userId;
 		this.generationDate = generationDate;
 		this.expirationDate = generateExpirationDate(generationDate);
 		this.used = false;
+	}
+
+	private String generateToken() throws NoSuchAlgorithmException {
+		// TODO Auto-generated method stub
+		
+		String sha256hex = Hashing.sha256()
+				  .hashString(UUID.randomUUID().toString(), StandardCharsets.UTF_8)
+				  .toString();
+		return sha256hex;
 	}
 
 	public User getUserId() {
@@ -88,6 +106,16 @@ public class AccountActivation {
 	public UUID getId() {
 		return id;
 	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+	
+	
 	
 	
 }

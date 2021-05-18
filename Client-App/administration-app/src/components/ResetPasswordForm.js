@@ -1,4 +1,4 @@
-import { useContext,useState } from "react";
+import { useContext,useState, useEffect } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { userService } from "../services/UserService";
 import { Link } from "react-router-dom";
@@ -8,7 +8,9 @@ const ResetPasswordForm = (props) => {
 
 	const [password, setPassword] = useState("");
 	const [passwordRepeat, setPasswordRepeat] = useState("");
-	let resetPasswordId = props.id;
+
+	const resetPasswordId = props.id;
+	const token= props.token;
 
     const handleSubmit = (e) => {
 		e.preventDefault();
@@ -17,10 +19,21 @@ const ResetPasswordForm = (props) => {
 			resetPasswordId,
 			password,
 			passwordRepeat,
+			token
 		};
 
 		userService.resetPassword(resetPasswordRequest, dispatch);
 	};
+
+	useEffect(() => {
+
+		let tokenDTO = {
+			token
+		}
+
+		userService.checkIfResetPasswordTokenIsValid(tokenDTO);
+	});
+	
 
 	return (
 		<form className="login100-form" onSubmit={handleSubmit}>

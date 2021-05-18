@@ -1,5 +1,7 @@
 package NoWaiter.UserService.entities;
 
+import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.UUID;
 
@@ -9,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.google.common.hash.Hashing;
+
 @Entity
 public class ResetPasswordToken {
 	@Id
@@ -17,6 +21,9 @@ public class ResetPasswordToken {
 	
     @ManyToOne(fetch = FetchType.EAGER)
     private User userId;
+    
+    @Column(name = "token")
+	private String token;
     
     @Column(name= "generationDate", nullable = false)
     private Date generationDate;
@@ -31,22 +38,32 @@ public class ResetPasswordToken {
 		super();
 	}
 
-	public ResetPasswordToken(UUID id, User userId, Date generationDate, Date expirationDate, boolean used) {
+	public ResetPasswordToken(UUID id,String token, User userId, Date generationDate, Date expirationDate, boolean used) {
 		super();
 		this.id = id;
+		this.token=token;
 		this.userId = userId;
 		this.generationDate = generationDate;
 		this.expirationDate = expirationDate;
 		this.used = used;
 	}
 	
-	public ResetPasswordToken(User userId, Date generationDate) {
+	public ResetPasswordToken(User userId, Date generationDate) throws NoSuchAlgorithmException {
 		super();
 		this.id = UUID.randomUUID();
 		this.userId = userId;
+		this.token = generateToken();
 		this.generationDate = generationDate;
 		this.expirationDate = generateExpirationDate(generationDate);
 		this.used = false;
+	}
+	
+	private String generateToken() throws NoSuchAlgorithmException {
+		
+		String sha256hex = Hashing.sha256()
+				  .hashString(UUID.randomUUID().toString(), StandardCharsets.UTF_8)
+				  .toString();
+		return sha256hex;
 	}
 
 	public User getUserId() {
@@ -87,5 +104,9 @@ public class ResetPasswordToken {
 
 	public UUID getId() {
 		return id;
+	}
+
+	public String getToken() {
+		return token;
 	}
 }
