@@ -11,6 +11,7 @@ import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestEmailDTO;
 import NoWaiter.UserService.services.contracts.dto.ResetPasswordDTO;
 import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
+import NoWaiter.UserService.services.contracts.dto.UpdateWaiterDTO;
 import NoWaiter.UserService.services.contracts.dto.UserClientObjectDTO;
 import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
 import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsedException;
@@ -23,6 +24,8 @@ import NoWaiter.UserService.services.contracts.exceptions.TokenNotFoundException
 public interface UserService {
 
     UUID createObjectAdmin(ObjectAdminDTO entity) throws Exception;
+    
+    void updateWaiter(IdentifiableDTO<UpdateWaiterDTO> entity);
         
     void updateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity);
     
@@ -51,4 +54,5 @@ public interface UserService {
 	AccountActivationToken isValidAccountActivationLink(String token) throws TokenNotFoundException, ActivationLinkExpiredOrUsedException;
 
 	ResetPasswordToken isValidResetPasswordToken(String token) throws TokenNotFoundException, ResetPasswordTokenExpiredOrUsedException;
+
 }

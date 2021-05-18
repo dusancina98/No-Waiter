@@ -231,31 +231,7 @@ export const objectReducer = (state, action) => {
 					errorMessage: action.errorMessage,
 				},
 			};
-		case objectConstants.HIDE_OBJECT_EDIT_SUCCESS:
-			return {
-				...state,
-				editObject: {
-					showSuccessMessage: false,
-					successMessage: "",
-					showErrorMessage: false,
-					errorMessage: "",
-				},
-				objectDetails: {
-					showModal: true,
-					readOnly: true,
-					object: action.object,
-				},
-			};
-		case objectConstants.HIDE_OBJECT_EDIT_FAILURE:
-			return {
-				...state,
-				editObject: {
-					showSuccessMessage: false,
-					successMessage: "",
-					showErrorMessage: false,
-					errorMessage: "",
-				},
-			};
+
 		case modalConstants.SHOW_OBJECT_DETAILS:
 			return {
 				...state,

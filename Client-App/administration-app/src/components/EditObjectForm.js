@@ -13,7 +13,19 @@ const EditObjectForm = () => {
 
 	const handleObjectUpdate = (e) => {
 		e.preventDefault();
-		let object = { Id: objectState.objectDetails.object.Id, EntityDTO: { Name: name, Email: email, PhoneNumber: phoneNumber, ImagePath: "assets/images/restaurant.jpg", Address: address } };
+		let object = {
+			Id: objectState.objectDetails.object.Id,
+			EntityDTO: {
+				Name: name,
+				Email: email,
+				PhoneNumber: phoneNumber,
+				ImagePath: "assets/images/restaurant.jpg",
+				Address: address,
+				Blocked: objectState.objectDetails.object.EntityDTO.Blocked,
+				Active: objectState.objectDetails.object.EntityDTO.Active,
+			},
+		};
+
 		objectService.updateObject(object, dispatch);
 	};
 

@@ -76,7 +76,7 @@ const SideBar = () => {
 					<div className="collapse" id="employees">
 						<ul className="nav flex-column sub-menu">
 							<li className="nav-item">
-								<Link className="nav-link" to="/object-admins">
+								<Link className="nav-link" to="/employees/waiter">
 									All Employees
 								</Link>
 							</li>
@@ -87,6 +87,12 @@ const SideBar = () => {
 							</li>
 						</ul>
 					</div>
+				</li>
+				<li className="nav-item">
+					<Link className="nav-link" to="/tables">
+						<i className="mdi mdi-contacts menu-icon"></i>
+						<span className="menu-title">Tables</span>
+					</Link>
 				</li>
 				<li className="nav-item">
 					<a className="nav-link" href="pages/icons/mdi.html">

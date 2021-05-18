@@ -24,6 +24,7 @@ import NoWaiter.UserService.services.contracts.exceptions.ResetPasswordTokenExpi
 import NoWaiter.UserService.services.contracts.exceptions.TokenNotFoundException;
 import NoWaiter.UserService.services.contracts.exceptions.UserIsActiveException;
 import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
+import NoWaiter.UserService.services.contracts.dto.UpdateWaiterDTO;
 import NoWaiter.UserService.services.contracts.dto.UserClientObjectDTO;
 import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
 import NoWaiter.UserService.services.implementation.util.UserMapper;
@@ -246,11 +247,21 @@ public class UserServiceImpl implements UserService {
 		return UserMapper.MapWaiterCollectionToIdentifiableWaiterDTOCollection(waiterRepository.findAllByObjectId(objectAdmin.getObjectId()));
 	}
 
-	
+
+	@Override
+	public void updateWaiter(IdentifiableDTO<UpdateWaiterDTO> entity) {
+		Waiter waiter = waiterRepository.findById(entity.Id).get();
+		waiter.setAddress(entity.EntityDTO.Address);
+		waiter.setName(entity.EntityDTO.Name);
+		waiter.setSurname(entity.EntityDTO.Surname);
+		waiter.setPhoneNumber(entity.EntityDTO.PhoneNumber);
+		waiterRepository.save(waiter);
+	}
+
+
 	@Override
 	public ResetPasswordToken isValidResetPasswordToken(String token) throws TokenNotFoundException, ResetPasswordTokenExpiredOrUsedException {
 		ResetPasswordToken resetPasswordToken = resetPasswordTokenRepository.findToken(token);
-
 		if(resetPasswordToken==null)
 			throw new TokenNotFoundException("Token not found");
 		

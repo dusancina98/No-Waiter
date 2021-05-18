@@ -6,18 +6,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import NoWaiter.ObjectService.intercomm.AuthClient;
 import NoWaiter.ObjectService.intercomm.UserClient;
 import NoWaiter.ObjectService.services.contracts.ObjectService;
+import NoWaiter.ObjectService.services.contracts.TableService;
 import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
+import NoWaiter.ObjectService.services.contracts.dto.JwtParseResponseDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.UserClientObjectDTO;
 import feign.FeignException;
@@ -30,11 +35,17 @@ public class Api {
     private ObjectService objectService;
     
     @Autowired
+    private TableService tableService;
+    
+    @Autowired
     private UserClient userClient;
+    
+    @Autowired
+    private AuthClient authClient;
 
     @PostMapping
     @CrossOrigin
-    public ResponseEntity<?> CreateObject(@RequestBody ObjectDTO objectDTO) {
+    public ResponseEntity<?> createObject(@RequestBody ObjectDTO objectDTO) {
 
         try {
             UUID objectId = objectService.Create(objectDTO);
@@ -45,9 +56,43 @@ public class Api {
         }
     }
     
+    @PostMapping("/tables")
+    @CrossOrigin
+    public ResponseEntity<?> createTable(@RequestHeader("Authorization") String token) {
+        try {
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+            return new ResponseEntity<>(tableService.createTable(jwtResponse.getId()), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @GetMapping("/tables")
+    @CrossOrigin
+    public ResponseEntity<?> findAllTables(@RequestHeader("Authorization") String token) {
+        try {
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+            return new ResponseEntity<>(tableService.findAllForObject(jwtResponse.getId()), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @DeleteMapping("/tables/{tableId}")
+    @CrossOrigin
+    public ResponseEntity<?> deleteTable(@RequestHeader("Authorization") String token, @PathVariable UUID tableId) {
+        try {
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+        	tableService.deleteTable(jwtResponse.getId(), tableId);
+            return new ResponseEntity<>( HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
     @PostMapping("/admin")
     @CrossOrigin
-    public ResponseEntity<?> AddAdminToObject(@RequestBody AddAdminDTO addAdminDTO) {
+    public ResponseEntity<?> addAdminToObject(@RequestBody AddAdminDTO addAdminDTO) {
 
         try {
             objectService.AddAdminToObject(addAdminDTO);
@@ -61,7 +106,7 @@ public class Api {
 
     @GetMapping
     @CrossOrigin
-    public ResponseEntity<?> FindAllObjects() {
+    public ResponseEntity<?> findAllObjects() {
 
         try {
             return new ResponseEntity<>(objectService.FindAllForAdmin(), HttpStatus.OK);
@@ -74,7 +119,7 @@ public class Api {
     
     @PutMapping
     @CrossOrigin
-    public ResponseEntity<?> UpdateObject(@RequestBody IdentifiableDTO<ObjectDTO> objectDTO) {
+    public ResponseEntity<?> updateObject(@RequestBody IdentifiableDTO<ObjectDTO> objectDTO) {
 
         try {
         	IdentifiableDTO<ObjectDTO> objDto = objectService.FindById(objectDTO.Id);
@@ -94,7 +139,7 @@ public class Api {
     
     @PutMapping("/{objectId}/activate")
     @CrossOrigin
-    public ResponseEntity<?> ActivateObject(@PathVariable UUID objectId) {
+    public ResponseEntity<?> activateObject(@PathVariable UUID objectId) {
 
         try {
         	objectService.ToggleObjectActivation(objectId, true);
@@ -108,7 +153,7 @@ public class Api {
     
     @PutMapping("/{objectId}/deactivate")
     @CrossOrigin
-    public ResponseEntity<?> DeactivateObject(@PathVariable UUID objectId) {
+    public ResponseEntity<?> deactivateObject(@PathVariable UUID objectId) {
 
         try {
         	objectService.ToggleObjectActivation(objectId, false);
@@ -122,7 +167,7 @@ public class Api {
     
     @PutMapping("/{objectId}/block")
     @CrossOrigin
-    public ResponseEntity<?> BlockObject(@PathVariable UUID objectId) {
+    public ResponseEntity<?> blockObject(@PathVariable UUID objectId) {
 
         try {
         	objectService.ToggleObjectBlock(objectId, true);
@@ -136,7 +181,7 @@ public class Api {
     
     @PutMapping("/{objectId}/unblock")
     @CrossOrigin
-    public ResponseEntity<?> UnblockObject(@PathVariable UUID objectId) {
+    public ResponseEntity<?> unblockObject(@PathVariable UUID objectId) {
 
         try {
         	objectService.ToggleObjectBlock(objectId, false);
@@ -150,7 +195,7 @@ public class Api {
 
     @GetMapping("/checkObject/{objectId}")
     @CrossOrigin
-    public ResponseEntity<?> CheckObject(@PathVariable UUID objectId){
+    public ResponseEntity<?> checkObject(@PathVariable UUID objectId){
 
         try {
             objectService.FindById(objectId);

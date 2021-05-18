@@ -45,13 +45,13 @@ const ObjectDetailsModal = () => {
 					hidden={!objectState.editObject.showSuccessMessage}
 					header="Success"
 					message={objectState.editObject.successMessage}
-					handleCloseAlert={() => dispatch({ type: objectConstants.HIDE_OBJECT_EDIT_SUCCESS })}
+					handleCloseAlert={() => dispatch({ type: objectConstants.OBJECT_UPDATE_REQUEST })}
 				/>
 				<FailureAlert
 					hidden={!objectState.editObject.showErrorMessage}
 					header="Error"
 					message={objectState.editObject.successMessage}
-					handleCloseAlert={() => dispatch({ type: objectConstants.HIDE_OBJECT_EDIT_FAILURE })}
+					handleCloseAlert={() => dispatch({ type: objectConstants.OBJECT_UPDATE_REQUEST })}
 				/>
 				<div className="row">
 					<div className="col-md-6 grid-margin stretch-card">

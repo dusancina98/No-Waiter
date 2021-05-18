@@ -41,7 +41,7 @@ export const userReducer = (state, action) => {
 				},
 			};
 		case userConstants.OBJECT_ADMIN_UPDATE_SUCCESS:
-			let pom = {
+			let stateCpy = {
 				...state,
 				editObjectAdmin: {
 					showSuccessMessage: true,
@@ -55,10 +55,10 @@ export const userReducer = (state, action) => {
 					objectAdmin: action.objectAdmin,
 				},
 			};
-			var foundIndex = pom.objectAdmins.findIndex((objectAdmin) => objectAdmin.Id === action.objectAdmin.Id);
-			pom.objectAdmins[foundIndex] = action.objectAdmin;
+			var foundIndex = stateCpy.objectAdmins.findIndex((objectAdmin) => objectAdmin.Id === action.objectAdmin.Id);
+			stateCpy.objectAdmins[foundIndex] = action.objectAdmin;
 
-			return pom;
+			return stateCpy;
 		case userConstants.OBJECT_ADMIN_UPDATE_FAILURE:
 			return {
 				...state,
@@ -117,7 +117,66 @@ export const userReducer = (state, action) => {
 					showSuccessMessage: false,
 				},
 			};
+		case userConstants.WAITER_UPDATE_REQUEST:
+			return {
+				...state,
+				editWaiter: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case userConstants.WAITER_UPDATE_SUCCESS:
+			let pom = {
+				...state,
+				editWaiter: {
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+				waiterDetails: {
+					showModal: true,
+					readOnly: true,
+					waiter: action.waiter,
+				},
+			};
+			var foundIdx = pom.waiters.findIndex((waiter) => waiter.Id === action.waiter.Id);
+			pom.waiters[foundIdx] = action.waiter;
 
+			return pom;
+		case userConstants.WAITER_UPDATE_FAILURE:
+			return {
+				...state,
+				editWaiter: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+			};
+		case userConstants.SET_WAITERS_REQUEST:
+			return {
+				...state,
+				waiters: [],
+				showWaitersError: false,
+				waitersErrorMessage: "",
+			};
+		case userConstants.SET_WAITERS_SUCCESS:
+			return {
+				...state,
+				showWaitersError: false,
+				waitersErrorMessage: "",
+				waiters: action.waiters,
+			};
+		case userConstants.SET_WAITERS_ERROR:
+			return {
+				...state,
+				showWaitersError: true,
+				waitersErrorMessage: action.errorMessage,
+				waiters: [],
+			};
 		case userConstants.LOGIN_REQUEST:
 			return {
 				loginError: {
@@ -173,63 +232,100 @@ export const userReducer = (state, action) => {
 					},
 				},
 			};
-			case userConstants.INACTIVE_USER_EMAIL_REQUEST:
-				return {
-					inActiveUser: {
-						showError: false,
-						errorMessage: "",
-						showSuccessMessage: false,
-						emailAddress: action.emailAddress,
+		case modalConstants.SHOW_WAITER_DETAILS:
+			return {
+				...state,
+				waiterDetails: {
+					showModal: true,
+					readOnly: true,
+					waiter: action.waiter,
+				},
+			};
+		case modalConstants.HIDE_WAITER_DETAILS:
+			return {
+				...state,
+				editWaiter: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+				waiterDetails: {
+					showModal: false,
+					readOnly: true,
+					waiter: {
+						Id: "",
+						EntityDTO: {
+							Email: "",
+							Name: "",
+							Surname: "",
+							Address: "",
+							PhoneNumber: "",
+						},
 					},
-				};
-			case userConstants.RESEND_ACTIVATION_LINK_REQUEST:
-				return {
-					inActiveUser: {
-						showError: false,
-						errorMessage: "",
-						showSuccessMessage: false,
-					},
-				};
-			case userConstants.RESEND_ACTIVATION_LINK_SUCCESS:
-				return {
-					inActiveUser: {
-						showError: false,
-						errorMessage: "",
-						showSuccessMessage: true,
-					},
-				};
-			case userConstants.RESEND_ACTIVATION_LINK_FAILURE:
-				return {
-					inActiveUser: {
-						showError: true,
-						errorMessage: action.errorMessage,
-						showSuccessMessage: false,
-					},
-				};
-			case userConstants.FIRST_ACTIVATION_PASSWORD_CHANGE_REQUEST:
-				return {
-					changePassword: {
-						showError: false,
-						errorMessage: "",
-						showSuccessMessage: false,
-					},
-				};
-			case userConstants.FIRST_ACTIVATION_PASSWORD_CHANGE_SUCCESS:
-				return {
-					changePassword: {
-						showError: false,
-						errorMessage: "",
-						showSuccessMessage: true,
-					},
-				};
-			case userConstants.FIRST_ACTIVATION_PASSWORD_CHANGE_FAILURE:
-				return {
-					changePassword: {
-						showError: true,
-						errorMessage: action.errorMessage,
-						showSuccessMessage: false,
-					},
-				};
+				},
+			};
+		case modalConstants.ALLOW_WAITER_DETAILS_INPUT_FIELDS:
+			let temp = { ...state };
+			temp.waiterDetails.readOnly = false;
+			return temp;
+		case userConstants.INACTIVE_USER_EMAIL_REQUEST:
+			return {
+				inActiveUser: {
+					showError: false,
+					errorMessage: "",
+					showSuccessMessage: false,
+					emailAddress: action.emailAddress,
+				},
+			};
+		case userConstants.RESEND_ACTIVATION_LINK_REQUEST:
+			return {
+				inActiveUser: {
+					showError: false,
+					errorMessage: "",
+					showSuccessMessage: false,
+				},
+			};
+		case userConstants.RESEND_ACTIVATION_LINK_SUCCESS:
+			return {
+				inActiveUser: {
+					showError: false,
+					errorMessage: "",
+					showSuccessMessage: true,
+				},
+			};
+		case userConstants.RESEND_ACTIVATION_LINK_FAILURE:
+			return {
+				inActiveUser: {
+					showError: true,
+					errorMessage: action.errorMessage,
+					showSuccessMessage: false,
+				},
+			};
+		case userConstants.FIRST_ACTIVATION_PASSWORD_CHANGE_REQUEST:
+			return {
+				changePassword: {
+					showError: false,
+					errorMessage: "",
+					showSuccessMessage: false,
+				},
+			};
+		case userConstants.FIRST_ACTIVATION_PASSWORD_CHANGE_SUCCESS:
+			return {
+				changePassword: {
+					showError: false,
+					errorMessage: "",
+					showSuccessMessage: true,
+				},
+			};
+		case userConstants.FIRST_ACTIVATION_PASSWORD_CHANGE_FAILURE:
+			return {
+				changePassword: {
+					showError: true,
+					errorMessage: action.errorMessage,
+					showSuccessMessage: false,
+				},
+			};
 		case modalConstants.ALLOW_OBJECT_ADMIN_DETAILS_INPUT_FIELDS:
 			let prom = { ...state };
 			prom.objectAdminDetails.readOnly = false;

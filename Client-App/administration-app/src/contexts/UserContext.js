@@ -52,6 +52,26 @@ const UserContextProvider = (props) => {
 				},
 			},
 		},
+		editWaiter: {
+			showSuccessMessage: false,
+			successMessage: "",
+			showErrorMessage: false,
+			errorMessage: "",
+		},
+		waiterDetails: {
+			showModal: false,
+			readOnly: true,
+			waiter: {
+				Id: "",
+				EntityDTO: {
+					Email: "",
+					Name: "",
+					Surname: "",
+					Address: "",
+					PhoneNumber: "",
+				},
+			},
+		},
 		forgotPasswordRequestLinkError: {
 			showError: false,
 			errorMessage: "",
@@ -63,6 +83,9 @@ const UserContextProvider = (props) => {
 			errorMessage: "",
 			showSuccessMessage: false,
 		},
+		waiters: [],
+		showWaitersError: false,
+		waitersErrorMessage: "",
 		objectAdmins: [],
 		showError: false,
 		errorMessage: "",

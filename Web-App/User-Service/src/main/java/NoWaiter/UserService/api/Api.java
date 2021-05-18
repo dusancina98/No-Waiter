@@ -33,6 +33,7 @@ import NoWaiter.UserService.services.contracts.dto.RequestIdDTO;
 import NoWaiter.UserService.services.contracts.dto.ResetPasswordDTO;
 import NoWaiter.UserService.services.contracts.dto.TokenDTO;
 import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
+import NoWaiter.UserService.services.contracts.dto.UpdateWaiterDTO;
 import NoWaiter.UserService.services.contracts.dto.UserClientObjectDTO;
 import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
 import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsedException;
@@ -132,6 +133,18 @@ public class Api {
         try {
         	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
             return new ResponseEntity<>(userService.findAllWaiters(jwtResponse.getId()), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PutMapping("/employee/waiter")
+    @CrossOrigin
+    public ResponseEntity<?> updateWaiter(@RequestBody IdentifiableDTO<UpdateWaiterDTO> waiterDTO) {
+        try {
+        	userService.updateWaiter(waiterDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
