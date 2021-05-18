@@ -9,7 +9,7 @@ const ResetPasswordPage = (props) => {
 		        <div className="container-login100">
 			        <div className="wrap-login100">
                         <UserContextProvider>
-                            <ResetPasswordForm id={props.match.params.id} />
+                            <ResetPasswordForm id={props.match.params.id} token={props.match.params.token} />
                         </UserContextProvider>
 			        </div>
 		        </div>

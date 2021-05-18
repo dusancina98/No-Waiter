@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.UUID;
 import javax.mail.MessagingException;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import javax.transaction.Transactional;
@@ -205,7 +206,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void resetPasswordLinkRequest(RequestEmailDTO requestEmailDTO) throws NonExistentUserEmailException {
+	public void resetPasswordLinkRequest(RequestEmailDTO requestEmailDTO) throws NonExistentUserEmailException, NoSuchAlgorithmException {
 		User user = userRepository.findByEmail(requestEmailDTO.email);
 		
 		if(user==null)
@@ -215,7 +216,7 @@ public class UserServiceImpl implements UserService {
 		resetPasswordTokenRepository.save(newResetPasswordToken);
 		
 		try {
-			emailService.sendResetPasswordLinkAsync(user, newResetPasswordToken.getId());
+			emailService.sendResetPasswordLinkAsync(user, newResetPasswordToken.getToken());
 		} catch (MailException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -224,16 +225,13 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 	}
-
+	
 	@Override
-	public void resetPassword(ResetPasswordDTO resetPasswordDTO) throws ResetPasswordTokenExpiredOrUsedException, PasswordsIsNotTheSameException, PasswordIsNotStrongException {
-		ResetPasswordToken resetPasswordToken = isValidResetPasswordToken(resetPasswordDTO.resetPasswordId);
-		
-		if(resetPasswordToken==null)
-			throw new ResetPasswordTokenExpiredOrUsedException("Reset password token expired or used");
-		
+	public void resetPassword(ResetPasswordDTO resetPasswordDTO) throws ResetPasswordTokenExpiredOrUsedException, PasswordsIsNotTheSameException, PasswordIsNotStrongException, TokenNotFoundException {
 		String password = HashAndSaltPasswordIfStrongAndMatching(resetPasswordDTO.password,resetPasswordDTO.passwordRepeat);
 		
+		ResetPasswordToken resetPasswordToken = isValidResetPasswordToken(resetPasswordDTO.token);
+				
 		User user = userRepository.getOne(resetPasswordToken.getUserId().getId());
 		user.setPassword(password);
 		userRepository.save(user);
@@ -241,18 +239,27 @@ public class UserServiceImpl implements UserService {
 		resetPasswordTokenRepository.save(resetPasswordToken);
 	}
 	
-	private ResetPasswordToken isValidResetPasswordToken(UUID resetPasswordId) {
-		ResetPasswordToken resetPasswordToken = resetPasswordTokenRepository.getOne(resetPasswordId);
-		
-		if(resetPasswordToken.getExpirationDate().before(new Date()) || resetPasswordToken.isUsed())
-			return null;
-		
-		return resetPasswordToken;	
-	}
 
 	@Override
 	public Iterable<IdentifiableDTO<WaiterDTO>> findAllWaiters(UUID objectAdminId) {
 		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
 		return UserMapper.MapWaiterCollectionToIdentifiableWaiterDTOCollection(waiterRepository.findAllByObjectId(objectAdmin.getObjectId()));
 	}
+
+	
+	@Override
+	public ResetPasswordToken isValidResetPasswordToken(String token) throws TokenNotFoundException, ResetPasswordTokenExpiredOrUsedException {
+		ResetPasswordToken resetPasswordToken = resetPasswordTokenRepository.findToken(token);
+
+		if(resetPasswordToken==null)
+			throw new TokenNotFoundException("Token not found");
+		
+		if(resetPasswordToken.getExpirationDate().before(new Date()) || resetPasswordToken.isUsed())
+			throw new ResetPasswordTokenExpiredOrUsedException("Token expired or used");
+		
+		return resetPasswordToken;	
+	}
+	
+	
+	
 }

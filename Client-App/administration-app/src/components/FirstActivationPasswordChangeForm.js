@@ -31,7 +31,7 @@ const FirstActivationPasswordChangeForm = (props) => {
 			token
 		}
 
-		userService.checkIfTokenIsValid(tokenDTO);
+		userService.checkIfActivationTokenIsValid(tokenDTO);
 	});
 
 

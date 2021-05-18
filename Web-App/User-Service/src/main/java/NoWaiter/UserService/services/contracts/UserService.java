@@ -1,8 +1,10 @@
 package NoWaiter.UserService.services.contracts;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 import NoWaiter.UserService.entities.AccountActivationToken;
+import NoWaiter.UserService.entities.ResetPasswordToken;
 import NoWaiter.UserService.services.contracts.dto.ChangeFirstPasswordDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
@@ -38,13 +40,15 @@ public interface UserService {
 
 	void changeFirstPassword(ChangeFirstPasswordDTO changeFirstPasswordDTO) throws PasswordsIsNotTheSameException, PasswordIsNotStrongException, ActivationLinkExpiredOrUsedException, TokenNotFoundException;
 
-	void resetPasswordLinkRequest(RequestEmailDTO requestEmailDTO) throws NonExistentUserEmailException;
+	void resetPasswordLinkRequest(RequestEmailDTO requestEmailDTO) throws NonExistentUserEmailException, NoSuchAlgorithmException;
 
-	void resetPassword(ResetPasswordDTO resetPasswordDTO) throws ResetPasswordTokenExpiredOrUsedException, PasswordsIsNotTheSameException, PasswordIsNotStrongException;
+	void resetPassword(ResetPasswordDTO resetPasswordDTO) throws ResetPasswordTokenExpiredOrUsedException, PasswordsIsNotTheSameException, PasswordIsNotStrongException, TokenNotFoundException;
 
 	void activateUser(String token) throws ActivationLinkExpiredOrUsedException, TokenNotFoundException;
 
 	UUID isUserFirstLogin(String token);
 
 	AccountActivationToken isValidAccountActivationLink(String token) throws TokenNotFoundException, ActivationLinkExpiredOrUsedException;
+
+	ResetPasswordToken isValidResetPasswordToken(String token) throws TokenNotFoundException, ResetPasswordTokenExpiredOrUsedException;
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import NoWaiter.UserService.entities.AccountActivationToken;
+import NoWaiter.UserService.entities.ResetPasswordToken;
 import NoWaiter.UserService.intercomm.AuthClient;
 import NoWaiter.UserService.intercomm.ObjectClient;
 import NoWaiter.UserService.services.contracts.UserService;
@@ -242,6 +243,8 @@ public class Api {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }catch(ResetPasswordTokenExpiredOrUsedException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }catch(TokenNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
         catch(Exception e) {
         	e.printStackTrace();
@@ -254,6 +257,23 @@ public class Api {
     public ResponseEntity<?> checkIfActivationTokenValid(@RequestBody TokenDTO tokenDTO) {
         try {
         	AccountActivationToken token=  userService.isValidAccountActivationLink(tokenDTO.token);
+        	if(token==null)
+        		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        	else 
+        		return new ResponseEntity<>(HttpStatus.OK);
+        }catch(TokenNotFoundException e) {
+    		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }catch(Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PostMapping("/check-if-reset-password-token-valid")
+    @CrossOrigin
+    public ResponseEntity<?> checkIfResetPasswordTokenValid(@RequestBody TokenDTO tokenDTO) {
+        try {
+        	ResetPasswordToken token=  userService.isValidResetPasswordToken(tokenDTO.token);
         	if(token==null)
         		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         	else 
