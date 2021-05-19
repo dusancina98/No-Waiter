@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import NoWaiter.UserService.entities.AccountActivationToken;
+import NoWaiter.UserService.entities.ResetPasswordToken;
 import NoWaiter.UserService.intercomm.AuthClient;
 import NoWaiter.UserService.intercomm.ObjectClient;
 import NoWaiter.UserService.services.contracts.UserService;
@@ -33,16 +35,18 @@ import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestEmailDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestIdDTO;
 import NoWaiter.UserService.services.contracts.dto.ResetPasswordDTO;
+import NoWaiter.UserService.services.contracts.dto.TokenDTO;
 import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
 import NoWaiter.UserService.services.contracts.dto.UpdateWaiterDTO;
 import NoWaiter.UserService.services.contracts.dto.UserClientObjectDTO;
 import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
-import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsed;
 import NoWaiter.UserService.services.contracts.exceptions.ClassFieldValidationException;
+import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsedException;
 import NoWaiter.UserService.services.contracts.exceptions.NonExistentUserEmailException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordIsNotStrongException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordsIsNotTheSameException;
 import NoWaiter.UserService.services.contracts.exceptions.ResetPasswordTokenExpiredOrUsedException;
+import NoWaiter.UserService.services.contracts.exceptions.TokenNotFoundException;
 import NoWaiter.UserService.services.contracts.exceptions.UserIsActiveException;
 import feign.FeignException;
 
@@ -232,23 +236,23 @@ public class Api {
         }
     }
     
-    @GetMapping("/activate-user/{activationId}")
+    @GetMapping("/activate-user/token={token}")
     @CrossOrigin
-    public ResponseEntity<?> activateUser(@PathVariable UUID activationId,HttpServletResponse httpServletResponse) {
+    public ResponseEntity<?> activateUser(@PathVariable String token,HttpServletResponse httpServletResponse) {
         try {
-        	
-        	UUID userId = userService.isUserFirstLogin(activationId);
+        	UUID userId = userService.isUserFirstLogin(token);
         	if(userId!=null) {
-        		httpServletResponse.setHeader("Location", "http://localhost:3000/index.html#/first-login-password/" + userId);
+        		httpServletResponse.setHeader("Location", "http://localhost:3000/index.html#/first-login-password/" + userId + "/" + token);
                 httpServletResponse.setStatus(302);
         	}else {
-            	userService.activateUser(activationId);
+            	userService.activateUser(token);
             	httpServletResponse.setHeader("Location", "http://localhost:3000/index.html#/login");
                 httpServletResponse.setStatus(302);
         	}
 
             return new ResponseEntity<>(HttpStatus.PERMANENT_REDIRECT);
-        } catch(ActivationLinkExpiredOrUsed e) {
+        } catch(ActivationLinkExpiredOrUsedException e) {
+        	//TODO 1: izmeniti u neku stranicu za token je istekao
             httpServletResponse.setHeader("Location", "http://localhost:3000/index.html#/404");
             httpServletResponse.setStatus(302);
             return new ResponseEntity<>(HttpStatus.PERMANENT_REDIRECT);
@@ -264,9 +268,13 @@ public class Api {
         	userService.changeFirstPassword(changeFirstPasswordDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch(PasswordsIsNotTheSameException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }catch(PasswordIsNotStrongException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }catch(ActivationLinkExpiredOrUsedException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }catch(TokenNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }catch(Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -299,8 +307,44 @@ public class Api {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }catch(ResetPasswordTokenExpiredOrUsedException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }catch(TokenNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
         catch(Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PostMapping("/check-if-activation-token-valid")
+    @CrossOrigin
+    public ResponseEntity<?> checkIfActivationTokenValid(@RequestBody TokenDTO tokenDTO) {
+        try {
+        	AccountActivationToken token=  userService.isValidAccountActivationLink(tokenDTO.token);
+        	if(token==null)
+        		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        	else 
+        		return new ResponseEntity<>(HttpStatus.OK);
+        }catch(TokenNotFoundException e) {
+    		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }catch(Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PostMapping("/check-if-reset-password-token-valid")
+    @CrossOrigin
+    public ResponseEntity<?> checkIfResetPasswordTokenValid(@RequestBody TokenDTO tokenDTO) {
+        try {
+        	ResetPasswordToken token=  userService.isValidResetPasswordToken(tokenDTO.token);
+        	if(token==null)
+        		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        	else 
+        		return new ResponseEntity<>(HttpStatus.OK);
+        }catch(TokenNotFoundException e) {
+    		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }catch(Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

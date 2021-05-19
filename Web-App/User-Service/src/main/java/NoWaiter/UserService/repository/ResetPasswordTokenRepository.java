@@ -11,5 +11,8 @@ import NoWaiter.UserService.entities.ResetPasswordToken;
 public interface ResetPasswordTokenRepository extends JpaRepository<ResetPasswordToken, UUID> {
 	@Query(value = "SELECT t FROM ResetPasswordToken t WHERE t.userId.id = ?1 AND t.used = true")
 	List<ResetPasswordToken> getUsedTokensForUser(UUID id);
+	
+	@Query(value = "SELECT t FROM ResetPasswordToken t WHERE t.token = ?1")
+	ResetPasswordToken findToken(String token);
 
 }

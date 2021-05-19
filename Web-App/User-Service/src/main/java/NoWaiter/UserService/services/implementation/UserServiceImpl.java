@@ -1,5 +1,6 @@
 package NoWaiter.UserService.services.implementation;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,12 +16,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import NoWaiter.UserService.entities.AccountActivation;
+import NoWaiter.UserService.entities.AccountActivationToken;
 import NoWaiter.UserService.entities.ObjectAdmin;
 import NoWaiter.UserService.entities.ResetPasswordToken;
 import NoWaiter.UserService.entities.User;
 import NoWaiter.UserService.entities.Waiter;
-import NoWaiter.UserService.repository.AccountActivationRepository;
+import NoWaiter.UserService.repository.AccountActivationTokenRepository;
 import NoWaiter.UserService.repository.ObjectAdminRepository;
 import NoWaiter.UserService.repository.ResetPasswordTokenRepository;
 import NoWaiter.UserService.repository.UserRepository;
@@ -35,12 +36,13 @@ import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
 import NoWaiter.UserService.services.contracts.dto.UpdateWaiterDTO;
 import NoWaiter.UserService.services.contracts.dto.UserClientObjectDTO;
 import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
-import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsed;
+import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsedException;
 import NoWaiter.UserService.services.contracts.exceptions.ClassFieldValidationException;
 import NoWaiter.UserService.services.contracts.exceptions.NonExistentUserEmailException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordIsNotStrongException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordsIsNotTheSameException;
 import NoWaiter.UserService.services.contracts.exceptions.ResetPasswordTokenExpiredOrUsedException;
+import NoWaiter.UserService.services.contracts.exceptions.TokenNotFoundException;
 import NoWaiter.UserService.services.contracts.exceptions.UserIsActiveException;
 import NoWaiter.UserService.services.implementation.util.UserMapper;
 
@@ -55,7 +57,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     
     @Autowired
-    private AccountActivationRepository accountActivationRepository;
+    private AccountActivationTokenRepository accountActivationTokenRepository;
     
     @Autowired
     private EmailServiceImpl emailService;
@@ -98,11 +100,12 @@ public class UserServiceImpl implements UserService {
 		if(user.isActive())
 			throw new UserIsActiveException("User was activated");
 				
-		AccountActivation accountActivation = new AccountActivation(userId, new Date(System.currentTimeMillis()));
-		accountActivationRepository.save(accountActivation);
+
+		AccountActivationToken accountActivation = new AccountActivationToken(user.getId(), new Date(System.currentTimeMillis()));
+		accountActivationTokenRepository.save(accountActivation);
 		
 		try {
-			emailService.sendActivationLinkAsync(user, accountActivation.getId());
+			emailService.sendActivationLinkAsync(user, accountActivation.getToken());
 		} catch (MailException | InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -113,51 +116,53 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void activateUser(UUID activationId) throws ActivationLinkExpiredOrUsed {
-		AccountActivation accountActivation = isValidAccountActivationLink(activationId);
-		if(accountActivation==null)
-			throw new ActivationLinkExpiredOrUsed("User was activated");
-				
+	public void activateUser(String token) throws ActivationLinkExpiredOrUsedException, TokenNotFoundException {
+		AccountActivationToken accountActivation = isValidAccountActivationLink(token);
 		
 		User user = userRepository.getOne(accountActivation.getUserId());
 		user.setActive(true);
 		userRepository.save(user);
 		accountActivation.setUsed(true);
-		accountActivationRepository.save(accountActivation);
-	}
-
-	private AccountActivation isValidAccountActivationLink(UUID activationId) {
-		AccountActivation accountActivation = accountActivationRepository.getOne(activationId);
-		
-		if(accountActivation.getExpirationDate().before(new Date()) || accountActivation.isUsed())
-			return null;
-		
-		return accountActivation;
+		accountActivationTokenRepository.save(accountActivation);
 	}
 
 	@Override
-	public UUID isUserFirstLogin(UUID activationId) {
-		AccountActivation accountActivation = accountActivationRepository.getOne(activationId);
-
-		List<AccountActivation> accountActivations =  accountActivationRepository.getUsedActivationsForUser(accountActivation.getUserId());
+	public AccountActivationToken isValidAccountActivationLink(String token) throws TokenNotFoundException, ActivationLinkExpiredOrUsedException {
+		AccountActivationToken accountActivationToken = accountActivationTokenRepository.findToken(token);
 		
-		if(accountActivations.size()==0) {
-			accountActivation.setUsed(true);
-			accountActivationRepository.save(accountActivation);
-			return accountActivation.getUserId();
+		if(accountActivationToken==null)
+			throw new TokenNotFoundException("Token not found");
+		
+		if(accountActivationToken.getExpirationDate().before(new Date()) || accountActivationToken.isUsed()) 
+			throw new ActivationLinkExpiredOrUsedException("Token expired or used");
+				
+		return accountActivationToken;
+	}
 
-		}
+	@Override
+	public UUID isUserFirstLogin(String token) {
+		AccountActivationToken accountActivation = accountActivationTokenRepository.findToken(token);
+
+
+		List<AccountActivationToken> accountActivations =  accountActivationTokenRepository.getUsedActivationsForUser(accountActivation.getUserId());
+		
+		if(accountActivations.size()==0) 
+			return accountActivation.getUserId();
 		else
 			return null;
 	}
 
 	@Override
-	public void changeFirstPassword(ChangeFirstPasswordDTO changeFirstPasswordDTO) throws PasswordsIsNotTheSameException, PasswordIsNotStrongException {
+	public void changeFirstPassword(ChangeFirstPasswordDTO changeFirstPasswordDTO) throws PasswordsIsNotTheSameException, PasswordIsNotStrongException, ActivationLinkExpiredOrUsedException, TokenNotFoundException {
 		String newPassword = HashAndSaltPasswordIfStrongAndMatching(changeFirstPasswordDTO.password,changeFirstPasswordDTO.repeatedPassword);
+		
+		AccountActivationToken token= isValidAccountActivationLink(changeFirstPasswordDTO.token);
 		
 		User user= userRepository.getOne(changeFirstPasswordDTO.userId);
 		user.setPassword(newPassword);
 		user.setActive(true);
+		token.setUsed(true);
+		accountActivationTokenRepository.save(token);
 		userRepository.save(user);
 	}
 	
@@ -205,7 +210,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void resetPasswordLinkRequest(RequestEmailDTO requestEmailDTO) throws NonExistentUserEmailException {
+	public void resetPasswordLinkRequest(RequestEmailDTO requestEmailDTO) throws NonExistentUserEmailException, NoSuchAlgorithmException {
 		User user = userRepository.findByEmail(requestEmailDTO.email);
 		
 		if(user==null)
@@ -215,7 +220,7 @@ public class UserServiceImpl implements UserService {
 		resetPasswordTokenRepository.save(newResetPasswordToken);
 		
 		try {
-			emailService.sendResetPasswordLinkAsync(user, newResetPasswordToken.getId());
+			emailService.sendResetPasswordLinkAsync(user, newResetPasswordToken.getToken());
 		} catch (MailException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -224,16 +229,13 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 	}
-
+	
 	@Override
-	public void resetPassword(ResetPasswordDTO resetPasswordDTO) throws ResetPasswordTokenExpiredOrUsedException, PasswordsIsNotTheSameException, PasswordIsNotStrongException {
-		ResetPasswordToken resetPasswordToken = isValidResetPasswordToken(resetPasswordDTO.resetPasswordId);
-		
-		if(resetPasswordToken==null)
-			throw new ResetPasswordTokenExpiredOrUsedException("Reset password token expired or used");
-		
+	public void resetPassword(ResetPasswordDTO resetPasswordDTO) throws ResetPasswordTokenExpiredOrUsedException, PasswordsIsNotTheSameException, PasswordIsNotStrongException, TokenNotFoundException {
 		String password = HashAndSaltPasswordIfStrongAndMatching(resetPasswordDTO.password,resetPasswordDTO.passwordRepeat);
 		
+		ResetPasswordToken resetPasswordToken = isValidResetPasswordToken(resetPasswordDTO.token);
+				
 		User user = userRepository.getOne(resetPasswordToken.getUserId().getId());
 		user.setPassword(password);
 		userRepository.save(user);
@@ -241,20 +243,13 @@ public class UserServiceImpl implements UserService {
 		resetPasswordTokenRepository.save(resetPasswordToken);
 	}
 	
-	private ResetPasswordToken isValidResetPasswordToken(UUID resetPasswordId) {
-		ResetPasswordToken resetPasswordToken = resetPasswordTokenRepository.getOne(resetPasswordId);
-		
-		if(resetPasswordToken.getExpirationDate().before(new Date()) || resetPasswordToken.isUsed())
-			return null;
-		
-		return resetPasswordToken;	
-	}
 
 	@Override
 	public Iterable<IdentifiableDTO<WaiterDTO>> findAllWaiters(UUID objectAdminId) {
 		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
 		return UserMapper.MapWaiterCollectionToIdentifiableWaiterDTOCollection(waiterRepository.findAllByObjectId(objectAdmin.getObjectId()));
 	}
+
 
 	@Override
 	public void updateWaiter(IdentifiableDTO<UpdateWaiterDTO> entity) throws ClassFieldValidationException {
@@ -273,6 +268,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 
-
-
+	@Override
+	public ResetPasswordToken isValidResetPasswordToken(String token) throws TokenNotFoundException, ResetPasswordTokenExpiredOrUsedException {
+		ResetPasswordToken resetPasswordToken = resetPasswordTokenRepository.findToken(token);
+		if(resetPasswordToken==null)
+			throw new TokenNotFoundException("Token not found");
+		
+		if(resetPasswordToken.getExpirationDate().before(new Date()) || resetPasswordToken.isUsed())
+			throw new ResetPasswordTokenExpiredOrUsedException("Token expired or used");
+		
+		return resetPasswordToken;	
+	}
+	
+	
+	
 }

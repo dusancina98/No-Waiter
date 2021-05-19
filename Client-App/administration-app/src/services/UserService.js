@@ -18,6 +18,8 @@ export const userService = {
 	changeFirstPassword,
 	resetPasswordLinkRequest,
 	resetPassword,
+	checkIfActivationTokenIsValid,
+	checkIfResetPasswordTokenIsValid,
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -160,7 +162,7 @@ function createWaiter(waiter, dispatch) {
 	if (validateWaiter(waiter, dispatch, userConstants.WAITER_CREATE_FAILURE)) {
 		dispatch(request());
 
-		Axios.post(`/user-api/api/users/employee/waiter`, waiter, { validateStatus: () => true, headers: authHeader(), headers: authHeader() })
+		Axios.post(`/user-api/api/users/employee/waiter`, waiter, { validateStatus: () => true, headers: authHeader() })
 			.then((res) => {
 				if (res.status === 201) {
 					dispatch(success());
@@ -442,4 +444,30 @@ function resetPassword(resetPasswordRequest, dispatch) {
 function logout() {
 	deleteLocalStorage();
 	window.location = "#/login";
+}
+
+function checkIfActivationTokenIsValid(token) {
+	Axios.post(`/user-api/api/users/check-if-activation-token-valid`, token, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 400) {
+				//TODO 1: izmeniti u neku stranicu za token je istekao
+				window.location = "#/404";
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+}
+
+function checkIfResetPasswordTokenIsValid(token) {
+	Axios.post(`/user-api/api/users/check-if-reset-password-token-valid`, token, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 400) {
+				//TODO 1: izmeniti u neku stranicu za token je istekao
+				window.location = "#/404";
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+		});
 }
