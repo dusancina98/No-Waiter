@@ -1,8 +1,10 @@
 package NoWaiter.ObjectService.api;
 
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -51,7 +53,10 @@ public class Api {
             UUID objectId = objectService.Create(objectDTO);
             return new ResponseEntity<>(objectId, HttpStatus.CREATED);
 
-        } catch (Exception e) {
+        } catch (DataIntegrityViolationException e) {
+			e.printStackTrace();
+            return new ResponseEntity<>(e.getRootCause().getMessage(), HttpStatus.CONFLICT);
+		} catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -85,7 +90,10 @@ public class Api {
         	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
         	tableService.deleteTable(jwtResponse.getId(), tableId);
             return new ResponseEntity<>( HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        }  catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -131,6 +139,9 @@ public class Api {
         } catch (FeignException e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -145,6 +156,9 @@ public class Api {
         	objectService.ToggleObjectActivation(objectId, true);
             return new ResponseEntity<>(HttpStatus.OK);
 
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -159,6 +173,9 @@ public class Api {
         	objectService.ToggleObjectActivation(objectId, false);
             return new ResponseEntity<>(HttpStatus.OK);
 
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -173,6 +190,9 @@ public class Api {
         	objectService.ToggleObjectBlock(objectId, true);
             return new ResponseEntity<>(HttpStatus.OK);
 
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -187,6 +207,9 @@ public class Api {
         	objectService.ToggleObjectBlock(objectId, false);
             return new ResponseEntity<>(HttpStatus.OK);
 
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -200,6 +223,9 @@ public class Api {
         try {
             objectService.FindById(objectId);
             return new ResponseEntity<>(true, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         } catch (Exception e){
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }

@@ -46,10 +46,6 @@ public class ObjectServiceImpl implements ObjectService {
 		Object object = objectRepository.findById(addAdminDTO.ObjectId).get();
 		ObjectAdmin objectAdmin = new ObjectAdmin(addAdminDTO.AdminId, object);
 		objectAdminRepository.save(objectAdmin);
-		/*
-		 * Object object = objectRepository.findById(addAdminDTO.ObjectId).get();
-		 * object.addAmin(objectAdmin); objectRepository.save(object);
-		 */
 	}
 
 	@Override
