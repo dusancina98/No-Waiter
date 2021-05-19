@@ -36,6 +36,12 @@ const UserContextProvider = (props) => {
 			showErrorMessage: false,
 			errorMessage: "",
 		},
+		deleteObjectAdmin: {
+			showSuccessMessage: false,
+			successMessage: "",
+			showErrorMessage: false,
+			errorMessage: "",
+		},
 		objectAdminDetails: {
 			showModal: false,
 			readOnly: true,

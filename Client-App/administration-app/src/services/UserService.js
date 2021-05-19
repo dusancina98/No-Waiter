@@ -6,6 +6,7 @@ import { setAuthInLocalStorage } from "../helpers/auth-header";
 export const userService = {
 	createObjectAdmin,
 	updateObjectAdmin,
+	deleteObjectAdmin,
 	findAllObjectAdmins,
 	createWaiter,
 	updateWaiter,
@@ -77,6 +78,32 @@ function updateObjectAdmin(objectAdmin, dispatch) {
 	}
 	function failure(message) {
 		return { type: userConstants.OBJECT_ADMIN_UPDATE_FAILURE, errorMessage: message };
+	}
+}
+
+function deleteObjectAdmin(objectAdminId, dispatch) {
+	dispatch(request());
+
+	Axios.delete(`/user-api/api/users/object-admin/${objectAdminId}`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success("Object admin successfully deleted", objectAdminId));
+			} else {
+				dispatch(failure("Error while deleting object admin"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+
+	function request() {
+		return { type: userConstants.OBJECT_ADMIN_DELETE_REQUEST };
+	}
+	function success(message, objectAdminId) {
+		return { type: userConstants.OBJECT_ADMIN_DELETE_SUCCESS, successMessage: message, objectAdminId };
+	}
+	function failure(message) {
+		return { type: userConstants.OBJECT_ADMIN_DELETE_FAILURE, errorMessage: message };
 	}
 }
 
