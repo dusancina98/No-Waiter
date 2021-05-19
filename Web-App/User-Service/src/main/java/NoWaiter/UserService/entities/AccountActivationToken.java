@@ -7,9 +7,7 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 import com.google.common.hash.Hashing;
 
@@ -19,12 +17,11 @@ public class AccountActivationToken {
     @Column(name = "id")
 	private UUID id;
 	
-    @Column(name = "token")
+    private UUID userId;
+
+	@Column(name = "token")
 	private String token;
-	
-    @ManyToOne(fetch = FetchType.EAGER)
-    private User userId;
-    
+	    
     @Column(name= "generationDate", nullable = false)
     private Date generationDate;
     
@@ -38,7 +35,7 @@ public class AccountActivationToken {
 		super();
 	}
 
-	public AccountActivationToken(UUID id,String token, User userId, Date generationDate, Date expirationDate, boolean used) {
+	public AccountActivationToken(UUID id, String token, UUID userId, Date generationDate, Date expirationDate, boolean used) {
 		super();
 		this.id = id;
 		this.token=token;
@@ -48,7 +45,7 @@ public class AccountActivationToken {
 		this.used = used;
 	}
 	
-	public AccountActivationToken(User userId, Date generationDate) throws NoSuchAlgorithmException {
+	public AccountActivationToken(UUID userId, Date generationDate) throws NoSuchAlgorithmException {
 		super();
 		this.id = UUID.randomUUID();
 		this.token= generateToken();
@@ -57,6 +54,7 @@ public class AccountActivationToken {
 		this.expirationDate = generateExpirationDate(generationDate);
 		this.used = false;
 	}
+
 
 	private String generateToken() throws NoSuchAlgorithmException {
 		// TODO Auto-generated method stub
@@ -67,11 +65,11 @@ public class AccountActivationToken {
 		return sha256hex;
 	}
 
-	public User getUserId() {
+	public UUID getUserId() {
 		return userId;
 	}
 
-	public void setUserId(User userId) {
+	public void setUserId(UUID userId) {
 		this.userId = userId;
 	}
 

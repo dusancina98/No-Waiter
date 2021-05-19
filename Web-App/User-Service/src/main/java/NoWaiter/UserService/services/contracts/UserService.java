@@ -14,6 +14,7 @@ import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
 import NoWaiter.UserService.services.contracts.dto.UpdateWaiterDTO;
 import NoWaiter.UserService.services.contracts.dto.UserClientObjectDTO;
 import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
+import NoWaiter.UserService.services.contracts.exceptions.ClassFieldValidationException;
 import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsedException;
 import NoWaiter.UserService.services.contracts.exceptions.NonExistentUserEmailException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordIsNotStrongException;
@@ -24,14 +25,16 @@ import NoWaiter.UserService.services.contracts.exceptions.TokenNotFoundException
 public interface UserService {
 
     UUID createObjectAdmin(ObjectAdminDTO entity) throws Exception;
+
+    void updateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity) throws ClassFieldValidationException;
+
+    void deleteObjectAdmin(UUID objectAdminId);
     
-    void updateWaiter(IdentifiableDTO<UpdateWaiterDTO> entity);
+    void updateWaiter(IdentifiableDTO<UpdateWaiterDTO> entity) throws ClassFieldValidationException;
         
-    void updateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity);
-    
     void updateObjects(UserClientObjectDTO entity);
     
-    UUID createWaiter(WaiterDTO entity, UUID objectAdminId);
+    UUID createWaiter(WaiterDTO entity, UUID objectAdminId) throws ClassFieldValidationException;
     
     Iterable<IdentifiableDTO<ObjectAdminDTO>> findAllObjectAdmins();
     

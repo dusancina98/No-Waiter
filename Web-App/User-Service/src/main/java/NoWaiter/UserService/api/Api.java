@@ -1,14 +1,18 @@
 package NoWaiter.UserService.api;
 
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +40,7 @@ import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
 import NoWaiter.UserService.services.contracts.dto.UpdateWaiterDTO;
 import NoWaiter.UserService.services.contracts.dto.UserClientObjectDTO;
 import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
+import NoWaiter.UserService.services.contracts.exceptions.ClassFieldValidationException;
 import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsedException;
 import NoWaiter.UserService.services.contracts.exceptions.NonExistentUserEmailException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordIsNotStrongException;
@@ -74,7 +79,7 @@ public class Api {
     @CrossOrigin
     public ResponseEntity<?> createRestaurantAdmin(@RequestBody ObjectAdminDTO objectAdminDTO) {
         try {
-        	
+       
             objectClient.checkObject(objectAdminDTO.ObjectId);
             UUID adminId = userService.createObjectAdmin(objectAdminDTO);
             objectClient.addAdminToObject(new AddAdminDTO(objectAdminDTO.ObjectId, adminId));
@@ -82,10 +87,16 @@ public class Api {
             return new ResponseEntity<>(adminId, HttpStatus.CREATED);
         } catch (FeignException e) {
         	if(e.status() == HttpStatus.NOT_FOUND.value())
-                return new ResponseEntity<>("Invalid restaurant id: " + objectAdminDTO.ObjectId, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Invalid restaurant id: " + objectAdminDTO.ObjectId, HttpStatus.NOT_FOUND);
         	
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (Exception e) {
+        } catch (ConstraintViolationException | ClassFieldValidationException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (DataIntegrityViolationException e) {
+			e.printStackTrace();
+            return new ResponseEntity<>(e.getRootCause().getMessage(), HttpStatus.CONFLICT);
+		} catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -94,13 +105,19 @@ public class Api {
     @PutMapping("/object-admin")
     @CrossOrigin
     public ResponseEntity<?> updateRestaurantAdmin(@RequestBody IdentifiableDTO<UpdateObjectAdminRequestDTO> objectAdminDTO) {
-        try {
-        	userService.updateObjectAdmin(objectAdminDTO);       
+    	try {
+			userService.updateObjectAdmin(objectAdminDTO);
             return new ResponseEntity<>(HttpStatus.OK);
+		} catch (ConstraintViolationException | ClassFieldValidationException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        }   
     }
     
     
@@ -115,13 +132,41 @@ public class Api {
         }
     }
     
+    @DeleteMapping("/object-admin/{adminId}")
+    @CrossOrigin
+    public ResponseEntity<?> deleteObjectAdmin(@PathVariable UUID adminId) {
+        try {
+        	objectClient.deleteObjectAdmin(adminId);
+        	userService.deleteObjectAdmin(adminId);
+        	
+            return new ResponseEntity<>(HttpStatus.OK);
+        }  catch (FeignException e) {
+        	if(e.status() == HttpStatus.NOT_FOUND.value())
+                return new ResponseEntity<>("Invalid object admin id: " + adminId, HttpStatus.NOT_FOUND);
+        	
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
     @PostMapping("/employee/waiter")
     @CrossOrigin
     public ResponseEntity<?> createWaiter(@RequestHeader("Authorization") String token, @RequestBody WaiterDTO waiterDTO) {
         try {
         	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
             return new ResponseEntity<>(userService.createWaiter(waiterDTO, jwtResponse.getId()), HttpStatus.CREATED);
-        } catch (Exception e) {
+        } catch (ConstraintViolationException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (ClassFieldValidationException e) {
+			e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (DataIntegrityViolationException e) {
+			e.printStackTrace();
+            return new ResponseEntity<>(e.getRootCause().getMessage(), HttpStatus.CONFLICT);
+		} catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -145,6 +190,12 @@ public class Api {
         try {
         	userService.updateWaiter(waiterDTO);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ConstraintViolationException | ClassFieldValidationException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -167,7 +218,7 @@ public class Api {
             return new ResponseEntity<>(userService.checkUserExistance(userId), HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

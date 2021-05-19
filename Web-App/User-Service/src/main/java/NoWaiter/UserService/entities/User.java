@@ -1,11 +1,30 @@
 package NoWaiter.UserService.entities;
 
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
-
-import java.util.List;
-import java.util.UUID;
+import NoWaiter.UserService.services.contracts.exceptions.ClassFieldValidationException;
 
 @Entity
 @Table(name="USERS")
@@ -17,6 +36,8 @@ public class User{
     private UUID id;
 
     @Column(name = "email", nullable = false, unique = true)
+    @Email(message = "Email address is not valid")
+    @NotEmpty
     private String email;
 
     @JsonIgnore
@@ -40,17 +61,34 @@ public class User{
 
     public User() { }
 
-    public User(UUID id, String email, String password, String name, String surname) {
+    public User(UUID id, String email, String password, String name, String surname) throws ClassFieldValidationException {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
         this.surname = surname;
         this.active=false; 
+        
+		validate();
     }
-
-    public User(String email, String password, String name, String surname) {
+    
+    public User(String email, String password, String name, String surname) throws ClassFieldValidationException {
         this(UUID.randomUUID(), email, password, name, surname);
+    }
+    
+    public void validate() throws ClassFieldValidationException {
+    	ValidatorFactory vf = Validation.buildDefaultValidatorFactory(); Validator
+		validator = vf.getValidator(); 
+    	Set<ConstraintViolation<User>> violations =  validator.validate(this);
+    	
+    	if(!violations.isEmpty())
+    		throw new ConstraintViolationException(violations);
+    	
+    	if(this.name.length() < 2 || this.name.toLowerCase().charAt(0) == this.name.charAt(0))
+    		throw new ClassFieldValidationException("Name must be at least 2 characters starting with capital letter");
+    	
+    	if(this.surname.length() < 2 || this.surname.toLowerCase().charAt(0) == this.surname.charAt(0))
+    		throw new ClassFieldValidationException("Surname must be at least 2 characters starting with capital letter");
     }
 
     public UUID getId() {
@@ -77,7 +115,7 @@ public class User{
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name) {    	
         this.name = name;
     }
 

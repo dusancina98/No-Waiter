@@ -1,5 +1,6 @@
 import Axios from "axios";
 import { objectConstants } from "../constants/ObjectConstants";
+import { authHeader } from "../helpers/auth-header";
 
 export const objectService = {
 	createObject,
@@ -15,7 +16,7 @@ function createObject(object, dispatch) {
 	if (validateObject(object, dispatch, objectConstants.OBJECT_CREATE_FAILURE)) {
 		dispatch(request());
 
-		Axios.post(`/object-api/api/objects`, object, { validateStatus: () => true })
+		Axios.post(`/object-api/api/objects`, object, { validateStatus: () => true, headers: authHeader() })
 			.then((res) => {
 				if (res.status === 201) {
 					dispatch(success());
@@ -54,7 +55,7 @@ function updateObject(object, dispatch) {
 	if (validateObject(object.EntityDTO, dispatch, objectConstants.OBJECT_UPDATE_FAILURE)) {
 		dispatch(request());
 
-		Axios.put(`/object-api/api/objects`, objectDTO, { validateStatus: () => true })
+		Axios.put(`/object-api/api/objects`, objectDTO, { validateStatus: () => true, headers: authHeader() })
 			.then((res) => {
 				if (res.status === 200) {
 					dispatch(success("Object successfully updated", object));
@@ -127,7 +128,7 @@ function validateObject(object, dispatch, type) {
 function activateObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`/object-api/api/objects/${object.Id}/activate`, { validateStatus: () => true })
+	Axios.put(`/object-api/api/objects/${object.Id}/activate`, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -156,7 +157,7 @@ function activateObject(object, dispatch) {
 function deactivateObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`/object-api/api/objects/${object.Id}/deactivate`, { validateStatus: () => true })
+	Axios.put(`/object-api/api/objects/${object.Id}/deactivate`, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -185,7 +186,7 @@ function deactivateObject(object, dispatch) {
 function blockObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`/object-api/api/objects/${object.Id}/block`, { validateStatus: () => true })
+	Axios.put(`/object-api/api/objects/${object.Id}/block`, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -214,7 +215,7 @@ function blockObject(object, dispatch) {
 function unblockObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`/object-api/api/objects/${object.Id}/unblock`, { validateStatus: () => true })
+	Axios.put(`/object-api/api/objects/${object.Id}/unblock`, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {

@@ -9,10 +9,11 @@ import NoWaiter.UserService.entities.Waiter;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
+import NoWaiter.UserService.services.contracts.exceptions.ClassFieldValidationException;
 
 public class UserMapper {
 
-    public static ObjectAdmin MapRestaurantAdminDTOToRestaurantAdmin(ObjectAdminDTO objectAdminDTO){
+    public static ObjectAdmin MapRestaurantAdminDTOToRestaurantAdmin(ObjectAdminDTO objectAdminDTO) throws ClassFieldValidationException{
         if (objectAdminDTO == null) throw new IllegalArgumentException();
 
         return new ObjectAdmin(objectAdminDTO.Email, "", objectAdminDTO.Name, objectAdminDTO.Surname, objectAdminDTO.ObjectId, objectAdminDTO.ObjectName, objectAdminDTO.Address, objectAdminDTO.PhoneNumber);
@@ -34,7 +35,7 @@ public class UserMapper {
         return retVal;
     }
 
-    public static Waiter MapWaiterDTOToWaiter(WaiterDTO waiterDTO, UUID objectId) {
+    public static Waiter MapWaiterDTOToWaiter(WaiterDTO waiterDTO, UUID objectId) throws ClassFieldValidationException {
     	if (waiterDTO == null) throw new IllegalArgumentException();
     	
     	return new Waiter(waiterDTO.Email, "", waiterDTO.Name, waiterDTO.Surname, waiterDTO.Address, waiterDTO.PhoneNumber, objectId);

@@ -50,7 +50,7 @@ const ObjectDetailsModal = () => {
 				<FailureAlert
 					hidden={!objectState.editObject.showErrorMessage}
 					header="Error"
-					message={objectState.editObject.successMessage}
+					message={objectState.editObject.errorMessage}
 					handleCloseAlert={() => dispatch({ type: objectConstants.OBJECT_UPDATE_REQUEST })}
 				/>
 				<div className="row">

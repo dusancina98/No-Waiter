@@ -31,8 +31,19 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 	.antMatchers("/auth-api/api/auth/login").permitAll()
+                	
+                	.antMatchers(HttpMethod.POST ,"/object-api/api/objects").hasRole("SYSADMIN")
+                	.antMatchers(HttpMethod.PUT ,"/object-api/api/objects/**").hasRole("SYSADMIN")
+                	.antMatchers(HttpMethod.PUT ,"/object-api/api/objects").hasRole("SYSADMIN")
+
+                	.antMatchers(HttpMethod.POST ,"/user-api/api/users/object-admin").hasRole("SYSADMIN")
+                	.antMatchers(HttpMethod.GET ,"/user-api/api/users/object-admin").hasRole("SYSADMIN")
+                	.antMatchers(HttpMethod.PUT ,"/user-api/api/users/object-admin").hasRole("SYSADMIN")
+                	.antMatchers(HttpMethod.DELETE ,"/user-api/api/users/object-admin/**").hasRole("SYSADMIN")
+
                 	.antMatchers(HttpMethod.POST ,"/user-api/api/users/employee/waiter").hasRole("OBJADMIN")
                 	.antMatchers(HttpMethod.GET ,"/user-api/api/users/employee/waiter").hasRole("OBJADMIN")
+                	
                 	.antMatchers(HttpMethod.POST ,"/object-api/api/objects/tables").hasRole("OBJADMIN")
                 	.antMatchers(HttpMethod.GET ,"/object-api/api/objects/tables").hasRole("OBJADMIN")
                 	.antMatchers(HttpMethod.DELETE ,"/object-api/api/objects/tables/**").hasRole("OBJADMIN")

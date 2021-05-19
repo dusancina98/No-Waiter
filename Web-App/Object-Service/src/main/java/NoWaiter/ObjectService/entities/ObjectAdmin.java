@@ -15,6 +15,8 @@ public class ObjectAdmin {
 	@ManyToOne
 	private Object object;
 	
+	public ObjectAdmin() { }
+	
 	public ObjectAdmin(Object object) {
 		this(UUID.randomUUID(), object);
 	}

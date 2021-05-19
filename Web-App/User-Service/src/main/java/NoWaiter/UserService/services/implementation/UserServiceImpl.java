@@ -1,33 +1,13 @@
 package NoWaiter.UserService.services.implementation;
 
-import NoWaiter.UserService.entities.AccountActivationToken;
-import NoWaiter.UserService.entities.ObjectAdmin;
-import NoWaiter.UserService.entities.ResetPasswordToken;
-import NoWaiter.UserService.entities.User;
-import NoWaiter.UserService.repository.AccountActivationTokenRepository;
-import NoWaiter.UserService.repository.ObjectAdminRepository;
-import NoWaiter.UserService.repository.ResetPasswordTokenRepository;
-import NoWaiter.UserService.repository.UserRepository;
-import NoWaiter.UserService.entities.Waiter;
-import NoWaiter.UserService.repository.WaiterRepository;
-import NoWaiter.UserService.services.contracts.UserService;
-import NoWaiter.UserService.services.contracts.dto.ChangeFirstPasswordDTO;
-import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
-import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
-import NoWaiter.UserService.services.contracts.dto.RequestEmailDTO;
-import NoWaiter.UserService.services.contracts.dto.ResetPasswordDTO;
-import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsedException;
-import NoWaiter.UserService.services.contracts.exceptions.NonExistentUserEmailException;
-import NoWaiter.UserService.services.contracts.exceptions.PasswordIsNotStrongException;
-import NoWaiter.UserService.services.contracts.exceptions.PasswordsIsNotTheSameException;
-import NoWaiter.UserService.services.contracts.exceptions.ResetPasswordTokenExpiredOrUsedException;
-import NoWaiter.UserService.services.contracts.exceptions.TokenNotFoundException;
-import NoWaiter.UserService.services.contracts.exceptions.UserIsActiveException;
-import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
-import NoWaiter.UserService.services.contracts.dto.UpdateWaiterDTO;
-import NoWaiter.UserService.services.contracts.dto.UserClientObjectDTO;
-import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
-import NoWaiter.UserService.services.implementation.util.UserMapper;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import javax.mail.MessagingException;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -36,15 +16,35 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-import javax.mail.MessagingException;
-
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-
-import javax.transaction.Transactional;
+import NoWaiter.UserService.entities.AccountActivationToken;
+import NoWaiter.UserService.entities.ObjectAdmin;
+import NoWaiter.UserService.entities.ResetPasswordToken;
+import NoWaiter.UserService.entities.User;
+import NoWaiter.UserService.entities.Waiter;
+import NoWaiter.UserService.repository.AccountActivationTokenRepository;
+import NoWaiter.UserService.repository.ObjectAdminRepository;
+import NoWaiter.UserService.repository.ResetPasswordTokenRepository;
+import NoWaiter.UserService.repository.UserRepository;
+import NoWaiter.UserService.repository.WaiterRepository;
+import NoWaiter.UserService.services.contracts.UserService;
+import NoWaiter.UserService.services.contracts.dto.ChangeFirstPasswordDTO;
+import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
+import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
+import NoWaiter.UserService.services.contracts.dto.RequestEmailDTO;
+import NoWaiter.UserService.services.contracts.dto.ResetPasswordDTO;
+import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
+import NoWaiter.UserService.services.contracts.dto.UpdateWaiterDTO;
+import NoWaiter.UserService.services.contracts.dto.UserClientObjectDTO;
+import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
+import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsedException;
+import NoWaiter.UserService.services.contracts.exceptions.ClassFieldValidationException;
+import NoWaiter.UserService.services.contracts.exceptions.NonExistentUserEmailException;
+import NoWaiter.UserService.services.contracts.exceptions.PasswordIsNotStrongException;
+import NoWaiter.UserService.services.contracts.exceptions.PasswordsIsNotTheSameException;
+import NoWaiter.UserService.services.contracts.exceptions.ResetPasswordTokenExpiredOrUsedException;
+import NoWaiter.UserService.services.contracts.exceptions.TokenNotFoundException;
+import NoWaiter.UserService.services.contracts.exceptions.UserIsActiveException;
+import NoWaiter.UserService.services.implementation.util.UserMapper;
 
 
 @Service
@@ -100,7 +100,8 @@ public class UserServiceImpl implements UserService {
 		if(user.isActive())
 			throw new UserIsActiveException("User was activated");
 				
-		AccountActivationToken accountActivation = new AccountActivationToken(user, new Date(System.currentTimeMillis()));
+
+		AccountActivationToken accountActivation = new AccountActivationToken(user.getId(), new Date(System.currentTimeMillis()));
 		accountActivationTokenRepository.save(accountActivation);
 		
 		try {
@@ -118,7 +119,7 @@ public class UserServiceImpl implements UserService {
 	public void activateUser(String token) throws ActivationLinkExpiredOrUsedException, TokenNotFoundException {
 		AccountActivationToken accountActivation = isValidAccountActivationLink(token);
 		
-		User user = userRepository.getOne(accountActivation.getUserId().getId());
+		User user = userRepository.getOne(accountActivation.getUserId());
 		user.setActive(true);
 		userRepository.save(user);
 		accountActivation.setUsed(true);
@@ -142,10 +143,11 @@ public class UserServiceImpl implements UserService {
 	public UUID isUserFirstLogin(String token) {
 		AccountActivationToken accountActivation = accountActivationTokenRepository.findToken(token);
 
-		List<AccountActivationToken> accountActivations =  accountActivationTokenRepository.getUsedActivationsForUser(accountActivation.getUserId().getId());
+
+		List<AccountActivationToken> accountActivations =  accountActivationTokenRepository.getUsedActivationsForUser(accountActivation.getUserId());
 		
 		if(accountActivations.size()==0) 
-			return accountActivation.getUserId().getId();
+			return accountActivation.getUserId();
 		else
 			return null;
 	}
@@ -176,21 +178,22 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public UUID createWaiter(WaiterDTO entity, UUID objectAdminId) {
+	public UUID createWaiter(WaiterDTO entity, UUID objectAdminId) throws ClassFieldValidationException {
 		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
-		Waiter waiter = UserMapper.MapWaiterDTOToWaiter(entity, objectAdmin.getObjectId());
+		Waiter waiter = UserMapper.MapWaiterDTOToWaiter(entity, objectAdmin.getObjectId());	
 		waiterRepository.save(waiter);
 		return waiter.getId();
 	}
 
 	@Override
-	public void updateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity) {
-
+	public void updateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity) throws ClassFieldValidationException {
+		
 		ObjectAdmin objectAdmin = objectAdminRepository.findById(entity.Id).get();
 		objectAdmin.setAddress(entity.EntityDTO.Address);
 		objectAdmin.setName(entity.EntityDTO.Name);
 		objectAdmin.setSurname(entity.EntityDTO.Surname);
 		objectAdmin.setPhoneNumber(entity.EntityDTO.PhoneNumber);
+		objectAdmin.validate();
 		objectAdminRepository.save(objectAdmin);
 	}
 
@@ -249,13 +252,19 @@ public class UserServiceImpl implements UserService {
 
 
 	@Override
-	public void updateWaiter(IdentifiableDTO<UpdateWaiterDTO> entity) {
+	public void updateWaiter(IdentifiableDTO<UpdateWaiterDTO> entity) throws ClassFieldValidationException {
 		Waiter waiter = waiterRepository.findById(entity.Id).get();
 		waiter.setAddress(entity.EntityDTO.Address);
 		waiter.setName(entity.EntityDTO.Name);
 		waiter.setSurname(entity.EntityDTO.Surname);
 		waiter.setPhoneNumber(entity.EntityDTO.PhoneNumber);
+		waiter.validate();
 		waiterRepository.save(waiter);
+	}
+
+	@Override
+	public void deleteObjectAdmin(UUID objectAdminId) {
+		objectAdminRepository.deleteById(objectAdminId);
 	}
 
 

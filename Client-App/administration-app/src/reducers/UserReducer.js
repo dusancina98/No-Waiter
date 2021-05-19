@@ -69,6 +69,54 @@ export const userReducer = (state, action) => {
 					errorMessage: action.errorMessage,
 				},
 			};
+		case userConstants.OBJECT_ADMIN_DELETE_REQUEST:
+			return {
+				...state,
+				deleteObjectAdmin: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case userConstants.OBJECT_ADMIN_DELETE_SUCCESS:
+			let stCpy = {
+				...state,
+				deleteObjectAdmin: {
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+				objectAdminDetails: {
+					showModal: false,
+					readOnly: true,
+					objectAdmin: {
+						Id: "",
+						EntityDTO: {
+							Email: "",
+							Name: "",
+							Surname: "",
+							Address: "",
+							ObjectName: "",
+							PhoneNumber: "",
+						},
+					},
+				},
+			};
+			var newListAdmins = stCpy.objectAdmins.filter((objectAdmin) => objectAdmin.Id !== action.objectAdminId);
+			stCpy.objectAdmins = newListAdmins;
+			return stCpy;
+		case userConstants.OBJECT_ADMIN_DELETE_FAILURE:
+			return {
+				...state,
+				deleteObjectAdmin: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+			};
 		case userConstants.SET_OBJECT_ADMINS_REQUEST:
 			return {
 				...state,

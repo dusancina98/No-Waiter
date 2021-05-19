@@ -2,6 +2,8 @@ package NoWaiter.UserService.entities;
 
 import javax.persistence.MappedSuperclass;
 
+import NoWaiter.UserService.services.contracts.exceptions.ClassFieldValidationException;
+
 @MappedSuperclass
 public class Employee extends User {
 	
@@ -11,12 +13,12 @@ public class Employee extends User {
 	
 	public Employee() { }
 
-	public Employee(String email, String password, String name, String surname, String address, String phoneNumber) {
+	public Employee(String email, String password, String name, String surname, String address, String phoneNumber) throws ClassFieldValidationException {
 		super(email, password, name, surname);
 		this.address = address;
 		this.phoneNumber = phoneNumber;
 	}
-
+	
 	public String getAddress() {
 		return address;
 	}

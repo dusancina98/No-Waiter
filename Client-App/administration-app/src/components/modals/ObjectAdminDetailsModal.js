@@ -3,6 +3,7 @@ import { Button, Modal } from "react-bootstrap";
 import { modalConstants } from "../../constants/ModalConstants";
 import { userConstants } from "../../constants/UserConstants";
 import { UserContext } from "../../contexts/UserContext";
+import { userService } from "../../services/UserService";
 import EditObjectAdminForm from "../EditObjectAdminForm";
 import FailureAlert from "../FailureAlert";
 import SuccessAlert from "../SuccessAlert";
@@ -13,6 +14,10 @@ const ObjectAdminDetailsModal = () => {
 
 	const handleModalClose = () => {
 		dispatch({ type: modalConstants.HIDE_OBJECT_ADMIN_DETAILS });
+	};
+
+	const handleObjectAdminDelete = () => {
+		userService.deleteObjectAdmin(userState.objectAdminDetails.objectAdmin.Id, dispatch);
 	};
 
 	return (
@@ -35,15 +40,21 @@ const ObjectAdminDetailsModal = () => {
 				<FailureAlert
 					hidden={!userState.editObjectAdmin.showErrorMessage}
 					header="Error"
-					message={userState.editObjectAdmin.successMessage}
+					message={userState.editObjectAdmin.errorMessage}
 					handleCloseAlert={() => dispatch({ type: userConstants.OBJECT_ADMIN_UPDATE_REQUEST })}
+				/>
+				<FailureAlert
+					hidden={!userState.deleteObjectAdmin.showErrorMessage}
+					header="Error"
+					message={userState.deleteObjectAdmin.errorMessage}
+					handleCloseAlert={() => dispatch({ type: userConstants.OBJECT_ADMIN_DELETE_REQUEST })}
 				/>
 				<div className="row">
 					<div className="col-md-12 grid-margin stretch-card">
 						<div className="card" style={{ border: "0" }}>
 							<div className="card-body">
 								<EditObjectAdminForm />
-								<ObjectAdminDetailsModalButtons />
+								<ObjectAdminDetailsModalButtons handleDelete={handleObjectAdminDelete} />
 							</div>
 						</div>
 					</div>

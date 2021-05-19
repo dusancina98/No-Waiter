@@ -28,38 +28,34 @@ public class ObjectServiceImpl implements ObjectService {
     private ObjectAdminRepository objectAdminRepository;
 
     @Override
-    public UUID Create(ObjectDTO entity) {
+    public UUID create(ObjectDTO entity) {
         Object object = ObjectMapper.MapObjectDTOToObject(entity);
         objectRepository.save(object);
         return object.getId();
     }
 
     @Override
-    public IdentifiableDTO<ObjectDTO> FindById(UUID id) {
+    public IdentifiableDTO<ObjectDTO> findById(UUID id) {
         return ObjectMapper.MapObjectToIdentifiableObjectDTO(objectRepository.findById(id).get());
     }
 
 
 	@Override
-	public void AddAdminToObject(AddAdminDTO addAdminDTO) {
+	public void addAdminToObject(AddAdminDTO addAdminDTO) {
 		
 		Object object = objectRepository.findById(addAdminDTO.ObjectId).get();
 		ObjectAdmin objectAdmin = new ObjectAdmin(addAdminDTO.AdminId, object);
 		objectAdminRepository.save(objectAdmin);
-		/*
-		 * Object object = objectRepository.findById(addAdminDTO.ObjectId).get();
-		 * object.addAmin(objectAdmin); objectRepository.save(object);
-		 */
 	}
 
 	@Override
-	public Iterable<IdentifiableDTO<ObjectWithStatusDTO>> FindAllForAdmin() {
+	public Iterable<IdentifiableDTO<ObjectWithStatusDTO>> findAllForAdmin() {
         return ObjectMapper.MapObjectCollectionToIdentifiableObjectWithStatusDTOCollection(objectRepository.findAll());
 
 	}
 
 	@Override
-	public void ToggleObjectActivation(UUID id, boolean status) {
+	public void toggleObjectActivation(UUID id, boolean status) {
 		
 		Object object = objectRepository.findById(id).get();
 		
@@ -70,7 +66,7 @@ public class ObjectServiceImpl implements ObjectService {
 	}
 
 	@Override
-	public void ToggleObjectBlock(UUID id, boolean status) {
+	public void toggleObjectBlock(UUID id, boolean status) {
 		
 		Object object = objectRepository.findById(id).get();
 		
@@ -82,7 +78,7 @@ public class ObjectServiceImpl implements ObjectService {
 	}
 
 	@Override
-	public void Update(IdentifiableDTO<ObjectDTO> entity) {
+	public void update(IdentifiableDTO<ObjectDTO> entity) {
 
 		Object object = objectRepository.findById(entity.Id).get();
 		object.setAddress(new Address(entity.EntityDTO.Address));
@@ -91,5 +87,15 @@ public class ObjectServiceImpl implements ObjectService {
 		object.setName(entity.EntityDTO.Name);
 		
 		objectRepository.save(object);
+	}
+
+	@Override
+	public void deleteObjectAdminHandlingObjectActivation(UUID objectAdminId) {
+		
+		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
+		objectAdminRepository.deleteById(objectAdminId);
+		Object object = objectRepository.findById(objectAdmin.getObject().getId()).get();
+		if(object.getAdmins().isEmpty()) 
+			toggleObjectActivation(object.getId(), false);
 	}
 }

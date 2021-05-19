@@ -1,16 +1,18 @@
 import Axios from "axios";
-import { authHeader } from "../helpers/auth-header";
+import { authHeader, deleteLocalStorage } from "../helpers/auth-header";
 import { userConstants } from "../constants/UserConstants";
 import { setAuthInLocalStorage } from "../helpers/auth-header";
 
 export const userService = {
 	createObjectAdmin,
 	updateObjectAdmin,
+	deleteObjectAdmin,
 	findAllObjectAdmins,
 	createWaiter,
 	updateWaiter,
 	findAllWaiters,
 	login,
+	logout,
 	checkIfUserIdExist,
 	resendActivationLinkRequest,
 	changeFirstPassword,
@@ -24,7 +26,7 @@ function createObjectAdmin(objectAdmin, dispatch) {
 	if (validateObjectAdmin(objectAdmin, dispatch, userConstants.OBJECT_ADMIN_CREATE_FAILURE)) {
 		dispatch(request());
 
-		Axios.post(`/user-api/api/users/object-admin`, objectAdmin, { validateStatus: () => true })
+		Axios.post(`/user-api/api/users/object-admin`, objectAdmin, { validateStatus: () => true, headers: authHeader() })
 			.then((res) => {
 				if (res.status === 201) {
 					dispatch(success());
@@ -57,7 +59,7 @@ function updateObjectAdmin(objectAdmin, dispatch) {
 	if (validateObjectAdmin(objectAdminDTO.EntityDTO, dispatch, userConstants.OBJECT_ADMIN_UPDATE_FAILURE)) {
 		dispatch(request());
 
-		Axios.put(`/user-api/api/users/object-admin`, objectAdminDTO, { validateStatus: () => true })
+		Axios.put(`/user-api/api/users/object-admin`, objectAdminDTO, { validateStatus: () => true, headers: authHeader() })
 			.then((res) => {
 				if (res.status === 200) {
 					dispatch(success("Object admin successfully updated", objectAdmin));
@@ -78,6 +80,32 @@ function updateObjectAdmin(objectAdmin, dispatch) {
 	}
 	function failure(message) {
 		return { type: userConstants.OBJECT_ADMIN_UPDATE_FAILURE, errorMessage: message };
+	}
+}
+
+function deleteObjectAdmin(objectAdminId, dispatch) {
+	dispatch(request());
+
+	Axios.delete(`/user-api/api/users/object-admin/${objectAdminId}`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success("Object admin successfully deleted", objectAdminId));
+			} else {
+				dispatch(failure("Error while deleting object admin"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+
+	function request() {
+		return { type: userConstants.OBJECT_ADMIN_DELETE_REQUEST };
+	}
+	function success(message, objectAdminId) {
+		return { type: userConstants.OBJECT_ADMIN_DELETE_SUCCESS, successMessage: message, objectAdminId };
+	}
+	function failure(message) {
+		return { type: userConstants.OBJECT_ADMIN_DELETE_FAILURE, errorMessage: message };
 	}
 }
 
@@ -106,7 +134,7 @@ function validateObjectAdmin(objectAdmin, dispatch, type) {
 async function findAllObjectAdmins(dispatch) {
 	dispatch(request());
 
-	await Axios.get(`/user-api/api/users/object-admin`, { validateStatus: () => true })
+	await Axios.get(`/user-api/api/users/object-admin`, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 200) {
 				dispatch(success(res.data));
@@ -167,7 +195,7 @@ function updateWaiter(waiter, dispatch) {
 	if (validateWaiter(waiterDTO.EntityDTO, dispatch, userConstants.WAITER_UPDATE_FAILURE)) {
 		dispatch(request());
 
-		Axios.put(`/user-api/api/users/employee/waiter`, waiterDTO, { validateStatus: () => true })
+		Axios.put(`/user-api/api/users/employee/waiter`, waiterDTO, { validateStatus: () => true, headers: authHeader() })
 			.then((res) => {
 				if (res.status === 200) {
 					dispatch(success("Waiter successfully updated", waiter));
@@ -413,11 +441,16 @@ function resetPassword(resetPasswordRequest, dispatch) {
 	}
 }
 
+function logout() {
+	deleteLocalStorage();
+	window.location = "#/login";
+}
+
 function checkIfActivationTokenIsValid(token) {
 	Axios.post(`/user-api/api/users/check-if-activation-token-valid`, token, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 400) {
-        		//TODO 1: izmeniti u neku stranicu za token je istekao
+				//TODO 1: izmeniti u neku stranicu za token je istekao
 				window.location = "#/404";
 			}
 		})
@@ -430,7 +463,7 @@ function checkIfResetPasswordTokenIsValid(token) {
 	Axios.post(`/user-api/api/users/check-if-reset-password-token-valid`, token, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 400) {
-        		//TODO 1: izmeniti u neku stranicu za token je istekao
+				//TODO 1: izmeniti u neku stranicu za token je istekao
 				window.location = "#/404";
 			}
 		})

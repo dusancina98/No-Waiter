@@ -1,8 +1,10 @@
 package NoWaiter.ObjectService.api;
 
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -48,10 +50,13 @@ public class Api {
     public ResponseEntity<?> createObject(@RequestBody ObjectDTO objectDTO) {
 
         try {
-            UUID objectId = objectService.Create(objectDTO);
+            UUID objectId = objectService.create(objectDTO);
             return new ResponseEntity<>(objectId, HttpStatus.CREATED);
 
-        } catch (Exception e) {
+        } catch (DataIntegrityViolationException e) {
+			e.printStackTrace();
+            return new ResponseEntity<>(e.getRootCause().getMessage(), HttpStatus.CONFLICT);
+		} catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -85,7 +90,10 @@ public class Api {
         	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
         	tableService.deleteTable(jwtResponse.getId(), tableId);
             return new ResponseEntity<>( HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        }  catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -95,7 +103,7 @@ public class Api {
     public ResponseEntity<?> addAdminToObject(@RequestBody AddAdminDTO addAdminDTO) {
 
         try {
-            objectService.AddAdminToObject(addAdminDTO);
+            objectService.addAdminToObject(addAdminDTO);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
         } catch (Exception e) {
@@ -104,12 +112,26 @@ public class Api {
         }
     }
 
+    @DeleteMapping("/admin/{adminId}")
+    @CrossOrigin
+    public ResponseEntity<?> deleteObjectAdmin(@PathVariable UUID adminId) {
+        try {
+        	objectService.deleteObjectAdminHandlingObjectActivation(adminId);
+            return new ResponseEntity<>( HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        }  catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
     @GetMapping
     @CrossOrigin
     public ResponseEntity<?> findAllObjects() {
 
         try {
-            return new ResponseEntity<>(objectService.FindAllForAdmin(), HttpStatus.OK);
+            return new ResponseEntity<>(objectService.findAllForAdmin(), HttpStatus.OK);
 
         } catch (Exception e) {
         	e.printStackTrace();
@@ -122,15 +144,19 @@ public class Api {
     public ResponseEntity<?> updateObject(@RequestBody IdentifiableDTO<ObjectDTO> objectDTO) {
 
         try {
-        	IdentifiableDTO<ObjectDTO> objDto = objectService.FindById(objectDTO.Id);
+        	IdentifiableDTO<ObjectDTO> objDto = objectService.findById(objectDTO.Id);
         	if(!objDto.EntityDTO.Name.equals(objectDTO.EntityDTO.Name))
         		userClient.updateObject(new UserClientObjectDTO(objectDTO.Id, objectDTO.EntityDTO.Name));
-        	objectService.Update(objectDTO);
+        	
+        	objectService.update(objectDTO);
             return new ResponseEntity<>(HttpStatus.OK);
 
         } catch (FeignException e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -142,9 +168,12 @@ public class Api {
     public ResponseEntity<?> activateObject(@PathVariable UUID objectId) {
 
         try {
-        	objectService.ToggleObjectActivation(objectId, true);
+        	objectService.toggleObjectActivation(objectId, true);
             return new ResponseEntity<>(HttpStatus.OK);
 
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -156,9 +185,12 @@ public class Api {
     public ResponseEntity<?> deactivateObject(@PathVariable UUID objectId) {
 
         try {
-        	objectService.ToggleObjectActivation(objectId, false);
+        	objectService.toggleObjectActivation(objectId, false);
             return new ResponseEntity<>(HttpStatus.OK);
 
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -170,9 +202,12 @@ public class Api {
     public ResponseEntity<?> blockObject(@PathVariable UUID objectId) {
 
         try {
-        	objectService.ToggleObjectBlock(objectId, true);
+        	objectService.toggleObjectBlock(objectId, true);
             return new ResponseEntity<>(HttpStatus.OK);
 
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -184,9 +219,12 @@ public class Api {
     public ResponseEntity<?> unblockObject(@PathVariable UUID objectId) {
 
         try {
-        	objectService.ToggleObjectBlock(objectId, false);
+        	objectService.toggleObjectBlock(objectId, false);
             return new ResponseEntity<>(HttpStatus.OK);
 
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -198,8 +236,11 @@ public class Api {
     public ResponseEntity<?> checkObject(@PathVariable UUID objectId){
 
         try {
-            objectService.FindById(objectId);
+            objectService.findById(objectId);
             return new ResponseEntity<>(true, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         } catch (Exception e){
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
