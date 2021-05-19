@@ -21,11 +21,13 @@ import NoWaiter.UserService.services.contracts.exceptions.ResetPasswordTokenExpi
 public interface UserService {
 
     UUID createObjectAdmin(ObjectAdminDTO entity) throws Exception;
+
+    void updateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity) throws ClassFieldValidationException;
+
+    void deleteObjectAdmin(UUID objectAdminId);
     
     void updateWaiter(IdentifiableDTO<UpdateWaiterDTO> entity) throws ClassFieldValidationException;
         
-    void updateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity) throws ClassFieldValidationException;
-    
     void updateObjects(UserClientObjectDTO entity);
     
     UUID createWaiter(WaiterDTO entity, UUID objectAdminId) throws ClassFieldValidationException;

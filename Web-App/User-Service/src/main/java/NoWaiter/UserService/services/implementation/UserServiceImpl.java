@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
 		if(user.isActive())
 			throw new UserIsActiveException("User was activated");
 				
-		AccountActivation accountActivation = new AccountActivation(user, new Date(System.currentTimeMillis()));
+		AccountActivation accountActivation = new AccountActivation(userId, new Date(System.currentTimeMillis()));
 		accountActivationRepository.save(accountActivation);
 		
 		try {
@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService {
 			throw new ActivationLinkExpiredOrUsed("User was activated");
 				
 		
-		User user = userRepository.getOne(accountActivation.getUserId().getId());
+		User user = userRepository.getOne(accountActivation.getUserId());
 		user.setActive(true);
 		userRepository.save(user);
 		accountActivation.setUsed(true);
@@ -139,12 +139,12 @@ public class UserServiceImpl implements UserService {
 	public UUID isUserFirstLogin(UUID activationId) {
 		AccountActivation accountActivation = accountActivationRepository.getOne(activationId);
 
-		List<AccountActivation> accountActivations =  accountActivationRepository.getUsedActivationsForUser(accountActivation.getUserId().getId());
+		List<AccountActivation> accountActivations =  accountActivationRepository.getUsedActivationsForUser(accountActivation.getUserId());
 		
 		if(accountActivations.size()==0) {
 			accountActivation.setUsed(true);
 			accountActivationRepository.save(accountActivation);
-			return accountActivation.getUserId().getId();
+			return accountActivation.getUserId();
 
 		}
 		else
@@ -265,6 +265,11 @@ public class UserServiceImpl implements UserService {
 		waiter.setPhoneNumber(entity.EntityDTO.PhoneNumber);
 		waiter.validate();
 		waiterRepository.save(waiter);
+	}
+
+	@Override
+	public void deleteObjectAdmin(UUID objectAdminId) {
+		objectAdminRepository.deleteById(objectAdminId);
 	}
 
 

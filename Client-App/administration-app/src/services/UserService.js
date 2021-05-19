@@ -23,7 +23,7 @@ function createObjectAdmin(objectAdmin, dispatch) {
 	if (validateObjectAdmin(objectAdmin, dispatch, userConstants.OBJECT_ADMIN_CREATE_FAILURE)) {
 		dispatch(request());
 
-		Axios.post(`/user-api/api/users/object-admin`, objectAdmin, { validateStatus: () => true })
+		Axios.post(`/user-api/api/users/object-admin`, objectAdmin, { validateStatus: () => true, headers: authHeader() })
 			.then((res) => {
 				if (res.status === 201) {
 					dispatch(success());
@@ -56,7 +56,7 @@ function updateObjectAdmin(objectAdmin, dispatch) {
 	if (validateObjectAdmin(objectAdminDTO.EntityDTO, dispatch, userConstants.OBJECT_ADMIN_UPDATE_FAILURE)) {
 		dispatch(request());
 
-		Axios.put(`/user-api/api/users/object-admin`, objectAdminDTO, { validateStatus: () => true })
+		Axios.put(`/user-api/api/users/object-admin`, objectAdminDTO, { validateStatus: () => true, headers: authHeader() })
 			.then((res) => {
 				if (res.status === 200) {
 					dispatch(success("Object admin successfully updated", objectAdmin));
@@ -105,7 +105,7 @@ function validateObjectAdmin(objectAdmin, dispatch, type) {
 async function findAllObjectAdmins(dispatch) {
 	dispatch(request());
 
-	await Axios.get(`/user-api/api/users/object-admin`, { validateStatus: () => true })
+	await Axios.get(`/user-api/api/users/object-admin`, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 200) {
 				dispatch(success(res.data));
@@ -133,7 +133,7 @@ function createWaiter(waiter, dispatch) {
 	if (validateWaiter(waiter, dispatch, userConstants.WAITER_CREATE_FAILURE)) {
 		dispatch(request());
 
-		Axios.post(`/user-api/api/users/employee/waiter`, waiter, { validateStatus: () => true, headers: authHeader() })
+		Axios.post(`/user-api/api/users/employee/waiter`, waiter, { validateStatus: () => true, headers: authHeader(), headers: authHeader() })
 			.then((res) => {
 				if (res.status === 201) {
 					dispatch(success());
@@ -166,7 +166,7 @@ function updateWaiter(waiter, dispatch) {
 	if (validateWaiter(waiterDTO.EntityDTO, dispatch, userConstants.WAITER_UPDATE_FAILURE)) {
 		dispatch(request());
 
-		Axios.put(`/user-api/api/users/employee/waiter`, waiterDTO, { validateStatus: () => true })
+		Axios.put(`/user-api/api/users/employee/waiter`, waiterDTO, { validateStatus: () => true, headers: authHeader() })
 			.then((res) => {
 				if (res.status === 200) {
 					dispatch(success("Waiter successfully updated", waiter));

@@ -15,8 +15,7 @@ public class AccountActivation {
     @Column(name = "id")
 	private UUID id;
 	
-    @ManyToOne(fetch = FetchType.EAGER)
-    private User userId;
+    private UUID userId;
     
     @Column(name= "generationDate", nullable = false)
     private Date generationDate;
@@ -31,7 +30,7 @@ public class AccountActivation {
 		super();
 	}
 
-	public AccountActivation(UUID id, User userId, Date generationDate, Date expirationDate, boolean used) {
+	public AccountActivation(UUID id, UUID userId, Date generationDate, Date expirationDate, boolean used) {
 		super();
 		this.id = id;
 		this.userId = userId;
@@ -40,7 +39,7 @@ public class AccountActivation {
 		this.used = used;
 	}
 	
-	public AccountActivation(User userId, Date generationDate) {
+	public AccountActivation(UUID userId, Date generationDate) {
 		super();
 		this.id = UUID.randomUUID();
 		this.userId = userId;
@@ -49,11 +48,11 @@ public class AccountActivation {
 		this.used = false;
 	}
 
-	public User getUserId() {
+	public UUID getUserId() {
 		return userId;
 	}
 
-	public void setUserId(User userId) {
+	public void setUserId(UUID userId) {
 		this.userId = userId;
 	}
 

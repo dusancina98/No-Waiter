@@ -9,17 +9,19 @@ import NoWaiter.ObjectService.services.contracts.dto.ObjectWithStatusDTO;
 
 public interface ObjectService {
 
-    UUID Create(ObjectDTO entity);
+    UUID create(ObjectDTO entity);
     
-    void Update(IdentifiableDTO<ObjectDTO> entity);
+    void update(IdentifiableDTO<ObjectDTO> entity);
     
-    void AddAdminToObject(AddAdminDTO addAdminDTO);
+    void addAdminToObject(AddAdminDTO addAdminDTO);
+    
+    void deleteObjectAdminHandlingObjectActivation(UUID objectAdminId);
 
-    IdentifiableDTO<ObjectDTO> FindById(UUID id);
+    IdentifiableDTO<ObjectDTO> findById(UUID id);
 
-    Iterable<IdentifiableDTO<ObjectWithStatusDTO>> FindAllForAdmin();
+    Iterable<IdentifiableDTO<ObjectWithStatusDTO>> findAllForAdmin();
     
-    void ToggleObjectBlock(UUID id, boolean status);
+    void toggleObjectBlock(UUID id, boolean status);
     
-    void ToggleObjectActivation(UUID id, boolean status);
+    void toggleObjectActivation(UUID id, boolean status);
 }

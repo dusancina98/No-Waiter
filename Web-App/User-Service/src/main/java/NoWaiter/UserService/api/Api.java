@@ -12,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -82,7 +83,7 @@ public class Api {
             return new ResponseEntity<>(adminId, HttpStatus.CREATED);
         } catch (FeignException e) {
         	if(e.status() == HttpStatus.NOT_FOUND.value())
-                return new ResponseEntity<>("Invalid restaurant id: " + objectAdminDTO.ObjectId, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Invalid restaurant id: " + objectAdminDTO.ObjectId, HttpStatus.NOT_FOUND);
         	
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (ConstraintViolationException | ClassFieldValidationException e) {
@@ -121,6 +122,25 @@ public class Api {
     public ResponseEntity<?> findAllObjectAdmins() {
         try {
             return new ResponseEntity<>(userService.findAllObjectAdmins(), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @DeleteMapping("/object-admin/{adminId}")
+    @CrossOrigin
+    public ResponseEntity<?> deleteObjectAdmin(@PathVariable UUID adminId) {
+        try {
+        	objectClient.deleteObjectAdmin(adminId);
+        	userService.deleteObjectAdmin(adminId);
+        	
+            return new ResponseEntity<>(HttpStatus.OK);
+        }  catch (FeignException e) {
+        	if(e.status() == HttpStatus.NOT_FOUND.value())
+                return new ResponseEntity<>("Invalid object admin id: " + adminId, HttpStatus.NOT_FOUND);
+        	
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
