@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { authHeader } from "../helpers/auth-header";
+import { authHeader, deleteLocalStorage } from "../helpers/auth-header";
 import { userConstants } from "../constants/UserConstants";
 import { setAuthInLocalStorage } from "../helpers/auth-header";
 
@@ -11,6 +11,7 @@ export const userService = {
 	updateWaiter,
 	findAllWaiters,
 	login,
+	logout,
 	checkIfUserIdExist,
 	resendActivationLinkRequest,
 	changeFirstPassword,
@@ -409,4 +410,9 @@ function resetPassword(resetPasswordRequest, dispatch) {
 	function failure(error) {
 		return { type: userConstants.RESET_PASSWORD_FAILURE, errorMessage: error };
 	}
+}
+
+function logout() {
+	deleteLocalStorage();
+	window.location = "#/login";
 }

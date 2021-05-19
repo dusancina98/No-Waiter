@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
+import { userService } from "../services/UserService";
 
 const SideBar = () => {
+	const handleLogout = () => {
+		userService.logout();
+	};
+
 	return (
 		<nav className="sidebar sidebar-offcanvas" id="sidebar">
 			<div className="text-center sidebar-brand-wrapper d-flex align-items-center">
@@ -136,7 +141,7 @@ const SideBar = () => {
 								<p className="text-black">Notification</p>
 							</div>
 							<ul className="mt-4 pl-0">
-								<li>Sign Out</li>
+								<li onClick={handleLogout}>Log Out</li>
 							</ul>
 						</div>
 					</div>
