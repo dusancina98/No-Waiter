@@ -6,16 +6,16 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class FoodType {
+public class ProductType {
 
 	@Id
 	private UUID id;
 	
 	private String name;
 	
-	public FoodType() { }
+	public ProductType() { }
 
-	public FoodType(UUID id, String name) {
+	public ProductType(UUID id, String name) {
 		super();
 		this.id = id;
 		this.name = name;

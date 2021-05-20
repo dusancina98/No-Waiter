@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class ObjectProductCategory {
+public class ProductCategory {
 	
 	@Id
 	private UUID id;
@@ -21,9 +21,9 @@ public class ObjectProductCategory {
 	@OneToMany(mappedBy = "productCategory")
 	private List<Product> products;
 	
-	public ObjectProductCategory() { }
+	public ProductCategory() { }
 
-	public ObjectProductCategory(UUID id, UUID objectId, String name, List<Product> products) {
+	public ProductCategory(UUID id, UUID objectId, String name, List<Product> products) {
 		super();
 		this.id = id;
 		this.objectId = objectId;
@@ -31,7 +31,7 @@ public class ObjectProductCategory {
 		this.products = products;
 	}
 	
-	public ObjectProductCategory(UUID objectId, String name, List<Product> products) {
+	public ProductCategory(UUID objectId, String name, List<Product> products) {
 		this(UUID.randomUUID(), objectId, name, new ArrayList<Product>());
 	}
 
