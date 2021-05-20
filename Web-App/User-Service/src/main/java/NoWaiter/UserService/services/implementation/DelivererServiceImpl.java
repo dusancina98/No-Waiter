@@ -19,6 +19,8 @@ import NoWaiter.UserService.repository.DelivererRepository;
 import NoWaiter.UserService.repository.DelivererRequestRepository;
 import NoWaiter.UserService.services.contracts.DelivererService;
 import NoWaiter.UserService.services.contracts.dto.DelivererRequestDTO;
+import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
+import NoWaiter.UserService.services.contracts.dto.RejectDelivererDTO;
 import NoWaiter.UserService.services.contracts.exceptions.ClassFieldValidationException;
 import NoWaiter.UserService.services.implementation.util.UserMapper;
 
@@ -71,6 +73,29 @@ public class DelivererServiceImpl implements DelivererService{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public Iterable<IdentifiableDTO<DelivererRequestDTO>> getAllPendingRequests() {
+		return UserMapper.MapDelivererRequestCollectionToIdentifiableODelivererRequestDTOCollection(delivererRequestRepository.getAllPendingRequests());
+	}
+
+	@Override
+	public void rejectDelivererRequest(RejectDelivererDTO rejectDelivererDTO) {
+		DelivererRequest delivererRequest = delivererRequestRepository.getOne(rejectDelivererDTO.Id);
+		delivererRequest.setRequestStatus(RequestStatus.REJECTED);
+		
+		try {
+			emailService.sendDelivererRejectReasonEmailAsync(delivererRequest, rejectDelivererDTO.Reason);
+		} catch (MailException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		delivererRequestRepository.save(delivererRequest);
 	}
 
 }

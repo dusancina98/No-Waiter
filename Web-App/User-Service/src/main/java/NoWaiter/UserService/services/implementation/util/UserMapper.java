@@ -71,6 +71,22 @@ public class UserMapper {
 
         return new Deliverer(delivererRequest.getEmail(), " ", delivererRequest.getName(), delivererRequest.getSurname(), delivererRequest.getPhoneNumber());
 	}
+
+	public static Iterable<IdentifiableDTO<DelivererRequestDTO>> MapDelivererRequestCollectionToIdentifiableODelivererRequestDTOCollection(
+			List<DelivererRequest> delivererRequests) {
+		if (delivererRequests == null) throw new IllegalArgumentException();
+
+        List<IdentifiableDTO<DelivererRequestDTO>> retVal = new ArrayList<>();
+        delivererRequests.forEach((delivererRequest) -> retVal.add(MapDelivererRequestToIdentifiableDelivererDto(delivererRequest)));
+
+        return retVal;
+	}
+	
+	public static IdentifiableDTO<DelivererRequestDTO> MapDelivererRequestToIdentifiableDelivererDto(DelivererRequest delivererRequest) {
+		if (delivererRequest == null) throw new IllegalArgumentException();
+
+        return new IdentifiableDTO<DelivererRequestDTO>(delivererRequest.getId(),new DelivererRequestDTO(delivererRequest.getEmail(), delivererRequest.getName(), delivererRequest.getSurname(), delivererRequest.getPhoneNumber(), delivererRequest.getReference()));
+	}
     
    
 }
