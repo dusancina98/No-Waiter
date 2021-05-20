@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import NoWaiter.UserService.entities.Deliverer;
 import NoWaiter.UserService.entities.User;
 
 @Service
@@ -64,5 +65,23 @@ public class EmailServiceImpl {
 		javaMailSender.send(mimeMessage);
 		System.out.println("Email poslat!");
 
+	}
+
+	public void sendDelivererActivationLinkAsync(Deliverer deliverer, String token) throws MessagingException {
+		System.out.println("Slanje emaila...");
+		
+		String url = CLIENT_APP_URL + "#/reset-password/" + deliverer.getId() +"/"+ token;
+		
+		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+		String htmlMsg = "<p>Hello " + deliverer.getName() + ",</p>" +
+					"<p>You registered an account on PQuince portal, before being able to use your account you need to verify that this is your email address by clicking here:</p>"
+					+ "<a href=\"" + url + "\">Verify your account</a>.</p>" + "<p>Kind Regards, No-Waiter</p>"; 
+		helper.setText(htmlMsg, true);
+		helper.setTo(deliverer.getEmail());
+		helper.setSubject("Activate account");
+		helper.setFrom(env.getProperty("spring.mail.username"));
+		javaMailSender.send(mimeMessage);
+		System.out.println("Email poslat!");
 	}
 }

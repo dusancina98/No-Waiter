@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import NoWaiter.UserService.entities.AccountActivationToken;
+import NoWaiter.UserService.entities.DelivererRequest;
 import NoWaiter.UserService.entities.ResetPasswordToken;
 import NoWaiter.UserService.intercomm.AuthClient;
 import NoWaiter.UserService.intercomm.ObjectClient;
@@ -369,6 +370,34 @@ public class Api {
 			e.printStackTrace();
             return new ResponseEntity<>(e.getRootCause().getMessage(), HttpStatus.CONFLICT);
 		} catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @GetMapping("/deliverer-request")
+    @CrossOrigin
+    public ResponseEntity<?> getDelivererRequest() {
+    	try {
+            return new ResponseEntity<>(delivererService.getAllPendingRequests(), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PutMapping("/approve-deliverer-request")
+    @CrossOrigin
+    public ResponseEntity<?> approveDelivererRequest(@RequestBody RequestIdDTO requestIdDTO) {
+        try {
+        	delivererService.approveDelivererRequest(requestIdDTO.id);    
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (EntityNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+        }catch (DataIntegrityViolationException | ConstraintViolationException | ClassFieldValidationException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

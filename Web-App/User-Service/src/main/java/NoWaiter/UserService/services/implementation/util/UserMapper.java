@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import NoWaiter.UserService.entities.Deliverer;
 import NoWaiter.UserService.entities.DelivererRequest;
 import NoWaiter.UserService.entities.ObjectAdmin;
 import NoWaiter.UserService.entities.Waiter;
@@ -64,6 +65,12 @@ public class UserMapper {
 
         return new DelivererRequest(delivererRequestDTO.Email,delivererRequestDTO.Name,delivererRequestDTO.Surname,delivererRequestDTO.PhoneNumber,delivererRequestDTO.Reference);
     }
+
+	public static Deliverer MapDelivererRequestToDeliverer(DelivererRequest delivererRequest) throws ClassFieldValidationException {
+        if (delivererRequest == null) throw new IllegalArgumentException();
+
+        return new Deliverer(delivererRequest.getEmail(), " ", delivererRequest.getName(), delivererRequest.getSurname(), delivererRequest.getPhoneNumber());
+	}
     
    
 }
