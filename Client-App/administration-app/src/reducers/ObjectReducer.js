@@ -90,6 +90,52 @@ export const objectReducer = (state, action) => {
 				errorMessage: action.errorMessage,
 				objects: [],
 			};
+
+		case objectConstants.OBJECT_INFO_REQUEST:
+			return {
+				...state,
+				objectInfo: {
+					showError: false,
+					errorMessage: "",
+					object: {
+						Id: "",
+						EntityDTO: {
+							Email: "",
+							Name: "",
+							Address: "",
+							PhoneNumber: "",
+							ImagePath: "",
+						},
+					},
+				},
+			};
+		case objectConstants.OBJECT_INFO_SUCCESS:
+			return {
+				...state,
+				objectInfo: {
+					showError: false,
+					errorMessage: "",
+					object: action.objectInfo,
+				},
+			};
+		case objectConstants.OBJECT_INFO_FAILURE:
+			return {
+				...state,
+				objectInfo: {
+					showError: true,
+					errorMessage: action.errorMessage,
+					object: {
+						Id: "",
+						EntityDTO: {
+							Email: "",
+							Name: "",
+							Address: "",
+							PhoneNumber: "",
+							ImagePath: "",
+						},
+					},
+				},
+			};
 		case objectConstants.OBJECT_ACTIVATION_REQUEST:
 			return {
 				...state,

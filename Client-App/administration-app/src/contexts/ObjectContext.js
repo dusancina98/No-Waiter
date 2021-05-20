@@ -30,6 +30,20 @@ const ObjectContextProvider = (props) => {
 				},
 			},
 		},
+		objectInfo: {
+			showError: false,
+			errorMessage: "",
+			object: {
+				Id: "",
+				EntityDTO: {
+					Email: "",
+					Name: "",
+					Address: "",
+					PhoneNumber: "",
+					ImagePath: "",
+				},
+			},
+		},
 		objects: [],
 		showError: false,
 		errorMessage: "",

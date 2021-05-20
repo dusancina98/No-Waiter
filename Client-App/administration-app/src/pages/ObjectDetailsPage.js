@@ -14,7 +14,6 @@ const ObjectDetailsPage = () => {
 					<div className="main-panel">
 						<ObjectContextProvider>
 							<ObjectImageForm />
-
 							<div className="content-wrapper">
 								<div className="row">
 									<div className="col-md-6 grid-margin stretch-card">

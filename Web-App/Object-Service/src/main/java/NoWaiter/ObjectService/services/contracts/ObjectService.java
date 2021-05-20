@@ -23,7 +23,7 @@ public interface ObjectService {
     void deleteObjectAdminHandlingObjectActivation(UUID objectAdminId);
 
     IdentifiableDTO<ObjectDTO> findById(UUID id);
-    
+        
     IdentifiableDTO<ObjectDTO> findByObjectAdminId(UUID adminId);
 
     Iterable<IdentifiableDTO<ObjectWithStatusDTO>> findAllForAdmin();

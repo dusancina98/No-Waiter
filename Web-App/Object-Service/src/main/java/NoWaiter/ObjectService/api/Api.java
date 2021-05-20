@@ -64,6 +64,38 @@ public class Api {
         }
     }
     
+    @GetMapping("/{objectId}")
+    @CrossOrigin
+    public ResponseEntity<?> findById(@PathVariable UUID objectId) {
+
+        try {
+            return new ResponseEntity<>(objectService.findById(objectId), HttpStatus.OK);
+
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @GetMapping("/admin")
+    @CrossOrigin
+    public ResponseEntity<?> findByAdminId(@RequestHeader("Authorization") String token) {
+    	try {
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+            IdentifiableDTO<ObjectDTO> object = objectService.findByObjectAdminId(jwtResponse.getId());
+            return new ResponseEntity<>(object, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e){
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    
+    
     @PostMapping("/tables")
     @CrossOrigin
     public ResponseEntity<?> createTable(@RequestHeader("Authorization") String token) {

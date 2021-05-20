@@ -6,6 +6,7 @@ export const objectService = {
 	createObject,
 	updateObject,
 	findAll,
+	findByAdminId,
 	activateObject,
 	deactivateObject,
 	blockObject,
@@ -104,6 +105,34 @@ async function findAll(dispatch) {
 	}
 	function failure(message) {
 		return { type: objectConstants.SET_OBJECTS_ERROR, errorMessage: message };
+	}
+}
+
+async function findByAdminId(dispatch) {
+	dispatch(request());
+
+	await Axios.get(`/object-api/api/objects/admin`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			console.log(res);
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else {
+				dispatch(failure("Error"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function request() {
+		return { type: objectConstants.OBJECT_INFO_REQUEST };
+	}
+	function success(data) {
+		return { type: objectConstants.OBJECT_INFO_SUCCESS, objectInfo: data };
+	}
+	function failure(message) {
+		return { type: objectConstants.OBJECT_INFO_FAILURE, errorMessage: message };
 	}
 }
 
