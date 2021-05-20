@@ -26,9 +26,11 @@ import NoWaiter.UserService.entities.AccountActivationToken;
 import NoWaiter.UserService.entities.ResetPasswordToken;
 import NoWaiter.UserService.intercomm.AuthClient;
 import NoWaiter.UserService.intercomm.ObjectClient;
+import NoWaiter.UserService.services.contracts.DelivererService;
 import NoWaiter.UserService.services.contracts.UserService;
 import NoWaiter.UserService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.ChangeFirstPasswordDTO;
+import NoWaiter.UserService.services.contracts.dto.DelivererRequestDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.JwtParseResponseDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
@@ -57,6 +59,9 @@ public class Api {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private DelivererService delivererService;
+    
     @Autowired
     private ObjectClient objectClient;
     
@@ -345,6 +350,25 @@ public class Api {
         }catch(TokenNotFoundException e) {
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }catch(Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PostMapping("/deliverer-request")
+    @CrossOrigin
+    public ResponseEntity<?> createDelivererRequest(@RequestBody DelivererRequestDTO delivererRequestDTO) {
+        try {
+            UUID requestId = delivererService.createDelivererRequest(delivererRequestDTO);
+            
+            return new ResponseEntity<>(requestId, HttpStatus.CREATED);
+       } catch (ConstraintViolationException | ClassFieldValidationException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (DataIntegrityViolationException e) {
+			e.printStackTrace();
+            return new ResponseEntity<>(e.getRootCause().getMessage(), HttpStatus.CONFLICT);
+		} catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

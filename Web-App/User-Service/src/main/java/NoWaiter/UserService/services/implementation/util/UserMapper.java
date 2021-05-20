@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import NoWaiter.UserService.entities.DelivererRequest;
 import NoWaiter.UserService.entities.ObjectAdmin;
 import NoWaiter.UserService.entities.Waiter;
+import NoWaiter.UserService.services.contracts.dto.DelivererRequestDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
@@ -55,6 +57,12 @@ public class UserMapper {
         waiters.forEach((waiter) -> retVal.add(MapWaiterToIdentifiableWaiterDTO(waiter)));
 
         return retVal;
+    }
+    
+    public static DelivererRequest MapDelivererRequestDTOToDelivererRequest (DelivererRequestDTO delivererRequestDTO) throws ClassFieldValidationException{
+        if (delivererRequestDTO == null) throw new IllegalArgumentException();
+
+        return new DelivererRequest(delivererRequestDTO.Email,delivererRequestDTO.Name,delivererRequestDTO.Surname,delivererRequestDTO.PhoneNumber,delivererRequestDTO.Reference);
     }
     
    
