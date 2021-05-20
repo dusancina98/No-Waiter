@@ -1,5 +1,6 @@
 package NoWaiter.ObjectService.api;
 
+import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import NoWaiter.ObjectService.intercomm.AuthClient;
 import NoWaiter.ObjectService.intercomm.UserClient;
@@ -163,6 +166,28 @@ public class Api {
         }
     }
     
+    @PutMapping("/image")
+    @CrossOrigin
+    public ResponseEntity<?> updateObjectImage(@RequestHeader("Authorization") String token, @RequestParam("image") MultipartFile multipartFile) {
+
+        try {
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+        	objectService.updateImage(multipartFile, jwtResponse.getId());
+        	
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (IOException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
     @PutMapping("/{objectId}/activate")
     @CrossOrigin
     public ResponseEntity<?> activateObject(@PathVariable UUID objectId) {
@@ -238,6 +263,21 @@ public class Api {
         try {
             objectService.findById(objectId);
             return new ResponseEntity<>(true, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e){
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    @GetMapping("/{objectAdminId}")
+    @CrossOrigin
+    public ResponseEntity<?> getObjectId(@PathVariable UUID objectAdminId){
+
+        try {
+            IdentifiableDTO<ObjectDTO> object = objectService.findByObjectAdminId(objectAdminId);
+            return new ResponseEntity<>(object.Id, HttpStatus.OK);
         } catch (NoSuchElementException e) {
         	e.printStackTrace();
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);

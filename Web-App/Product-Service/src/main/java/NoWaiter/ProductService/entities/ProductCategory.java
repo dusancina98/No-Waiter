@@ -31,7 +31,7 @@ public class ProductCategory {
 		this.products = products;
 	}
 	
-	public ProductCategory(UUID objectId, String name, List<Product> products) {
+	public ProductCategory(UUID objectId, String name) {
 		this(UUID.randomUUID(), objectId, name, new ArrayList<Product>());
 	}
 
