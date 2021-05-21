@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../components/Header";
-import ObjectImageForm from "../components/ObjectImageForm";
+import ObjectInfoHeader from "../components/ObjectInfoHeader";
 import SideBar from "../components/SideBar";
 import ObjectContextProvider from "../contexts/ObjectContext";
 
@@ -13,7 +13,7 @@ const ObjectDetailsPage = () => {
 					<Header />
 					<div className="main-panel">
 						<ObjectContextProvider>
-							<ObjectImageForm />
+							<ObjectInfoHeader />
 							<div className="content-wrapper">
 								<div className="row">
 									<div className="col-md-6 grid-margin stretch-card">

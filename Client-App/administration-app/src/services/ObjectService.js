@@ -5,6 +5,7 @@ import { authHeader } from "../helpers/auth-header";
 export const objectService = {
 	createObject,
 	updateObject,
+	updateObjectImage,
 	findAll,
 	findByAdminId,
 	activateObject,
@@ -80,6 +81,33 @@ function updateObject(object, dispatch) {
 	}
 }
 
+function updateObjectImage(image, dispatch) {
+	dispatch(request());
+
+	Axios.put(`/object-api/api/objects/image`, image, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success("Object image updated successfully"));
+			} else {
+				dispatch(failure(res.data.message));
+			}
+			console.log(res);
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+
+	function request() {
+		return { type: objectConstants.OBJECT_IMAGE_CHANGE_REQUEST };
+	}
+	function success(message) {
+		return { type: objectConstants.OBJECT_IMAGE_CHANGE_SUCCESS, successMessage: message };
+	}
+	function failure(message) {
+		return { type: objectConstants.OBJECT_IMAGE_CHANGE_FAILURE, errorMessage: message };
+	}
+}
+
 async function findAll(dispatch) {
 	dispatch(request());
 
@@ -113,7 +141,7 @@ async function findByAdminId(dispatch) {
 
 	await Axios.get(`/object-api/api/objects/admin`, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
-			console.log(res);
+			res.data.EntityDTO.ImagePath = res.data.EntityDTO.ImagePath.replace("\\", "/");
 			if (res.status === 200) {
 				dispatch(success(res.data));
 			} else {

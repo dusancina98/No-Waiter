@@ -31,8 +31,12 @@ const ObjectContextProvider = (props) => {
 			},
 		},
 		objectInfo: {
+			imageSelected: false,
+			showedImage: "",
 			showError: false,
 			errorMessage: "",
+			showSuccessMessage: false,
+			successMessage: "",
 			object: {
 				Id: "",
 				EntityDTO: {
