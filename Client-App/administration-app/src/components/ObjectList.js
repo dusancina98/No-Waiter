@@ -23,6 +23,7 @@ const ObjectList = () => {
 			<div className="content-wrapper">
 				<div className="row">
 					{objectState.objects.map((object) => {
+						console.log(object);
 						return <ObjectItem imagePath={object.EntityDTO.ImagePath} key={object.Id} name={object.EntityDTO.Name} clickHandler={() => handleObjectClick(object)} />;
 					})}
 				</div>
