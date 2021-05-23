@@ -20,6 +20,7 @@ export const userService = {
 	resetPassword,
 	checkIfActivationTokenIsValid,
 	checkIfResetPasswordTokenIsValid,
+	findAllDelivererRequests,
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -155,6 +156,33 @@ async function findAllObjectAdmins(dispatch) {
 	}
 	function failure(message) {
 		return { type: userConstants.SET_OBJECT_ADMINS_ERROR, errorMessage: message };
+	}
+}
+
+async function findAllDelivererRequests(dispatch) {
+	dispatch(request());
+
+	await Axios.get(`/user-api/api/users/deliverer-request`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else {
+				dispatch(failure("Error"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function request() {
+		return { type: userConstants.SET_DELIVERER_REQUEST };
+	}
+	function success(data) {
+		return { type: userConstants.SET_DELIVERER_REQUEST_SUCCESS, delivererRequests: data };
+	}
+	function failure(message) {
+		return { type: userConstants.SET_DELIVERER_REQUEST_ERROR, errorMessage: message };
 	}
 }
 

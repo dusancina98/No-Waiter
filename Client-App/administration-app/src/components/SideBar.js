@@ -94,6 +94,27 @@ const SideBar = () => {
 					</div>
 				</li>
 				<li className="nav-item">
+					<a className="nav-link" data-toggle="collapse" href="#deliverers" aria-expanded="false" aria-controls="deliverers">
+						<i className="mdi mdi-account-plus menu-icon"></i>
+						<span className="menu-title">Deliverer</span>
+						<i className="menu-arrow"></i>
+					</a>
+					<div className="collapse" id="deliverers">
+						<ul className="nav flex-column sub-menu">
+							<li className="nav-item">
+								<Link className="nav-link" to="/todo">
+									All Deliverer
+								</Link>
+							</li>
+							<li className="nav-item">
+								<Link className="nav-link" to="/deliverer/requests">
+									Deliverer requests
+								</Link>
+							</li>
+						</ul>
+					</div>
+				</li>
+				<li className="nav-item">
 					<Link className="nav-link" to="/tables">
 						<i className="mdi mdi-contacts menu-icon"></i>
 						<span className="menu-title">Tables</span>

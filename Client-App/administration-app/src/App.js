@@ -16,6 +16,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import PageNotFoundPage from "./pages/PageNotFoundPage";
 import ListTablesPage from "./pages/ListTablesPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
+import ListDelivererRequestPage from "./pages/ListDelivererRequestPage";
 
 function App() {
 	return (
@@ -38,6 +39,8 @@ function App() {
 				<ProtectedRoute roles={""} exact path="/reset-password-request" redirectTo="/unauthorized" component={ForgotPasswordPage} />
 				<ProtectedRoute roles={""} exact path="/reset-password/:id/:token" redirectTo="/unauthorized" component={ResetPasswordPage} />
 				<Route path="/unauthorized" component={UnauthorizedPage} />
+
+				<ProtectedRoute roles={"ROLE_SYSADMIN"} redirectTo="/unauthorized" path="/deliverer/requests" component={ListDelivererRequestPage} />
 
 				<Route path="/404" component={PageNotFoundPage} />
 				<Redirect to="/404" />
