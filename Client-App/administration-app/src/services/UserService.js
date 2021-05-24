@@ -21,6 +21,7 @@ export const userService = {
 	checkIfActivationTokenIsValid,
 	checkIfResetPasswordTokenIsValid,
 	findAllDelivererRequests,
+	approveDelivererRequest,
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -498,4 +499,27 @@ function checkIfResetPasswordTokenIsValid(token) {
 		.catch((err) => {
 			console.log(err);
 		});
+}
+
+function approveDelivererRequest(requestIdDTO,dispatch){
+
+	Axios.put(`/user-api/api/users/approve-deliverer-request`, requestIdDTO, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 200) {
+				findAllDelivererRequests(dispatch)
+				dispatch(success("Uspesno ste odobrili novog dostavljaca"))
+			}else{
+				dispatch(failure("Trenutno nije moguce odobriti datog dostavljaca"))
+			}
+		})
+		.catch((err) => {
+			dispatch(failure("Trenutno nije moguce odobriti datog dostavljaca"))
+		});
+
+		function success(message) {
+			return { type: userConstants.ACCEPT_DELIVERER_REQUEST_SUCCESS, successMessage: message };
+		}
+		function failure(message) {
+			return { type: userConstants.OBJECT_ADMIN_DELETE_FAILURE, errorMessage: message };
+		}
 }

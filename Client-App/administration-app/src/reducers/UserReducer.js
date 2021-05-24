@@ -254,7 +254,7 @@ export const userReducer = (state, action) => {
 					readOnly: true,
 					objectAdmin: action.objectAdmin,
 				},
-			};
+			};	
 		case modalConstants.HIDE_OBJECT_ADMIN_DETAILS:
 			return {
 				...state,
@@ -431,14 +431,28 @@ export const userReducer = (state, action) => {
 			};
 		case userConstants.SET_DELIVERER_REQUEST:
 			return {
+				...state,
 				delivererRequest:{
 					showError: false,
 					errorMessage: "",
 					requests: [],
+				},
+				approveDeliveryRequest: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+				rejectDeliveryRequest: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
 				}
 			};
 		case userConstants.SET_DELIVERER_REQUEST_SUCCESS:
 			return {
+				...state,
 				delivererRequest:{
 					showError: false,
 					errorMessage: "",
@@ -447,10 +461,65 @@ export const userReducer = (state, action) => {
 			};
 		case userConstants.SET_DELIVERER_REQUEST_ERROR:
 			return {
+				...state,
 				delivererRequest:{
 					showError: true,
 					errorMessage: action.errorMessage,
 					requests: [],
+				}
+			};
+		case modalConstants.SHOW_DELIVERER_REQUEST_DETAILS:
+			return {
+				...state,
+				delivererRequestDetails:{
+					showModal: true,
+					requestDetails: action.delivererRequest,
+				}
+			};
+		case modalConstants.HIDE_DELIVERER_REQUEST_DETAILS:
+			return {
+				...state,
+				delivererRequestDetails:{
+					showModal: false,
+					requestDetails: {
+						Id: "",
+						EntityDTO: {
+							Email: "",
+							Name: "",
+							Surname: "",
+							PhoneNumber: "",
+							Reference:"",
+						},
+					},
+				}
+			};
+		case userConstants.ACCEPT_DELIVERER_REQUEST_SUCCESS:
+			return {
+				...state,
+				delivererRequestDetails:{
+					showModal: false,
+					requestDetails: {
+	 					Id: "",
+						EntityDTO: {
+							Email: "",
+							Name: "",
+							Surname: "",
+							PhoneNumber: "",
+							Reference:"",
+						},
+					},
+				},
+				approveDeliveryRequest: {
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+				rejectDeliveryRequest: {
+					showSuccessMessage: false,
+					successMessage: '',
+					showErrorMessage: false,
+					errorMessage: "",
 				}
 			};
 		default:
