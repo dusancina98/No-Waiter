@@ -303,7 +303,7 @@ public class Api {
         }
     }
     
-    @GetMapping("/{objectAdminId}")
+    @GetMapping("/admin/{objectAdminId}")
     @CrossOrigin
     public ResponseEntity<?> getObjectId(@PathVariable UUID objectAdminId){
 

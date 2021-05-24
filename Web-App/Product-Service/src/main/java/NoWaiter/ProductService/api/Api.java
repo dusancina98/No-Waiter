@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,13 +34,31 @@ public class Api {
 	@Autowired
 	private ProductService productService;
 	
-	@PutMapping("/categories")
+	@PostMapping("/categories")
 	@CrossOrigin
 	public ResponseEntity<?> createProductCategory(@RequestHeader("Authorization") String token, @RequestBody CategoryDTO categoryDTO) {
 		try {
 			JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
 			UUID objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());
 			return new ResponseEntity<>(productService.createProductCategory(categoryDTO, objectId), HttpStatus.CREATED);
+		} catch (FeignException e) {
+        	if(e.status() == HttpStatus.NOT_FOUND.value())
+                return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);
+        	
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+	}  
+	
+	@GetMapping("/categories")
+	@CrossOrigin
+	public ResponseEntity<?> getProductCategories(@RequestHeader("Authorization") String token) {
+		try {
+			JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+			UUID objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());
+			return new ResponseEntity<>(productService.findAllProductCategories(objectId), HttpStatus.OK);
 		} catch (FeignException e) {
         	if(e.status() == HttpStatus.NOT_FOUND.value())
                 return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);

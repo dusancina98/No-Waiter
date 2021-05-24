@@ -34,6 +34,7 @@ public class Product {
 	@Embedded
 	private ProductAmount productAmount;
 	
+	@ManyToOne
 	private ProductType productType;
 	
 	@OneToMany

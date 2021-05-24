@@ -9,6 +9,7 @@ import NoWaiter.ProductService.entities.ProductCategory;
 import NoWaiter.ProductService.repository.ProductCategoryRepository;
 import NoWaiter.ProductService.services.contracts.ProductService;
 import NoWaiter.ProductService.services.contracts.dto.CategoryDTO;
+import NoWaiter.ProductService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ProductService.services.implementation.util.ProductCategoryMapper;
 
 @Service
@@ -23,6 +24,11 @@ public class ProductServiceImpl implements ProductService {
 		ProductCategory productCategory = ProductCategoryMapper.MapProductCategoryDTOToProductCategory(categoryDTO, objectId);
 		productCategoryRepository.save(productCategory);
 		return productCategory.getId();
+	}
+
+	@Override
+	public Iterable<IdentifiableDTO<CategoryDTO>> findAllProductCategories(UUID objectId) {
+		return ProductCategoryMapper.MapProductCategoryCollectionToIdentifiableCategoryDTOCollection(productCategoryRepository.findAllByObjectId(objectId));
 	}
 
 }
