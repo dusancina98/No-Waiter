@@ -107,9 +107,9 @@ function createProduct(productDTO, dispatch) {
 				if (res.status === 201) {
 					let product = { Id: res.data, EntityDTO: productDTO };
 					product.EntityDTO.Ingredients = ingredients;
-					product.EntityDTO.Image = pathConstants.PRODUCT_IMAGES_PATH + res.data + ".jpg";
+					product.EntityDTO.Image = productDTO.Image === "" ? "" : pathConstants.PRODUCT_IMAGES_PATH + res.data + ".jpg";
 					product.EntityDTO.SideDishes = sideDishes;
-					dispatch(success(product, "Table successfully added"));
+					dispatch(success(product, "Product successfully added"));
 				} else {
 					dispatch(failure(res.data.message));
 				}
@@ -145,7 +145,7 @@ function fetchFormData(productDTO) {
 	if (productDTO.Image !== "") {
 		formData.append("Image", productDTO.Image, "img");
 	} else {
-		formData.append("Image", new Blob(), "img");
+		formData.append("Image", null);
 	}
 	formData.append("Name", productDTO.Name);
 	formData.append("MeasureUnit", productDTO.MeasureUnit);

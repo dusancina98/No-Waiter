@@ -67,9 +67,6 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	@Transactional
 	public UUID createProduct(ProductRequestDTO productDTO, UUID objectId) throws InvalidProductCategoryException, IOException {
-		System.out.println(productDTO.CategoryId);
-		System.out.println(productDTO.Name);
-		System.out.println(productDTO.Price);
 
 		ProductCategory productCategory = productCategoryRepository.findById(productDTO.CategoryId).get();
 		
@@ -77,7 +74,10 @@ public class ProductServiceImpl implements ProductService {
 		
 		Product product = mapProductRequestDTOToProduct(productDTO);
 		product.setProductCategory(productCategory);
-		product.setImagePath(env.getProperty("rel-image-path") + "\\" + product.getId().toString() + ".jpg");
+		if(productDTO.Image == null)
+			product.setImagePath("");
+		else
+			product.setImagePath(env.getProperty("rel-image-path") + "\\" + product.getId().toString() + ".jpg");
 		productRepository.save(product);
 		saveImageAndGetPath(productDTO.Image, product.getId());
 
@@ -85,8 +85,9 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	private String saveImageAndGetPath(MultipartFile multipartFile, UUID productId) throws IOException {
-
-		ImageUtil.saveFile(env.getProperty("abs-image-path"), productId.toString() + ".jpg", multipartFile);
+		
+		if(multipartFile != null) 
+			ImageUtil.saveFile(env.getProperty("abs-image-path"), productId.toString() + ".jpg", multipartFile);
 		return env.getProperty("rel-image-path") + "\\" + productId.toString() + ".jpg";
 	}
 		

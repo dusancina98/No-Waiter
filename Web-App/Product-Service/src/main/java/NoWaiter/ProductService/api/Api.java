@@ -42,7 +42,7 @@ public class Api {
 	
 	@PostMapping
 	@CrossOrigin
-	public ResponseEntity<?> createProduct(@RequestHeader("Authorization") String token,@RequestParam("Image") MultipartFile Image, @RequestParam("CategoryId") UUID CategoryId, @RequestParam("Name") String Name
+	public ResponseEntity<?> createProduct(@RequestHeader("Authorization") String token,@RequestParam(value = "Image", required = false) MultipartFile Image, @RequestParam("CategoryId") UUID CategoryId, @RequestParam("Name") String Name
 			, @RequestParam("Description") String Description, @RequestParam("Price") double Price, @RequestParam("MeasureUnit") String MeasureUnit,
 			@RequestParam("Amount") int Amount, @RequestParam("ProductTypeId") UUID ProductTypeId, @RequestParam("Ingredients") List<String> Ingredients, @RequestParam("SideDishes") List<String> SideDishes) {
 		try {

@@ -2,6 +2,8 @@ import { colorConstants } from "../constants/ColorConstants";
 import { capitalizeFirstLetter } from "../helpers/string-util";
 
 const ProductItem = (props) => {
+	const handleSelectProductImage = () => {};
+
 	return (
 		<div className="col-12 portfolio-item">
 			<hr />
@@ -23,10 +25,16 @@ const ProductItem = (props) => {
 
 					<h4 style={{ color: colorConstants.COLOR_BLUE }}>RSD {Number(props.price).toFixed(2)}</h4>
 				</div>
-				<div className="col-4 ">
-					<a href="portfolio-details/portfolio-details2.html">
-						<img src={props.imagePath} className="img-fluid rounded" alt="" />
-					</a>
+				<div className="col-4">
+					{props.imagePath === "" ? (
+						<button type="button" data-toggle="tooltip" title="Add product image" onClick={handleSelectProductImage} className="btn btn-outline-dark btn-icon-text border-0">
+							<i className="mdi mdi-plus btn-icon-prepend"></i> Upload
+						</button>
+					) : (
+						<a href="portfolio-details/portfolio-details2.html">
+							<img src={props.imagePath} className="img-fluid rounded" alt="" />
+						</a>
+					)}
 				</div>
 			</div>
 		</div>
