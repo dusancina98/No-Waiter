@@ -1,12 +1,12 @@
 package NoWaiter.ProductService.services.contracts.dto;
 
-public class CategoryDTO {
+public class NameDTO {
 
 	public String Name;
 	
-	public CategoryDTO() { }
+	public NameDTO() { }
 
-	public CategoryDTO(String name) {
+	public NameDTO(String name) {
 		super();
 		Name = name;
 	}	

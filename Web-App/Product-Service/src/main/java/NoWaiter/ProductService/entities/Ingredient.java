@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Ingredient {
@@ -13,12 +14,19 @@ public class Ingredient {
 	
 	private String name;
 	
+	@ManyToOne
+	private Product product;
+	
 	public Ingredient() { }
 
 	public Ingredient(UUID id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
+	}
+	
+	public Ingredient(String name) {
+		this(UUID.randomUUID(), name);
 	}
 
 	public String getName() {
@@ -31,5 +39,13 @@ public class Ingredient {
 
 	public UUID getId() {
 		return id;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 }

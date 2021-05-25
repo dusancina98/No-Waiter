@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { modalConstants } from "../constants/ModalConstants";
 import { productConstants } from "../constants/ProductConstants";
 import { ProductContext } from "../contexts/ProductContext";
 import FailureAlert from "./FailureAlert";
@@ -9,6 +10,10 @@ import SuccessAlert from "./SuccessAlert";
 
 const ProductMenu = () => {
 	const { productState, dispatch } = useContext(ProductContext);
+
+	const handleOpenCreateProductModal = () => {
+		dispatch({ type: modalConstants.SHOW_CREATE_PRODUCT_MODAL, category: productState.selectedCategory });
+	};
 
 	return (
 		<React.Fragment>
@@ -28,8 +33,14 @@ const ProductMenu = () => {
 			<div id="portfolio" className="portfolio">
 				<div class="container">
 					<ProductsTabs />
-					<div className="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
-						<div className="row">
+					<div>
+						{productState.selectedCategory.EntityDTO.Name}
+						<button type="button" onClick={handleOpenCreateProductModal} className="btn btn-outline-secondary btn-rounded btn-icon border-0">
+							<i class="mdi mdi-plus text-dark"></i>
+						</button>
+					</div>
+					<div className="row portfolio-container">
+						<div className="row w-100">
 							<ProductList />
 							<ObjectSidebar />
 						</div>

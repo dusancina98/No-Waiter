@@ -11,4 +11,5 @@ public interface ProductCategoryRepository extends PagingAndSortingRepository<Pr
 
 	@Query(value = "SELECT pc FROM ProductCategory pc WHERE pc.objectId = ?1")
 	Iterable<ProductCategory> findAllByObjectId(UUID objectId);
+
 }

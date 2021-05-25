@@ -31,7 +31,7 @@ const ProductsTabs = () => {
 						<li onClick={() => filterProducts("*")}>Sve</li>
 						{productState.categories.map((category) => {
 							return (
-								<li onClick={() => filterProducts(category.EntityDTO.Name)} key={category.Id}>
+								<li onClick={() => filterProducts(category)} key={category.Id}>
 									{category.EntityDTO.Name}
 								</li>
 							);

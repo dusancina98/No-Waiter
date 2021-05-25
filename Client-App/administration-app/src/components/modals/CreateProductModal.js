@@ -1,15 +1,17 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { modalConstants } from "../../constants/ModalConstants";
+import { productConstants } from "../../constants/ProductConstants";
 import { ProductContext } from "../../contexts/ProductContext";
-import { productService } from "../../services/ProductService";
 import CreateProductForm from "../CreateProductForm";
+import FailureAlert from "../FailureAlert";
+import IngredientsAndSideDishForm from "../IngredientsAndSideDishForm";
 
 const CreateProductModal = () => {
 	const { productState, dispatch } = useContext(ProductContext);
 
 	const handleModalClose = () => {
-		dispatch({ type: modalConstants.HIDE_CREATE_CATEGORY_MODAL });
+		dispatch({ type: modalConstants.HIDE_CREATE_PRODUCT_MODAL });
 	};
 
 	return (
@@ -20,7 +22,14 @@ const CreateProductModal = () => {
 				</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				<CreateProductForm />
+				<FailureAlert
+					hidden={!productState.createProduct.showErrorMessage}
+					header="Error"
+					message={productState.createProduct.errorMessage}
+					handleCloseAlert={() => dispatch({ type: productConstants.CREATE_PRODUCT_MODAL_HIDE_ERROR })}
+				/>
+				<CreateProductForm hidden={productState.createProduct.showedPage !== 1} />
+				<IngredientsAndSideDishForm hidden={productState.createProduct.showedPage !== 2} />
 			</Modal.Body>
 			<Modal.Footer>
 				<Button onClick={handleModalClose}>Close</Button>

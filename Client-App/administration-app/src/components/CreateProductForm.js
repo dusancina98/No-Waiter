@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { productConstants } from "../constants/ProductConstants";
 import { ProductContext } from "../contexts/ProductContext";
-import { objectService } from "../services/ObjectService";
 import { productService } from "../services/ProductService";
 
-const CreateProductForm = () => {
+const CreateProductForm = ({ hidden }) => {
 	const { productState, dispatch } = useContext(ProductContext);
 
 	const [name, setName] = useState("");
@@ -20,11 +19,23 @@ const CreateProductForm = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		//let object = { Name: name, Email: email, PhoneNumber: phoneNumber, ImagePath: "assets/images/restaurant.jpg", Address: address };
+		let product = {
+			CategoryId: productState.selectedCategory.Id,
+			Name: name,
+			MeasureUnit: measureUnit,
+			Amount: amount,
+			Price: price,
+			ProductTypeId: productTypeId,
+			Description: description,
+			Image: image,
+			Ingredients: [],
+			SideDishes: [],
+		};
+		console.log(productState);
+		dispatch({ type: productConstants.CREATE_PRODUCT_SUBMIT_FIRST_PAGE, product });
 	};
 
 	const onImageChange = (e) => {
-		//e.preventDefault();
 		setImage(e.target.files[0]);
 
 		if (e.target.files && e.target.files[0]) {
@@ -38,15 +49,15 @@ const CreateProductForm = () => {
 	};
 
 	useEffect(() => {
-		const getObjectsHandler = async () => {
+		const getProductTypesHandler = async () => {
 			await productService.findAllProductTypes(dispatch);
 		};
-		getObjectsHandler();
+		getProductTypesHandler();
 	}, [dispatch]);
 
 	return (
 		<React.Fragment>
-			<form className="forms-sample" method="post" onSubmit={handleSubmit}>
+			<form className="forms-sample" method="post" onSubmit={handleSubmit} hidden={hidden}>
 				<div className="row">
 					<div className="col-md-6 grid-margin stretch-card">
 						<div className="card border-0">
@@ -76,7 +87,7 @@ const CreateProductForm = () => {
 									<label for="price" className="row">
 										Price
 									</label>
-									<input required className="form-control row" id="price" placeholder="Price" onChange={(e) => setPrice(e.target.value)} />
+									<input type="number" step={0.01} required className="form-control row" id="price" min="1" placeholder="Price" onChange={(e) => setPrice(e.target.value)} />
 								</div>
 								<div className="form-group">
 									<label for="amount" className="row">
@@ -109,7 +120,7 @@ const CreateProductForm = () => {
 						<div className="card border-0">
 							<div className="card-body row align-items-end">
 								<div className="col-12">
-									{productState.createProduct.showedImage !== "" && <img src={productState.createProduct.showedImage} alt="product-image" className="img-fluid row" />}
+									{productState.createProduct.showedImage !== "" && <img src={productState.createProduct.showedImage} alt="product" className="img-fluid row" />}
 									<input type="file" ref={imgRef} style={{ display: "none" }} name="image" accept="image/png, image/jpeg" onChange={onImageChange} />
 									<div className="row d-flex flex-row-reverse">
 										<button
@@ -118,7 +129,7 @@ const CreateProductForm = () => {
 											onClick={handleImageDeselect}
 											className="btn btn-outline-danger btn-icon-text border-0  mt-4"
 										>
-											Remove<i className="mdi mdi-close  ml-1 align-middle"></i>
+											Remove<i className="mdi mdi-close ml-1 align-middle"></i>
 										</button>
 										<button
 											hidden={productState.createProduct.imageSelected}

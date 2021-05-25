@@ -3,6 +3,7 @@ package NoWaiter.ProductService.entities;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -37,10 +38,10 @@ public class Product {
 	@ManyToOne
 	private ProductType productType;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Ingredient> ingredients;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<SideDish> sideDishes;
 	
 	public Product() { }
