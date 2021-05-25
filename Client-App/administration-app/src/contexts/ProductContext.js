@@ -17,7 +17,7 @@ const ProductContextProvider = (props) => {
 			showErrorMessage: false,
 			errorMessage: "",
 			product: {
-				CategoryId: "",
+				Category: "",
 				Name: "",
 				MeasureUnit: "",
 				Amount: "",

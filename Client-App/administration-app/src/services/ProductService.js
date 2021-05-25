@@ -98,31 +98,7 @@ function createProduct(productDTO, dispatch) {
 	let ingredients = [...productDTO.Ingredients];
 	let sideDishes = [...productDTO.SideDishes];
 
-	productDTO.Ingredients = [];
-	productDTO.SideDishes = [];
-	ingredients.forEach((ingredient) => {
-		productDTO.Ingredients.push(ingredient.EntityDTO.Name);
-	});
-	sideDishes.forEach((sideDish) => {
-		productDTO.SideDishes.push(sideDish.EntityDTO.Name);
-	});
-	let formData = new FormData();
-
-	if (productDTO.Image !== "") {
-		formData.append("Image", productDTO.Image, "img");
-	} else {
-		formData.append("Image", null, "img");
-	}
-	formData.append("Name", productDTO.Name);
-	formData.append("MeasureUnit", productDTO.MeasureUnit);
-	formData.append("Amount", productDTO.Amount);
-	formData.append("Price", productDTO.Price);
-	formData.append("ProductTypeId", productDTO.ProductTypeId);
-	formData.append("Description", productDTO.Description);
-	formData.append("Ingredients", productDTO.Ingredients);
-	formData.append("SideDishes", productDTO.SideDishes);
-	formData.append("CategoryId", productDTO.CategoryId);
-
+	const formData = fetchFormData(productDTO);
 	dispatch(request());
 
 	if (validateProduct(productDTO, dispatch, productConstants.PRODUCT_CREATE_FAILURE)) {
@@ -151,6 +127,36 @@ function createProduct(productDTO, dispatch) {
 	function failure(message) {
 		return { type: productConstants.PRODUCT_CREATE_FAILURE, errorMessage: message };
 	}
+}
+
+function fetchFormData(productDTO) {
+	let ingredients = [...productDTO.Ingredients];
+	let sideDishes = [...productDTO.SideDishes];
+	productDTO.Ingredients = [];
+	productDTO.SideDishes = [];
+	ingredients.forEach((ingredient) => {
+		productDTO.Ingredients.push(ingredient.EntityDTO.Name);
+	});
+	sideDishes.forEach((sideDish) => {
+		productDTO.SideDishes.push(sideDish.EntityDTO.Name);
+	});
+	let formData = new FormData();
+
+	if (productDTO.Image !== "") {
+		formData.append("Image", productDTO.Image, "img");
+	} else {
+		formData.append("Image", new Blob(), "img");
+	}
+	formData.append("Name", productDTO.Name);
+	formData.append("MeasureUnit", productDTO.MeasureUnit);
+	formData.append("Amount", productDTO.Amount);
+	formData.append("Price", productDTO.Price);
+	formData.append("ProductTypeId", productDTO.ProductTypeId);
+	formData.append("Description", productDTO.Description);
+	formData.append("Ingredients", productDTO.Ingredients);
+	formData.append("SideDishes", productDTO.SideDishes);
+	formData.append("CategoryId", productDTO.CategoryId);
+	return formData;
 }
 
 async function findAllProducts(dispatch) {

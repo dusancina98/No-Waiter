@@ -206,9 +206,13 @@ export const productReducer = (state, action) => {
 			return statees;
 
 		case productConstants.PRODUCT_CREATE_SUCCESS:
+			let cpyProd = action.product;
+			delete cpyProd.CategoryId;
+			cpyProd.EntityDTO.ProductCategory = state.selectedCategory;
 			let arrProd = [...state.products];
-			arrProd.push(action.product);
-
+			let arrShowedProd = [...state.showedProducts];
+			arrProd.push(cpyProd);
+			arrShowedProd.push(cpyProd);
 			return {
 				...state,
 				createProduct: {
@@ -235,6 +239,7 @@ export const productReducer = (state, action) => {
 				showSuccessMessage: true,
 				successMessage: action.successMessage,
 				products: arrProd,
+				showedProducts: arrShowedProd,
 			};
 		case productConstants.PRODUCT_CREATE_FAILURE:
 			let staeteees = { ...state };

@@ -4,13 +4,13 @@ import { v4 as uuidv4 } from "uuid";
 import React from "react";
 import { productConstants } from "../constants/ProductConstants";
 import { productService } from "../services/ProductService";
+import TextItemList from "./TextItemList";
 
 const IngredientsAndSideDishForm = ({ hidden }) => {
 	const { productState, dispatch } = useContext(ProductContext);
 
 	const [ingredients, setIngredients] = useState([]);
 	const [ingredientInput, setIngredientInput] = useState("");
-
 	const [sideDishes, setSideDishes] = useState([]);
 	const [sideDishInput, setSideDishInput] = useState("");
 
@@ -59,23 +59,13 @@ const IngredientsAndSideDishForm = ({ hidden }) => {
 					<div className="card border-0">
 						<div className="card-body">
 							<label>Ingredients</label>
-
-							{ingredients.map((ingredient) => {
-								return (
-									<div key={ingredient.Id}>
-										<label>{ingredient.EntityDTO.Name}</label>
-										<button type="button" onClick={() => handleIngredientDelete(ingredient.Id)} className="btn btn-outline-secondary btn-rounded btn-icon border-0">
-											<i className="mdi mdi-close text-danger"></i>
-										</button>
-									</div>
-								);
-							})}
-							<div>
-								<input type="text" placeholder="Ingredient" value={ingredientInput} onChange={(e) => setIngredientInput(e.target.value)} />
-								<button type="button" onClick={handleAddIngredient} disabled={ingredientInput.length === 0} className="btn btn-outline-primary btn-icon=text border-0">
-									<i className="mdi mdi-plus mr-1"></i>Add
-								</button>
-							</div>
+							<TextItemList
+								list={ingredients}
+								handleItemDelete={handleIngredientDelete}
+								handleItemAdd={handleAddIngredient}
+								itemInput={ingredientInput}
+								setItemInput={setIngredientInput}
+							/>
 						</div>
 					</div>
 				</div>
@@ -84,23 +74,7 @@ const IngredientsAndSideDishForm = ({ hidden }) => {
 					<div className="card border-0">
 						<div className="card-body">
 							<label>Side dishes</label>
-
-							{sideDishes.map((sideDish) => {
-								return (
-									<div key={sideDish.Id}>
-										<label>{sideDish.EntityDTO.Name}</label>
-										<button type="button" onClick={() => handleSideDishDelete(sideDish.Id)} className="btn btn-outline-secondary btn-rounded btn-icon border-0">
-											<i className="mdi mdi-close text-danger"></i>
-										</button>
-									</div>
-								);
-							})}
-							<div>
-								<input type="text" placeholder="Side dish" value={sideDishInput} onChange={(e) => setSideDishInput(e.target.value)} />
-								<button type="button" onClick={handleAddSideDish} disabled={sideDishInput.length === 0} className="btn btn-outline-primary btn-icon=text border-0">
-									<i className="mdi mdi-plus mr-1"></i>Add
-								</button>
-							</div>
+							<TextItemList list={sideDishes} handleItemDelete={handleSideDishDelete} handleItemAdd={handleAddSideDish} itemInput={sideDishInput} setItemInput={setSideDishInput} />
 						</div>
 					</div>
 				</div>

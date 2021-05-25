@@ -18,7 +18,6 @@ const ProductsPage = () => {
 							<div className="col-12 grid-margin stretch-card">
 								<div className="card">
 									<div className="card-body">
-										<h4 className="card-title">Add new restaurant</h4>
 										<ProductContextProvider>
 											<CreateProductModal />
 											<CreateProductCategoryModal />

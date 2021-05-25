@@ -1,8 +1,12 @@
 import React from "react";
 import Header from "../components/Header";
+import CreateProductCategoryModal from "../components/modals/CreateProductCategoryModal";
+import CreateProductModal from "../components/modals/CreateProductModal";
 import ObjectInfoHeader from "../components/ObjectInfoHeader";
+import ProductMenu from "../components/ProductMenu";
 import SideBar from "../components/SideBar";
 import ObjectContextProvider from "../contexts/ObjectContext";
+import ProductContextProvider from "../contexts/ProductContext";
 
 const ObjectDetailsPage = () => {
 	return (
@@ -14,20 +18,16 @@ const ObjectDetailsPage = () => {
 					<div className="main-panel">
 						<ObjectContextProvider>
 							<ObjectInfoHeader />
-							<div className="content-wrapper">
-								<div className="row">
-									<div className="col-md-6 grid-margin stretch-card">
-										<div className="card">
-											<div className="card-body">
-												<h4 className="card-title">Object</h4>
-											</div>
-										</div>
-									</div>
-									<div className="col-md-6 grid-margin stretch-card">
-										<div className="card">
-											<div className="card-body">
-												<img src="assets/images/waiter.jpg" alt="restaurant" className="img-fluid" />
-											</div>
+
+							<div className="row">
+								<div className="col-12 grid-margin stretch-card">
+									<div className="card">
+										<div className="card-body">
+											<ProductContextProvider>
+												<CreateProductModal />
+												<CreateProductCategoryModal />
+												<ProductMenu />
+											</ProductContextProvider>
 										</div>
 									</div>
 								</div>

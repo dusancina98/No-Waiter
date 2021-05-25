@@ -26,8 +26,8 @@
 
 .portfolio #portfolio-flters li:hover,
 .portfolio #portfolio-flters li.filter-active {
-	color: #8e1c18;
-	background: #fff1ed;
+	color: #198ae3;
+	background: #d3d3d3;
 }
 
 .portfolio #portfolio-flters li:last-child {
@@ -74,7 +74,7 @@
 
 .portfolio .portfolio-item .portfolio-info .preview-link:hover,
 .portfolio .portfolio-item .portfolio-info .details-link:hover {
-	color: #8e1c18;
+	color: #198ae3;
 }
 
 .portfolio .portfolio-item .portfolio-info .details-link {

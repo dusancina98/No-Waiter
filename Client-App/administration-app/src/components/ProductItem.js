@@ -1,4 +1,5 @@
 import { colorConstants } from "../constants/ColorConstants";
+import { capitalizeFirstLetter } from "../helpers/string-util";
 
 const ProductItem = (props) => {
 	return (
@@ -7,8 +8,18 @@ const ProductItem = (props) => {
 			<div className="row">
 				<div className="col-8">
 					<h3>{props.name}</h3>
-					<p> {props.ingredients.map((ingredient) => ingredient.EntityDTO.Name + ", ")}</p>
-					<p> {props.sideDishes.map((sideDish) => sideDish.EntityDTO.Name + ", ")}</p>
+					<p>
+						{props.ingredients.map((ingredient) =>
+							props.ingredients.indexOf(ingredient) === props.ingredients.length - 1
+								? capitalizeFirstLetter(ingredient.EntityDTO.Name)
+								: capitalizeFirstLetter(ingredient.EntityDTO.Name + ", ")
+						)}
+					</p>
+					<p>
+						{props.sideDishes.map((sideDish) =>
+							props.sideDishes.indexOf(sideDish) === props.sideDishes.length - 1 ? capitalizeFirstLetter(sideDish.EntityDTO.Name) : capitalizeFirstLetter(sideDish.EntityDTO.Name + ", ")
+						)}
+					</p>
 
 					<h4 style={{ color: colorConstants.COLOR_BLUE }}>RSD {Number(props.price).toFixed(2)}</h4>
 				</div>

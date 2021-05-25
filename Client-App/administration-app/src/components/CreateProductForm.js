@@ -84,18 +84,17 @@ const CreateProductForm = ({ hidden }) => {
 									</select>
 								</div>
 								<div className="form-group">
-									<label for="price" className="row">
-										Price
-									</label>
-									<input type="number" step={0.01} required className="form-control row" id="price" min="1" placeholder="Price" onChange={(e) => setPrice(e.target.value)} />
-								</div>
-								<div className="form-group">
 									<label for="amount" className="row">
 										Amount
 									</label>
 									<input type="number" required className="form-control row" id="amount" min="1" placeholder="Amount" onChange={(e) => setAmount(e.target.value)} />
 								</div>
-
+								<div className="form-group">
+									<label for="price" className="row">
+										Price
+									</label>
+									<input type="number" step={0.01} required className="form-control row" id="price" min="1" placeholder="Price" onChange={(e) => setPrice(e.target.value)} />
+								</div>
 								<div className="form-group">
 									<label for="name" className="row">
 										Select product type
