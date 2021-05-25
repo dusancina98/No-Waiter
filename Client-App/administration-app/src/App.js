@@ -17,6 +17,7 @@ import PageNotFoundPage from "./pages/PageNotFoundPage";
 import ListTablesPage from "./pages/ListTablesPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import ObjectDetailsPage from "./pages/ObjectDetailsPage";
+import ProductsPage from "./pages/ProductsPage";
 
 function App() {
 	return (
@@ -35,6 +36,8 @@ function App() {
 				<ProtectedRoute roles={"ROLE_OBJADMIN"} redirectTo="/unauthorized" path="/employees/waiter" component={ListWaitersPage} />
 
 				<ProtectedRoute roles={""} redirectTo="/" path="/first-login-password/:id/:token" component={FirstActivationPasswordChangePage} />
+
+				<Route path="/products" component={ProductsPage} />
 
 				<ProtectedRoute roles={"ROLE_OBJADMIN"} redirectTo="/" path="/object-details" component={ObjectDetailsPage} />
 

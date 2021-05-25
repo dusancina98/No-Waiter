@@ -20,6 +20,10 @@ public class Ingredient {
 		this.id = id;
 		this.name = name;
 	}
+	
+	public Ingredient(String name) {
+		this(UUID.randomUUID(), name);
+	}
 
 	public String getName() {
 		return name;

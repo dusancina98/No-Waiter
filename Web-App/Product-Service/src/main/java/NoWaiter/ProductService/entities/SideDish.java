@@ -20,6 +20,10 @@ public class SideDish {
 		this.id = id;
 		this.name = name;
 	}
+	
+	public SideDish(String name) {
+		this(UUID.randomUUID(), name);
+	}
 
 	public String getName() {
 		return name;

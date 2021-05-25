@@ -59,7 +59,10 @@ public class ProductCategory {
 		return products;
 	}
 
-	public void setProducts(List<Product> products) {
-		this.products = products;
+	public void addProduct(Product product) {
+		if(products == null)
+			products = new ArrayList<Product>();
+		
+		products.add(product);
 	}
 }
