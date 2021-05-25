@@ -19,7 +19,7 @@ const EditObjectForm = () => {
 				Name: name,
 				Email: email,
 				PhoneNumber: phoneNumber,
-				ImagePath: "assets/images/restaurant.jpg",
+				ImagePath: objectState.objectDetails.object.EntityDTO.ImagePath,
 				Address: address,
 				Blocked: objectState.objectDetails.object.EntityDTO.Blocked,
 				Active: objectState.objectDetails.object.EntityDTO.Active,

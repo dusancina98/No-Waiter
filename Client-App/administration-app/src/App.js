@@ -17,6 +17,9 @@ import PageNotFoundPage from "./pages/PageNotFoundPage";
 import ListTablesPage from "./pages/ListTablesPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import ListDelivererRequestPage from "./pages/ListDelivererRequestPage";
+import ObjectDetailsPage from "./pages/ObjectDetailsPage";
+import ProductsPage from "./pages/ProductsPage";
+
 
 function App() {
 	return (
@@ -25,7 +28,7 @@ function App() {
 				<ProtectedRoute roles={""} redirectTo="/" path="/login" component={LoginPage} />
 				<ProtectedRoute roles={"*"} exact path="/" redirectTo="/unauthorized" component={HomePage} />
 				<ProtectedRoute roles={"ROLE_SYSADMIN"} redirectTo="/unauthorized" path="/add-object" component={CreateObjectPage} />
-				<ProtectedRoute roles={"ROLE_SYSADMIN"} redirectTo="/unauthorized" path="/objects" component={ListObjectPage} />
+				<ProtectedRoute roles={"*"} redirectTo="/unauthorized" path="/objects" component={ListObjectPage} />
 				<ProtectedRoute roles={"ROLE_OBJADMIN"} redirectTo="/unauthorized" path="/tables" component={ListTablesPage} />
 
 				<ProtectedRoute roles={"ROLE_SYSADMIN"} redirectTo="/unauthorized" path="/add-object-admin" component={CreateObjectAdminPage} />
@@ -35,6 +38,10 @@ function App() {
 				<ProtectedRoute roles={"ROLE_OBJADMIN"} redirectTo="/unauthorized" path="/employees/waiter" component={ListWaitersPage} />
 
 				<ProtectedRoute roles={""} redirectTo="/" path="/first-login-password/:id/:token" component={FirstActivationPasswordChangePage} />
+
+				<Route path="/products" component={ProductsPage} />
+
+				<ProtectedRoute roles={"ROLE_OBJADMIN"} redirectTo="/" path="/object-details" component={ObjectDetailsPage} />
 
 				<ProtectedRoute roles={""} exact path="/reset-password-request" redirectTo="/unauthorized" component={ForgotPasswordPage} />
 				<ProtectedRoute roles={""} exact path="/reset-password/:id/:token" redirectTo="/unauthorized" component={ResetPasswordPage} />

@@ -1,6 +1,9 @@
 package NoWaiter.ObjectService.services.contracts;
 
+import java.io.IOException;
 import java.util.UUID;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
@@ -11,6 +14,8 @@ public interface ObjectService {
 
     UUID create(ObjectDTO entity);
     
+    void updateImage(MultipartFile multipartFile, UUID objectAdminId) throws IOException;
+    
     void update(IdentifiableDTO<ObjectDTO> entity);
     
     void addAdminToObject(AddAdminDTO addAdminDTO);
@@ -18,6 +23,8 @@ public interface ObjectService {
     void deleteObjectAdminHandlingObjectActivation(UUID objectAdminId);
 
     IdentifiableDTO<ObjectDTO> findById(UUID id);
+        
+    IdentifiableDTO<ObjectDTO> findByObjectAdminId(UUID adminId);
 
     Iterable<IdentifiableDTO<ObjectWithStatusDTO>> findAllForAdmin();
     

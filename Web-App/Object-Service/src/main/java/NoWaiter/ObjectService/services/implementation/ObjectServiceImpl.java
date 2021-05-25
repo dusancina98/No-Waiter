@@ -1,9 +1,12 @@
 package NoWaiter.ObjectService.services.implementation;
 
+import java.io.IOException;
 import java.util.UUID;
 
+import org.springframework.core.env.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import NoWaiter.ObjectService.entities.Address;
 import NoWaiter.ObjectService.entities.Contact;
@@ -16,6 +19,7 @@ import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectWithStatusDTO;
+import NoWaiter.ObjectService.services.implementation.util.ImageUtil;
 import NoWaiter.ObjectService.services.implementation.util.ObjectMapper;
 
 @Service
@@ -27,6 +31,9 @@ public class ObjectServiceImpl implements ObjectService {
     @Autowired
     private ObjectAdminRepository objectAdminRepository;
 
+    @Autowired
+	private Environment env;
+    
     @Override
     public UUID create(ObjectDTO entity) {
         Object object = ObjectMapper.MapObjectDTOToObject(entity);
@@ -97,5 +104,21 @@ public class ObjectServiceImpl implements ObjectService {
 		Object object = objectRepository.findById(objectAdmin.getObject().getId()).get();
 		if(object.getAdmins().isEmpty()) 
 			toggleObjectActivation(object.getId(), false);
+	}
+
+	@Override
+	public IdentifiableDTO<ObjectDTO> findByObjectAdminId(UUID adminId) {
+		return ObjectMapper.MapObjectToIdentifiableObjectDTO(objectAdminRepository.findObjectByAdminId(adminId));
+	}
+
+	@Override
+	public void updateImage(MultipartFile multipartFile, UUID objectAdminId) throws IOException {
+
+		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
+		Object object = objectRepository.findById(objectAdmin.getObject().getId()).get();
+		System.out.println(env.getProperty("abs-image-path"));
+		ImageUtil.saveFile(env.getProperty("abs-image-path"), object.getId().toString() + ".jpg", multipartFile);
+		object.setImagePath(env.getProperty("rel-image-path") + "\\" + object.getId().toString() + ".jpg");
+		objectRepository.save(object);
 	}
 }
