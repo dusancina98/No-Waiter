@@ -98,8 +98,7 @@ public class UserServiceImpl implements UserService {
 	public void createActivationLink(UUID userId) throws Exception {
 		User user = userRepository.getOne(userId);
 		if(user.isActive())
-			throw new UserIsActiveException("User was activated");
-				
+			throw new UserIsActiveException("User was activated");	
 
 		AccountActivationToken accountActivation = new AccountActivationToken(user.getId(), new Date(System.currentTimeMillis()));
 		accountActivationTokenRepository.save(accountActivation);

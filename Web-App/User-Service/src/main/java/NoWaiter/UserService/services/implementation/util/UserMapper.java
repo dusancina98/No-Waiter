@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import NoWaiter.UserService.entities.Deliverer;
+import NoWaiter.UserService.entities.DelivererRequest;
 import NoWaiter.UserService.entities.ObjectAdmin;
 import NoWaiter.UserService.entities.Waiter;
+import NoWaiter.UserService.services.contracts.dto.DelivererRequestDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
@@ -56,6 +59,34 @@ public class UserMapper {
 
         return retVal;
     }
+    
+    public static DelivererRequest MapDelivererRequestDTOToDelivererRequest (DelivererRequestDTO delivererRequestDTO) throws ClassFieldValidationException{
+        if (delivererRequestDTO == null) throw new IllegalArgumentException();
+
+        return new DelivererRequest(delivererRequestDTO.Email,delivererRequestDTO.Name,delivererRequestDTO.Surname,delivererRequestDTO.PhoneNumber,delivererRequestDTO.Reference);
+    }
+
+	public static Deliverer MapDelivererRequestToDeliverer(DelivererRequest delivererRequest) throws ClassFieldValidationException {
+        if (delivererRequest == null) throw new IllegalArgumentException();
+
+        return new Deliverer(delivererRequest.getEmail(), " ", delivererRequest.getName(), delivererRequest.getSurname(), delivererRequest.getPhoneNumber());
+	}
+
+	public static Iterable<IdentifiableDTO<DelivererRequestDTO>> MapDelivererRequestCollectionToIdentifiableODelivererRequestDTOCollection(
+			List<DelivererRequest> delivererRequests) {
+		if (delivererRequests == null) throw new IllegalArgumentException();
+
+        List<IdentifiableDTO<DelivererRequestDTO>> retVal = new ArrayList<>();
+        delivererRequests.forEach((delivererRequest) -> retVal.add(MapDelivererRequestToIdentifiableDelivererDto(delivererRequest)));
+
+        return retVal;
+	}
+	
+	public static IdentifiableDTO<DelivererRequestDTO> MapDelivererRequestToIdentifiableDelivererDto(DelivererRequest delivererRequest) {
+		if (delivererRequest == null) throw new IllegalArgumentException();
+
+        return new IdentifiableDTO<DelivererRequestDTO>(delivererRequest.getId(),new DelivererRequestDTO(delivererRequest.getEmail(), delivererRequest.getName(), delivererRequest.getSurname(), delivererRequest.getPhoneNumber(), delivererRequest.getReference()));
+	}
     
    
 }

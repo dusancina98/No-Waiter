@@ -52,6 +52,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 	.antMatchers(HttpMethod.POST ,"/object-api/api/objects/tables").hasRole("OBJADMIN")
                 	.antMatchers(HttpMethod.GET ,"/object-api/api/objects/tables").hasRole("OBJADMIN")
                 	.antMatchers(HttpMethod.DELETE ,"/object-api/api/objects/tables/**").hasRole("OBJADMIN")
+                	
                     //.antMatchers("/auth-api/**").permitAll()
                     //.antMatchers("/object-api/**").permitAll()
                     //.antMatchers("/user-api/**").permitAll()

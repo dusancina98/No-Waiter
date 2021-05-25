@@ -20,6 +20,9 @@ export const userService = {
 	resetPassword,
 	checkIfActivationTokenIsValid,
 	checkIfResetPasswordTokenIsValid,
+	findAllDelivererRequests,
+	approveDelivererRequest,
+	rejectDelivererRequest,
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -155,6 +158,33 @@ async function findAllObjectAdmins(dispatch) {
 	}
 	function failure(message) {
 		return { type: userConstants.SET_OBJECT_ADMINS_ERROR, errorMessage: message };
+	}
+}
+
+async function findAllDelivererRequests(dispatch) {
+	dispatch(request());
+
+	await Axios.get(`/user-api/api/users/deliverer-request`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else {
+				dispatch(failure("Error"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function request() {
+		return { type: userConstants.SET_DELIVERER_REQUEST };
+	}
+	function success(data) {
+		return { type: userConstants.SET_DELIVERER_REQUEST_SUCCESS, delivererRequests: data };
+	}
+	function failure(message) {
+		return { type: userConstants.SET_DELIVERER_REQUEST_ERROR, errorMessage: message };
 	}
 }
 
@@ -470,4 +500,57 @@ function checkIfResetPasswordTokenIsValid(token) {
 		.catch((err) => {
 			console.log(err);
 		});
+}
+
+function approveDelivererRequest(requestIdDTO,dispatch){
+
+	Axios.put(`/user-api/api/users/approve-deliverer-request`, requestIdDTO, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 200) {
+				findAllDelivererRequests(dispatch)
+				dispatch(success("Uspesno ste odobrili novog dostavljaca"))
+			}else{
+				dispatch(failure("Trenutno nije moguce odobriti datog dostavljaca"))
+			}
+		})
+		.catch((err) => {
+			dispatch(failure("Trenutno nije moguce odobriti datog dostavljaca"))
+		});
+
+		function success(message) {
+			return { type: userConstants.ACCEPT_DELIVERER_REQUEST_SUCCESS, successMessage: message };
+		}
+		function failure(message) {
+			return { type: userConstants.OBJECT_ADMIN_DELETE_FAILURE, errorMessage: message };
+		}
+}
+
+function rejectDelivererRequest(rejectRequestDTO,dispatch){
+
+
+	if(rejectRequestDTO.Reason.length<10){
+		dispatch(failure("Razlog odbijanja zahteva mora sadrzati minimalno 10 slova"))
+		return;
+	}
+
+	Axios.put(`/user-api/api/users/reject-deliverer-request`, rejectRequestDTO, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 200) {
+				findAllDelivererRequests(dispatch)
+				dispatch(success("Uspesno ste odbili zahtev za novog dostavljaca"))
+			}else{
+				dispatch(failure("Trenutno nije moguce odbiti zahtev za datog dostavljaca"))
+			}
+		})
+		.catch((err) => {
+			dispatch(failure("Trenutno nije moguce odbiti zahtev za datog dostavljaca"))
+		});
+
+		function success(message) {
+			return { type: userConstants.REJECT_DELIVERER_REQUEST_SUCCESS, successMessage: message };
+		}
+
+		function failure(message) {
+			return { type: userConstants.REJECT_DELIVERER_REQUEST_FAILURE, errorMessage: message };
+		}
 }
