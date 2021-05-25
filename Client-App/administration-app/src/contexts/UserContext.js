@@ -126,6 +126,7 @@ const UserContextProvider = (props) => {
 			showErrorMessage: false,
 			errorMessage: "",
 		},
+		deliverers: [],
 	});
 
 	return <UserContext.Provider value={{ userState, dispatch }}>{props.children}</UserContext.Provider>;

@@ -609,6 +609,21 @@ export const userReducer = (state, action) => {
 					errorMessage: "",
 				},
 			};
+		case userConstants.SET_DELIVERERS_REQUEST:
+			return {
+				...state,
+				deliverers: [],
+			};
+		case userConstants.SET_DELIVERERS_SUCCESS:
+			return {
+				...state,
+				deliverers: action.deliverers,
+			};
+		case userConstants.SET_DELIVERERS_ERROR:
+			return {
+				...state,
+				deliverers: [],
+			};
 		default:
 			return state;
 	}

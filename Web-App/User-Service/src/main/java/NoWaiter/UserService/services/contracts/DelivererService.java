@@ -3,6 +3,7 @@ package NoWaiter.UserService.services.contracts;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
+import NoWaiter.UserService.services.contracts.dto.DelivererDTO;
 import NoWaiter.UserService.services.contracts.dto.DelivererRequestDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.RejectDelivererDTO;
@@ -17,4 +18,6 @@ public interface DelivererService {
 	Iterable<IdentifiableDTO<DelivererRequestDTO>> getAllPendingRequests();
 
 	void rejectDelivererRequest(RejectDelivererDTO rejectDelivererDTO);
+
+	Iterable<IdentifiableDTO<DelivererDTO>> getAllDeliverer();
 }

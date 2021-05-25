@@ -19,6 +19,7 @@ import UnauthorizedPage from "./pages/UnauthorizedPage";
 import ListDelivererRequestPage from "./pages/ListDelivererRequestPage";
 import ObjectDetailsPage from "./pages/ObjectDetailsPage";
 import ProductsPage from "./pages/ProductsPage";
+import ListOfDelivererPage from "./pages/ListOfDelivererPage";
 
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
 				<Route path="/unauthorized" component={UnauthorizedPage} />
 
 				<ProtectedRoute roles={"ROLE_SYSADMIN"} redirectTo="/unauthorized" path="/deliverer/requests" component={ListDelivererRequestPage} />
+				<ProtectedRoute roles={"ROLE_SYSADMIN"} redirectTo="/unauthorized" path="/deliverers" component={ListOfDelivererPage} />
 
 				<Route path="/404" component={PageNotFoundPage} />
 				<Redirect to="/404" />

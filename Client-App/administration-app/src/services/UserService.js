@@ -23,6 +23,7 @@ export const userService = {
 	findAllDelivererRequests,
 	approveDelivererRequest,
 	rejectDelivererRequest,
+	findAllDeliverer,
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -185,6 +186,33 @@ async function findAllDelivererRequests(dispatch) {
 	}
 	function failure(message) {
 		return { type: userConstants.SET_DELIVERER_REQUEST_ERROR, errorMessage: message };
+	}
+}
+
+async function findAllDeliverer(dispatch) {
+	dispatch(request());
+
+	await Axios.get(`/user-api/api/users/deliverers`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else {
+				dispatch(failure("Error"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function request() {
+		return { type: userConstants.SET_DELIVERERS_REQUEST };
+	}
+	function success(data) {
+		return { type: userConstants.SET_DELIVERERS_SUCCESS, deliverers: data };
+	}
+	function failure(message) {
+		return { type: userConstants.SET_DELIVERERS_ERROR, errorMessage: message };
 	}
 }
 
