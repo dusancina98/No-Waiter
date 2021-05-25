@@ -16,7 +16,7 @@ const IngredientsAndSideDishForm = ({ hidden }) => {
 
 	const handleAddIngredient = () => {
 		let prom = [...ingredients];
-		prom.push({ Id: uuidv4(), Name: ingredientInput });
+		prom.push({ Id: uuidv4(), EntityDTO: { Name: ingredientInput } });
 
 		setIngredients(prom);
 		setIngredientInput("");
@@ -29,7 +29,7 @@ const IngredientsAndSideDishForm = ({ hidden }) => {
 
 	const handleAddSideDish = () => {
 		let prom = [...sideDishes];
-		prom.push({ Id: uuidv4(), Name: sideDishInput });
+		prom.push({ Id: uuidv4(), EntityDTO: { Name: sideDishInput } });
 
 		setSideDishes(prom);
 		setSideDishInput("");
@@ -63,7 +63,7 @@ const IngredientsAndSideDishForm = ({ hidden }) => {
 							{ingredients.map((ingredient) => {
 								return (
 									<div key={ingredient.Id}>
-										<label>{ingredient.Name}</label>
+										<label>{ingredient.EntityDTO.Name}</label>
 										<button type="button" onClick={() => handleIngredientDelete(ingredient.Id)} className="btn btn-outline-secondary btn-rounded btn-icon border-0">
 											<i className="mdi mdi-close text-danger"></i>
 										</button>
@@ -88,7 +88,7 @@ const IngredientsAndSideDishForm = ({ hidden }) => {
 							{sideDishes.map((sideDish) => {
 								return (
 									<div key={sideDish.Id}>
-										<label>{sideDish.Name}</label>
+										<label>{sideDish.EntityDTO.Name}</label>
 										<button type="button" onClick={() => handleSideDishDelete(sideDish.Id)} className="btn btn-outline-secondary btn-rounded btn-icon border-0">
 											<i className="mdi mdi-close text-danger"></i>
 										</button>

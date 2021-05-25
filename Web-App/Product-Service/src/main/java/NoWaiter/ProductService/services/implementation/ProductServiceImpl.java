@@ -75,9 +75,8 @@ public class ProductServiceImpl implements ProductService {
 		
 		if(!objectId.equals(productCategory.getObjectId())) throw new InvalidProductCategoryException("Invalid product category id");
 		
-		Product product = MapProductRequestDTOToProduct(productDTO);
+		Product product = mapProductRequestDTOToProduct(productDTO);
 		product.setProductCategory(productCategory);
-		//productCategory.addProduct(product);
 		product.setImagePath(env.getProperty("rel-image-path") + "\\" + product.getId().toString() + ".jpg");
 		productRepository.save(product);
 		saveImageAndGetPath(productDTO.Image, product.getId());
@@ -90,8 +89,8 @@ public class ProductServiceImpl implements ProductService {
 		ImageUtil.saveFile(env.getProperty("abs-image-path"), productId.toString() + ".jpg", multipartFile);
 		return env.getProperty("rel-image-path") + "\\" + productId.toString() + ".jpg";
 	}
-	
-	private  Product MapProductRequestDTOToProduct(ProductRequestDTO productDTO) {
+		
+	private Product mapProductRequestDTOToProduct(ProductRequestDTO productDTO) {
 		if(productDTO == null) throw new IllegalArgumentException();
 		
 		List<Ingredient> ingredients = new ArrayList<Ingredient>();

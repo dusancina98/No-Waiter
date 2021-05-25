@@ -33,12 +33,22 @@ const ProductMenu = () => {
 			<div id="portfolio" className="portfolio">
 				<div class="container">
 					<ProductsTabs />
-					<div>
-						{productState.selectedCategory.EntityDTO.Name}
-						<button type="button" onClick={handleOpenCreateProductModal} className="btn btn-outline-secondary btn-rounded btn-icon border-0">
-							<i class="mdi mdi-plus text-dark"></i>
-						</button>
-					</div>
+					{productState.selectedCategory.EntityDTO.Name !== "" && (
+						<div>
+							<h2>
+								{productState.selectedCategory.EntityDTO.Name}{" "}
+								<button
+									type="button"
+									data-toggle="tooltip"
+									title="Add new product"
+									onClick={handleOpenCreateProductModal}
+									className="btn btn-outline-secondary btn-rounded btn-icon border-0"
+								>
+									<i class="mdi mdi-plus text-dark"></i>
+								</button>
+							</h2>
+						</div>
+					)}
 					<div className="row portfolio-container">
 						<div className="row w-100">
 							<ProductList />

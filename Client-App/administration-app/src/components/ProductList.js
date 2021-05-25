@@ -15,7 +15,7 @@ const ProductList = () => {
 
 	return (
 		<div className="col-8">
-			{productState.products.map((product) => {
+			{productState.showedProducts.map((product) => {
 				console.log(product);
 				return (
 					<ProductItem

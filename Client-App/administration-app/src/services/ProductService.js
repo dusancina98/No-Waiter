@@ -1,4 +1,5 @@
 import Axios from "axios";
+import { pathConstants } from "../constants/PathConstants";
 import { productConstants } from "../constants/ProductConstants";
 import { authHeader } from "../helpers/auth-header";
 
@@ -100,10 +101,10 @@ function createProduct(productDTO, dispatch) {
 	productDTO.Ingredients = [];
 	productDTO.SideDishes = [];
 	ingredients.forEach((ingredient) => {
-		productDTO.Ingredients.push(ingredient.Name);
+		productDTO.Ingredients.push(ingredient.EntityDTO.Name);
 	});
 	sideDishes.forEach((sideDish) => {
-		productDTO.SideDishes.push(sideDish.Name);
+		productDTO.SideDishes.push(sideDish.EntityDTO.Name);
 	});
 	let formData = new FormData();
 
@@ -129,8 +130,9 @@ function createProduct(productDTO, dispatch) {
 			.then((res) => {
 				if (res.status === 201) {
 					let product = { Id: res.data, EntityDTO: productDTO };
-					product.Ingredients = ingredients;
-					product.SideDishes = sideDishes;
+					product.EntityDTO.Ingredients = ingredients;
+					product.EntityDTO.Image = pathConstants.PRODUCT_IMAGES_PATH + res.data + ".jpg";
+					product.EntityDTO.SideDishes = sideDishes;
 					dispatch(success(product, "Table successfully added"));
 				} else {
 					dispatch(failure(res.data.message));

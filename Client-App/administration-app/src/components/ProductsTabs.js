@@ -36,7 +36,13 @@ const ProductsTabs = () => {
 								</li>
 							);
 						})}
-						<button type="button" onClick={handleOpenCreateCategoryModal} className="btn btn-outline-secondary btn-rounded btn-icon border-0">
+						<button
+							type="button"
+							data-toggle="tooltip"
+							title="Add new product category"
+							onClick={handleOpenCreateCategoryModal}
+							className="btn btn-outline-secondary btn-rounded btn-icon border-0"
+						>
 							<i class="mdi mdi-plus text-dark"></i>
 						</button>
 					</ul>

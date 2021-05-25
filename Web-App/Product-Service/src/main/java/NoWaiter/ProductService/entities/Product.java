@@ -38,7 +38,7 @@ public class Product {
 	@ManyToOne
 	private ProductType productType;
 	
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade={CascadeType.ALL})
 	private List<Ingredient> ingredients;
 	
 	@OneToMany(cascade = CascadeType.ALL)
@@ -55,6 +55,8 @@ public class Product {
 		this.imagePath = imagePath;
 		this.price = price;
 		this.productType = productType;
+		this.ingredients = ingredients;
+		this.sideDishes = sideDishes;	
 		this.productAmount = new ProductAmount(amount, amountName);
 	}
 	

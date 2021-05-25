@@ -250,6 +250,7 @@ export const productReducer = (state, action) => {
 				showSuccessMessage: false,
 				successMessage: "",
 				products: [],
+				showedProducts: [],
 			};
 		case productConstants.SET_PRODUCTS_SUCCESS:
 			return {
@@ -259,6 +260,7 @@ export const productReducer = (state, action) => {
 				showSuccessMessage: false,
 				successMessage: "",
 				products: action.products,
+				showedProducts: action.products,
 			};
 		case productConstants.SET_PRODUCTS_ERROR:
 			return {
@@ -268,6 +270,7 @@ export const productReducer = (state, action) => {
 				showSuccessMessage: false,
 				successMessage: "",
 				products: [],
+				showedProducts: [],
 			};
 
 		case productConstants.SET_PRODUCT_TYPES_REQUEST:
