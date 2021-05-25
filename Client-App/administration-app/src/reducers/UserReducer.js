@@ -2,6 +2,7 @@ import { modalConstants } from "../constants/ModalConstants";
 import { userConstants } from "../constants/UserConstants";
 
 export const userReducer = (state, action) => {
+	var temp;
 	switch (action.type) {
 		case userConstants.OBJECT_ADMIN_CREATE_REQUEST:
 			return {
@@ -314,9 +315,9 @@ export const userReducer = (state, action) => {
 				},
 			};
 		case modalConstants.ALLOW_WAITER_DETAILS_INPUT_FIELDS:
-			let temp = { ...state };
-			temp.waiterDetails.readOnly = false;
-			return temp;
+			let temp1 = { ...state };
+			temp1.waiterDetails.readOnly = false;
+			return temp1;
 		case userConstants.INACTIVE_USER_EMAIL_REQUEST:
 			return {
 				inActiveUser: {
@@ -473,6 +474,7 @@ export const userReducer = (state, action) => {
 				...state,
 				delivererRequestDetails:{
 					showModal: true,
+					showRejectWindow: false,
 					requestDetails: action.delivererRequest,
 				}
 			};
@@ -481,6 +483,7 @@ export const userReducer = (state, action) => {
 				...state,
 				delivererRequestDetails:{
 					showModal: false,
+					showRejectWindow: false,
 					requestDetails: {
 						Id: "",
 						EntityDTO: {
@@ -498,6 +501,7 @@ export const userReducer = (state, action) => {
 				...state,
 				delivererRequestDetails:{
 					showModal: false,
+					showRejectWindow: false,
 					requestDetails: {
 	 					Id: "",
 						EntityDTO: {
@@ -520,7 +524,90 @@ export const userReducer = (state, action) => {
 					successMessage: '',
 					showErrorMessage: false,
 					errorMessage: "",
-				}
+				},
+			};
+		case userConstants.REJECT_DELIVERER_REQUEST_SUCCESS:
+			return {
+				...state,
+				delivererRequestDetails:{
+					showModal: false,
+					showRejectWindow: false,
+					requestDetails: {
+	 					Id: "",
+						EntityDTO: {
+							Email: "",
+							Name: "",
+							Surname: "",
+							PhoneNumber: "",
+							Reference:"",
+						},
+					},
+				},
+				rejectDeliveryRequest: {
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case userConstants.REJECT_DELIVERER_REQUEST_FAILURE:
+			return {
+				...state,
+				rejectDeliveryRequest: {
+					showSuccessMessage: false,
+					successMessage: '',
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+			};
+		case userConstants.HIDE_FAILURE_ALERT_REJECT_DELIVERY_REQUEST:
+			return {
+				...state,
+				rejectDeliveryRequest: {
+					showSuccessMessage: false,
+					successMessage: '',
+					showErrorMessage: false,
+					errorMessage: '',
+				},
+			}
+		case modalConstants.SHOW_DELIVERER_REQUEST_REJECT_WINDOW:
+		    temp = { ...state };
+			temp.delivererRequestDetails.showRejectWindow = true;
+			return temp;
+		case modalConstants.BACK_FROM_DELIVERER_REQUEST_REJECT_WINDOW:
+			temp = { ...state };
+			temp.delivererRequestDetails.showRejectWindow = false;
+			temp.rejectDeliveryRequest.showErrorMessage =false;
+			return temp;
+		case userConstants.ACCEPT_DELIVERER_REQUEST_FAILURE:
+			return {
+				...state,
+				delivererRequestDetails:{
+					showModal: false,
+					showRejectWindow: false,
+					requestDetails: {
+	 					Id: "",
+						EntityDTO: {
+							Email: "",
+							Name: "",
+							Surname: "",
+							PhoneNumber: "",
+							Reference:"",
+						},
+					},
+				},
+				approveDeliveryRequest: {
+					showSuccessMessage: false,
+					successMessage: action.successMessage,
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+				rejectDeliveryRequest: {
+					showSuccessMessage: false,
+					successMessage: '',
+					showErrorMessage: false,
+					errorMessage: "",
+				},
 			};
 		default:
 			return state;

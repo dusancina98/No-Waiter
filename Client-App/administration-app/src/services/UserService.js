@@ -22,6 +22,7 @@ export const userService = {
 	checkIfResetPasswordTokenIsValid,
 	findAllDelivererRequests,
 	approveDelivererRequest,
+	rejectDelivererRequest,
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -521,5 +522,35 @@ function approveDelivererRequest(requestIdDTO,dispatch){
 		}
 		function failure(message) {
 			return { type: userConstants.OBJECT_ADMIN_DELETE_FAILURE, errorMessage: message };
+		}
+}
+
+function rejectDelivererRequest(rejectRequestDTO,dispatch){
+
+
+	if(rejectRequestDTO.Reason.length<10){
+		dispatch(failure("Razlog odbijanja zahteva mora sadrzati minimalno 10 slova"))
+		return;
+	}
+
+	Axios.put(`/user-api/api/users/reject-deliverer-request`, rejectRequestDTO, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 200) {
+				findAllDelivererRequests(dispatch)
+				dispatch(success("Uspesno ste odbili zahtev za novog dostavljaca"))
+			}else{
+				dispatch(failure("Trenutno nije moguce odbiti zahtev za datog dostavljaca"))
+			}
+		})
+		.catch((err) => {
+			dispatch(failure("Trenutno nije moguce odbiti zahtev za datog dostavljaca"))
+		});
+
+		function success(message) {
+			return { type: userConstants.REJECT_DELIVERER_REQUEST_SUCCESS, successMessage: message };
+		}
+
+		function failure(message) {
+			return { type: userConstants.REJECT_DELIVERER_REQUEST_FAILURE, errorMessage: message };
 		}
 }

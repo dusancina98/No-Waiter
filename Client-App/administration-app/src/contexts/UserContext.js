@@ -102,6 +102,7 @@ const UserContextProvider = (props) => {
 		},
 		delivererRequestDetails: {
 			showModal: false,
+			showRejectWindow: false,
 			requestDetails: {
 				Id: "",
 				EntityDTO: {

@@ -4,6 +4,7 @@ import DelivererRequestDetailsModal from "./modals/DelivererRequestDetailsModal"
 import { UserContext } from "../contexts/UserContext";
 import { userConstants } from "../constants/UserConstants";
 import SuccessAlerts from "../components/SuccessAlert";
+import FailureAlert from "../components/FailureAlert";
 
 const DelivererRequestTable = () => {
 	const { userState, dispatch } = useContext(UserContext);
@@ -20,6 +21,20 @@ const DelivererRequestTable = () => {
 							message={userState.approveDeliveryRequest.successMessage}
 							handleCloseAlert={() => dispatch({ type: userConstants.SET_DELIVERER_REQUEST })}
 						/>
+
+						<SuccessAlerts
+							hidden={!userState.rejectDeliveryRequest.showSuccessMessage}
+							header="Success"
+							message={userState.rejectDeliveryRequest.successMessage}
+							handleCloseAlert={() => dispatch({ type: userConstants.SET_DELIVERER_REQUEST })}
+						/>	
+
+						<FailureAlert
+					    	hidden={!userState.approveDeliveryRequest.showErrorMessage}
+					    	header="Error"
+					    	message={userState.approveDeliveryRequest.errorMessage}
+					    	handleCloseAlert={() => dispatch({ type: userConstants.SET_DELIVERER_REQUEST })}
+				    	/>
 						<div className="table-responsive">
 							<table className="table table-hover">
 								<thead>
