@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import NoWaiter.UserService.entities.Deliverer;
 import NoWaiter.UserService.entities.DelivererRequest;
+import NoWaiter.UserService.entities.DelivererStatus;
 import NoWaiter.UserService.entities.ObjectAdmin;
 import NoWaiter.UserService.entities.Waiter;
 import NoWaiter.UserService.services.contracts.dto.DelivererDTO;
@@ -70,7 +71,7 @@ public class UserMapper {
 	public static Deliverer MapDelivererRequestToDeliverer(DelivererRequest delivererRequest) throws ClassFieldValidationException {
         if (delivererRequest == null) throw new IllegalArgumentException();
 
-        return new Deliverer(delivererRequest.getEmail(), " ", delivererRequest.getName(), delivererRequest.getSurname(), delivererRequest.getPhoneNumber());
+        return new Deliverer(delivererRequest.getEmail(), " ", delivererRequest.getName(), delivererRequest.getSurname(), delivererRequest.getPhoneNumber(), DelivererStatus.ACTIVE);
 	}
 
 	public static Iterable<IdentifiableDTO<DelivererRequestDTO>> MapDelivererRequestCollectionToIdentifiableODelivererRequestDTOCollection(
@@ -102,7 +103,7 @@ public class UserMapper {
 	public static IdentifiableDTO<DelivererDTO> MapDelivererToIdentifiableDelivererDto(Deliverer deliverer) {
 		if (deliverer == null) throw new IllegalArgumentException();
 
-        return new IdentifiableDTO<DelivererDTO>(deliverer.getId(),new DelivererDTO(deliverer.getEmail(), deliverer.getName(), deliverer.getSurname(), deliverer.getPhoneNumber()));
+        return new IdentifiableDTO<DelivererDTO>(deliverer.getId(),new DelivererDTO(deliverer.getEmail(), deliverer.getName(), deliverer.getSurname(), deliverer.getPhoneNumber(), deliverer.getDelivererStatus()));
 	}
     
    

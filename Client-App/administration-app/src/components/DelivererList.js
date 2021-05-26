@@ -27,6 +27,9 @@ const DelivererList = () => {
 						<td>{deliverer.EntityDTO.Name}</td>
 						<td>{deliverer.EntityDTO.Surname}</td>
 						<td>{deliverer.EntityDTO.PhoneNumber}</td>
+						<td>
+							<label  className={deliverer.EntityDTO.DelivererStatus==='ACTIVE' ? 'badge badge-info' : 'badge badge-info-red'}>{deliverer.EntityDTO.DelivererStatus}</label>
+						</td>
 					</tr>
 				);
 			})}

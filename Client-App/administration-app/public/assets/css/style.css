@@ -6340,6 +6340,10 @@ input[type="button"].btn-block {
     -webkit-box-shadow: 0 0 0 0.2rem rgba(25, 138, 227, 0.5);
     box-shadow: 0 0 0 0.2rem rgba(25, 138, 227, 0.5); }
 
+.badge-info-red, .preview-list .preview-item .preview-thumbnail .badge.badge-offline {
+  color: #fff;
+  background-color: #e3193b; }
+
 .badge-warning, .preview-list .preview-item .preview-thumbnail .badge.badge-busy {
   color: #212529;
   background-color: #ffab2d; }
