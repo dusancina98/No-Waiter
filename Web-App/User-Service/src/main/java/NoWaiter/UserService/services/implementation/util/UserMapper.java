@@ -6,8 +6,10 @@ import java.util.UUID;
 
 import NoWaiter.UserService.entities.Deliverer;
 import NoWaiter.UserService.entities.DelivererRequest;
+import NoWaiter.UserService.entities.DelivererStatus;
 import NoWaiter.UserService.entities.ObjectAdmin;
 import NoWaiter.UserService.entities.Waiter;
+import NoWaiter.UserService.services.contracts.dto.DelivererDTO;
 import NoWaiter.UserService.services.contracts.dto.DelivererRequestDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
@@ -69,7 +71,7 @@ public class UserMapper {
 	public static Deliverer MapDelivererRequestToDeliverer(DelivererRequest delivererRequest) throws ClassFieldValidationException {
         if (delivererRequest == null) throw new IllegalArgumentException();
 
-        return new Deliverer(delivererRequest.getEmail(), " ", delivererRequest.getName(), delivererRequest.getSurname(), delivererRequest.getPhoneNumber());
+        return new Deliverer(delivererRequest.getEmail(), " ", delivererRequest.getName(), delivererRequest.getSurname(), delivererRequest.getPhoneNumber(), DelivererStatus.ACTIVE, false);
 	}
 
 	public static Iterable<IdentifiableDTO<DelivererRequestDTO>> MapDelivererRequestCollectionToIdentifiableODelivererRequestDTOCollection(
@@ -86,6 +88,22 @@ public class UserMapper {
 		if (delivererRequest == null) throw new IllegalArgumentException();
 
         return new IdentifiableDTO<DelivererRequestDTO>(delivererRequest.getId(),new DelivererRequestDTO(delivererRequest.getEmail(), delivererRequest.getName(), delivererRequest.getSurname(), delivererRequest.getPhoneNumber(), delivererRequest.getReference()));
+	}
+
+	public static Iterable<IdentifiableDTO<DelivererDTO>> MapDelivererCollectionToIdentifiableODelivererDTOCollection(
+			List<Deliverer> deliverers) {
+		if (deliverers == null) throw new IllegalArgumentException();
+
+        List<IdentifiableDTO<DelivererDTO>> retVal = new ArrayList<>();
+        deliverers.forEach((deliverer) -> retVal.add(MapDelivererToIdentifiableDelivererDto(deliverer)));
+
+        return retVal;
+	}
+	
+	public static IdentifiableDTO<DelivererDTO> MapDelivererToIdentifiableDelivererDto(Deliverer deliverer) {
+		if (deliverer == null) throw new IllegalArgumentException();
+
+        return new IdentifiableDTO<DelivererDTO>(deliverer.getId(),new DelivererDTO(deliverer.getEmail(), deliverer.getName(), deliverer.getSurname(), deliverer.getPhoneNumber(), deliverer.getDelivererStatus()));
 	}
     
    

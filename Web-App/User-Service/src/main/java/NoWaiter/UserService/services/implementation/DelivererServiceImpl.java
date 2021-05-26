@@ -18,6 +18,7 @@ import NoWaiter.UserService.repository.AccountActivationTokenRepository;
 import NoWaiter.UserService.repository.DelivererRepository;
 import NoWaiter.UserService.repository.DelivererRequestRepository;
 import NoWaiter.UserService.services.contracts.DelivererService;
+import NoWaiter.UserService.services.contracts.dto.DelivererDTO;
 import NoWaiter.UserService.services.contracts.dto.DelivererRequestDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.RejectDelivererDTO;
@@ -96,6 +97,32 @@ public class DelivererServiceImpl implements DelivererService{
 		}
 		
 		delivererRequestRepository.save(delivererRequest);
+	}
+
+	@Override
+	public Iterable<IdentifiableDTO<DelivererDTO>> getAllDeliverer() {
+		return UserMapper.MapDelivererCollectionToIdentifiableODelivererDTOCollection(delivererRepository.getAll());
+	}
+
+	@Override
+	public void activateDeliverer(UUID id) {
+		Deliverer deliverer = delivererRepository.getOne(id);
+		deliverer.activateDeliverer();
+		delivererRepository.save(deliverer);
+	}
+	
+	@Override
+	public void deactivateDeliverer(UUID id) {
+		Deliverer deliverer = delivererRepository.getOne(id);
+		deliverer.deactivateDeliverer();
+		delivererRepository.save(deliverer);
+	}
+
+	@Override
+	public void deleteDeliverer(UUID delivererId) {
+		Deliverer deliverer = delivererRepository.getOne(delivererId);
+		deliverer.delete();
+		delivererRepository.save(deliverer);
 	}
 
 }

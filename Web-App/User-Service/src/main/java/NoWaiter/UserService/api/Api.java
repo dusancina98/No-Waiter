@@ -386,11 +386,11 @@ public class Api {
         }
     }
     
-    @PutMapping("/approve-deliverer-request")
+    @PutMapping("/deliverer-request/approve/{requestId}")
     @CrossOrigin
-    public ResponseEntity<?> approveDelivererRequest(@RequestBody RequestIdDTO requestIdDTO) {
+    public ResponseEntity<?> approveDelivererRequest(@PathVariable UUID requestId) {
         try {
-        	delivererService.approveDelivererRequest(requestIdDTO.id);    
+        	delivererService.approveDelivererRequest(requestId);    
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (EntityNotFoundException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
@@ -403,7 +403,7 @@ public class Api {
         }
     }
     
-    @PutMapping("/reject-deliverer-request")
+    @PutMapping("/deliverer-request/reject")
     @CrossOrigin
     public ResponseEntity<?> rejectDelivererRequest(@RequestBody RejectDelivererDTO rejectDelivererDTO) {
         try {
@@ -411,6 +411,68 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (EntityNotFoundException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @GetMapping("/deliverers")
+    @CrossOrigin
+    public ResponseEntity<?> getDeliverers() {
+    	try {
+            return new ResponseEntity<>(delivererService.getAllDeliverer(), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PutMapping("/deliverers/{delivererId}/activate")
+    @CrossOrigin
+    public ResponseEntity<?> activateDeliverer(@PathVariable UUID delivererId) {
+
+        try {
+            delivererService.activateDeliverer(delivererId);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PutMapping("/deliverers/{delivererId}/deactivate")
+    @CrossOrigin
+    public ResponseEntity<?> deactivateDeliverer(@PathVariable UUID delivererId) {
+
+        try {
+            delivererService.deactivateDeliverer(delivererId);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @DeleteMapping("/deliverers/{delivererId}")
+    @CrossOrigin
+    public ResponseEntity<?> deleteDeliverer(@PathVariable UUID delivererId) {
+
+        try {
+            delivererService.deleteDeliverer(delivererId);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

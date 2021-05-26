@@ -569,7 +569,7 @@ export const userReducer = (state, action) => {
 					showErrorMessage: false,
 					errorMessage: '',
 				},
-			}
+			};
 		case modalConstants.SHOW_DELIVERER_REQUEST_REJECT_WINDOW:
 		    temp = { ...state };
 			temp.delivererRequestDetails.showRejectWindow = true;
@@ -609,6 +609,196 @@ export const userReducer = (state, action) => {
 					errorMessage: "",
 				},
 			};
+		case userConstants.SET_DELIVERERS_REQUEST:
+			return {
+				...state,
+				deliverers: [],
+			};
+		case userConstants.SET_DELIVERERS_SUCCESS:
+			return {
+				...state,
+				deliverers: action.deliverers,
+			};
+		case userConstants.SET_DELIVERERS_ERROR:
+			return {
+				...state,
+				deliverers: [],
+			};
+		case modalConstants.SHOW_DELIVERER_DETAILS:
+			return {
+				...state,
+				delivererDetails:{
+					showModal: true,
+					deliverer: action.deliverer,
+				}
+			};
+		case modalConstants.HIDE_DELIVERER_DETAILS:
+			return {
+				...state,
+				delivererDetails:{
+					showModal: false,
+					deliverer: {
+					Id: "",
+					   EntityDTO: {
+						   Email: "",
+						   Name: "",
+						   Surname: "",
+						   PhoneNumber: "",
+						   DelivererStatus: "",
+					   },
+				   },
+				}
+			};
+		case userConstants.DELIVERER_ACTIVATION_REQUEST:
+			return {
+				...state,
+				editDeliverer: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case userConstants.DELIVERER_ACTIVATION_SUCCESS:
+			return {
+				...state,
+				editDeliverer: {
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+				delivererDetails:{
+					showModal: true,
+					deliverer: action.deliverer,
+				}
+			};
+		case userConstants.DELIVERER_ACTIVATION_FAILURE:
+			return {
+				...state,
+				editDeliverer: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+			};
+		case userConstants.HIDE_UPDATE_DELIVERER_ALERTS:
+			return {
+				...state,
+				editDeliverer: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage:  "",
+				},
+			}
+		case userConstants.DELIVERER_DEACTIVATION_REQUEST:
+			return {
+				...state,
+				editDeliverer: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case userConstants.DELIVERER_DEACTIVATION_SUCCESS:
+			return {
+				...state,
+				editDeliverer: {
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+				delivererDetails:{
+					showModal: true,
+					deliverer: action.deliverer,
+				}
+			};
+		case userConstants.DELIVERER_DEACTIVATION_FAILURE:
+			return {
+				...state,
+				editDeliverer: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+			};
+		case userConstants.DELIVERER_DELETE_REQUEST:
+			return {
+				...state,
+				deleteDeliverer: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case userConstants.DELIVERER_DELETE_SUCCESS:
+			let strcpy =  {
+				...state,
+				deleteDeliverer: {
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+				delivererDetails:{
+					showModal: false,
+					deliverer: {
+						Id: "",
+						   EntityDTO: {
+							   Email: "",
+							   Name: "",
+							   Surname: "",
+							   PhoneNumber: "",
+							   DelivererStatus: "",
+						   },
+					},
+				}
+			};
+			var newListDeliverers = strcpy.deliverers.filter((deliverer) => deliverer.Id !== action.deliverer.Id);
+			strcpy.deliverers = newListDeliverers;
+			return strcpy;
+		case userConstants.DELIVERER_DELETE_FAILURE:
+			return {
+				...state,
+				deleteDeliverer: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+			};
+		case userConstants.HIDE_DELIVERER_DELETE_ALERT:
+			return {
+				...state,
+				deleteDeliverer: {
+					showSuccessMessage: false,
+					successMessage: '',
+					showErrorMessage: false,
+					errorMessage: '',
+				},
+			}
+		case userConstants.HIDE_DELIVERER_REQUEST_ALERTS:
+			return {
+				...state,
+				approveDeliveryRequest: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+				rejectDeliveryRequest: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				}
+			}
 		default:
 			return state;
 	}

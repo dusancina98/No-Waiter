@@ -102,7 +102,7 @@ const SideBar = () => {
 					<div className="collapse" id="deliverers">
 						<ul className="nav flex-column sub-menu">
 							<li className="nav-item">
-								<Link className="nav-link" to="/todo">
+								<Link className="nav-link" to="/deliverers">
 									All Deliverer
 								</Link>
 							</li>
