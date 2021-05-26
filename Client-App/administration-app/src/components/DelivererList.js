@@ -14,8 +14,8 @@ const DelivererList = () => {
 		getRequestsHandler();
 	}, [dispatch]);
 
-	const handleDelivererRequestClick = (delivererRequest) => {
-		dispatch({ type: modalConstants.SHOW_DELIVERER_REQUEST_DETAILS, delivererRequest });
+	const handleDelivererRequestClick = (deliverer) => {
+		dispatch({ type: modalConstants.SHOW_DELIVERER_DETAILS, deliverer });
 	};
 
 	return (
@@ -28,7 +28,7 @@ const DelivererList = () => {
 						<td>{deliverer.EntityDTO.Surname}</td>
 						<td>{deliverer.EntityDTO.PhoneNumber}</td>
 						<td>
-							<label  className={deliverer.EntityDTO.DelivererStatus==='ACTIVE' ? 'badge badge-info' : 'badge badge-info-red'}>{deliverer.EntityDTO.DelivererStatus}</label>
+							<label  className={deliverer.EntityDTO.DelivererStatus==='ACTIVE' ? 'badge badge-info' : 'badge badge-info-inactive'}>{deliverer.EntityDTO.DelivererStatus}</label>
 						</td>
 					</tr>
 				);

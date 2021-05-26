@@ -33,8 +33,12 @@ public class Deliverer extends Worker{
 		return delivererStatus;
 	}
 
-	public void setDelivererStatus(DelivererStatus delivererStatus) {
-		this.delivererStatus = delivererStatus;
+	public void activateDeliverer() {
+		this.delivererStatus = DelivererStatus.ACTIVE;
+	}
+	
+	public void deactivateDeliverer() {
+		this.delivererStatus = DelivererStatus.INACTIVE;
 	}
 
     

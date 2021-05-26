@@ -624,6 +624,75 @@ export const userReducer = (state, action) => {
 				...state,
 				deliverers: [],
 			};
+		case modalConstants.SHOW_DELIVERER_DETAILS:
+			return {
+				...state,
+				delivererDetails:{
+					showModal: true,
+					deliverer: action.deliverer,
+				}
+			};
+		case modalConstants.HIDE_DELIVERER_DETAILS:
+			return {
+				...state,
+				delivererDetails:{
+					showModal: false,
+					deliverer: {
+					Id: "",
+					   EntityDTO: {
+						   Email: "",
+						   Name: "",
+						   Surname: "",
+						   PhoneNumber: "",
+						   DelivererStatus: "",
+					   },
+				   },
+				}
+			};
+		case userConstants.DELIVERER_ACTIVATION_REQUEST:
+			return {
+				...state,
+				editDeliverer: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case userConstants.DELIVERER_ACTIVATION_SUCCESS:
+			return {
+				...state,
+				editDeliverer: {
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+				delivererDetails:{
+					showModal: true,
+					deliverer: action.deliverer,
+				}
+			};
+		case userConstants.DELIVERER_ACTIVATION_FAILURE:
+			return {
+				...state,
+				editDeliverer: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+			};
+		case userConstants.HIDE_UPDATE_DELIVERER_ALERTS:
+			return {
+				...state,
+				editDeliverer: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage:  "",
+				},
+			}
 		default:
 			return state;
 	}

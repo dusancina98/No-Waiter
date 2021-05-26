@@ -1,5 +1,6 @@
 import React from "react";
 import DelivererList from "./DelivererList";
+import DelivererDetailsModal from "./modals/DelivererDetailsModal";
 
 
 const DelivererTable = () => {
@@ -23,6 +24,7 @@ const DelivererTable = () => {
 								</thead>
 								<tbody>
 									<DelivererList/>
+									<DelivererDetailsModal/>
 								</tbody>
 							</table>
 						</div>

@@ -104,4 +104,18 @@ public class DelivererServiceImpl implements DelivererService{
 		return UserMapper.MapDelivererCollectionToIdentifiableODelivererDTOCollection(delivererRepository.findAll());
 	}
 
+	@Override
+	public void activateDeliverer(UUID id) {
+		Deliverer deliverer = delivererRepository.getOne(id);
+		deliverer.activateDeliverer();
+		delivererRepository.save(deliverer);
+	}
+	
+	@Override
+	public void deactivateDeliverer(UUID id) {
+		Deliverer deliverer = delivererRepository.getOne(id);
+		deliverer.deactivateDeliverer();
+		delivererRepository.save(deliverer);
+	}
+
 }

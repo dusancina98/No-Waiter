@@ -20,4 +20,8 @@ public interface DelivererService {
 	void rejectDelivererRequest(RejectDelivererDTO rejectDelivererDTO);
 
 	Iterable<IdentifiableDTO<DelivererDTO>> getAllDeliverer();
+
+	void activateDeliverer(UUID id);
+
+	void deactivateDeliverer(UUID id);
 }
