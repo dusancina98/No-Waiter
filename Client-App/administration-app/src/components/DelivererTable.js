@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import DelivererList from "./DelivererList";
 import DelivererDetailsModal from "./modals/DelivererDetailsModal";
+import { UserContext } from "../contexts/UserContext";
+import { userConstants } from "../constants/UserConstants";
+import SuccessAlerts from "../components/SuccessAlert";
 
 
 const DelivererTable = () => {
+	const { userState, dispatch } = useContext(UserContext);
 
 	return (
 		<React.Fragment>
@@ -11,6 +15,12 @@ const DelivererTable = () => {
 				<div className="card">
 					<div className="card-body">
 						<h4 className="card-title">Deliverers</h4>
+						<SuccessAlerts
+							hidden={!userState.deleteDeliverer.showSuccessMessage}
+							header="Success"
+							message={userState.deleteDeliverer.successMessage}
+							handleCloseAlert={() => dispatch({ type: userConstants.HIDE_DELIVERER_DELETE_ALERT })}
+						/>
 						<div className="table-responsive">
 							<table className="table table-hover">
 								<thead>

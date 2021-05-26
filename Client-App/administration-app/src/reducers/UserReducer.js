@@ -569,7 +569,7 @@ export const userReducer = (state, action) => {
 					showErrorMessage: false,
 					errorMessage: '',
 				},
-			}
+			};
 		case modalConstants.SHOW_DELIVERER_REQUEST_REJECT_WINDOW:
 		    temp = { ...state };
 			temp.delivererRequestDetails.showRejectWindow = true;
@@ -727,6 +727,62 @@ export const userReducer = (state, action) => {
 					errorMessage: action.errorMessage,
 				},
 			};
+		case userConstants.DELIVERER_DELETE_REQUEST:
+			return {
+				...state,
+				deleteDeliverer: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case userConstants.DELIVERER_DELETE_SUCCESS:
+			let strcpy =  {
+				...state,
+				deleteDeliverer: {
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+				delivererDetails:{
+					showModal: false,
+					deliverer: {
+						Id: "",
+						   EntityDTO: {
+							   Email: "",
+							   Name: "",
+							   Surname: "",
+							   PhoneNumber: "",
+							   DelivererStatus: "",
+						   },
+					},
+				}
+			};
+			var newListDeliverers = strcpy.deliverers.filter((deliverer) => deliverer.Id !== action.deliverer.Id);
+			strcpy.deliverers = newListDeliverers;
+			return strcpy;
+		case userConstants.DELIVERER_DELETE_FAILURE:
+			return {
+				...state,
+				deleteDeliverer: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+			};
+		case userConstants.HIDE_DELIVERER_DELETE_ALERT:
+			return {
+				...state,
+				deleteDeliverer: {
+					showSuccessMessage: false,
+					successMessage: '',
+					showErrorMessage: false,
+					errorMessage: '',
+				},
+			}
 		default:
 			return state;
 	}

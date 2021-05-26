@@ -16,7 +16,7 @@ const DelivererDetailsModal = () => {
 	}
 
     const handleDeleteDeliverer = () =>{
-        alert('TODO')
+        userService.deleteDeliverer(userState.delivererDetails.deliverer, dispatch);
     }
 
     const handleActivateDeliverer = () =>{
@@ -48,6 +48,12 @@ const DelivererDetailsModal = () => {
                         header="Error"
                         message={userState.editDeliverer.errorMessage}
                         handleCloseAlert={() => dispatch({ type: userConstants.HIDE_UPDATE_DELIVERER_ALERTS })}
+                    />
+                    <FailureAlert
+                        hidden={!userState.deleteDeliverer.showErrorMessage}
+                        header="Error"
+                        message={userState.deleteDeliverer.errorMessage}
+                        handleCloseAlert={() => dispatch({ type: userConstants.HIDE_DELIVERER_DELETE_ALERT })}
                     />
                     <div className="row">
                         <div className="col-md-12 grid-margin stretch-card">

@@ -16,7 +16,7 @@ public class Deliverer extends Worker{
 	@Column(name="status", nullable = false)
 	private DelivererStatus delivererStatus;
 	
-    @Column(name="status")
+    @Column(name="deleted")
 	private boolean deleted;
     
 	public Deliverer() {

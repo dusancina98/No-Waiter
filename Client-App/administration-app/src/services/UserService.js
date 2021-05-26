@@ -26,6 +26,7 @@ export const userService = {
 	findAllDeliverer,
 	activateDeliverer,
 	deactivateDeliverer,
+	deleteDeliverer,
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -588,7 +589,7 @@ function rejectDelivererRequest(rejectRequestDTO,dispatch){
 function activateDeliverer(deliverer, dispatch) {
 	dispatch(request());
 
-	Axios.put(`/user-api/api/users/${deliverer.Id}/activate`, { validateStatus: () => true, headers: authHeader() })
+	Axios.put(`/user-api/api/users/deliverers/${deliverer.Id}/activate`, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -617,7 +618,7 @@ function activateDeliverer(deliverer, dispatch) {
 function deactivateDeliverer(deliverer, dispatch) {
 	dispatch(request());
 
-	Axios.put(`/user-api/api/users/${deliverer.Id}/deactivate`, { validateStatus: () => true, headers: authHeader() })
+	Axios.put(`/user-api/api/users/deliverers/${deliverer.Id}/deactivate`, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -640,5 +641,33 @@ function deactivateDeliverer(deliverer, dispatch) {
 	}
 	function failure(message) {
 		return { type: userConstants.DELIVERER_DEACTIVATION_FAILURE, errorMessage: message };
+	}
+}
+
+function deleteDeliverer(deliverer, dispatch) {
+	dispatch(request());
+
+	Axios.delete(`/user-api/api/users/deliverers/${deliverer.Id}`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			console.log(res);
+			if (res.status === 200) {
+				dispatch(success("Deliverer successfully deleted", deliverer));
+			} else {
+				dispatch(failure("Error"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function request() {
+		return { type: userConstants.DELIVERER_DELETE_REQUEST };
+	}
+	function success(message, deliverer) {
+		return { type: userConstants.DELIVERER_DELETE_SUCCESS, successMessage: message, deliverer };
+	}
+	function failure(message) {
+		return { type: userConstants.DELIVERER_DELETE_FAILURE, errorMessage: message };
 	}
 }

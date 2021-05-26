@@ -428,7 +428,7 @@ public class Api {
         }
     }
     
-    @PutMapping("/{delivererId}/activate")
+    @PutMapping("/deliverers/{delivererId}/activate")
     @CrossOrigin
     public ResponseEntity<?> activateDeliverer(@PathVariable UUID delivererId) {
 
@@ -445,7 +445,7 @@ public class Api {
         }
     }
     
-    @PutMapping("/{delivererId}/deactivate")
+    @PutMapping("/deliverers/{delivererId}/deactivate")
     @CrossOrigin
     public ResponseEntity<?> deactivateDeliverer(@PathVariable UUID delivererId) {
 
@@ -462,7 +462,7 @@ public class Api {
         }
     }
     
-    @DeleteMapping("/{delivererId}")
+    @DeleteMapping("/deliverers/{delivererId}")
     @CrossOrigin
     public ResponseEntity<?> deleteDeliverer(@PathVariable UUID delivererId) {
 

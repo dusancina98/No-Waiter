@@ -101,7 +101,7 @@ public class DelivererServiceImpl implements DelivererService{
 
 	@Override
 	public Iterable<IdentifiableDTO<DelivererDTO>> getAllDeliverer() {
-		return UserMapper.MapDelivererCollectionToIdentifiableODelivererDTOCollection(delivererRepository.findAll());
+		return UserMapper.MapDelivererCollectionToIdentifiableODelivererDTOCollection(delivererRepository.getAll());
 	}
 
 	@Override

@@ -30,7 +30,7 @@ insert into deliverer_request (id, email, name, surname, phone_number, reference
 
 --deliverers
 insert into worker (id,phone_number) values ('29363b4f-8fb9-4d3d-8785-d7235ecc8286','062490393');
-insert into deliverer (id,status) values ('29363b4f-8fb9-4d3d-8785-d7235ecc8286', 'ACTIVE');
+insert into deliverer (id,status,deleted) values ('29363b4f-8fb9-4d3d-8785-d7235ecc8286', 'ACTIVE', false);
 
 insert into worker (id,phone_number) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0ba0','0655532134');
-insert into deliverer (id,status) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0ba0', 'INACTIVE');
+insert into deliverer (id,status,deleted) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0ba0', 'INACTIVE', false);
