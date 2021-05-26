@@ -16,17 +16,22 @@ public class Deliverer extends Worker{
 	@Column(name="status", nullable = false)
 	private DelivererStatus delivererStatus;
 	
+    @Column(name="status")
+	private boolean deleted;
+    
 	public Deliverer() {
     }
 	
-	public Deliverer(UUID id, String email, String password, String name, String surname, UUID objectId, String objectName, String address, String phoneNumber, DelivererStatus delivererStatus) throws ClassFieldValidationException {
+	public Deliverer(UUID id, String email, String password, String name, String surname, UUID objectId, String objectName, String address, String phoneNumber, DelivererStatus delivererStatus, boolean deleted) throws ClassFieldValidationException {
         super(id, email, password, name, surname, phoneNumber);
         this.delivererStatus=delivererStatus;
+        this.deleted=deleted;
     }
 
-    public Deliverer(String email, String password, String name, String surname, String phoneNumber, DelivererStatus delivererStatus) throws ClassFieldValidationException {
+    public Deliverer(String email, String password, String name, String surname, String phoneNumber, DelivererStatus delivererStatus, boolean deleted) throws ClassFieldValidationException {
         super(email, password, name, surname, phoneNumber);
         this.delivererStatus=delivererStatus;
+        this.deleted=deleted;
     }
 
 	public DelivererStatus getDelivererStatus() {
@@ -41,5 +46,12 @@ public class Deliverer extends Worker{
 		this.delivererStatus = DelivererStatus.INACTIVE;
 	}
 
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void delete() {
+		this.deleted=true;
+	}
     
 }

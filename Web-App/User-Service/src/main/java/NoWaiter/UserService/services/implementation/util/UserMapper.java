@@ -71,7 +71,7 @@ public class UserMapper {
 	public static Deliverer MapDelivererRequestToDeliverer(DelivererRequest delivererRequest) throws ClassFieldValidationException {
         if (delivererRequest == null) throw new IllegalArgumentException();
 
-        return new Deliverer(delivererRequest.getEmail(), " ", delivererRequest.getName(), delivererRequest.getSurname(), delivererRequest.getPhoneNumber(), DelivererStatus.ACTIVE);
+        return new Deliverer(delivererRequest.getEmail(), " ", delivererRequest.getName(), delivererRequest.getSurname(), delivererRequest.getPhoneNumber(), DelivererStatus.ACTIVE, false);
 	}
 
 	public static Iterable<IdentifiableDTO<DelivererRequestDTO>> MapDelivererRequestCollectionToIdentifiableODelivererRequestDTOCollection(

@@ -24,4 +24,6 @@ public interface DelivererService {
 	void activateDeliverer(UUID id);
 
 	void deactivateDeliverer(UUID id);
+
+	void deleteDeliverer(UUID delivererId);
 }

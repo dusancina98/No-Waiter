@@ -118,4 +118,11 @@ public class DelivererServiceImpl implements DelivererService{
 		delivererRepository.save(deliverer);
 	}
 
+	@Override
+	public void deleteDeliverer(UUID delivererId) {
+		Deliverer deliverer = delivererRepository.getOne(delivererId);
+		deliverer.delete();
+		delivererRepository.save(deliverer);
+	}
+
 }
