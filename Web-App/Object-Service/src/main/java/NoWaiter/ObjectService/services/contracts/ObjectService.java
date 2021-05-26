@@ -31,4 +31,6 @@ public interface ObjectService {
     void toggleObjectBlock(UUID id, boolean status);
     
     void toggleObjectActivation(UUID id, boolean status);
+
+	void worktime();
 }

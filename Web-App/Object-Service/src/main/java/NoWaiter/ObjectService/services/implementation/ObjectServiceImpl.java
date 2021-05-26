@@ -1,6 +1,11 @@
 package NoWaiter.ObjectService.services.implementation;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.core.env.Environment;
@@ -12,8 +17,12 @@ import NoWaiter.ObjectService.entities.Address;
 import NoWaiter.ObjectService.entities.Contact;
 import NoWaiter.ObjectService.entities.Object;
 import NoWaiter.ObjectService.entities.ObjectAdmin;
+import NoWaiter.ObjectService.entities.WeekDay;
+import NoWaiter.ObjectService.entities.WorkDay;
+import NoWaiter.ObjectService.entities.WorkTime;
 import NoWaiter.ObjectService.repository.ObjectAdminRepository;
 import NoWaiter.ObjectService.repository.ObjectRepository;
+import NoWaiter.ObjectService.repository.WorkTimeRepository;
 import NoWaiter.ObjectService.services.contracts.ObjectService;
 import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
@@ -33,6 +42,9 @@ public class ObjectServiceImpl implements ObjectService {
 
     @Autowired
 	private Environment env;
+    
+    @Autowired
+    private WorkTimeRepository workTimeRepository;
     
     @Override
     public UUID create(ObjectDTO entity) {
@@ -120,5 +132,29 @@ public class ObjectServiceImpl implements ObjectService {
 		ImageUtil.saveFile(env.getProperty("abs-image-path"), object.getId().toString() + ".jpg", multipartFile);
 		object.setImagePath(env.getProperty("rel-image-path") + "\\" + object.getId().toString() + ".jpg");
 		objectRepository.save(object);
+	}
+
+	@Override
+	public void worktime() {
+		System.out.println("TEST");
+		List<WorkDay> listaWorkDay = new ArrayList<>();
+		
+		LocalTime time1= LocalTime.of(15, 00);
+		LocalTime time2= LocalTime.of(18, 00);
+		
+		WorkDay wd1 = new WorkDay(WeekDay.MONDAY, true, time1, time2);
+		WorkDay wd2 = new WorkDay(WeekDay.THURSDAY, true, time1, time2);
+		WorkDay wd3 = new WorkDay(WeekDay.FRIDAY, false, time1, time2);
+		listaWorkDay.add(wd1);
+		listaWorkDay.add(wd2);
+		listaWorkDay.add(wd3);
+
+		WorkTime wt= new WorkTime(listaWorkDay);
+		System.out.println("TEST33");
+
+		workTimeRepository.save(wt);
+		
+		System.out.println("TEST22");
+
 	}
 }

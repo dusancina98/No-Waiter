@@ -317,4 +317,18 @@ public class Api {
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
     }
+    
+    @GetMapping("/worktime")
+    @CrossOrigin
+    public ResponseEntity<?> worktime() {
+    	try {
+    		objectService.worktime();
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e){
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
+    }
 }
