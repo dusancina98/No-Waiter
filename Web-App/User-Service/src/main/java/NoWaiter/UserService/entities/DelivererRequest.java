@@ -42,7 +42,7 @@ public class DelivererRequest {
     private String reference;
     
     @Enumerated(EnumType.STRING)
-	@Column(name="staffType")
+	@Column(name="requestStatus")
 	private RequestStatus requestStatus;
     
     public DelivererRequest() { }

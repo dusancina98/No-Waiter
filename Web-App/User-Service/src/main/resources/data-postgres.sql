@@ -23,6 +23,11 @@ insert into user_authority (user_id, authority_id) values ('739ebff1-a0a6-4c1d-b
 
 insert into object_admin (id, object_id, object_name, address) values ('22793162-52d3-11eb-ae93-0242ac130111', '11193162-52d3-11eb-ae93-0242ac130111', 'Loft' , 'Novi Sad');
 
+--deliverer requests
+insert into deliverer_request (id, email, name, surname, phone_number, reference, request_status) values ('1334cf36-af66-4a38-8e59-475d33798341', 'requestexample@example.com', 'Pera' , 'Peric' ,'065324235','Najbolji deliverer', 'PENDING');
+insert into deliverer_request (id, email, name, surname, phone_number, reference, request_status) values ('065e478a-a0fc-485b-bfe9-1b274fc19399', 'requestexample2@example.com', 'Djura' , 'Djuric' ,'065756535','Najgori deliverer', 'PENDING');
+insert into deliverer_request (id, email, name, surname, phone_number, reference, request_status) values ('76f91951-34fc-4fbc-9684-597307975ed3', 'requestexample3@example.com', 'Mika' , 'Mikic' ,'063676535','Radio za wolt', 'PENDING');
+
 --deliverers
 insert into worker (id,phone_number) values ('29363b4f-8fb9-4d3d-8785-d7235ecc8286','062490393');
 insert into deliverer (id,status) values ('29363b4f-8fb9-4d3d-8785-d7235ecc8286', 'ACTIVE');
