@@ -5,6 +5,7 @@ import { authHeader } from "../helpers/auth-header";
 
 export const productService = {
 	createProductCategory,
+	updateProductImage,
 	findAllProductCategories,
 	findAllProductTypes,
 	createProduct,
@@ -35,6 +36,33 @@ function createProductCategory(categoryName, dispatch) {
 	}
 	function failure(message) {
 		return { type: productConstants.CATEGORY_CREATE_FAILURE, errorMessage: message };
+	}
+}
+
+function updateProductImage(productId, image, imageUrl, dispatch) {
+	dispatch(request());
+
+	Axios.put(`/product-api/api/products/${productId}/image`, image, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success("Product image updated successfully", productId, imageUrl));
+			} else {
+				dispatch(failure(res.data.message));
+			}
+			console.log(res);
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+
+	function request() {
+		return { type: productConstants.PRODUCT_IMAGE_CHANGE_REQUEST };
+	}
+	function success(message, productId, imageUrl) {
+		return { type: productConstants.PRODUCT_IMAGE_CHANGE_SUCCESS, successMessage: message, productId, imageUrl };
+	}
+	function failure(message) {
+		return { type: productConstants.PRODUCT_IMAGE_CHANGE_FAILURE, errorMessage: message };
 	}
 }
 

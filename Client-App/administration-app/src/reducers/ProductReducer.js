@@ -55,6 +55,45 @@ export const productReducer = (state, action) => {
 					},
 				},
 			};
+
+		case productConstants.PRODUCT_IMAGE_CHANGE_REQUEST:
+			let stt = { ...state };
+			stt.showError = false;
+			stt.showSuccessMessage = false;
+			stt.successMessage = "";
+			stt.errorMessage = "";
+
+			return stt;
+		case productConstants.PRODUCT_IMAGE_CHANGE_SUCCESS:
+			let stta = { ...state };
+
+			stta.showError = false;
+			stta.errorMessage = "";
+			stta.showSuccessMessage = true;
+			stta.successMessage = action.successMessage;
+			let foundProdIndex = stta.products.findIndex((product) => product.id === action.productId);
+			let foundShowProdIndex = stta.showedProducts.findIndex((product) => product.id === action.productId);
+
+			let prod = { ...stta.products[foundProdIndex] };
+			prod.EntityDTO.ImagePath = action.imageUrl;
+			stta.products[foundProdIndex] = prod;
+			stta.showedProducts[foundShowProdIndex] = prod;
+
+			return stta;
+
+		case productConstants.PRODUCT_TOGGLE_DETAILS:
+			let prStta = { ...state };
+
+			prStta.productDetails.productId = prStta.productDetails.productId === action.productId ? "" : action.productId;
+			return prStta;
+
+		case productConstants.PRODUCT_IMAGE_CHANGE_FAILURE:
+			let sttta = { ...state };
+			sttta.showError = true;
+			sttta.showSuccessMessage = false;
+			sttta.successMessage = "";
+			sttta.errorMessage = action.errorMessage;
+			return sttta;
 		case modalConstants.HIDE_CREATE_PRODUCT_MODAL:
 			return {
 				...state,

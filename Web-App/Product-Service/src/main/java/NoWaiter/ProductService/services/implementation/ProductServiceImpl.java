@@ -26,6 +26,7 @@ import NoWaiter.ProductService.services.contracts.dto.NameDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductRequestDTO;
 import NoWaiter.ProductService.services.contracts.exceptions.InvalidProductCategoryException;
+import NoWaiter.ProductService.services.contracts.exceptions.UnauthorizedRequestException;
 import NoWaiter.ProductService.services.implementation.util.ImageUtil;
 import NoWaiter.ProductService.services.implementation.util.ProductCategoryMapper;
 import NoWaiter.ProductService.services.implementation.util.ProductMapper;
@@ -107,5 +108,16 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Iterable<IdentifiableDTO<ProductDTO>> findAllProducts(UUID objectId) {
 		return ProductMapper.MapProductCategoryCollectionToIdentifiableProductDTOCollection(productCategoryRepository.findAllByObjectId(objectId));
+	}
+
+	@Override
+	public void updateImage(MultipartFile multipartFile, UUID productId, UUID objectId) throws IOException, UnauthorizedRequestException {
+
+		Product product = productRepository.findById(productId).get();
+		
+		if(!objectId.equals(product.getProductCategory().getObjectId())) throw new UnauthorizedRequestException("Object admin not authorized for this operation");
+		
+		product.setImagePath(saveImageAndGetPath(multipartFile, productId));
+		productRepository.save(product);
 	}
 }

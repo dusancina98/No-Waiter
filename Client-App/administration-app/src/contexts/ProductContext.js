@@ -35,6 +35,27 @@ const ProductContextProvider = (props) => {
 				Name: "",
 			},
 		},
+		productDetails: {
+			productId: "",
+		},
+		productEditInfo: {
+			product: {
+				Id: "",
+				EntityDTO: {
+					Amount: "",
+					Ingredients: [],
+					SideDishes: [],
+					Description: "",
+					MeasureUnit: "",
+					Name: "",
+					Price: "",
+					ProductCategory: { Id: "", EntityDTO: { Name: "" } },
+					ProductType: { Id: "", EntityDTO: { Name: "" } },
+					PhoneNumber: "",
+					Image: "",
+				},
+			},
+		},
 		showedProducts: [],
 		products: [],
 		categories: [],
