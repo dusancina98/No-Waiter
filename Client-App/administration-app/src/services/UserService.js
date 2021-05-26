@@ -535,7 +535,7 @@ function checkIfResetPasswordTokenIsValid(token) {
 
 function approveDelivererRequest(requestIdDTO,dispatch){
 
-	Axios.put(`/user-api/api/users/approve-deliverer-request`, requestIdDTO, { validateStatus: () => true })
+	Axios.put(`/user-api/api/users/deliverer-request/approve/${requestIdDTO.id}`, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 200) {
 				findAllDelivererRequests(dispatch)
@@ -564,7 +564,7 @@ function rejectDelivererRequest(rejectRequestDTO,dispatch){
 		return;
 	}
 
-	Axios.put(`/user-api/api/users/reject-deliverer-request`, rejectRequestDTO, { validateStatus: () => true })
+	Axios.put(`/user-api/api/users/deliverer-request/reject/`, rejectRequestDTO, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 200) {
 				findAllDelivererRequests(dispatch)

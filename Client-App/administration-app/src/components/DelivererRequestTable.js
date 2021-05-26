@@ -19,21 +19,21 @@ const DelivererRequestTable = () => {
 							hidden={!userState.approveDeliveryRequest.showSuccessMessage}
 							header="Success"
 							message={userState.approveDeliveryRequest.successMessage}
-							handleCloseAlert={() => dispatch({ type: userConstants.SET_DELIVERER_REQUEST })}
+							handleCloseAlert={() => dispatch({ type: userConstants.HIDE_DELIVERER_REQUEST_ALERTS })}
 						/>
 
 						<SuccessAlerts
 							hidden={!userState.rejectDeliveryRequest.showSuccessMessage}
 							header="Success"
 							message={userState.rejectDeliveryRequest.successMessage}
-							handleCloseAlert={() => dispatch({ type: userConstants.SET_DELIVERER_REQUEST })}
+							handleCloseAlert={() => dispatch({ type: userConstants.HIDE_DELIVERER_REQUEST_ALERTS })}
 						/>	
 
 						<FailureAlert
 					    	hidden={!userState.approveDeliveryRequest.showErrorMessage}
 					    	header="Error"
 					    	message={userState.approveDeliveryRequest.errorMessage}
-					    	handleCloseAlert={() => dispatch({ type: userConstants.SET_DELIVERER_REQUEST })}
+					    	handleCloseAlert={() => dispatch({ type: userConstants.HIDE_DELIVERER_REQUEST_ALERTS })}
 				    	/>
 						<div className="table-responsive">
 							<table className="table table-hover">

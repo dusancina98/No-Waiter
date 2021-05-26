@@ -386,11 +386,11 @@ public class Api {
         }
     }
     
-    @PutMapping("/approve-deliverer-request")
+    @PutMapping("/deliverer-request/approve/{requestId}")
     @CrossOrigin
-    public ResponseEntity<?> approveDelivererRequest(@RequestBody RequestIdDTO requestIdDTO) {
+    public ResponseEntity<?> approveDelivererRequest(@PathVariable UUID requestId) {
         try {
-        	delivererService.approveDelivererRequest(requestIdDTO.id);    
+        	delivererService.approveDelivererRequest(requestId);    
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (EntityNotFoundException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
@@ -403,7 +403,7 @@ public class Api {
         }
     }
     
-    @PutMapping("/reject-deliverer-request")
+    @PutMapping("/deliverer-request/reject")
     @CrossOrigin
     public ResponseEntity<?> rejectDelivererRequest(@RequestBody RejectDelivererDTO rejectDelivererDTO) {
         try {

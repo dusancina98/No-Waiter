@@ -783,6 +783,22 @@ export const userReducer = (state, action) => {
 					errorMessage: '',
 				},
 			}
+		case userConstants.HIDE_DELIVERER_REQUEST_ALERTS:
+			return {
+				...state,
+				approveDeliveryRequest: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+				rejectDeliveryRequest: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				}
+			}
 		default:
 			return state;
 	}
