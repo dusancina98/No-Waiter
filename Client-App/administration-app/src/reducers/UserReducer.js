@@ -693,6 +693,40 @@ export const userReducer = (state, action) => {
 					errorMessage:  "",
 				},
 			}
+		case userConstants.DELIVERER_DEACTIVATION_REQUEST:
+			return {
+				...state,
+				editDeliverer: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+		case userConstants.DELIVERER_DEACTIVATION_SUCCESS:
+			return {
+				...state,
+				editDeliverer: {
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+				delivererDetails:{
+					showModal: true,
+					deliverer: action.deliverer,
+				}
+			};
+		case userConstants.DELIVERER_DEACTIVATION_FAILURE:
+			return {
+				...state,
+				editDeliverer: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+			};
 		default:
 			return state;
 	}

@@ -25,6 +25,7 @@ export const userService = {
 	rejectDelivererRequest,
 	findAllDeliverer,
 	activateDeliverer,
+	deactivateDeliverer,
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -610,5 +611,34 @@ function activateDeliverer(deliverer, dispatch) {
 	}
 	function failure(message) {
 		return { type: userConstants.DELIVERER_ACTIVATION_FAILURE, errorMessage: message };
+	}
+}
+
+function deactivateDeliverer(deliverer, dispatch) {
+	dispatch(request());
+
+	Axios.put(`/user-api/api/users/${deliverer.Id}/deactivate`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			console.log(res);
+			if (res.status === 200) {
+				deliverer.EntityDTO.DelivererStatus = 'INACTIVE';
+				dispatch(success("Deliverer successfully deactivated", deliverer));
+			} else {
+				dispatch(failure("Error"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function request() {
+		return { type: userConstants.DELIVERER_DEACTIVATION_REQUEST };
+	}
+	function success(message, deliverer) {
+		return { type: userConstants.DELIVERER_DEACTIVATION_SUCCESS, successMessage: message, deliverer };
+	}
+	function failure(message) {
+		return { type: userConstants.DELIVERER_DEACTIVATION_FAILURE, errorMessage: message };
 	}
 }

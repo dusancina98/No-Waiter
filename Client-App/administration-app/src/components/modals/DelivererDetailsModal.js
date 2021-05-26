@@ -24,7 +24,7 @@ const DelivererDetailsModal = () => {
     }
 
     const handleDeactivateDeliverer = () =>{
-        alert('TODO')
+        userService.deactivateDeliverer(userState.delivererDetails.deliverer, dispatch);
     }
 
 	return (
