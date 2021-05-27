@@ -22,9 +22,11 @@ import org.springframework.web.multipart.MultipartFile;
 import NoWaiter.ProductService.intercomm.AuthClient;
 import NoWaiter.ProductService.intercomm.ObjectClient;
 import NoWaiter.ProductService.services.contracts.ProductService;
+import NoWaiter.ProductService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ProductService.services.contracts.dto.JwtParseResponseDTO;
 import NoWaiter.ProductService.services.contracts.dto.NameDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductRequestDTO;
+import NoWaiter.ProductService.services.contracts.dto.ProductUpdateRequestDTO;
 import NoWaiter.ProductService.services.contracts.exceptions.InvalidProductCategoryException;
 import NoWaiter.ProductService.services.contracts.exceptions.UnauthorizedRequestException;
 import feign.FeignException;
@@ -67,6 +69,28 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 	}  
+	
+	@PutMapping
+	@CrossOrigin
+	public ResponseEntity<?> updateProduct(@RequestHeader("Authorization") String token, @RequestBody IdentifiableDTO<ProductUpdateRequestDTO> productDTO) {
+		try {
+			JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+			UUID objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());
+			productService.updateProduct(productDTO, objectId);
+			return new ResponseEntity<>( HttpStatus.OK);
+		} catch (FeignException e) {
+        	if(e.status() == HttpStatus.NOT_FOUND.value())
+                return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);
+        	
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }  catch (UnauthorizedRequestException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+		} catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+	} 
 	
 	@GetMapping
 	@CrossOrigin

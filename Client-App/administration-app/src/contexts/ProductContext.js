@@ -38,7 +38,12 @@ const ProductContextProvider = (props) => {
 		productDetails: {
 			productId: "",
 		},
-		productEditInfo: {
+		updateProduct: {
+			showModal: false,
+			showedPage: 1,
+			productTypes: [],
+			showErrorMessage: false,
+			errorMessage: "",
 			product: {
 				Id: "",
 				EntityDTO: {
@@ -49,10 +54,7 @@ const ProductContextProvider = (props) => {
 					MeasureUnit: "",
 					Name: "",
 					Price: "",
-					ProductCategory: { Id: "", EntityDTO: { Name: "" } },
-					ProductType: { Id: "", EntityDTO: { Name: "" } },
-					PhoneNumber: "",
-					Image: "",
+					ProductTypeId: "",
 				},
 			},
 		},

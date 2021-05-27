@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import { colorConstants } from "../constants/ColorConstants";
+import { modalConstants } from "../constants/ModalConstants";
 import { productConstants } from "../constants/ProductConstants";
 import { ProductContext } from "../contexts/ProductContext";
 import { capitalizeFirstLetter } from "../helpers/string-util";
@@ -42,6 +43,24 @@ const ProductItem = (props) => {
 
 	const handleToggleDetails = () => {
 		dispatch({ type: productConstants.PRODUCT_TOGGLE_DETAILS, productId: props.product.Id });
+	};
+
+	const handleEditProduct = () => {
+		let product = {
+			Id: props.product.Id,
+			EntityDTO: {
+				Name: props.product.EntityDTO.Name,
+				MeasureUnit: props.product.EntityDTO.MeasureUnit,
+				Amount: props.product.EntityDTO.Amount,
+				Price: props.product.EntityDTO.Price,
+				ProductTypeId: props.product.EntityDTO.ProductType.Id,
+				Description: props.product.EntityDTO.Description,
+				Ingredients: props.product.EntityDTO.Ingredients,
+				SideDishes: props.product.EntityDTO.SideDishes,
+			},
+		};
+
+		dispatch({ type: modalConstants.SHOW_UPDATE_PRODUCT_MODAL, product });
 	};
 
 	useEffect(() => {
@@ -110,7 +129,7 @@ const ProductItem = (props) => {
 			<hr hidden={!showedDetails} />
 			<div className="row" hidden={!showedDetails} onClick={handleToggleDetails}>
 				<div className="col-12 col-md-12 d-flex justify-content-end mt-3">
-					<button type="button" className="btn btn-primary border-0 mr-4">
+					<button type="button" className="btn btn-primary border-0 mr-4" onClick={handleEditProduct}>
 						Edit info
 					</button>
 					<button type="button" className="btn btn-danger border-0 mr-4">

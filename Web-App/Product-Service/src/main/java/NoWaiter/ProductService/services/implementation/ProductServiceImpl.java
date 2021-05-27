@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import NoWaiter.ProductService.entities.Ingredient;
 import NoWaiter.ProductService.entities.Product;
+import NoWaiter.ProductService.entities.ProductAmount;
 import NoWaiter.ProductService.entities.ProductCategory;
 import NoWaiter.ProductService.entities.ProductType;
 import NoWaiter.ProductService.entities.SideDish;
@@ -25,6 +26,7 @@ import NoWaiter.ProductService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ProductService.services.contracts.dto.NameDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductRequestDTO;
+import NoWaiter.ProductService.services.contracts.dto.ProductUpdateRequestDTO;
 import NoWaiter.ProductService.services.contracts.exceptions.InvalidProductCategoryException;
 import NoWaiter.ProductService.services.contracts.exceptions.UnauthorizedRequestException;
 import NoWaiter.ProductService.services.implementation.util.ImageUtil;
@@ -118,6 +120,30 @@ public class ProductServiceImpl implements ProductService {
 		if(!objectId.equals(product.getProductCategory().getObjectId())) throw new UnauthorizedRequestException("Object admin not authorized for this operation");
 		
 		product.setImagePath(saveImageAndGetPath(multipartFile, productId));
+		productRepository.save(product);
+	}
+
+	@Override
+	public void updateProduct(IdentifiableDTO<ProductUpdateRequestDTO> productDTO, UUID objectId) throws UnauthorizedRequestException {
+		
+		Product product = productRepository.findById(productDTO.Id).get();
+		
+		if(!objectId.equals(product.getProductCategory().getObjectId())) throw new UnauthorizedRequestException("Object admin not authorized for this operation");
+		
+		product.setName(productDTO.EntityDTO.Name);
+		
+		List<Ingredient> ingredients = new ArrayList<Ingredient>();
+		List<SideDish> sideDishes = new ArrayList<SideDish>();
+		ProductType productType = productTypeRepository.findById(productDTO.EntityDTO.ProductTypeId).get();
+
+		productDTO.EntityDTO.Ingredients.forEach((ingredient) -> ingredients.add(new Ingredient(ingredient)));
+		productDTO.EntityDTO.SideDishes.forEach((sideDish) -> sideDishes.add(new SideDish(sideDish)));
+		product.setIngredients(ingredients);
+		product.setSideDishes(sideDishes);
+		product.setPrice(productDTO.EntityDTO.Price);
+		product.setProductAmount(new ProductAmount(productDTO.EntityDTO.Amount, productDTO.EntityDTO.MeasureUnit));
+		product.setProductType(productType);
+		product.setDescription(productDTO.EntityDTO.Description);
 		productRepository.save(product);
 	}
 }

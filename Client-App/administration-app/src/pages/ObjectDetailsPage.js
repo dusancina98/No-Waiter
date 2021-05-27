@@ -2,6 +2,7 @@ import React from "react";
 import Header from "../components/Header";
 import CreateProductCategoryModal from "../components/modals/CreateProductCategoryModal";
 import CreateProductModal from "../components/modals/CreateProductModal";
+import EditProductModal from "../components/modals/EditProductModal";
 import ObjectInfoHeader from "../components/ObjectInfoHeader";
 import ProductMenu from "../components/ProductMenu";
 import SideBar from "../components/SideBar";
@@ -25,6 +26,7 @@ const ObjectDetailsPage = () => {
 										<div className="card-body">
 											<ProductContextProvider>
 												<CreateProductModal />
+												<EditProductModal />
 												<CreateProductCategoryModal />
 												<ProductMenu />
 											</ProductContextProvider>
