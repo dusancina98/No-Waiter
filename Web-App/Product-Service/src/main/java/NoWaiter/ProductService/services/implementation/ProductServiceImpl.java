@@ -81,6 +81,7 @@ public class ProductServiceImpl implements ProductService {
 			product.setImagePath("");
 		else
 			product.setImagePath(env.getProperty("rel-image-path") + "\\" + product.getId().toString() + ".jpg");
+		
 		productRepository.save(product);
 		saveImageAndGetPath(productDTO.Image, product.getId());
 
@@ -103,7 +104,7 @@ public class ProductServiceImpl implements ProductService {
 
 		productDTO.Ingredients.forEach((ingredient) -> ingredients.add(new Ingredient(ingredient)));
 		productDTO.SideDishes.forEach((sideDish) -> sideDishes.add(new SideDish(sideDish)));
-		System.out.println(ingredients.size() + "\n\n\n");
+
 		return new Product(productDTO.Name, productDTO.Description, true, "", productDTO.Price, productDTO.Amount, productDTO.MeasureUnit, productType, ingredients, sideDishes);
 	}
 
@@ -144,6 +145,7 @@ public class ProductServiceImpl implements ProductService {
 		product.setProductAmount(new ProductAmount(productDTO.EntityDTO.Amount, productDTO.EntityDTO.MeasureUnit));
 		product.setProductType(productType);
 		product.setDescription(productDTO.EntityDTO.Description);
+		product.validate();
 		productRepository.save(product);
 	}
 }

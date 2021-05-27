@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,6 +63,9 @@ public class Api {
                 return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);
         	
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (ConstraintViolationException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (InvalidProductCategoryException e) {
 			e.printStackTrace();
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -83,7 +88,10 @@ public class Api {
                 return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);
         	
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }  catch (UnauthorizedRequestException e) {
+        } catch (ConstraintViolationException e) {
+	        	e.printStackTrace();
+	            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	    } catch (UnauthorizedRequestException e) {
         	e.printStackTrace();
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
 		} catch (Exception e) {
