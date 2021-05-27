@@ -227,11 +227,12 @@ export const productReducer = (state, action) => {
 			stta.errorMessage = "";
 			stta.showSuccessMessage = true;
 			stta.successMessage = action.successMessage;
-			let foundProdIndex = stta.products.findIndex((product) => product.id === action.productId);
-			let foundShowProdIndex = stta.showedProducts.findIndex((product) => product.id === action.productId);
+			let foundProdIndex = stta.products.findIndex((product) => product.Id === action.productId);
+			let foundShowProdIndex = stta.showedProducts.findIndex((product) => product.Id === action.productId);
 
 			let prod = { ...stta.products[foundProdIndex] };
-			prod.EntityDTO.ImagePath = action.imageUrl;
+			console.log(foundProdIndex, prod, action.productId, stta);
+			prod.EntityDTO.Image = action.imageUrl;
 			stta.products[foundProdIndex] = prod;
 			stta.showedProducts[foundShowProdIndex] = prod;
 
