@@ -333,7 +333,7 @@ function login(loginRequest, dispatch) {
 		.then((res) => {
 			if (res.status === 200) {
 				setAuthInLocalStorage(res.data);
-				dispatch(success());
+				dispatch(success(res.data));
 				window.location = "#/";
 			} else if (res.status === 401) {
 				dispatch(failure(res.data.message));
