@@ -13,7 +13,7 @@ import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeExce
 
 public interface ObjectService {
 
-    UUID create(ObjectDTO entity);
+    UUID create(ObjectDTO entity) throws InvalidTimeRangeException;
     
     void updateImage(MultipartFile multipartFile, UUID objectAdminId) throws IOException;
     

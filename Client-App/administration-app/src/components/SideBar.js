@@ -24,7 +24,7 @@ const SideBar = () => {
 							<span className="login-status online"></span>
 						</div>
 						<div className="nav-profile-text d-flex flex-column pr-3">
-							<span className="font-weight-medium mb-2">Henry Klein</span>
+							<span className="font-weight-medium mb-2">Ime  Prezime</span>
 							<span className="font-weight-normal">$8,753.00</span>
 						</div>
 						<span className="badge badge-danger text-white ml-3 rounded">3</span>

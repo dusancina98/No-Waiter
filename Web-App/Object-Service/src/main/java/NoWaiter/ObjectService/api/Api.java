@@ -61,6 +61,7 @@ public class Api {
 			e.printStackTrace();
             return new ResponseEntity<>(e.getRootCause().getMessage(), HttpStatus.CONFLICT);
 		} catch (Exception e) {
+			e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

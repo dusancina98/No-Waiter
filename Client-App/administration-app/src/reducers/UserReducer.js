@@ -232,9 +232,11 @@ export const userReducer = (state, action) => {
 					showError: false,
 					errorMessage: "",
 				},
+				...state
 			};
 		case userConstants.LOGIN_FAILURE:
 			return {
+				...state,
 				loginError: {
 					showError: true,
 					errorMessage: "Sorry, your email or password was incorrect. Please double-check your password.",
@@ -242,6 +244,7 @@ export const userReducer = (state, action) => {
 			};
 		case userConstants.LOGIN_SUCCESS:
 			return {
+				...state,
 				loginError: {
 					showError: false,
 					errorMessage: "",

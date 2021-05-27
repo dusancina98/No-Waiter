@@ -55,6 +55,9 @@ public class Api {
 		String jwt;
 		int expiresIn;
 		List<String> roles = new ArrayList<String>();
+		String name;
+		String surname;
+		String image = "URL";
 
 		try {
 			Authentication authentication = authenticationManager
@@ -64,6 +67,8 @@ public class Api {
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			User user = (User) authentication.getPrincipal();
 			user.getUserAuthorities().forEach((a) -> roles.add(a.getName()));
+			name=user.getName();
+			surname= user.getSurname();
 			jwt = tokenUtils.generateToken(user.getUsername(), user.getId() ,roles); // username
 			expiresIn = tokenUtils.getExpiredIn();
 		} catch (BadCredentialsException e) {
@@ -78,7 +83,7 @@ public class Api {
 		
         response.addHeader(HEADER, HEADER_VALUE_PREFIX + " " + jwt);
 		
-		return new ResponseEntity<UserTokenStateDTO>(new UserTokenStateDTO(jwt, new Date().getTime() + expiresIn, roles), HttpStatus.OK);
+		return new ResponseEntity<UserTokenStateDTO>(new UserTokenStateDTO(jwt, new Date().getTime() + expiresIn, roles, name,surname,image), HttpStatus.OK);
 	}
     
     @PostMapping("/parse-jwt")
