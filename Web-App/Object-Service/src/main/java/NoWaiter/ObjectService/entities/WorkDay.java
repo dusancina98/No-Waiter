@@ -4,6 +4,8 @@ import java.time.LocalTime;
 
 import javax.persistence.Embeddable;
 
+import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeException;
+
 
 @Embeddable
 public class WorkDay {
@@ -20,7 +22,7 @@ public class WorkDay {
 		// TODO Auto-generated constructor stub
 	}
 
-	public WorkDay(WeekDay weekDay, boolean working, LocalTime timeFrom, LocalTime timeTo) {
+	public WorkDay(WeekDay weekDay, boolean working, LocalTime timeFrom, LocalTime timeTo) throws InvalidTimeRangeException {
 		super();
 		this.weekDay = weekDay;
 		this.working = working;
@@ -29,9 +31,12 @@ public class WorkDay {
 		checkTimeRange(timeFrom,timeTo);
 	}
 
-
-	private void checkTimeRange(LocalTime timeFrom2, LocalTime timeTo2) {
-			
+	private void checkTimeRange(LocalTime timeFrom, LocalTime timeTo) throws InvalidTimeRangeException {
+		if(timeFrom.getHour() == timeTo.getHour() && timeFrom.getMinute() >= timeTo.getMinute()) 
+			throw new InvalidTimeRangeException("Time from is after time to");
+		
+		if(timeFrom.getHour() > timeTo.getHour())
+			throw new InvalidTimeRangeException("Time from is after time to");
 	}
 
 	public WeekDay getWeekDay() {

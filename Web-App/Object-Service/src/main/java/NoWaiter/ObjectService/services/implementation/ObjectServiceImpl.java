@@ -2,10 +2,8 @@ package NoWaiter.ObjectService.services.implementation;
 
 import java.io.IOException;
 import java.time.LocalTime;
-import java.time.Period;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.core.env.Environment;
@@ -28,6 +26,7 @@ import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectWithStatusDTO;
+import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeException;
 import NoWaiter.ObjectService.services.implementation.util.ImageUtil;
 import NoWaiter.ObjectService.services.implementation.util.ObjectMapper;
 
@@ -135,26 +134,29 @@ public class ObjectServiceImpl implements ObjectService {
 	}
 
 	@Override
-	public void worktime() {
+	public void worktime() throws InvalidTimeRangeException {
 		System.out.println("TEST");
-		List<WorkDay> listaWorkDay = new ArrayList<>();
+		Map<WeekDay, WorkDay> listaWorkDay = new HashMap<WeekDay, WorkDay>();
 		
 		LocalTime time1= LocalTime.of(15, 00);
 		LocalTime time2= LocalTime.of(18, 00);
 		
+		LocalTime time3= LocalTime.of(15, 00);
+		LocalTime time4= LocalTime.of(15, 20);
 		WorkDay wd1 = new WorkDay(WeekDay.MONDAY, true, time1, time2);
-		WorkDay wd2 = new WorkDay(WeekDay.THURSDAY, true, time1, time2);
-		WorkDay wd3 = new WorkDay(WeekDay.FRIDAY, false, time1, time2);
-		listaWorkDay.add(wd1);
-		listaWorkDay.add(wd2);
-		listaWorkDay.add(wd3);
+		WorkDay wd2 = new WorkDay(WeekDay.THURSDAY, true, time3, time4);
+		WorkDay wd3 = new WorkDay(WeekDay.MONDAY, false, time1, time4);
 
 		WorkTime wt= new WorkTime(listaWorkDay);
+		wt.addWorkDay(wd1);
+		wt.addWorkDay(wd2);
+		wt.addWorkDay(wd3);
+
+		//wt.addWorkDay(wd1);
 		System.out.println("TEST33");
 
 		workTimeRepository.save(wt);
 		
 		System.out.println("TEST22");
-
 	}
 }
