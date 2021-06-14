@@ -24,7 +24,7 @@ const SideBar = () => {
 							<span className="login-status online"></span>
 						</div>
 						<div className="nav-profile-text d-flex flex-column pr-3">
-							<span className="font-weight-medium mb-2">Henry Klein</span>
+							<span className="font-weight-medium mb-2">Ime  Prezime</span>
 							<span className="font-weight-normal">$8,753.00</span>
 						</div>
 						<span className="badge badge-danger text-white ml-3 rounded">3</span>
@@ -88,6 +88,27 @@ const SideBar = () => {
 							<li className="nav-item">
 								<Link className="nav-link" to="/employees/add-waiter">
 									Add Employee
+								</Link>
+							</li>
+						</ul>
+					</div>
+				</li>
+				<li className="nav-item">
+					<a className="nav-link" data-toggle="collapse" href="#deliverers" aria-expanded="false" aria-controls="deliverers">
+						<i className="mdi mdi-account-plus menu-icon"></i>
+						<span className="menu-title">Deliverer</span>
+						<i className="menu-arrow"></i>
+					</a>
+					<div className="collapse" id="deliverers">
+						<ul className="nav flex-column sub-menu">
+							<li className="nav-item">
+								<Link className="nav-link" to="/deliverers">
+									All Deliverer
+								</Link>
+							</li>
+							<li className="nav-item">
+								<Link className="nav-link" to="/deliverer/requests">
+									Deliverer requests
 								</Link>
 							</li>
 						</ul>

@@ -6,7 +6,7 @@ const HomePage = () => {
 	return (
 		<React.Fragment>
 			<div className="container-scroller">
-				<SideBar />
+					<SideBar />
 				<div className="container-fluid page-body-wrapper">
 					<Header />
 				</div>

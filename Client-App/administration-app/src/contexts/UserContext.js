@@ -95,6 +95,64 @@ const UserContextProvider = (props) => {
 		objectAdmins: [],
 		showError: false,
 		errorMessage: "",
+		delivererRequest:{
+			showError: false,
+			errorMessage: "",
+			requests: [],
+		},
+		delivererRequestDetails: {
+			showModal: false,
+			showRejectWindow: false,
+			requestDetails: {
+				Id: "",
+				EntityDTO: {
+					Email: "",
+					Name: "",
+					Surname: "",
+					PhoneNumber: "",
+					Reference:"",
+				},
+			},
+		},
+		approveDeliveryRequest: {
+			showSuccessMessage: false,
+			successMessage: "",
+			showErrorMessage: false,
+			errorMessage: "",
+		},
+		rejectDeliveryRequest: {
+			showSuccessMessage: false,
+			successMessage: "",
+			showErrorMessage: false,
+			errorMessage: "",
+		},
+		deliverers: [],
+		delivererDetails: {
+			showModal: false,
+			deliverer: {
+				Id: "",
+				EntityDTO: {
+					Email: "",
+					Name: "",
+					Surname: "",
+					PhoneNumber: "",
+					DelivererStatus:"",
+				},
+			},
+		},
+		editDeliverer: {
+			showSuccessMessage: false,
+			successMessage: "",
+			showErrorMessage: false,
+			errorMessage: "",
+		},
+		deleteDeliverer: {
+			showSuccessMessage: false,
+			successMessage: "",
+			showErrorMessage: false,
+			errorMessage: "",
+		},
+
 	});
 
 	return <UserContext.Provider value={{ userState, dispatch }}>{props.children}</UserContext.Provider>;

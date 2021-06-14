@@ -26,12 +26,15 @@ import NoWaiter.UserService.entities.AccountActivationToken;
 import NoWaiter.UserService.entities.ResetPasswordToken;
 import NoWaiter.UserService.intercomm.AuthClient;
 import NoWaiter.UserService.intercomm.ObjectClient;
+import NoWaiter.UserService.services.contracts.DelivererService;
 import NoWaiter.UserService.services.contracts.UserService;
 import NoWaiter.UserService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.ChangeFirstPasswordDTO;
+import NoWaiter.UserService.services.contracts.dto.DelivererRequestDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.JwtParseResponseDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
+import NoWaiter.UserService.services.contracts.dto.RejectDelivererDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestEmailDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestIdDTO;
 import NoWaiter.UserService.services.contracts.dto.ResetPasswordDTO;
@@ -57,6 +60,9 @@ public class Api {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private DelivererService delivererService;
+    
     @Autowired
     private ObjectClient objectClient;
     
@@ -345,6 +351,129 @@ public class Api {
         }catch(TokenNotFoundException e) {
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }catch(Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PostMapping("/deliverer-request")
+    @CrossOrigin
+    public ResponseEntity<?> createDelivererRequest(@RequestBody DelivererRequestDTO delivererRequestDTO) {
+        try {
+            UUID requestId = delivererService.createDelivererRequest(delivererRequestDTO);
+            
+            return new ResponseEntity<>(requestId, HttpStatus.CREATED);
+       } catch (ConstraintViolationException | ClassFieldValidationException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (DataIntegrityViolationException e) {
+			e.printStackTrace();
+            return new ResponseEntity<>(e.getRootCause().getMessage(), HttpStatus.CONFLICT);
+		} catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @GetMapping("/deliverer-request")
+    @CrossOrigin
+    public ResponseEntity<?> getDelivererRequest() {
+    	try {
+            return new ResponseEntity<>(delivererService.getAllPendingRequests(), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PutMapping("/deliverer-request/approve/{requestId}")
+    @CrossOrigin
+    public ResponseEntity<?> approveDelivererRequest(@PathVariable UUID requestId) {
+        try {
+        	delivererService.approveDelivererRequest(requestId);    
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (EntityNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+        }catch (DataIntegrityViolationException | ConstraintViolationException | ClassFieldValidationException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PutMapping("/deliverer-request/reject")
+    @CrossOrigin
+    public ResponseEntity<?> rejectDelivererRequest(@RequestBody RejectDelivererDTO rejectDelivererDTO) {
+        try {
+        	delivererService.rejectDelivererRequest(rejectDelivererDTO);    
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (EntityNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @GetMapping("/deliverers")
+    @CrossOrigin
+    public ResponseEntity<?> getDeliverers() {
+    	try {
+            return new ResponseEntity<>(delivererService.getAllDeliverer(), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PutMapping("/deliverers/{delivererId}/activate")
+    @CrossOrigin
+    public ResponseEntity<?> activateDeliverer(@PathVariable UUID delivererId) {
+
+        try {
+            delivererService.activateDeliverer(delivererId);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PutMapping("/deliverers/{delivererId}/deactivate")
+    @CrossOrigin
+    public ResponseEntity<?> deactivateDeliverer(@PathVariable UUID delivererId) {
+
+        try {
+            delivererService.deactivateDeliverer(delivererId);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @DeleteMapping("/deliverers/{delivererId}")
+    @CrossOrigin
+    public ResponseEntity<?> deleteDeliverer(@PathVariable UUID delivererId) {
+
+        try {
+            delivererService.deleteDeliverer(delivererId);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

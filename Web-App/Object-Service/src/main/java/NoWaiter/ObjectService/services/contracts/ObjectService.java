@@ -9,10 +9,11 @@ import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectWithStatusDTO;
+import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeException;
 
 public interface ObjectService {
 
-    UUID create(ObjectDTO entity);
+    UUID create(ObjectDTO entity) throws InvalidTimeRangeException;
     
     void updateImage(MultipartFile multipartFile, UUID objectAdminId) throws IOException;
     
@@ -31,4 +32,6 @@ public interface ObjectService {
     void toggleObjectBlock(UUID id, boolean status);
     
     void toggleObjectActivation(UUID id, boolean status);
+
+	void worktime() throws InvalidTimeRangeException;
 }

@@ -34,6 +34,7 @@ import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.JwtParseResponseDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.UserClientObjectDTO;
+import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeException;
 import feign.FeignException;
 
 @RestController
@@ -83,6 +84,7 @@ public class Api {
 			e.printStackTrace();
             return new ResponseEntity<>(e.getRootCause().getMessage(), HttpStatus.CONFLICT);
 		} catch (Exception e) {
+			e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -336,6 +338,20 @@ public class Api {
         } catch (NoSuchElementException e) {
         	e.printStackTrace();
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e){
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    @GetMapping("/worktime")
+    @CrossOrigin
+    public ResponseEntity<?> worktime() {
+    	try {
+    		objectService.worktime();
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (InvalidTimeRangeException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e){
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }

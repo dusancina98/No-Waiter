@@ -20,6 +20,13 @@ export const userService = {
 	resetPassword,
 	checkIfActivationTokenIsValid,
 	checkIfResetPasswordTokenIsValid,
+	findAllDelivererRequests,
+	approveDelivererRequest,
+	rejectDelivererRequest,
+	findAllDeliverer,
+	activateDeliverer,
+	deactivateDeliverer,
+	deleteDeliverer,
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -158,6 +165,60 @@ async function findAllObjectAdmins(dispatch) {
 	}
 }
 
+async function findAllDelivererRequests(dispatch) {
+	dispatch(request());
+
+	await Axios.get(`/user-api/api/users/deliverer-request`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else {
+				dispatch(failure("Error"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function request() {
+		return { type: userConstants.SET_DELIVERER_REQUEST };
+	}
+	function success(data) {
+		return { type: userConstants.SET_DELIVERER_REQUEST_SUCCESS, delivererRequests: data };
+	}
+	function failure(message) {
+		return { type: userConstants.SET_DELIVERER_REQUEST_ERROR, errorMessage: message };
+	}
+}
+
+async function findAllDeliverer(dispatch) {
+	dispatch(request());
+
+	await Axios.get(`/user-api/api/users/deliverers`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else {
+				dispatch(failure("Error"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function request() {
+		return { type: userConstants.SET_DELIVERERS_REQUEST };
+	}
+	function success(data) {
+		return { type: userConstants.SET_DELIVERERS_SUCCESS, deliverers: data };
+	}
+	function failure(message) {
+		return { type: userConstants.SET_DELIVERERS_ERROR, errorMessage: message };
+	}
+}
+
 function createWaiter(waiter, dispatch) {
 	if (validateWaiter(waiter, dispatch, userConstants.WAITER_CREATE_FAILURE)) {
 		dispatch(request());
@@ -272,7 +333,7 @@ function login(loginRequest, dispatch) {
 		.then((res) => {
 			if (res.status === 200) {
 				setAuthInLocalStorage(res.data);
-				dispatch(success());
+				dispatch(success(res.data));
 				window.location = "#/";
 			} else if (res.status === 401) {
 				dispatch(failure(res.data.message));
@@ -470,4 +531,143 @@ function checkIfResetPasswordTokenIsValid(token) {
 		.catch((err) => {
 			console.log(err);
 		});
+}
+
+function approveDelivererRequest(requestIdDTO,dispatch){
+
+	Axios.put(`/user-api/api/users/deliverer-request/approve/${requestIdDTO.id}`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				findAllDelivererRequests(dispatch)
+				dispatch(success("Uspesno ste odobrili novog dostavljaca"))
+			}else{
+				dispatch(failure("Trenutno nije moguce odobriti datog dostavljaca"))
+			}
+		})
+		.catch((err) => {
+			dispatch(failure("Trenutno nije moguce odobriti datog dostavljaca"))
+		});
+
+		function success(message) {
+			return { type: userConstants.ACCEPT_DELIVERER_REQUEST_SUCCESS, successMessage: message };
+		}
+		function failure(message) {
+			return { type: userConstants.OBJECT_ADMIN_DELETE_FAILURE, errorMessage: message };
+		}
+}
+
+function rejectDelivererRequest(rejectRequestDTO,dispatch){
+
+
+	if(rejectRequestDTO.Reason.length<10){
+		dispatch(failure("Razlog odbijanja zahteva mora sadrzati minimalno 10 slova"))
+		return;
+	}
+
+	Axios.put(`/user-api/api/users/deliverer-request/reject/`, rejectRequestDTO, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				findAllDelivererRequests(dispatch)
+				dispatch(success("Uspesno ste odbili zahtev za novog dostavljaca"))
+			}else{
+				dispatch(failure("Trenutno nije moguce odbiti zahtev za datog dostavljaca"))
+			}
+		})
+		.catch((err) => {
+			dispatch(failure("Trenutno nije moguce odbiti zahtev za datog dostavljaca"))
+		});
+
+		function success(message) {
+			return { type: userConstants.REJECT_DELIVERER_REQUEST_SUCCESS, successMessage: message };
+		}
+
+		function failure(message) {
+			return { type: userConstants.REJECT_DELIVERER_REQUEST_FAILURE, errorMessage: message };
+		}
+}
+
+function activateDeliverer(deliverer, dispatch) {
+	dispatch(request());
+
+	Axios.put(`/user-api/api/users/deliverers/${deliverer.Id}/activate`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			console.log(res);
+			if (res.status === 200) {
+				deliverer.EntityDTO.DelivererStatus = 'ACTIVE';
+				dispatch(success("Deliverer successfully activated", deliverer));
+			} else {
+				dispatch(failure("Error"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function request() {
+		return { type: userConstants.DELIVERER_ACTIVATION_REQUEST };
+	}
+	function success(message, deliverer) {
+		return { type: userConstants.DELIVERER_ACTIVATION_SUCCESS, successMessage: message, deliverer };
+	}
+	function failure(message) {
+		return { type: userConstants.DELIVERER_ACTIVATION_FAILURE, errorMessage: message };
+	}
+}
+
+function deactivateDeliverer(deliverer, dispatch) {
+	dispatch(request());
+
+	Axios.put(`/user-api/api/users/deliverers/${deliverer.Id}/deactivate`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			console.log(res);
+			if (res.status === 200) {
+				deliverer.EntityDTO.DelivererStatus = 'INACTIVE';
+				dispatch(success("Deliverer successfully deactivated", deliverer));
+			} else {
+				dispatch(failure("Error"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function request() {
+		return { type: userConstants.DELIVERER_DEACTIVATION_REQUEST };
+	}
+	function success(message, deliverer) {
+		return { type: userConstants.DELIVERER_DEACTIVATION_SUCCESS, successMessage: message, deliverer };
+	}
+	function failure(message) {
+		return { type: userConstants.DELIVERER_DEACTIVATION_FAILURE, errorMessage: message };
+	}
+}
+
+function deleteDeliverer(deliverer, dispatch) {
+	dispatch(request());
+
+	Axios.delete(`/user-api/api/users/deliverers/${deliverer.Id}`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			console.log(res);
+			if (res.status === 200) {
+				dispatch(success("Deliverer successfully deleted", deliverer));
+			} else {
+				dispatch(failure("Error"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function request() {
+		return { type: userConstants.DELIVERER_DELETE_REQUEST };
+	}
+	function success(message, deliverer) {
+		return { type: userConstants.DELIVERER_DELETE_SUCCESS, successMessage: message, deliverer };
+	}
+	function failure(message) {
+		return { type: userConstants.DELIVERER_DELETE_FAILURE, errorMessage: message };
+	}
 }

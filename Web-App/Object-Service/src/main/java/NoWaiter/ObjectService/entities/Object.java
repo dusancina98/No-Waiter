@@ -9,6 +9,9 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeException;
 
 @Entity
 public class Object {
@@ -37,7 +40,10 @@ public class Object {
     @OneToMany(mappedBy = "object")
     private List<Table> tables;
 
-    public Object(UUID id, String name, Address address, Contact contact, String imagePath, boolean active, boolean blocked, List<ObjectAdmin> admins, List<Table> tables) {
+    @OneToOne(optional= false)
+    private WorkTime workTime;
+
+    public Object(UUID id, String name, Address address, Contact contact, String imagePath, boolean active, boolean blocked, List<ObjectAdmin> admins, List<Table> tables, WorkTime workTime) throws InvalidTimeRangeException {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -47,10 +53,11 @@ public class Object {
         this.blocked = blocked;
         this.admins = admins;
         this.tables = tables;
+        this.workTime= workTime;
     }
 
-    public Object(String name, Address address, Contact contact, String imagePath) {
-        this (UUID.randomUUID(), name, address, contact, imagePath, false, false, new ArrayList<ObjectAdmin>(), new ArrayList<Table>());
+    public Object(String name, Address address, Contact contact, String imagePath, WorkTime workTime) throws InvalidTimeRangeException {
+        this (UUID.randomUUID(), name, address, contact, imagePath, false, false, new ArrayList<ObjectAdmin>(), new ArrayList<Table>(), workTime);
     }
 
     public Object() { }
@@ -135,5 +142,9 @@ public class Object {
 			tables = new ArrayList<Table>();
 		
 		tables.add(table);
+	}
+
+	public WorkTime getWorkTime() {
+		return workTime;
 	}
 }
