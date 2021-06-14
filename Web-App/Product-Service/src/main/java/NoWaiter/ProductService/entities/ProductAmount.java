@@ -2,13 +2,17 @@ package NoWaiter.ProductService.entities;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 @Embeddable
 public class ProductAmount {
 
 	@Embedded
+	@Valid
 	private MeasureUnit measureUnit;
 	
+	@Min(value = 1, message = "Product amount must be greater than zero")
 	private int amount;
 
 	public ProductAmount() {

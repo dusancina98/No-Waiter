@@ -8,6 +8,8 @@ export const productService = {
 	findAllProductCategories,
 	findAllProductTypes,
 	createProduct,
+	updateProduct,
+	updateProductImage,
 	findAllProducts,
 };
 
@@ -35,6 +37,33 @@ function createProductCategory(categoryName, dispatch) {
 	}
 	function failure(message) {
 		return { type: productConstants.CATEGORY_CREATE_FAILURE, errorMessage: message };
+	}
+}
+
+function updateProductImage(productId, image, imageUrl, dispatch) {
+	dispatch(request());
+
+	Axios.put(`/product-api/api/products/${productId}/image`, image, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success("Product image updated successfully", productId, imageUrl));
+			} else {
+				dispatch(failure(res.data.message));
+			}
+			console.log(res);
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+
+	function request() {
+		return { type: productConstants.PRODUCT_IMAGE_CHANGE_REQUEST };
+	}
+	function success(message, productId, imageUrl) {
+		return { type: productConstants.PRODUCT_IMAGE_CHANGE_SUCCESS, successMessage: message, productId, imageUrl };
+	}
+	function failure(message) {
+		return { type: productConstants.PRODUCT_IMAGE_CHANGE_FAILURE, errorMessage: message };
 	}
 }
 
@@ -107,9 +136,9 @@ function createProduct(productDTO, dispatch) {
 				if (res.status === 201) {
 					let product = { Id: res.data, EntityDTO: productDTO };
 					product.EntityDTO.Ingredients = ingredients;
-					product.EntityDTO.Image = pathConstants.PRODUCT_IMAGES_PATH + res.data + ".jpg";
+					product.EntityDTO.Image = productDTO.Image === "" ? "" : pathConstants.PRODUCT_IMAGES_PATH + res.data + ".jpg";
 					product.EntityDTO.SideDishes = sideDishes;
-					dispatch(success(product, "Table successfully added"));
+					dispatch(success(product, "Product successfully added"));
 				} else {
 					dispatch(failure(res.data.message));
 				}
@@ -129,6 +158,47 @@ function createProduct(productDTO, dispatch) {
 	}
 }
 
+function updateProduct(productDTO, dispatch) {
+	let ingredients = [...productDTO.EntityDTO.Ingredients];
+	let sideDishes = [...productDTO.EntityDTO.SideDishes];
+	productDTO.EntityDTO.Ingredients = [];
+	productDTO.EntityDTO.SideDishes = [];
+	ingredients.forEach((ingredient) => {
+		productDTO.EntityDTO.Ingredients.push(ingredient.EntityDTO.Name);
+	});
+	sideDishes.forEach((sideDish) => {
+		productDTO.EntityDTO.SideDishes.push(sideDish.EntityDTO.Name);
+	});
+	dispatch(request());
+
+	if (validateProduct(productDTO.EntityDTO, dispatch, productConstants.PRODUCT_CREATE_FAILURE)) {
+		Axios.put(`/product-api/api/products`, productDTO, { validateStatus: () => true, headers: authHeader() })
+			.then((res) => {
+				if (res.status === 200) {
+					let product = productDTO;
+					product.EntityDTO.Ingredients = ingredients;
+					product.EntityDTO.SideDishes = sideDishes;
+
+					dispatch(success(product, "Product successfully updated"));
+				} else {
+					dispatch(failure(res.data.message));
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}
+	function request() {
+		return { type: productConstants.PRODUCT_UPDATE_REQUEST };
+	}
+	function success(product, message) {
+		return { type: productConstants.PRODUCT_UPDATE_SUCCESS, product, successMessage: message };
+	}
+	function failure(message) {
+		return { type: productConstants.PRODUCT_UPDATE_FAILURE, errorMessage: message };
+	}
+}
+
 function fetchFormData(productDTO) {
 	let ingredients = [...productDTO.Ingredients];
 	let sideDishes = [...productDTO.SideDishes];
@@ -145,7 +215,7 @@ function fetchFormData(productDTO) {
 	if (productDTO.Image !== "") {
 		formData.append("Image", productDTO.Image, "img");
 	} else {
-		formData.append("Image", new Blob(), "img");
+		formData.append("Image", null);
 	}
 	formData.append("Name", productDTO.Name);
 	formData.append("MeasureUnit", productDTO.MeasureUnit);

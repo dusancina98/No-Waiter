@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import NoWaiter.ProductService.entities.Ingredient;
 import NoWaiter.ProductService.entities.Product;
+import NoWaiter.ProductService.entities.ProductAmount;
 import NoWaiter.ProductService.entities.ProductCategory;
 import NoWaiter.ProductService.entities.ProductType;
 import NoWaiter.ProductService.entities.SideDish;
@@ -25,7 +26,9 @@ import NoWaiter.ProductService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ProductService.services.contracts.dto.NameDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductRequestDTO;
+import NoWaiter.ProductService.services.contracts.dto.ProductUpdateRequestDTO;
 import NoWaiter.ProductService.services.contracts.exceptions.InvalidProductCategoryException;
+import NoWaiter.ProductService.services.contracts.exceptions.UnauthorizedRequestException;
 import NoWaiter.ProductService.services.implementation.util.ImageUtil;
 import NoWaiter.ProductService.services.implementation.util.ProductCategoryMapper;
 import NoWaiter.ProductService.services.implementation.util.ProductMapper;
@@ -67,9 +70,6 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	@Transactional
 	public UUID createProduct(ProductRequestDTO productDTO, UUID objectId) throws InvalidProductCategoryException, IOException {
-		System.out.println(productDTO.CategoryId);
-		System.out.println(productDTO.Name);
-		System.out.println(productDTO.Price);
 
 		ProductCategory productCategory = productCategoryRepository.findById(productDTO.CategoryId).get();
 		
@@ -77,7 +77,11 @@ public class ProductServiceImpl implements ProductService {
 		
 		Product product = mapProductRequestDTOToProduct(productDTO);
 		product.setProductCategory(productCategory);
-		product.setImagePath(env.getProperty("rel-image-path") + "\\" + product.getId().toString() + ".jpg");
+		if(productDTO.Image == null)
+			product.setImagePath("");
+		else
+			product.setImagePath(env.getProperty("abs-image-path") + "//" + product.getId().toString() + ".jpg");
+		
 		productRepository.save(product);
 		saveImageAndGetPath(productDTO.Image, product.getId());
 
@@ -85,9 +89,10 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	private String saveImageAndGetPath(MultipartFile multipartFile, UUID productId) throws IOException {
-
-		ImageUtil.saveFile(env.getProperty("abs-image-path"), productId.toString() + ".jpg", multipartFile);
-		return env.getProperty("rel-image-path") + "\\" + productId.toString() + ".jpg";
+		
+		if(multipartFile != null) 
+			ImageUtil.saveFile(env.getProperty("rel-image-path"), productId.toString() + ".jpg", multipartFile);
+		return env.getProperty("abs-image-path") + "//" + productId.toString() + ".jpg";
 	}
 		
 	private Product mapProductRequestDTOToProduct(ProductRequestDTO productDTO) {
@@ -99,12 +104,48 @@ public class ProductServiceImpl implements ProductService {
 
 		productDTO.Ingredients.forEach((ingredient) -> ingredients.add(new Ingredient(ingredient)));
 		productDTO.SideDishes.forEach((sideDish) -> sideDishes.add(new SideDish(sideDish)));
-		System.out.println(ingredients.size() + "\n\n\n");
+
 		return new Product(productDTO.Name, productDTO.Description, true, "", productDTO.Price, productDTO.Amount, productDTO.MeasureUnit, productType, ingredients, sideDishes);
 	}
 
 	@Override
 	public Iterable<IdentifiableDTO<ProductDTO>> findAllProducts(UUID objectId) {
 		return ProductMapper.MapProductCategoryCollectionToIdentifiableProductDTOCollection(productCategoryRepository.findAllByObjectId(objectId));
+	}
+
+	@Override
+	public void updateImage(MultipartFile multipartFile, UUID productId, UUID objectId) throws IOException, UnauthorizedRequestException {
+
+		Product product = productRepository.findById(productId).get();
+		
+		if(!objectId.equals(product.getProductCategory().getObjectId())) throw new UnauthorizedRequestException("Object admin not authorized for this operation");
+		
+		product.setImagePath(saveImageAndGetPath(multipartFile, productId));
+		productRepository.save(product);
+	}
+
+	@Override
+	public void updateProduct(IdentifiableDTO<ProductUpdateRequestDTO> productDTO, UUID objectId) throws UnauthorizedRequestException {
+		
+		Product product = productRepository.findById(productDTO.Id).get();
+		
+		if(!objectId.equals(product.getProductCategory().getObjectId())) throw new UnauthorizedRequestException("Object admin not authorized for this operation");
+		
+		product.setName(productDTO.EntityDTO.Name);
+		
+		List<Ingredient> ingredients = new ArrayList<Ingredient>();
+		List<SideDish> sideDishes = new ArrayList<SideDish>();
+		ProductType productType = productTypeRepository.findById(productDTO.EntityDTO.ProductTypeId).get();
+
+		productDTO.EntityDTO.Ingredients.forEach((ingredient) -> ingredients.add(new Ingredient(ingredient)));
+		productDTO.EntityDTO.SideDishes.forEach((sideDish) -> sideDishes.add(new SideDish(sideDish)));
+		product.setIngredients(ingredients);
+		product.setSideDishes(sideDishes);
+		product.setPrice(productDTO.EntityDTO.Price);
+		product.setProductAmount(new ProductAmount(productDTO.EntityDTO.Amount, productDTO.EntityDTO.MeasureUnit));
+		product.setProductType(productType);
+		product.setDescription(productDTO.EntityDTO.Description);
+		product.validate();
+		productRepository.save(product);
 	}
 }

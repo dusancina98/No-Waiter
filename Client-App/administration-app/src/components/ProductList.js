@@ -17,16 +17,7 @@ const ProductList = () => {
 		<div className="col-8">
 			{productState.showedProducts.map((product) => {
 				console.log(product);
-				return (
-					<ProductItem
-						imagePath={product.EntityDTO.Image}
-						key={product.Id}
-						name={product.EntityDTO.Name}
-						price={product.EntityDTO.Price}
-						sideDishes={product.EntityDTO.SideDishes}
-						ingredients={product.EntityDTO.Ingredients}
-					/>
-				);
+				return <ProductItem key={product.Id} product={product} />;
 			})}
 		</div>
 	);

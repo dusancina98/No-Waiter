@@ -21,7 +21,6 @@ const ObjectInfoHeader = () => {
 	};
 
 	const onImageChange = (e) => {
-		//e.preventDefault();
 		setImage(e.target.files[0]);
 
 		if (e.target.files && e.target.files[0]) {

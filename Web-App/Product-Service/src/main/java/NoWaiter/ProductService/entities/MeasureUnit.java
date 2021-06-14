@@ -1,10 +1,12 @@
 package NoWaiter.ProductService.entities;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotEmpty;
 
 @Embeddable
 public class MeasureUnit {
 
+	@NotEmpty(message = "Measure unit name is required")
 	private String measureUnitName;
 	
 	public MeasureUnit() { }

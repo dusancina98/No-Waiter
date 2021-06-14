@@ -1,9 +1,11 @@
 package NoWaiter.ProductService.entities;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -11,6 +13,15 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -22,6 +33,8 @@ public class Product {
 	@ManyToOne
 	private ProductCategory productCategory;
 	
+	@Column(nullable = false)
+	@NotEmpty(message = "Name is required")
 	private String name;
 	
 	private String description;
@@ -30,15 +43,18 @@ public class Product {
 	
 	private String imagePath;
 	
+	@DecimalMin("1.0")
 	private double price;
 	
 	@Embedded
+	@Valid
 	private ProductAmount productAmount;
 	
 	@ManyToOne
 	private ProductType productType;
 	
 	@OneToMany(cascade={CascadeType.ALL})
+    @Size(min=1, message = "Product must have at least one ingredient")
 	private List<Ingredient> ingredients;
 	
 	@OneToMany(cascade = CascadeType.ALL)
@@ -58,6 +74,18 @@ public class Product {
 		this.ingredients = ingredients;
 		this.sideDishes = sideDishes;	
 		this.productAmount = new ProductAmount(amount, amountName);
+		
+		validate();
+	}
+	
+	public void validate() { 
+		ValidatorFactory vf = Validation.buildDefaultValidatorFactory(); Validator
+		validator = vf.getValidator(); 
+    	Set<ConstraintViolation<Product>> violations =  validator.validate(this);
+    	
+    	if(!violations.isEmpty())
+    		throw new ConstraintViolationException(violations);
+		
 	}
 	
 	public Product(String name, String description, boolean available, String imagePath, double price, int amount, String amountName, ProductType productType, List<Ingredient> ingredients, List<SideDish> sideDishes) {
