@@ -80,7 +80,7 @@ public class ProductServiceImpl implements ProductService {
 		if(productDTO.Image == null)
 			product.setImagePath("");
 		else
-			product.setImagePath(env.getProperty("rel-image-path") + "\\" + product.getId().toString() + ".jpg");
+			product.setImagePath(env.getProperty("abs-image-path") + "//" + product.getId().toString() + ".jpg");
 		
 		productRepository.save(product);
 		saveImageAndGetPath(productDTO.Image, product.getId());
@@ -91,8 +91,8 @@ public class ProductServiceImpl implements ProductService {
 	private String saveImageAndGetPath(MultipartFile multipartFile, UUID productId) throws IOException {
 		
 		if(multipartFile != null) 
-			ImageUtil.saveFile(env.getProperty("abs-image-path"), productId.toString() + ".jpg", multipartFile);
-		return env.getProperty("rel-image-path") + "\\" + productId.toString() + ".jpg";
+			ImageUtil.saveFile(env.getProperty("rel-image-path"), productId.toString() + ".jpg", multipartFile);
+		return env.getProperty("abs-image-path") + "//" + productId.toString() + ".jpg";
 	}
 		
 	private Product mapProductRequestDTOToProduct(ProductRequestDTO productDTO) {

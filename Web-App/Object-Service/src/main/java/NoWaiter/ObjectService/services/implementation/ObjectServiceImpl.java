@@ -116,8 +116,8 @@ public class ObjectServiceImpl implements ObjectService {
 
 		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
 		Object object = objectRepository.findById(objectAdmin.getObject().getId()).get();
-		ImageUtil.saveFile(env.getProperty("abs-image-path"), object.getId().toString() + ".jpg", multipartFile);
-		object.setImagePath(env.getProperty("rel-image-path") + "\\" + object.getId().toString() + ".jpg");
+		ImageUtil.saveFile(env.getProperty("rel-image-path"), object.getId().toString() + ".jpg", multipartFile);
+		object.setImagePath(env.getProperty("abs-image-path") + "//" + object.getId().toString() + ".jpg");
 		objectRepository.save(object);
 	}
 }

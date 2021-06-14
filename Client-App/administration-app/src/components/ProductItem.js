@@ -70,10 +70,10 @@ const ProductItem = (props) => {
 	return (
 		<div className="col-12 portfolio-item">
 			<hr />
-			<div className="row container-img " hidden={!showedDetails}>
-				<div className="col-12 mb-4">
-					<img src={showedImage} className="img-fluid rounded w-100" alt="" />
-					<div className="overlay-img rounded">
+			<div className="row " hidden={!showedDetails}>
+				<div className="col-12 mb-4 container-img">
+					<img src={showedImage} className="img-fluid rounded-lg w-100" alt="" />
+					<div className="overlay-img rounded-lg">
 						<input type="file" ref={imgRef} style={{ display: "none" }} name="image" accept="image/png, image/jpeg" onChange={onImageChange} />
 
 						<button hidden={selectedImage} className="icon-img" data-toggle="tooltip" title="Edit image" onClick={() => imgRef.current.click()}>

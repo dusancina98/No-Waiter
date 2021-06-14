@@ -1,13 +1,18 @@
 package NoWaiter.ProductService.api;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import javax.validation.ConstraintViolationException;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +52,23 @@ public class Api {
 	@Autowired
 	private ProductService productService;
 	
+	@Autowired
+	private Environment env;
+	
+	@GetMapping("/product-images/{imageName}")
+	@CrossOrigin
+	public ResponseEntity<?> getProductImage(@PathVariable String imageName) {
+		byte[] image = new byte[0];
+        try {
+            image = FileUtils.readFileToByteArray(new File(env.getProperty("rel-image-path")+ "//"+ imageName));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
+    }
 	
 	@PostMapping
 	@CrossOrigin
