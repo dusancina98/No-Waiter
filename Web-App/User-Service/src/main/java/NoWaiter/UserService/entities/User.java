@@ -1,5 +1,6 @@
 package NoWaiter.UserService.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -133,6 +134,14 @@ public class User{
 
 	public void setAuthorities(List<Authority> authorities) {
 		this.authorities = authorities;
+	}
+	
+
+	public void addAuthority(Authority authority) {
+		if(this.authorities == null)
+			this.authorities = new ArrayList<Authority>();
+		
+		this.authorities.add(authority);
 	}
 
 	public boolean isActive() {

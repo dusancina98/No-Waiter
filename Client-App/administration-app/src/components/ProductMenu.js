@@ -27,11 +27,11 @@ const ProductMenu = () => {
 			/>
 
 			<div id="portfolio" className="portfolio">
-				<div class="container">
+				<div className="container ">
 					<ProductsTabs />
 					<SelectedProductCategoryTitle />
 					<div className="row portfolio-container">
-						<div className="row w-100">
+						<div className="row w-100 ">
 							<ProductList />
 							<ObjectSidebar />
 						</div>

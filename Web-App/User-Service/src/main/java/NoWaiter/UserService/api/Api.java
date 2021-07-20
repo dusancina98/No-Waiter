@@ -190,6 +190,17 @@ public class Api {
         }
     }
     
+    @GetMapping("/employee/waiter/{waiterId}/object-id")
+    @CrossOrigin
+    public ResponseEntity<?> findObjectIdByWaiterId(@PathVariable UUID waiterId) {
+        try {
+            return new ResponseEntity<>(userService.findObjectIdByWaiterId(waiterId), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
     @PutMapping("/employee/waiter")
     @CrossOrigin
     public ResponseEntity<?> updateWaiter(@RequestBody IdentifiableDTO<UpdateWaiterDTO> waiterDTO) {

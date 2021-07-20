@@ -39,6 +39,8 @@ public interface UserService {
     Iterable<IdentifiableDTO<ObjectAdminDTO>> findAllObjectAdmins();
     
     Iterable<IdentifiableDTO<WaiterDTO>> findAllWaiters(UUID objectAdminId);
+    
+    UUID findObjectIdByWaiterId(UUID waiterId);
 
 	String checkUserExistance(UUID userId);
 

@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { modalConstants } from "../constants/ModalConstants";
 import { productConstants } from "../constants/ProductConstants";
 import { ProductContext } from "../contexts/ProductContext";
+import { hasRoles } from "../helpers/auth-header";
 import { productService } from "../services/ProductService";
 
 const ProductsTabs = () => {
@@ -39,6 +40,8 @@ const ProductsTabs = () => {
 						<button
 							type="button"
 							data-toggle="tooltip"
+							disabled={!hasRoles("ROLE_OBJADMIN")}
+							hidden={!hasRoles("ROLE_OBJADMIN")}
 							title="Add new product category"
 							onClick={handleOpenCreateCategoryModal}
 							className="btn btn-outline-secondary btn-rounded btn-icon border-0"

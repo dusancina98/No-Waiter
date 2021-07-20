@@ -14,7 +14,7 @@ const ProductList = () => {
 	}, [dispatch]);
 
 	return (
-		<div className="col-8">
+		<div className="col-md-8 col-lg-8 col-12 no-gutters">
 			{productState.showedProducts.map((product) => {
 				console.log(product);
 				return <ProductItem key={product.Id} product={product} />;

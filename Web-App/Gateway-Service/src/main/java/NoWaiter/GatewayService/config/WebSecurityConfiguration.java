@@ -33,7 +33,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 	.antMatchers("/auth-api/api/auth/login").permitAll()
                 	
                 	.antMatchers(HttpMethod.POST ,"/product-api/api/products/categories").hasRole("OBJADMIN")
-                	.antMatchers(HttpMethod.GET ,"/product-api/api/products/categories").hasRole("OBJADMIN")
+                	.antMatchers(HttpMethod.GET ,"/product-api/api/products/categories").hasAnyRole("OBJADMIN", "WAITER")
                 	.antMatchers(HttpMethod.POST ,"/product-api/api/products").hasRole("OBJADMIN")
                 	.antMatchers(HttpMethod.PUT ,"/product-api/api/products").hasRole("OBJADMIN")
 

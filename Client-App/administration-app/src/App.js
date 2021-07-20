@@ -20,7 +20,7 @@ import ListDelivererRequestPage from "./pages/ListDelivererRequestPage";
 import ObjectDetailsPage from "./pages/ObjectDetailsPage";
 import ProductsPage from "./pages/ProductsPage";
 import ListOfDelivererPage from "./pages/ListOfDelivererPage";
-
+import CreateOrderPage from "./pages/CreateOrderPage";
 
 function App() {
 	return (
@@ -43,6 +43,7 @@ function App() {
 				<Route path="/products" component={ProductsPage} />
 
 				<ProtectedRoute roles={"ROLE_OBJADMIN"} redirectTo="/" path="/object-details" component={ObjectDetailsPage} />
+				<ProtectedRoute roles={"ROLE_WAITER"} redirectTo="/" path="/create-order" component={CreateOrderPage} />
 
 				<ProtectedRoute roles={""} exact path="/reset-password-request" redirectTo="/unauthorized" component={ForgotPasswordPage} />
 				<ProtectedRoute roles={""} exact path="/reset-password/:id/:token" redirectTo="/unauthorized" component={ResetPasswordPage} />
