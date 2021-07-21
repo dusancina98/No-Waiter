@@ -1,13 +1,11 @@
 import React from "react";
-import CreateOrderProductList from "../components/create-orders/CreateOrderProductList";
-import CreateOrderSidebar from "../components/create-orders/CreateOrderSidebar";
+import CreateOrderWrapper from "../components/create-orders/CreateOrderWrapper";
 import Header from "../components/Header";
-import ProductsTabs from "../components/ProductsTabs";
-import SelectedProductCategoryTitle from "../components/SelectedProductCategoryTitle";
 import SideBar from "../components/SideBar";
 import ObjectContextProvider from "../contexts/ObjectContext";
 import OrderContextProvider from "../contexts/OrderContext";
 import ProductContextProvider from "../contexts/ProductContext";
+import TableContextProvider from "../contexts/TableContext";
 
 const CreateOrderPage = () => {
 	return (
@@ -26,18 +24,9 @@ const CreateOrderPage = () => {
 										<ObjectContextProvider>
 											<ProductContextProvider>
 												<OrderContextProvider>
-													<div id="portfolio" className="portfolio">
-														<div className="container ">
-															<ProductsTabs />
-															<SelectedProductCategoryTitle />
-															<div className="row portfolio-container">
-																<div className="row w-100 ">
-																	<CreateOrderProductList />
-																	<CreateOrderSidebar />
-																</div>
-															</div>
-														</div>
-													</div>
+													<TableContextProvider>
+														<CreateOrderWrapper />
+													</TableContextProvider>
 												</OrderContextProvider>
 											</ProductContextProvider>
 										</ObjectContextProvider>

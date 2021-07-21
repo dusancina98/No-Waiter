@@ -10,8 +10,8 @@ import NoWaiter.ObjectService.services.contracts.dto.TableDTO;
 public interface TableService {
 
 	IdentifiableDTO<TableDTO> createTable(UUID objectAdminId);
-	
-	Iterable<IdentifiableDTO<TableDTO>> findAllForObject(UUID objectAdminId);
+		
+	Iterable<IdentifiableDTO<TableDTO>> findAllForObjectById(UUID objectId);
 	
 	void deleteTable(UUID objectAdminId, UUID tableId) throws AuthException;
 }

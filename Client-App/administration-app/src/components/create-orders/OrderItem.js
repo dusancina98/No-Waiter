@@ -1,10 +1,16 @@
-const OrderItem = ({ id, name, count, price, imageUrl, setProductCount, deleteFromShoppingCart }) => {
+import { capitalizeFirstLetter } from "../../helpers/string-util";
+
+const OrderItem = ({ id, name, count, price, sideDishes, imageUrl, setProductCount, deleteFromShoppingCart }) => {
 	return (
 		<div className="row align-items-center" style={{ cursor: "pointer" }}>
 			<div className="col-12 col-md-8">
 				<div className="ml-2">
 					<h4>{name}</h4>
-
+					<p>
+						{sideDishes.map((sideDish) =>
+							sideDishes.indexOf(sideDish) === sideDishes.length - 1 ? capitalizeFirstLetter(sideDish.EntityDTO.Name) : capitalizeFirstLetter(sideDish.EntityDTO.Name + ", ")
+						)}
+					</p>
 					<div className="row align-items-center">
 						<input type="number" className="form-control col-sm-3 ml-3" id="quantity" min="1" value={count} onChange={(e) => setProductCount(id, e.target.value)} />x{" "}
 						<span style={{ color: "#198ae3" }}>{Number(price).toFixed(2)} RSD</span>

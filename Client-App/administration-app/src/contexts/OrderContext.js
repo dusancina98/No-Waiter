@@ -6,7 +6,32 @@ export const OrderContext = createContext();
 const OrderContextProvider = (props) => {
 	const [orderState, dispatch] = useReducer(orderReducer, {
 		createOrder: {
+			pageVisible: 1,
 			items: [],
+		},
+		loadTables: false,
+		orderType: "",
+		selectedTable: {
+			id: "",
+			number: "",
+		},
+		deliveryInfo: {
+			estimatedTime: "",
+			address: "",
+		},
+		orderItemDetails: {
+			showModal: false,
+			selectedProduct: {
+				Id: "",
+				EntityDTO: {
+					Name: "",
+					Image: "",
+					Ingredients: [],
+					MeasureUnit: "",
+					Price: 0,
+					SideDishes: [],
+				},
+			},
 		},
 	});
 

@@ -26,6 +26,7 @@ const OrderItemList = () => {
 							name={item.name}
 							count={item.count}
 							price={item.price}
+							sideDishes={item.sideDishes}
 							imageUrl={item.imagePath}
 							setProductCount={setProductCount}
 							deleteFromShoppingCart={deleteFromShoppingCart}

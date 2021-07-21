@@ -26,7 +26,7 @@ public interface ObjectService {
     IdentifiableDTO<ObjectDTO> findById(UUID id);
         
     IdentifiableDTO<ObjectDTO> findByObjectAdminId(UUID adminId);
-
+    
     Iterable<IdentifiableDTO<ObjectWithStatusDTO>> findAllForAdmin();
     
     void toggleObjectBlock(UUID id, boolean status);

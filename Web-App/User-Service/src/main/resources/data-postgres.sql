@@ -10,6 +10,9 @@ insert into users (id, email, name,password,surname,active) values ('22793162-52
 -- restoran admin
 insert into users (id, email, name,password,surname,active) values ('22793162-52d3-11eb-ae93-0242ac130111','nikoladskv@hotmail.rs','Djura','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Djuric',true);
 
+-- restoran waiter
+insert into users (id, email, name,password,surname,active) values ('22793162-52d3-11eb-ae93-0242ac130222','example1@example.com','Nikola','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Djuric',true);
+
 -- deliveres
 insert into users (id, email, name,password,surname,active) values ('29363b4f-8fb9-4d3d-8785-d7235ecc8286','example2@example.com','Petar','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Petrovic',true);
 insert into users (id, email, name,password,surname,active) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0ba0','example3@example.com','Dusan','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Dusanic',true);
@@ -17,12 +20,14 @@ insert into users (id, email, name,password,surname,active) values ('739ebff1-a0
 
 insert into user_authority (user_id, authority_id) values ('22793162-52d3-11eb-ae93-0242ac130002', '7852aa5e-7040-4d99-8255-537a0b226c75');
 insert into user_authority (user_id, authority_id) values ('22793162-52d3-11eb-ae93-0242ac130111', '563e9925-cff6-42b7-99fa-6b1235f67655');
+insert into user_authority (user_id, authority_id) values ('22793162-52d3-11eb-ae93-0242ac130222', 'f98f5538-4d52-4e3e-bae3-598e523a6222');
 
 --deliverers authority
 insert into user_authority (user_id, authority_id) values ('29363b4f-8fb9-4d3d-8785-d7235ecc8286', 'f98f5538-4d52-4e3e-bae3-598e523a6200');
 insert into user_authority (user_id, authority_id) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0ba0', 'f98f5538-4d52-4e3e-bae3-598e523a6200');
 
 insert into object_admin (id, object_id, object_name, address) values ('22793162-52d3-11eb-ae93-0242ac130111', '11193162-52d3-11eb-ae93-0242ac130111', 'Loft' , 'Novi Sad');
+insert into waiter (id, object_id, address, phone_number) values ('22793162-52d3-11eb-ae93-0242ac130222', '11193162-52d3-11eb-ae93-0242ac130111', 'Novi Sad' , '123123123123');
 
 --deliverer requests
 insert into deliverer_request (id, email, name, surname, phone_number, reference, request_status) values ('1334cf36-af66-4a38-8e59-475d33798341', 'requestexample@example.com', 'Pera' , 'Peric' ,'065324235','Najbolji deliverer', 'PENDING');
