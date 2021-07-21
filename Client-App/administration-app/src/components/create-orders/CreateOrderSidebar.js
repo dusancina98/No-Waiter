@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { colorConstants } from "../../constants/ColorConstants";
 import { orderConstants } from "../../constants/OrderConstants";
 import { OrderContext } from "../../contexts/OrderContext";
+import { orderService } from "../../services/OrderService";
 import OrderItemList from "./OrderItemList";
 
 const CreateOrderSidebar = ({ address, estimatedTime }) => {
@@ -29,23 +30,7 @@ const CreateOrderSidebar = ({ address, estimatedTime }) => {
 			page: orderState.createOrder.pageVisible === 6 || orderState.createOrder.pageVisible === 4 ? 2 : orderState.createOrder.pageVisible - 1,
 		});
 	};
-	// createOrder:
-	// items: Array(1)
-	// 0:
-	// count: 1
-	// id: "ab7ca188-5743-407c-9b5d-cb8a0834b62f"
-	// imagePath: "./product-api/api/products/product-images//f59d1eef-f752-4152-adb1-78d2ff6fb656.jpg"
-	// name: "Burger XXXL"
-	// note: ""
-	// price: 1233
-	// productId: "f59d1eef-f752-4152-adb1-78d2ff6fb656"
-	// sideDishes: Array(2)
-	// 0:
-	// EntityDTO: {Name: "Pomfrit"}
-	// Id: "3ceb3860-0a1c-455a-82c0-36b5775672ff"
-	// __proto__: Object
-	// 1: {Id: "88a63655-bb3c-4ec6-872d-54153a86ec1d", EntityDTO: {…}}
-	// length: 2
+
 	const handleSubmitOrder = () => {
 		console.log(orderState);
 		let order = {
@@ -58,17 +43,18 @@ const CreateOrderSidebar = ({ address, estimatedTime }) => {
 
 		orderState.createOrder.items.forEach((item) => {
 			if (item.sideDishes.length === 0) {
-				order.Items.push({ Id: item.id, Count: item.count, SideDishes: [] });
+				order.Items.push({ Id: item.productId, Count: item.count, Note: item.note, SideDishes: [] });
 			} else {
 				let sideDishes = [];
 				item.sideDishes.forEach((sideDish) => {
 					sideDishes.push(sideDish.Id);
 				});
-				order.Items.push({ Id: item.id, Count: item.count, SideDishes: sideDishes });
+				order.Items.push({ Id: item.productId, Count: item.count, Note: item.note, SideDishes: sideDishes });
 			}
 		});
 
 		console.log(order);
+		orderService.createOrder(order, dispatch);
 	};
 
 	return (

@@ -7,9 +7,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import NoWaiter.ProductService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ProductService.services.contracts.dto.NameDTO;
+import NoWaiter.ProductService.services.contracts.dto.OrderItemsDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductRequestDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductUpdateRequestDTO;
+import NoWaiter.ProductService.services.contracts.dto.ProductValidationResponseDTO;
+import NoWaiter.ProductService.services.contracts.exceptions.InvalidOrderItemException;
 import NoWaiter.ProductService.services.contracts.exceptions.InvalidProductCategoryException;
 import NoWaiter.ProductService.services.contracts.exceptions.UnauthorizedRequestException;
 
@@ -28,5 +31,6 @@ public interface ProductService {
 	Iterable<IdentifiableDTO<NameDTO>> findAllProductCategories(UUID objectId);
 
 	Iterable<IdentifiableDTO<NameDTO>> findAllProductTypes();
-
+	
+	ProductValidationResponseDTO validateOrderItems(OrderItemsDTO items) throws InvalidOrderItemException;
 }

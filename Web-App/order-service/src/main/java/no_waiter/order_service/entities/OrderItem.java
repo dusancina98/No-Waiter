@@ -3,11 +3,12 @@ package no_waiter.order_service.entities;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class OrderItem {
@@ -25,9 +26,11 @@ public class OrderItem {
 	
 	private double singleItemPrice;
 	
-	@OneToMany
+	@ManyToMany(cascade={CascadeType.ALL})
 	private List<SideDish> sideDishes;
 
+	public OrderItem() {}
+	
 	public OrderItem(UUID id, Product product, String note, int count, double singleItemPrice, List<SideDish> sideDishes) {
 		super();
 		this.id = id;

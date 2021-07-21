@@ -18,6 +18,8 @@ public class Product {
 	
 	private String imagePath;
 
+	public Product() {}
+	
 	public Product(UUID id, @NotEmpty(message = "Name is required") String name, String imagePath) {
 		super();
 		this.id = id;

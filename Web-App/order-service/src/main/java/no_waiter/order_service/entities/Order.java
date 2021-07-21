@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -21,10 +22,9 @@ public class Order {
     @Column(name = "id")
 	private UUID id;
 
-	@Embedded
-	private Object object;
+	private UUID objectId;
 
-	@OneToMany
+	@OneToMany(cascade={CascadeType.ALL})
 	private List<OrderItem> items;
 	
     @Enumerated(EnumType.STRING)
@@ -36,27 +36,24 @@ public class Order {
     
     @Embedded
     private Address address;
+    
+    private int estimatedTime;
 
-	public Order(UUID id, Object object, OrderType orderType, UUID tableId, Address address) {
+    public Order() {}
+    
+	public Order(UUID id, UUID objectId, OrderType orderType, UUID tableId, Address address, int estimatedTime) {
 		super();
 		this.id = id;
-		this.object = object;
+		this.objectId = objectId;
 		this.items = new ArrayList<OrderItem>();
 		this.orderType = orderType;
 		this.tableId = tableId;
 		this.address = address;
+		this.estimatedTime = estimatedTime;
 	}
 	
-	public Order(Object object, OrderType orderType, UUID tableId, Address address) {
-		this(UUID.randomUUID(), object, orderType, tableId, address);
-	}
-
-	public Object getObject() {
-		return object;
-	}
-
-	public void setObject(Object object) {
-		this.object = object;
+	public Order(UUID objectId, OrderType orderType, UUID tableId, Address address, int estimatedTime) {
+		this(UUID.randomUUID(), objectId, orderType, tableId, address, estimatedTime);
 	}
 
 	public List<OrderItem> getItems() {
@@ -93,6 +90,22 @@ public class Order {
 
 	public UUID getId() {
 		return id;
+	}
+
+	public UUID getObjectId() {
+		return objectId;
+	}
+
+	public void setObjectId(UUID objectId) {
+		this.objectId = objectId;
+	}
+
+	public int getEstimatedTime() {
+		return estimatedTime;
+	}
+
+	public void setEstimatedTime(int estimatedTime) {
+		this.estimatedTime = estimatedTime;
 	}
    
 }

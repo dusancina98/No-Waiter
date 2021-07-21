@@ -33,8 +33,11 @@ import NoWaiter.ProductService.services.contracts.ProductService;
 import NoWaiter.ProductService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ProductService.services.contracts.dto.JwtParseResponseDTO;
 import NoWaiter.ProductService.services.contracts.dto.NameDTO;
+import NoWaiter.ProductService.services.contracts.dto.OrderItemsDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductRequestDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductUpdateRequestDTO;
+import NoWaiter.ProductService.services.contracts.dto.ProductValidationResponseDTO;
+import NoWaiter.ProductService.services.contracts.exceptions.InvalidOrderItemException;
 import NoWaiter.ProductService.services.contracts.exceptions.InvalidProductCategoryException;
 import NoWaiter.ProductService.services.contracts.exceptions.UnauthorizedRequestException;
 import feign.FeignException;
@@ -205,6 +208,22 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 	}  
+	
+	@PostMapping("/order-items/validate")
+	@CrossOrigin
+	public ResponseEntity<?> validateOrderItems(@RequestBody OrderItemsDTO items) {
+		try {
+			ProductValidationResponseDTO resp = productService.validateOrderItems(items);
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		} catch (InvalidOrderItemException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Order items not valid", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Order items not valid", HttpStatus.BAD_REQUEST);
+        }
+	} 
+	
 	
 	@GetMapping("/categories")
 	@CrossOrigin
