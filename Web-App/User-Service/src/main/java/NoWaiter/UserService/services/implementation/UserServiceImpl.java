@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import NoWaiter.UserService.entities.AccountActivationToken;
+import NoWaiter.UserService.entities.Authority;
 import NoWaiter.UserService.entities.ObjectAdmin;
 import NoWaiter.UserService.entities.ResetPasswordToken;
 import NoWaiter.UserService.entities.User;
@@ -79,6 +80,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UUID createObjectAdmin(ObjectAdminDTO entity) throws Exception {
         ObjectAdmin restaurantAdmin = UserMapper.MapRestaurantAdminDTOToRestaurantAdmin(entity);
+        restaurantAdmin.addAuthority(new Authority(UUID.fromString("563e9925-cff6-42b7-99fa-6b1235f67655"), "ROLE_OBJADMIN"));
         objectAdminRepository.save(restaurantAdmin);
         createActivationLink(restaurantAdmin.getId());
         return restaurantAdmin.getId();
@@ -180,6 +182,7 @@ public class UserServiceImpl implements UserService {
 	public UUID createWaiter(WaiterDTO entity, UUID objectAdminId) throws ClassFieldValidationException {
 		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
 		Waiter waiter = UserMapper.MapWaiterDTOToWaiter(entity, objectAdmin.getObjectId());	
+		waiter.addAuthority(new Authority(UUID.fromString("f98f5538-4d52-4e3e-bae3-598e523a6222"), "ROLE_WAITER"));
 		waiterRepository.save(waiter);
 		return waiter.getId();
 	}
@@ -278,7 +281,11 @@ public class UserServiceImpl implements UserService {
 		
 		return resetPasswordToken;	
 	}
-	
+
+	@Override
+	public UUID findObjectIdByWaiterId(UUID waiterId) {
+		return waiterRepository.findById(waiterId).get().getObjectId();
+	}
 	
 	
 }

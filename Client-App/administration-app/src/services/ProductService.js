@@ -228,7 +228,6 @@ function fetchFormData(productDTO) {
 	formData.append("CategoryId", productDTO.CategoryId);
 	return formData;
 }
-
 async function findAllProducts(dispatch) {
 	dispatch(request());
 
@@ -253,7 +252,7 @@ async function findAllProducts(dispatch) {
 		return { type: productConstants.SET_PRODUCTS_SUCCESS, products: data };
 	}
 	function failure(message) {
-		return { type: productConstants.SET_PRODUCTS_ERROR, errorMessage: message };
+		return { type: productConstants.SET_PRODUCTS_FAILURE, errorMessage: message };
 	}
 }
 

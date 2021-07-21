@@ -2,6 +2,7 @@ package NoWaiter.ObjectService.api;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -137,11 +138,29 @@ public class Api {
     public ResponseEntity<?> findAllTables(@RequestHeader("Authorization") String token) {
         try {
         	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
-            return new ResponseEntity<>(tableService.findAllForObject(jwtResponse.getId()), HttpStatus.OK);
+			UUID objectId;
+			if (hasRole(jwtResponse.getAuthorities(), "ROLE_OBJADMIN")) {
+				objectId = objectService.findByObjectAdminId(jwtResponse.getId()).Id;
+			} else {
+				objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());
+			}
+
+			return new ResponseEntity<>(tableService.findAllForObjectById(objectId), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    private boolean hasRole(List<String> authorities, String role) {
+		System.out.println(role);
+		for (String auth : authorities) {
+			System.out.println(auth);
+			if(auth.equals(role)) {
+				return true;
+			}
+		}
+		return false;
+	}
     
     @DeleteMapping("/tables/{tableId}")
     @CrossOrigin

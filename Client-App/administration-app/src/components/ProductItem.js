@@ -70,7 +70,7 @@ const ProductItem = (props) => {
 	return (
 		<div className="col-12 portfolio-item">
 			<hr />
-			<div className="row " hidden={!showedDetails}>
+			<div className="row no-gutters" hidden={!showedDetails}>
 				<div className="col-12 mb-4 container-img">
 					<img src={showedImage} className="img-fluid rounded-lg w-100" alt="" />
 					<div className="overlay-img rounded-lg">
@@ -91,7 +91,7 @@ const ProductItem = (props) => {
 				</div>
 			</div>
 			<div className="row" style={{ cursor: "pointer" }} onClick={handleToggleDetails}>
-				<div className="col-12 col-md-8">
+				<div className="col-7 col-md-8">
 					<h3>{props.product.EntityDTO.Name}</h3>
 					<p hidden={!showedDetails}>{props.product.EntityDTO.Description}</p>
 
@@ -116,7 +116,7 @@ const ProductItem = (props) => {
 
 					<h4 style={{ color: colorConstants.COLOR_BLUE }}>RSD {Number(props.product.EntityDTO.Price).toFixed(2)}</h4>
 				</div>
-				<div className="col-12 col-md-4" hidden={showedDetails}>
+				<div className="col-5 col-md-4" hidden={showedDetails}>
 					{props.product.EntityDTO.Image === "" ? (
 						<button type="button" data-toggle="tooltip" title="Add product image" onClick={handleSelectProductImage} className="btn btn-outline-dark btn-icon-text border-0">
 							<i className="mdi mdi-plus btn-icon-prepend"></i> Upload

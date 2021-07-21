@@ -43,13 +43,6 @@ public class TableServiceImpl implements TableService{
 	}
 
 	@Override
-	public Iterable<IdentifiableDTO<TableDTO>> findAllForObject(UUID objectAdminId) {
-
-		Object object = objectAdminRepository.findObjectByAdminId(objectAdminId);
-		return TableMapper.MapTableCollectionToIdentifiableTableDTOCollection(tableRepository.findAllByObjectId(object.getId()));
-	}
-
-	@Override
 	public void deleteTable(UUID objectAdminId, UUID tableId) throws AuthException {
 		
 		Object object = objectAdminRepository.findObjectByAdminId(objectAdminId);
@@ -57,6 +50,12 @@ public class TableServiceImpl implements TableService{
 		if(!table.getObject().getId().equals(object.getId())) throw new AuthException("Unauthorized");
 		
 		tableRepository.deleteById(tableId);
+	}
+
+	@Override
+	public Iterable<IdentifiableDTO<TableDTO>> findAllForObjectById(UUID objectId) {
+		return TableMapper.MapTableCollectionToIdentifiableTableDTOCollection(tableRepository.findAllByObjectId(objectId));
+
 	}
 
 }

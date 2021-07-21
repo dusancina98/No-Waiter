@@ -28,12 +28,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import NoWaiter.ProductService.intercomm.AuthClient;
 import NoWaiter.ProductService.intercomm.ObjectClient;
+import NoWaiter.ProductService.intercomm.UserClient;
 import NoWaiter.ProductService.services.contracts.ProductService;
 import NoWaiter.ProductService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ProductService.services.contracts.dto.JwtParseResponseDTO;
 import NoWaiter.ProductService.services.contracts.dto.NameDTO;
+import NoWaiter.ProductService.services.contracts.dto.OrderItemsDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductRequestDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductUpdateRequestDTO;
+import NoWaiter.ProductService.services.contracts.dto.ProductValidationResponseDTO;
+import NoWaiter.ProductService.services.contracts.exceptions.InvalidOrderItemException;
 import NoWaiter.ProductService.services.contracts.exceptions.InvalidProductCategoryException;
 import NoWaiter.ProductService.services.contracts.exceptions.UnauthorizedRequestException;
 import feign.FeignException;
@@ -48,6 +52,9 @@ public class Api {
 	
 	@Autowired
 	private ObjectClient objectClient;
+	
+	@Autowired
+	private UserClient userClient;
 	
 	@Autowired
 	private ProductService productService;
@@ -127,7 +134,13 @@ public class Api {
 	public ResponseEntity<?> getProducts(@RequestHeader("Authorization") String token) {
 		try {
 			JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
-			UUID objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());
+			UUID objectId;
+			if (hasRole(jwtResponse.getAuthorities(), "ROLE_OBJADMIN")) {
+				 objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());
+			} else {
+				objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());
+			}
+			System.out.println(objectId);
 			return new ResponseEntity<>(productService.findAllProducts(objectId), HttpStatus.OK);
 		} catch (FeignException e) {
         	if(e.status() == HttpStatus.NOT_FOUND.value())
@@ -140,6 +153,17 @@ public class Api {
         }
 	}
 	
+	private boolean hasRole(List<String> authorities, String role) {
+		System.out.println(role);
+		for (String auth : authorities) {
+			System.out.println(auth);
+			if(auth.equals(role)) {
+				return true;
+			}
+		}
+		return false;
+	}
+		
 	@PutMapping("/{productId}/image")
     @CrossOrigin
     public ResponseEntity<?> updateObjectImage(@RequestHeader("Authorization") String token, @RequestParam("image") MultipartFile multipartFile, @PathVariable UUID productId) {
@@ -185,12 +209,35 @@ public class Api {
         }
 	}  
 	
+	@PostMapping("/order-items/validate")
+	@CrossOrigin
+	public ResponseEntity<?> validateOrderItems(@RequestBody OrderItemsDTO items) {
+		try {
+			ProductValidationResponseDTO resp = productService.validateOrderItems(items);
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		} catch (InvalidOrderItemException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Order items not valid", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Order items not valid", HttpStatus.BAD_REQUEST);
+        }
+	} 
+	
+	
 	@GetMapping("/categories")
 	@CrossOrigin
 	public ResponseEntity<?> getProductCategories(@RequestHeader("Authorization") String token) {
 		try {
 			JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
-			UUID objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());
+			UUID objectId;
+			if (hasRole(jwtResponse.getAuthorities(), "ROLE_OBJADMIN")) {
+				 objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());
+			} else {
+				objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());
+			}
+			System.out.println(objectId);
+
 			return new ResponseEntity<>(productService.findAllProductCategories(objectId), HttpStatus.OK);
 		} catch (FeignException e) {
         	if(e.status() == HttpStatus.NOT_FOUND.value())

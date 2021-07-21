@@ -24,9 +24,15 @@ import NoWaiter.ProductService.repository.ProductTypeRepository;
 import NoWaiter.ProductService.services.contracts.ProductService;
 import NoWaiter.ProductService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ProductService.services.contracts.dto.NameDTO;
+import NoWaiter.ProductService.services.contracts.dto.OrderItemDTO;
+import NoWaiter.ProductService.services.contracts.dto.OrderItemsDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductRequestDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductUpdateRequestDTO;
+import NoWaiter.ProductService.services.contracts.dto.ProductValidationDTO;
+import NoWaiter.ProductService.services.contracts.dto.ProductValidationResponseDTO;
+import NoWaiter.ProductService.services.contracts.dto.SideDishDTO;
+import NoWaiter.ProductService.services.contracts.exceptions.InvalidOrderItemException;
 import NoWaiter.ProductService.services.contracts.exceptions.InvalidProductCategoryException;
 import NoWaiter.ProductService.services.contracts.exceptions.UnauthorizedRequestException;
 import NoWaiter.ProductService.services.implementation.util.ImageUtil;
@@ -147,5 +153,32 @@ public class ProductServiceImpl implements ProductService {
 		product.setDescription(productDTO.EntityDTO.Description);
 		product.validate();
 		productRepository.save(product);
+	}
+
+	@Override
+	public ProductValidationResponseDTO validateOrderItems(OrderItemsDTO items) throws InvalidOrderItemException {
+		List<ProductValidationDTO> products = new ArrayList<ProductValidationDTO>();
+		
+		for (OrderItemDTO item : items.Items) {
+			Product product = productRepository.findById(item.Id).get();
+			List<SideDishDTO> sideDishes = new ArrayList<SideDishDTO>();
+
+			for (UUID sideDishId : item.SideDishes) {
+				boolean found = false;
+				for (SideDish sideDish : product.getSideDishes()) {
+					if (sideDish.getId().equals(sideDishId)) {
+						found = true;
+						sideDishes.add(new SideDishDTO(sideDish.getId(), sideDish.getName()));
+						break;
+					}
+				}
+				if(!found) {
+					System.out.println("USAO");
+				} 
+			}
+			products.add(new ProductValidationDTO(product.getId(), product.getName(), product.getImagePath(), product.getPrice(), sideDishes));
+		}
+		
+		return new ProductValidationResponseDTO(products);
 	}
 }
