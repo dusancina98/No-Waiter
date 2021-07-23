@@ -1,12 +1,16 @@
 package no_waiter.order_service.api;
 
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,4 +69,38 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 	}  
+	
+	@GetMapping("/unconfirmed")
+    @CrossOrigin
+    public ResponseEntity<?> getDeliverers(@RequestHeader("Authorization") String token) {
+    	try {
+    		JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+			UUID objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());
+			
+            return new ResponseEntity<>(orderService.getUnconfirmedOrdersForObject(objectId), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
+	@PutMapping("/{orderId}/reject")
+    @CrossOrigin
+    public ResponseEntity<?> rejectOrder(@RequestHeader("Authorization") String token,@PathVariable String orderId) {
+
+        try {
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+			UUID objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());
+			
+        	orderService.rejectOrder(UUID.fromString(orderId),objectId);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -4,6 +4,7 @@ import SideBar from "../components/SideBar";
 import ConfirmedOrdersCard from "../components/waiter-orders/ConfirmedOrdersCard";
 import ReadyOrdersCard from "../components/waiter-orders/ReadyOrdersCard";
 import UnConfirmedOrdersCard from "../components/waiter-orders/UnConfirmedOrdersCard";
+import OrderContextProvider from "../contexts/OrderContext"
 
 const WaiterOrdersPage = () => {
 	return (
@@ -15,9 +16,11 @@ const WaiterOrdersPage = () => {
 					<div className="main-panel">
                         <div className="order-container">
                              <div className="row ">
-                                <div className="col-sm">
-                                    <UnConfirmedOrdersCard/>
-                                </div>
+                                 <OrderContextProvider>
+                                    <div className="col-sm">
+                                        <UnConfirmedOrdersCard/>
+                                    </div>
+                                 </OrderContextProvider>
                                 <div className="col-sm">
                                     <ConfirmedOrdersCard/>
                                 </div>

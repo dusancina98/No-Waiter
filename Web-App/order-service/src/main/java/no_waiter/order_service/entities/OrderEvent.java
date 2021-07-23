@@ -31,22 +31,26 @@ public class OrderEvent {
     
     @Column(name = "estimatedTime")
 	private int estimatedTime;
+    
+    @Column(name = "objectId")
+	private UUID objectId;
 
 	public OrderEvent() {
 		super();
 	}
 
-	public OrderEvent(UUID id, Order order, OrderStatus orderStatus, Date timeStamp, int estimatedTime) {
+	public OrderEvent(UUID id, Order order, OrderStatus orderStatus, Date timeStamp, int estimatedTime, UUID objectId) {
 		super();
 		this.id = id;
 		this.order = order;
 		this.orderStatus = orderStatus;
 		this.timeStamp = timeStamp;
 		this.estimatedTime = estimatedTime;
+		this.objectId = objectId;
 	}
 
-	public OrderEvent(Order order, OrderStatus orderStatus, Date timeStamp, int estimatedTime) {
-		this(UUID.randomUUID(), order, orderStatus, timeStamp, estimatedTime);
+	public OrderEvent(Order order, OrderStatus orderStatus, Date timeStamp, int estimatedTime, UUID objectId) {
+		this(UUID.randomUUID(), order, orderStatus, timeStamp, estimatedTime, objectId);
 	}
 
 	public Order getOrder() {
@@ -83,5 +87,13 @@ public class OrderEvent {
 
 	public UUID getId() {
 		return id;
+	}
+
+	public UUID getObjectId() {
+		return objectId;
+	}
+
+	public void setObjectId(UUID objectId) {
+		this.objectId = objectId;
 	}
 }

@@ -107,6 +107,24 @@ export const orderReducer = (state, action) => {
 			ordCpy.createOrder.pageVisible = action.page;
 
 			return ordCpy;
+
+		case orderConstants.GET_UNCONFIRMED_ORDER_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.UnConfirmedOrders = action.orders;
+	
+			return ordCpy;
+		case orderConstants.GET_UNCONFIRMED_ORDER_FAILURE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.UnConfirmedOrders = [];
+	
+			return ordCpy;
+		case orderConstants.REJECT_ORDER_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.UnConfirmedOrders = ordCpy.waiterOrders.UnConfirmedOrders.filter((item) => item.OrderId !== action.orderId);
+			return ordCpy;
+		case orderConstants.REJECT_ORDER_FAILURE:
+			ordCpy = { ...state };
+			return ordCpy;
 		default:
 			return state;
 	}
