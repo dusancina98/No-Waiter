@@ -116,7 +116,6 @@ export const orderReducer = (state, action) => {
 		case orderConstants.GET_UNCONFIRMED_ORDER_FAILURE:
 			ordCpy = { ...state };
 			ordCpy.waiterOrders.UnConfirmedOrders = [];
-	
 			return ordCpy;
 		case orderConstants.REJECT_ORDER_SUCCESS:
 			ordCpy = { ...state };
@@ -124,7 +123,14 @@ export const orderReducer = (state, action) => {
 			return ordCpy;
 		case orderConstants.REJECT_ORDER_FAILURE:
 			ordCpy = { ...state };
+			ordCpy.waiterOrders.showErrorMessage=true;
+			ordCpy.waiterOrders.errorMessage=action.errorMessage;
 			return ordCpy;
+		case orderConstants.HIDE_WAITER_ORDER_ERROR_MESSAGE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.showErrorMessage=false;
+			ordCpy.waiterOrders.errorMessage='';
+			return ordCpy;			
 		case modalConstants.SHOW_ACCEPT_UNCONFIRMED_ORDER_MODAL:
 			return {
 				...state,
@@ -167,7 +173,18 @@ export const orderReducer = (state, action) => {
 			ordCpy.waiterOrders.UnConfirmedOrders = ordCpy.waiterOrders.UnConfirmedOrders.filter((item) => item.OrderId !== action.orderId);
 			return ordCpy;
 		case orderConstants.ACCEPT_UNCONFIRMED_ORDER_FAILURE:
+			return {
+				...state,
+				acceptUnConfirmedOrder:{
+					showModal:true, 
+					showErrorMessage:true,
+					errorMessage:action.errorMessage,
+				}
+			}
+		case orderConstants.SHOW_WAITER_ORDERS_REQUEST:
 			ordCpy = { ...state };
+			ordCpy.waiterOrders.showErrorMessage=false;
+			ordCpy.waiterOrders.errorMessage='';
 			return ordCpy;
 		default:
 			return state;

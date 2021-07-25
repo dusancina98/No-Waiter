@@ -20,13 +20,13 @@ const AcceptUnConfirmedOrderModal = ({orderId}) => {
 		e.preventDefault();
         if(estimatedTime<=0){
             dispatch({ type: orderConstants.ACCEPT_UNCONFIRMED_ORDER_ESTIMATED_TIME_FAILURE, errorMessage: 'Number must be positive and more than 0' });
-        }
-
-		let acceptOrderDTO = {
-			OrderId: orderId,
-			EstimatedTime: estimatedTime,
-		};
-		orderService.acceptUnConfirmedOrder(acceptOrderDTO, dispatch);
+        }else{
+			let acceptOrderDTO = {
+				OrderId: orderId,
+				EstimatedTime: estimatedTime,
+			};
+			orderService.acceptUnConfirmedOrder(acceptOrderDTO, dispatch);
+		}
 	};
 
 	return (

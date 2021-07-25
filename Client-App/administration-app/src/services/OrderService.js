@@ -64,11 +64,11 @@ function rejectOrder(orderId, dispatch) {
 			if (res.status === 200) {
 				dispatch(success(orderId));
 			} else {
-				dispatch(failure(res.data.message));
+				dispatch(failure('We have some internal problem, please try later'));
 			}
 		})
 		.catch((err) => {
-			console.log(err);
+			dispatch(failure('We have some internal problem, please try later'));
 		});
 
 	function success(orderId) {

@@ -111,7 +111,6 @@ public class OrderServiceImpl implements OrderService{
 		
 		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId());
 		orderEventRepository.save(newOrderEvent);
-		
 	}
 
 }
