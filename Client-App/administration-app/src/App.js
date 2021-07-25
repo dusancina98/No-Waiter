@@ -21,6 +21,7 @@ import ObjectDetailsPage from "./pages/ObjectDetailsPage";
 import ProductsPage from "./pages/ProductsPage";
 import ListOfDelivererPage from "./pages/ListOfDelivererPage";
 import CreateOrderPage from "./pages/CreateOrderPage";
+import WaiterOrdersPage from "./pages/WaiterOrdersPage";
 
 function App() {
 	return (
@@ -44,6 +45,7 @@ function App() {
 
 				<ProtectedRoute roles={"ROLE_OBJADMIN"} redirectTo="/" path="/object-details" component={ObjectDetailsPage} />
 				<ProtectedRoute roles={"ROLE_WAITER"} redirectTo="/" path="/create-order" component={CreateOrderPage} />
+				<ProtectedRoute roles={"ROLE_WAITER"} redirectTo="/" path="/waiter-orders" component={WaiterOrdersPage} />
 
 				<ProtectedRoute roles={""} exact path="/reset-password-request" redirectTo="/unauthorized" component={ForgotPasswordPage} />
 				<ProtectedRoute roles={""} exact path="/reset-password/:id/:token" redirectTo="/unauthorized" component={ResetPasswordPage} />

@@ -127,6 +127,12 @@ const SideBar = () => {
 					</Link>
 				</li>
 				<li className="nav-item">
+					<Link className="nav-link" to="/waiter-orders">
+						<i className="mdi mdi-contacts menu-icon"></i>
+						<span className="menu-title">Orders</span>
+					</Link>
+				</li>
+				<li className="nav-item">
 					<a className="nav-link" href="pages/icons/mdi.html">
 						<i className="mdi mdi-contacts menu-icon"></i>
 						<span className="menu-title">Icons</span>

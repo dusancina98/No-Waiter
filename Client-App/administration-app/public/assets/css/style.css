@@ -2265,6 +2265,15 @@ pre {
     .container {
       max-width: 1140px; } }
 
+      
+.order-container {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-top: 15px;
+ }
+ 
+
 .container-fluid, .container-sm, .container-md, .container-lg, .container-xl {
   width: 100%;
   padding-right: 15px;
@@ -15490,3 +15499,12 @@ dl {
   }
 
 /*# sourceMappingURL=style.css.map */
+
+.hover-div .hover-div--on,
+.hover-div:hover .hover-div--off {
+  display: none;
+}
+
+.hover-div:hover .hover-div--on {
+  display: inline;
+}

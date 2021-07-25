@@ -107,6 +107,158 @@ export const orderReducer = (state, action) => {
 			ordCpy.createOrder.pageVisible = action.page;
 
 			return ordCpy;
+
+		case orderConstants.GET_UNCONFIRMED_ORDER_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.UnConfirmedOrders = action.orders;
+	
+			return ordCpy;
+		case orderConstants.GET_UNCONFIRMED_ORDER_FAILURE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.UnConfirmedOrders = [];
+			return ordCpy;
+		case orderConstants.GET_CONFIRMED_ORDER_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.ConfirmedOrders = action.orders;
+	
+			return ordCpy;
+		case orderConstants.GET_CONFIRMED_ORDER_FAILURE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.ConfirmedOrders = [];
+			return ordCpy;
+
+		case orderConstants.REJECT_ORDER_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.UnConfirmedOrders = ordCpy.waiterOrders.UnConfirmedOrders.filter((item) => item.OrderId !== action.orderId);
+			ordCpy.waiterOrders.ConfirmedOrders = ordCpy.waiterOrders.ConfirmedOrders.filter((item) => item.OrderId !== action.orderId);
+			ordCpy.waiterOrders.ReadyOrders = ordCpy.waiterOrders.ReadyOrders.filter((item) => item.OrderId !== action.orderId);
+			ordCpy.waiterOrders.OnRouteOrders = ordCpy.waiterOrders.OnRouteOrders.filter((item) => item.OrderId !== action.orderId);
+			return ordCpy;
+		case orderConstants.REJECT_ORDER_FAILURE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.showErrorMessage=true;
+			ordCpy.waiterOrders.errorMessage=action.errorMessage;
+			return ordCpy;
+		case orderConstants.HIDE_WAITER_ORDER_ERROR_MESSAGE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.showErrorMessage=false;
+			ordCpy.waiterOrders.errorMessage='';
+			return ordCpy;			
+		case modalConstants.SHOW_ACCEPT_UNCONFIRMED_ORDER_MODAL:
+			return {
+				...state,
+				acceptUnConfirmedOrder:{
+					orderId: action.orderId,
+					showModal:true, 
+					showErrorMessage:false,
+					errorMessage:'',
+				}
+			}
+		case modalConstants.HIDE_ACCEPT_UNCONFIRMED_ORDER_MODAL:
+			return {
+				...state,
+				acceptUnConfirmedOrder:{
+					showModal:false, 
+					orderId: '',
+					showErrorMessage:false,
+					errorMessage:'',
+				}
+			}
+		case orderConstants.ACCEPT_UNCONFIRMED_ORDER_ESTIMATED_TIME_FAILURE:
+			return {
+				...state,
+				acceptUnConfirmedOrder:{
+					orderId: '',
+					showModal:true, 
+					showErrorMessage:true,
+					errorMessage:action.errorMessage,
+				}
+			}
+		case orderConstants.ACCEPT_UNCONFIRMED_ORDER_REQUEST:
+			return {
+				...state,
+				acceptUnConfirmedOrder:{
+					orderId: '',
+					showModal:true, 
+					showErrorMessage:false,
+					errorMessage:'',
+				}
+			}
+		case orderConstants.ACCEPT_UNCONFIRMED_ORDER_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.acceptUnConfirmedOrder.showModal = false
+			ordCpy.waiterOrders.UnConfirmedOrders = ordCpy.waiterOrders.UnConfirmedOrders.filter((item) => item.OrderId !== action.orderId);
+			return ordCpy;
+		case orderConstants.ACCEPT_UNCONFIRMED_ORDER_FAILURE:
+			return {
+				...state,
+				acceptUnConfirmedOrder:{
+					orderId: '',
+					showModal:true, 
+					showErrorMessage:true,
+					errorMessage:action.errorMessage,
+				}
+			}
+		case orderConstants.SHOW_WAITER_ORDERS_REQUEST:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.showErrorMessage=false;
+			ordCpy.waiterOrders.errorMessage='';
+			return ordCpy;
+		case orderConstants.SET_READY_ORDER_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.ConfirmedOrders = ordCpy.waiterOrders.ConfirmedOrders.filter((item) => item.OrderId !== action.orderId);
+			return ordCpy;
+		case orderConstants.SET_READY_ORDER_FAILURE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.showErrorMessage=true;
+			ordCpy.waiterOrders.errorMessage=action.errorMessage;
+			return ordCpy;
+		case orderConstants.GET_READY_ORDER_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.ReadyOrders = action.orders;
+	
+			return ordCpy;
+		case orderConstants.GET_READY_ORDER_FAILURE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.ReadyOrders = [];
+			return ordCpy;
+		case orderConstants.SET_ON_ROUTE_ORDER_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.ReadyOrders = ordCpy.waiterOrders.ReadyOrders.filter((item) => item.OrderId !== action.orderId);
+			return ordCpy;
+		case orderConstants.SET_ON_ROUTE_ORDER_FAILURE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.showErrorMessage=true;
+			ordCpy.waiterOrders.errorMessage=action.errorMessage;
+			return ordCpy;
+		case orderConstants.SET_ORDER_TO_COMPLETE_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.ReadyOrders = ordCpy.waiterOrders.ReadyOrders.filter((item) => item.OrderId !== action.orderId);
+			ordCpy.waiterOrders.OnRouteOrders = ordCpy.waiterOrders.OnRouteOrders.filter((item) => item.OrderId !== action.orderId);
+			return ordCpy;
+		case orderConstants.SET_ORDER_TO_COMPLETE_FAILURE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.showErrorMessage=true;
+			ordCpy.waiterOrders.errorMessage=action.errorMessage;
+			return ordCpy;
+		case orderConstants.GET_ON_ROUTE_ORDERS_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.OnRouteOrders = action.orders;
+	
+			return ordCpy;
+		case orderConstants.GET_ON_ROUTE_ORDERS_FAILURE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.OnRouteOrders = [];
+			return ordCpy;
+		case orderConstants.GET_COMPLETED_ORDERS_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.CompletedOrders = action.orders;
+	
+			return ordCpy;
+		case orderConstants.GET_COMPLETED_ORDERS_FAILURE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.CompletedOrders = [];
+			return ordCpy;
 		default:
 			return state;
 	}

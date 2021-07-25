@@ -33,6 +33,21 @@ const OrderContextProvider = (props) => {
 				},
 			},
 		},
+		waiterOrders: {
+			UnConfirmedOrders: [],
+			ConfirmedOrders: [],
+			ReadyOrders: [],
+			OnRouteOrders: [],
+			CompletedOrders: [],
+			showErrorMessage:false,
+			errorMessage:'',
+		},
+		acceptUnConfirmedOrder:{
+			orderId:'',
+			showModal:false, 
+			showErrorMessage:false,
+			errorMessage:'',
+		}
 	});
 
 	return <OrderContext.Provider value={{ orderState, dispatch }}>{props.children}</OrderContext.Provider>;
