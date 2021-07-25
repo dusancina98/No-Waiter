@@ -152,4 +152,66 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+	
+	@GetMapping("/ready")
+    @CrossOrigin
+    public ResponseEntity<?> getReadyOrdersForObject(@RequestHeader("Authorization") String token) {
+    	try {
+    		JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+			UUID objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());
+			
+            return new ResponseEntity<>(orderService.getReadyOrdersForObject(objectId), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
+	@PutMapping("/{orderId}/on-route")
+    @CrossOrigin
+    public ResponseEntity<?> setOnRouteOrder(@PathVariable String orderId) {
+
+        try {
+        	orderService.setOnRouteOrder(UUID.fromString(orderId));
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
+	@GetMapping("/on-route")
+    @CrossOrigin
+    public ResponseEntity<?> getOnRouteOrdersForObject(@RequestHeader("Authorization") String token) {
+    	try {
+    		JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+			UUID objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());
+			
+            return new ResponseEntity<>(orderService.getOnRouteOrdersForObject(objectId), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
+	@PutMapping("/{orderId}/completed")
+    @CrossOrigin
+    public ResponseEntity<?> setCompleteOrder(@PathVariable String orderId) {
+
+        try {
+        	orderService.setOrderToComplete(UUID.fromString(orderId));
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

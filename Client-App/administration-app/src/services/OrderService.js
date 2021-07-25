@@ -9,6 +9,9 @@ export const orderService = {
 	acceptUnConfirmedOrder,
 	findAllConfirmedOrders,
 	readyOrder,
+	findAllReadyOrders,
+	setOnRouteOrder,
+	setOrderToCompleted,
 };
 
 function createOrder(orderDTO, dispatch) {
@@ -131,6 +134,7 @@ function readyOrder(orderId, dispatch) {
 		.then((res) => {
 			if (res.status === 200) {
 				dispatch(success(orderId));
+				findAllReadyOrders(dispatch);
 			} else {
 				dispatch(failure('We have some internal problem, please try later'));
 			}
@@ -140,9 +144,75 @@ function readyOrder(orderId, dispatch) {
 		});
 	
 	function success(orderId) {
-		return { type: orderConstants.READY_ORDER_SUCCESS, orderId: orderId };
+		return { type: orderConstants.SET_READY_ORDER_SUCCESS, orderId: orderId };
 	}
 	function failure(message) {
-		return { type: orderConstants.READY_ORDER_FAILURE, errorMessage: message };
+		return { type: orderConstants.SET_READY_ORDER_FAILURE, errorMessage: message };
+	}
+}
+
+async function findAllReadyOrders(dispatch){
+	await Axios.get(`/order-api/api/orders/ready`, { validateStatus: () => true, headers: authHeader() })
+	.then((res) => {
+		console.log(res);
+		if (res.status === 200) {
+			dispatch(success(res.data));
+		} else {
+			dispatch(failure("Error"));
+		}
+	})
+	.catch((err) => {
+		dispatch(failure("Error"));
+	});
+
+	function success(data) {
+		return { type: orderConstants.GET_READY_ORDER_SUCCESS, orders: data };
+	}
+	function failure(message) {
+		return { type: orderConstants.GET_READY_ORDER_FAILURE, errorMessage: message };
+	}
+}
+
+function setOnRouteOrder(orderId, dispatch) {
+	Axios.put(`/order-api/api/orders/${orderId}/on-route`, null, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(orderId));
+				//findAllReadyOrders(dispatch);
+			} else {
+				dispatch(failure('We have some internal problem, please try later'));
+			}
+		})
+		.catch((err) => {
+			dispatch(failure('We have some internal problem, please try later'));
+		});
+	
+	function success(orderId) {
+		return { type: orderConstants.SET_ON_ROUTE_ORDER_SUCCESS, orderId: orderId };
+	}
+	function failure(message) {
+		return { type: orderConstants.SET_ON_ROUTE_ORDER_FAILURE, errorMessage: message };
+	}
+}
+
+function setOrderToCompleted(orderId, dispatch) {
+	Axios.put(`/order-api/api/orders/${orderId}/completed`, null, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(orderId));
+				//findAllReadyOrders(dispatch);
+			} else {
+				dispatch(failure('We have some internal problem, please try later'));
+			}
+		})
+		.catch((err) => {
+			dispatch(failure('We have some internal problem, please try later'));
+		});
+	
+	function success(orderId) {
+		return { type: orderConstants.SET_ORDER_TO_COMPLETE_SUCCESS, orderId: orderId };
+	}
+	function failure(message) {
+		return { type: orderConstants.SET_ORDER_TO_COMPLETE_FAILURE, errorMessage: message };
 	}
 }

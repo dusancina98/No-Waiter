@@ -131,6 +131,7 @@ export const orderReducer = (state, action) => {
 			ordCpy = { ...state };
 			ordCpy.waiterOrders.UnConfirmedOrders = ordCpy.waiterOrders.UnConfirmedOrders.filter((item) => item.OrderId !== action.orderId);
 			ordCpy.waiterOrders.ConfirmedOrders = ordCpy.waiterOrders.ConfirmedOrders.filter((item) => item.OrderId !== action.orderId);
+			ordCpy.waiterOrders.ReadyOrders = ordCpy.waiterOrders.ReadyOrders.filter((item) => item.OrderId !== action.orderId);
 			return ordCpy;
 		case orderConstants.REJECT_ORDER_FAILURE:
 			ordCpy = { ...state };
@@ -202,11 +203,39 @@ export const orderReducer = (state, action) => {
 			ordCpy.waiterOrders.showErrorMessage=false;
 			ordCpy.waiterOrders.errorMessage='';
 			return ordCpy;
-		case orderConstants.READY_ORDER_SUCCESS:
+		case orderConstants.SET_READY_ORDER_SUCCESS:
 			ordCpy = { ...state };
 			ordCpy.waiterOrders.ConfirmedOrders = ordCpy.waiterOrders.ConfirmedOrders.filter((item) => item.OrderId !== action.orderId);
 			return ordCpy;
-		case orderConstants.READY_ORDER_FAILURE:
+		case orderConstants.SET_READY_ORDER_FAILURE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.showErrorMessage=true;
+			ordCpy.waiterOrders.errorMessage=action.errorMessage;
+			return ordCpy;
+		case orderConstants.GET_READY_ORDER_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.ReadyOrders = action.orders;
+	
+			return ordCpy;
+		case orderConstants.GET_READY_ORDER_FAILURE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.ReadyOrders = [];
+			return ordCpy;
+		case orderConstants.SET_ON_ROUTE_ORDER_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.ReadyOrders = ordCpy.waiterOrders.ReadyOrders.filter((item) => item.OrderId !== action.orderId);
+			return ordCpy;
+		case orderConstants.SET_ON_ROUTE_ORDER_FAILURE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.showErrorMessage=true;
+			ordCpy.waiterOrders.errorMessage=action.errorMessage;
+			return ordCpy;
+		case orderConstants.SET_ORDER_TO_COMPLETE_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.ReadyOrders = ordCpy.waiterOrders.ReadyOrders.filter((item) => item.OrderId !== action.orderId);
+			ordCpy.waiterOrders.OnRouteOrders = ordCpy.waiterOrders.OnRouteOrders.filter((item) => item.OrderId !== action.orderId);
+			return ordCpy;
+		case orderConstants.SET_ORDER_TO_COMPLETE_FAILURE:
 			ordCpy = { ...state };
 			ordCpy.waiterOrders.showErrorMessage=true;
 			ordCpy.waiterOrders.errorMessage=action.errorMessage;

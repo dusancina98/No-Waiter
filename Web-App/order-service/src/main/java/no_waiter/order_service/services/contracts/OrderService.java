@@ -5,8 +5,10 @@ import java.util.UUID;
 
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
+import no_waiter.order_service.services.contracts.dto.OnRouteOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
 import no_waiter.order_service.services.contracts.dto.ProductValidationResponseDTO;
+import no_waiter.order_service.services.contracts.dto.ReadyOrderDTO;
 import no_waiter.order_service.services.contracts.dto.UnConfirmedOrderDTO;
 
 public interface OrderService {
@@ -21,5 +23,13 @@ public interface OrderService {
 
 	List<ConfirmedOrderDTO> getConfirmedOrdersForObject(UUID objectId);
 
-	void setOrderToReady(UUID fromString);
+	void setOrderToReady(UUID orderId);
+
+	List<ReadyOrderDTO> getReadyOrdersForObject(UUID objectId);
+
+	void setOnRouteOrder(UUID orderId);
+
+	List<OnRouteOrderDTO> getOnRouteOrdersForObject(UUID objectId);
+
+	void setOrderToComplete(UUID orderId);
 }

@@ -17,7 +17,7 @@ const ConfirmedOrdersCard = () => {
 		<React.Fragment>
 			<div className="card" style= {{"width":"auto"}} >
                 <div className="card-header text-center" style={{"backgroundColor":"GreenYellow"}}>
-                    Un-Confirmed
+                    Confirmed
                 </div>
                 <ul className="list-group list-group-flush" >
 					{orderState.waiterOrders.ConfirmedOrders.length!==0? 

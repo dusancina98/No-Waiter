@@ -20,8 +20,10 @@ import no_waiter.order_service.repository.OrderRepository;
 import no_waiter.order_service.services.contracts.OrderService;
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
+import no_waiter.order_service.services.contracts.dto.OnRouteOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
 import no_waiter.order_service.services.contracts.dto.ProductValidationResponseDTO;
+import no_waiter.order_service.services.contracts.dto.ReadyOrderDTO;
 import no_waiter.order_service.services.contracts.dto.UnConfirmedOrderDTO;
 import no_waiter.order_service.services.implementation.util.OrderMapper;
 
@@ -159,4 +161,85 @@ public class OrderServiceImpl implements OrderService{
 		orderEventRepository.save(newOrderEvent);
 	}
 
+	@Override
+	public List<ReadyOrderDTO> getReadyOrdersForObject(UUID objectId) {
+		List<ReadyOrderDTO> readyOrderDTO = new ArrayList<ReadyOrderDTO>();
+		
+		Long setTime = (long) (3*60*3600*1000);
+		Date newDate = new Date();
+		newDate.setTime(newDate.getTime() - setTime);
+		
+		//povlaci orderEvente za dati restoran gde je vreme manje od 3h unazad
+		List<UUID> getOrderIdsForObjectAfterDate =  orderEventRepository.getOrderIdsForObjectAfterDate(objectId, newDate);
+		
+		for(UUID orderId : getOrderIdsForObjectAfterDate) {
+			List<OrderEvent> orderEvent = orderEventRepository.getOrderEventsByOrderId(orderId);
+			if(orderEvent.size()==0) 
+				continue;
+			
+			if(checkIfOrderIsGivenStatus(orderEvent,OrderStatus.READY)) {
+				readyOrderDTO.add(mapOrderToReadyOrderDTO(orderEvent.get(0)));
+			}
+		}
+		
+		return readyOrderDTO;
+	}
+
+	private ReadyOrderDTO mapOrderToReadyOrderDTO(OrderEvent orderEvent) {
+		Date estimatedDate = new Date();
+		estimatedDate.setTime(orderEvent.getCreatedTime().getTime() + (orderEvent.getEstimatedTime()*60*1000));		
+		
+		ReadyOrderDTO dto = new ReadyOrderDTO(orderEvent.getOrder().getId(),"1",orderEvent.getOrder().getOrderType().toString(),getPriceForOrder(orderEvent.getOrder()),orderEvent.getCreatedTime(),estimatedDate, "Ime i Prezime");
+		
+		return dto;
+	}
+
+	@Override
+	public void setOnRouteOrder(UUID orderId) {
+		Order order = orderRepository.findById(orderId).get();
+		
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.DELIVERING, new Date(), order.getEstimatedTime(), order.getObjectId());
+		orderEventRepository.save(newOrderEvent);
+	}
+
+	@Override
+	public List<OnRouteOrderDTO> getOnRouteOrdersForObject(UUID objectId) {
+		List<OnRouteOrderDTO> onRouteOrderDTO = new ArrayList<OnRouteOrderDTO>();
+		
+		Long setTime = (long) (3*60*3600*1000);
+		Date newDate = new Date();
+		newDate.setTime(newDate.getTime() - setTime);
+		
+		//povlaci orderEvente za dati restoran gde je vreme manje od 3h unazad
+		List<UUID> getOrderIdsForObjectAfterDate =  orderEventRepository.getOrderIdsForObjectAfterDate(objectId, newDate);
+		
+		for(UUID orderId : getOrderIdsForObjectAfterDate) {
+			List<OrderEvent> orderEvent = orderEventRepository.getOrderEventsByOrderId(orderId);
+			if(orderEvent.size()==0) 
+				continue;
+			
+			if(checkIfOrderIsGivenStatus(orderEvent,OrderStatus.DELIVERING)) {
+				onRouteOrderDTO.add(mapOrderToOnRouteOrderDTO(orderEvent.get(0)));
+			}
+		}
+		
+		return onRouteOrderDTO;
+	}
+
+	private OnRouteOrderDTO mapOrderToOnRouteOrderDTO(OrderEvent orderEvent) {
+		Date estimatedDate = new Date();
+		estimatedDate.setTime(orderEvent.getCreatedTime().getTime() + (orderEvent.getEstimatedTime()*60*1000));		
+		
+		OnRouteOrderDTO dto = new OnRouteOrderDTO(orderEvent.getOrder().getId(),orderEvent.getOrder().getOrderType().toString(),getPriceForOrder(orderEvent.getOrder()),orderEvent.getCreatedTime(),estimatedDate, "Ime i Prezime");
+		
+		return dto;
+	}
+
+	@Override
+	public void setOrderToComplete(UUID orderId) {
+		Order order = orderRepository.findById(orderId).get();
+		
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.COMPLETED, new Date(), order.getEstimatedTime(), order.getObjectId());
+		orderEventRepository.save(newOrderEvent);	
+	}
 }
