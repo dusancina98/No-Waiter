@@ -16,6 +16,7 @@ import no_waiter.order_service.entities.OrderStatus;
 import no_waiter.order_service.repository.OrderEventRepository;
 import no_waiter.order_service.repository.OrderRepository;
 import no_waiter.order_service.services.contracts.OrderService;
+import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
 import no_waiter.order_service.services.contracts.dto.ProductValidationResponseDTO;
 import no_waiter.order_service.services.contracts.dto.UnConfirmedOrderDTO;
@@ -102,6 +103,15 @@ public class OrderServiceImpl implements OrderService{
 		
 		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.REJECTED, new Date(), order.getEstimatedTime(), objectId);
 		orderEventRepository.save(newOrderEvent);
+	}
+
+	@Override
+	public void acceptOrder(AcceptOrderDTO acceptOrderDTO) {
+		Order order = orderRepository.findById(acceptOrderDTO.OrderId).get();
+		
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId());
+		orderEventRepository.save(newOrderEvent);
+		
 	}
 
 }

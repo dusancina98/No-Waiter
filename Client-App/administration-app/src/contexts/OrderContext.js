@@ -39,6 +39,11 @@ const OrderContextProvider = (props) => {
 			ReadyOrders: [],
 			OnRouteOrders: [],
 			CompletedOrders: [],
+		},
+		acceptUnConfirmedOrder:{
+			showModal:false, 
+			showErrorMessage:false,
+			errorMessage:'',
 		}
 	});
 

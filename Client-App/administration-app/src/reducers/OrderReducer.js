@@ -125,6 +125,50 @@ export const orderReducer = (state, action) => {
 		case orderConstants.REJECT_ORDER_FAILURE:
 			ordCpy = { ...state };
 			return ordCpy;
+		case modalConstants.SHOW_ACCEPT_UNCONFIRMED_ORDER_MODAL:
+			return {
+				...state,
+				acceptUnConfirmedOrder:{
+					showModal:true, 
+					showErrorMessage:false,
+					errorMessage:'',
+				}
+			}
+		case modalConstants.HIDE_ACCEPT_UNCONFIRMED_ORDER_MODAL:
+			return {
+				...state,
+				acceptUnConfirmedOrder:{
+					showModal:false, 
+					showErrorMessage:false,
+					errorMessage:'',
+				}
+			}
+		case orderConstants.ACCEPT_UNCONFIRMED_ORDER_ESTIMATED_TIME_FAILURE:
+			return {
+				...state,
+				acceptUnConfirmedOrder:{
+					showModal:true, 
+					showErrorMessage:true,
+					errorMessage:action.errorMessage,
+				}
+			}
+		case orderConstants.ACCEPT_UNCONFIRMED_ORDER_REQUEST:
+			return {
+				...state,
+				acceptUnConfirmedOrder:{
+					showModal:true, 
+					showErrorMessage:false,
+					errorMessage:'',
+				}
+			}
+		case orderConstants.ACCEPT_UNCONFIRMED_ORDER_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.acceptUnConfirmedOrder.showModal = false
+			ordCpy.waiterOrders.UnConfirmedOrders = ordCpy.waiterOrders.UnConfirmedOrders.filter((item) => item.OrderId !== action.orderId);
+			return ordCpy;
+		case orderConstants.ACCEPT_UNCONFIRMED_ORDER_FAILURE:
+			ordCpy = { ...state };
+			return ordCpy;
 		default:
 			return state;
 	}

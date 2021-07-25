@@ -21,6 +21,7 @@ import no_waiter.order_service.intercomm.AuthClient;
 import no_waiter.order_service.intercomm.ProductClient;
 import no_waiter.order_service.intercomm.UserClient;
 import no_waiter.order_service.services.contracts.OrderService;
+import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.JwtParseResponseDTO;
 import no_waiter.order_service.services.contracts.dto.OrderItemsDTO;
 import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
@@ -95,6 +96,23 @@ public class Api {
         	orderService.rejectOrder(UUID.fromString(orderId),objectId);
             return new ResponseEntity<>(HttpStatus.OK);
 
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
+	@PutMapping("/accept")
+    @CrossOrigin
+    public ResponseEntity<?> acceptOrder(@RequestHeader("Authorization") String token,@RequestBody AcceptOrderDTO acceptOrderDTO) {
+
+        try {		
+        	
+        	orderService.acceptOrder(acceptOrderDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (NoSuchElementException e) {
         	e.printStackTrace();
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);

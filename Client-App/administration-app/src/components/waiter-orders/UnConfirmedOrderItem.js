@@ -1,19 +1,42 @@
-import React, {useContext} from 'react'
+import React, { useContext, useState } from 'react'
 import moment from 'moment';
 import { OrderContext } from '../../contexts/OrderContext';
 import { orderService } from "../../services/OrderService"
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'
+import { modalConstants } from '../../constants/ModalConstants';
+import AcceptUnConfirmedOrderModal from './modals/AcceptUnConfirmedOrderModal';
 
 const UnConfirmedOrderItem = ({ order }) => {
 	const { dispatch } = useContext(OrderContext);
 
+    const [confirmOrderId, setConfirmOrderId] = useState("");
+
     const rejectOrder = (orderId) => {
-        orderService.rejectOrder(orderId, dispatch)
+        confirmAlert({
+			message: 'Are you sure to do this?',
+			buttons: [
+			  {
+				label: 'Yes',
+				onClick: () => orderService.rejectOrder(orderId, dispatch)
+			  },
+			  {
+				label: 'No',
+			  }
+			]
+		  });
+    }
+
+    const acceptOrder = (orderId) => {
+        setConfirmOrderId(orderId)
+        dispatch({type: modalConstants.SHOW_ACCEPT_UNCONFIRMED_ORDER_MODAL})
     }
 
 	return (
         <div className="hover-div">
-            <li className="list-group-item hover-div--off" style= {{"width":"auto","minHeight":"100px","minWidth":"250px"}}>
-                <div>
+            <AcceptUnConfirmedOrderModal orderId={confirmOrderId}/>
+            <li className="list-group-item hover-div" style= {{"width":"auto","minHeight":"100px","minWidth":"250px"}}>
+                <div className="hover-div--off">
                     <div className="row align-items-center" >
                         <div className="col-2 ">
                             <div className="row">
@@ -29,9 +52,12 @@ const UnConfirmedOrderItem = ({ order }) => {
                             <div className="row">
                                 <b>Placed</b>: {moment.utc(order.TimeStamp).local().startOf('seconds').fromNow()}
                             </div>
+                            {order.OrderType==="DELIVERY" ? 
+                            <div></div>:
                             <div className="row">
                                 <b>Table</b>:  {order.Table}
                             </div>
+                            }
                         </div>
                         <div className="col-3" >
                             <div className="row">
@@ -43,29 +69,30 @@ const UnConfirmedOrderItem = ({ order }) => {
                         </div>
                     </div>
                 </div>
-            </li>
-                    
-            <li className='hover-div--on'>
+                <div className='hover-div--on'>
                 <div >
                     <div className="row">
                         <div className="col-4 text-center">
-                            <button style={{"minHeight":"100px"}} onClick={()=>rejectOrder(order.OrderId)}>
+                            <button style={{"minHeight":"75px"}} onClick={()=>rejectOrder(order.OrderId)}>
                                 Reject
                             </button>
                         </div>
                         <div className="col-4 text-center">
-                            <button style={{"minHeight":"100px"}}>
+                            <button style={{"minHeight":"75px"}}>
                                 Details
                             </button>
                         </div>
                         <div className="col-4 text-center">
-                            <button style={{"minHeight":"100px"}} >
+                            <button style={{"minHeight":"75px"}} onClick={()=>acceptOrder(order.OrderId)} >
                                 Accept
                             </button>
                         </div>
                     </div>
                 </div>
+                </div>
             </li>
+                    
+ 
         </div>
 	);
 };

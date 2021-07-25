@@ -6,6 +6,7 @@ export const orderService = {
 	createOrder,
 	findAllUnConfirmedOrders,
 	rejectOrder,
+	acceptUnConfirmedOrder,
 };
 
 function createOrder(orderDTO, dispatch) {
@@ -77,3 +78,25 @@ function rejectOrder(orderId, dispatch) {
 		return { type: orderConstants.REJECT_ORDER_FAILURE, errorMessage: message };
 	}
 }
+
+function acceptUnConfirmedOrder(acceptOrderDTO, dispatch) {
+	Axios.put(`/order-api/api/orders/accept`, acceptOrderDTO, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(acceptOrderDTO.OrderId));
+			} else {
+				dispatch(failure('We have some internal problem, please try later'));
+			}
+		})
+		.catch((err) => {
+			console.log(failure('We have some internal problem, please try later'));
+		});
+
+	function success(orderId) {
+		return { type: orderConstants.ACCEPT_UNCONFIRMED_ORDER_SUCCESS, orderId: orderId };
+	}
+	function failure(message) {
+		return { type: orderConstants.ACCEPT_UNCONFIRMED_ORDER_FAILURE, errorMessage: message };
+	}
+}
+
