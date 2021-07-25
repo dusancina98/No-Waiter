@@ -27,7 +27,7 @@ public class OrderEvent {
 	private OrderStatus orderStatus;
 	
     @Column(name = "timestamp")
-	private Date timeStamp;
+	private Date createdTime;
     
     @Column(name = "estimatedTime")
 	private int estimatedTime;
@@ -39,12 +39,12 @@ public class OrderEvent {
 		super();
 	}
 
-	public OrderEvent(UUID id, Order order, OrderStatus orderStatus, Date timeStamp, int estimatedTime, UUID objectId) {
+	public OrderEvent(UUID id, Order order, OrderStatus orderStatus, Date createdTime, int estimatedTime, UUID objectId) {
 		super();
 		this.id = id;
 		this.order = order;
 		this.orderStatus = orderStatus;
-		this.timeStamp = timeStamp;
+		this.createdTime = createdTime;
 		this.estimatedTime = estimatedTime;
 		this.objectId = objectId;
 	}
@@ -69,12 +69,13 @@ public class OrderEvent {
 		this.orderStatus = orderStatus;
 	}
 
-	public Date getTimeStamp() {
-		return timeStamp;
+
+	public Date getCreatedTime() {
+		return createdTime;
 	}
 
-	public void setTimeStamp(Date timeStamp) {
-		this.timeStamp = timeStamp;
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
 	}
 
 	public int getEstimatedTime() {

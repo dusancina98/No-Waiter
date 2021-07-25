@@ -1,6 +1,8 @@
 package no_waiter.order_service.services.implementation;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +19,7 @@ import no_waiter.order_service.repository.OrderEventRepository;
 import no_waiter.order_service.repository.OrderRepository;
 import no_waiter.order_service.services.contracts.OrderService;
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
+import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
 import no_waiter.order_service.services.contracts.dto.ProductValidationResponseDTO;
 import no_waiter.order_service.services.contracts.dto.UnConfirmedOrderDTO;
@@ -44,39 +47,71 @@ public class OrderServiceImpl implements OrderService{
 
 	@Override
 	public List<UnConfirmedOrderDTO> getUnconfirmedOrdersForObject(UUID objectId) {
-		
-		
 		List<UnConfirmedOrderDTO> unConfirmedOrderDTO = new ArrayList<UnConfirmedOrderDTO>();
 		Long setTime = (long) (3*60*3600*1000);
 		Date newDate = new Date();
 		newDate.setTime(newDate.getTime() - setTime);
-		//povlaci orderEvente za dati restoran gde je orderstatus unconfirmed 
+		//povlaci orderEvente za dati restoran gde je vreme manje od 3h unazad
 		List<UUID> getOrderIdsForObjectAfterDate =  orderEventRepository.getOrderIdsForObjectAfterDate(objectId, newDate);
 		
-
-
 		for(UUID orderId : getOrderIdsForObjectAfterDate) {
 			List<OrderEvent> orderEvent = orderEventRepository.getOrderEventsByOrderId(orderId);
 			if(orderEvent.size()==0) 
 				continue;
 			
-			if(orderEvent.size()==1) {
-				unConfirmedOrderDTO.add(mapOrderToUnConfirmedOrderDTO(orderId,orderEvent.get(0).getTimeStamp()));
-				continue;
-			}
-			
-			Date orderDate= checkIfOrderIsUnConfirmed(orderEvent);
-			if(orderDate != null) {
-				unConfirmedOrderDTO.add(mapOrderToUnConfirmedOrderDTO(orderId,orderDate));
+			if(checkIfOrderIsGivenStatus(orderEvent,OrderStatus.UNCONFIRMED)) {
+				unConfirmedOrderDTO.add(mapOrderToUnConfirmedOrderDTO(orderId,orderEvent.get(0).getCreatedTime()));
 			}
 		}
 		
 		return unConfirmedOrderDTO;
 	}
+	
+	@Override
+	public List<ConfirmedOrderDTO> getConfirmedOrdersForObject(UUID objectId) {
+		List<ConfirmedOrderDTO> confirmedOrderDTO = new ArrayList<ConfirmedOrderDTO>();
+		
+		Long setTime = (long) (3*60*3600*1000);
+		Date newDate = new Date();
+		newDate.setTime(newDate.getTime() - setTime);
+		
+		//povlaci orderEvente za dati restoran gde je vreme manje od 3h unazad
+		List<UUID> getOrderIdsForObjectAfterDate =  orderEventRepository.getOrderIdsForObjectAfterDate(objectId, newDate);
+		
+		for(UUID orderId : getOrderIdsForObjectAfterDate) {
+			List<OrderEvent> orderEvent = orderEventRepository.getOrderEventsByOrderId(orderId);
+			if(orderEvent.size()==0) 
+				continue;
+			
+			if(checkIfOrderIsGivenStatus(orderEvent,OrderStatus.CONFIRMED)) {
+				confirmedOrderDTO.add(mapOrderToConfirmedOrderDTO(orderEvent.get(0)));
+			}
+		}
+		
+		return confirmedOrderDTO;
+	}
 
-	private Date checkIfOrderIsUnConfirmed(List<OrderEvent> orderEvent) {
-		// TODO Auto-generated method stub
-		return null;
+	private ConfirmedOrderDTO mapOrderToConfirmedOrderDTO(OrderEvent orderEvent) {
+		Date estimatedDate = new Date();
+		estimatedDate.setTime(orderEvent.getCreatedTime().getTime() + (orderEvent.getEstimatedTime()*60*1000));
+		
+		ConfirmedOrderDTO dto = new ConfirmedOrderDTO(orderEvent.getOrder().getId(),"1",orderEvent.getOrder().getOrderType().toString(),getPriceForOrder(orderEvent.getOrder()),orderEvent.getCreatedTime(),estimatedDate);
+		
+		return dto;
+	}
+
+	private boolean checkIfOrderIsGivenStatus(List<OrderEvent> orderEvent, OrderStatus orderStatus) {
+		Collections.sort(orderEvent, new Comparator<OrderEvent>() {
+			  public int compare(OrderEvent o1, OrderEvent o2) {
+			      return o2.getCreatedTime().compareTo(o1.getCreatedTime());
+			  }});
+		
+		if(orderEvent.size()>0) {
+			if(orderEvent.get(0).getOrderStatus()==orderStatus)
+				return true;
+		}
+		
+		return false;
 	}
 
 	private UnConfirmedOrderDTO mapOrderToUnConfirmedOrderDTO(UUID orderId,Date date) {
@@ -109,7 +144,18 @@ public class OrderServiceImpl implements OrderService{
 	public void acceptOrder(AcceptOrderDTO acceptOrderDTO) {
 		Order order = orderRepository.findById(acceptOrderDTO.OrderId).get();
 		
+		order.setEstimatedTime(acceptOrderDTO.EstimatedTime);
+		orderRepository.save(order);
+		
 		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId());
+		orderEventRepository.save(newOrderEvent);
+	}
+
+	@Override
+	public void setOrderToReady(UUID orderId) {
+		Order order = orderRepository.findById(orderId).get();
+				
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.READY, new Date(), order.getEstimatedTime(), order.getObjectId());
 		orderEventRepository.save(newOrderEvent);
 	}
 

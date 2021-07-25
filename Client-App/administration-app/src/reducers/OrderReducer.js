@@ -117,9 +117,20 @@ export const orderReducer = (state, action) => {
 			ordCpy = { ...state };
 			ordCpy.waiterOrders.UnConfirmedOrders = [];
 			return ordCpy;
+		case orderConstants.GET_CONFIRMED_ORDER_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.ConfirmedOrders = action.orders;
+	
+			return ordCpy;
+		case orderConstants.GET_CONFIRMED_ORDER_FAILURE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.ConfirmedOrders = [];
+			return ordCpy;
+
 		case orderConstants.REJECT_ORDER_SUCCESS:
 			ordCpy = { ...state };
 			ordCpy.waiterOrders.UnConfirmedOrders = ordCpy.waiterOrders.UnConfirmedOrders.filter((item) => item.OrderId !== action.orderId);
+			ordCpy.waiterOrders.ConfirmedOrders = ordCpy.waiterOrders.ConfirmedOrders.filter((item) => item.OrderId !== action.orderId);
 			return ordCpy;
 		case orderConstants.REJECT_ORDER_FAILURE:
 			ordCpy = { ...state };
@@ -135,6 +146,7 @@ export const orderReducer = (state, action) => {
 			return {
 				...state,
 				acceptUnConfirmedOrder:{
+					orderId: action.orderId,
 					showModal:true, 
 					showErrorMessage:false,
 					errorMessage:'',
@@ -145,6 +157,7 @@ export const orderReducer = (state, action) => {
 				...state,
 				acceptUnConfirmedOrder:{
 					showModal:false, 
+					orderId: '',
 					showErrorMessage:false,
 					errorMessage:'',
 				}
@@ -153,6 +166,7 @@ export const orderReducer = (state, action) => {
 			return {
 				...state,
 				acceptUnConfirmedOrder:{
+					orderId: '',
 					showModal:true, 
 					showErrorMessage:true,
 					errorMessage:action.errorMessage,
@@ -162,6 +176,7 @@ export const orderReducer = (state, action) => {
 			return {
 				...state,
 				acceptUnConfirmedOrder:{
+					orderId: '',
 					showModal:true, 
 					showErrorMessage:false,
 					errorMessage:'',
@@ -176,6 +191,7 @@ export const orderReducer = (state, action) => {
 			return {
 				...state,
 				acceptUnConfirmedOrder:{
+					orderId: '',
 					showModal:true, 
 					showErrorMessage:true,
 					errorMessage:action.errorMessage,
@@ -185,6 +201,15 @@ export const orderReducer = (state, action) => {
 			ordCpy = { ...state };
 			ordCpy.waiterOrders.showErrorMessage=false;
 			ordCpy.waiterOrders.errorMessage='';
+			return ordCpy;
+		case orderConstants.READY_ORDER_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.ConfirmedOrders = ordCpy.waiterOrders.ConfirmedOrders.filter((item) => item.OrderId !== action.orderId);
+			return ordCpy;
+		case orderConstants.READY_ORDER_FAILURE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.showErrorMessage=true;
+			ordCpy.waiterOrders.errorMessage=action.errorMessage;
 			return ordCpy;
 		default:
 			return state;

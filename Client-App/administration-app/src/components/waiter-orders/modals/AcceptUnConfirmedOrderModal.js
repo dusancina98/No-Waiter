@@ -7,7 +7,7 @@ import { colorConstants } from "../../../constants/ColorConstants";
 import FailureAlert from "../../FailureAlert";
 import { orderService } from "../../../services/OrderService";
 
-const AcceptUnConfirmedOrderModal = ({orderId}) => {
+const AcceptUnConfirmedOrderModal = () => {
 	const { orderState,dispatch } = useContext(OrderContext);
     const [ estimatedTime, setEstimatedTime] = useState("");
 
@@ -22,7 +22,7 @@ const AcceptUnConfirmedOrderModal = ({orderId}) => {
             dispatch({ type: orderConstants.ACCEPT_UNCONFIRMED_ORDER_ESTIMATED_TIME_FAILURE, errorMessage: 'Number must be positive and more than 0' });
         }else{
 			let acceptOrderDTO = {
-				OrderId: orderId,
+				OrderId: orderState.acceptUnConfirmedOrder.orderId,
 				EstimatedTime: estimatedTime,
 			};
 			orderService.acceptUnConfirmedOrder(acceptOrderDTO, dispatch);

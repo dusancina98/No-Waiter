@@ -1,6 +1,7 @@
 package no_waiter.order_service.entities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,11 +38,13 @@ public class Order {
     @Embedded
     private Address address;
     
+    private Date createdTime;
+    
     private int estimatedTime;
 
     public Order() {}
     
-	public Order(UUID id, UUID objectId, OrderType orderType, UUID tableId, Address address, int estimatedTime) {
+	public Order(UUID id, UUID objectId, OrderType orderType, UUID tableId, Address address, int estimatedTime, Date createdTime) {
 		super();
 		this.id = id;
 		this.objectId = objectId;
@@ -50,10 +53,11 @@ public class Order {
 		this.tableId = tableId;
 		this.address = address;
 		this.estimatedTime = estimatedTime;
+		this.createdTime = createdTime;
 	}
 	
 	public Order(UUID objectId, OrderType orderType, UUID tableId, Address address, int estimatedTime) {
-		this(UUID.randomUUID(), objectId, orderType, tableId, address, estimatedTime);
+		this(UUID.randomUUID(), objectId, orderType, tableId, address, estimatedTime,new Date());
 	}
 
 	public List<OrderItem> getItems() {
@@ -107,5 +111,12 @@ public class Order {
 	public void setEstimatedTime(int estimatedTime) {
 		this.estimatedTime = estimatedTime;
 	}
-   
+
+	public Date getCreatedTime() {
+		return createdTime;
+	}
+
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
+	}
 }

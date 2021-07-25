@@ -11,7 +11,7 @@ import no_waiter.order_service.entities.OrderEvent;
 
 public interface OrderEventRepository extends PagingAndSortingRepository<OrderEvent, UUID> {
 	
-	@Query(value = "SELECT distinct(oe.order.id) FROM OrderEvent oe WHERE oe.objectId = ?1 and oe.timeStamp >= ?2")
+	@Query(value = "SELECT distinct(oe.order.id) FROM OrderEvent oe WHERE oe.objectId = ?1 and oe.createdTime >= ?2")
 	List<UUID> getOrderIdsForObjectAfterDate(UUID objectId, Date timeStamp);
 
 	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.order.id = ?1")

@@ -73,7 +73,7 @@ public class Api {
 	
 	@GetMapping("/unconfirmed")
     @CrossOrigin
-    public ResponseEntity<?> getDeliverers(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<?> getUnconfirmedOrdersForObject(@RequestHeader("Authorization") String token) {
     	try {
     		JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
 			UUID objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());
@@ -113,6 +113,37 @@ public class Api {
         	
         	orderService.acceptOrder(acceptOrderDTO);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
+	@GetMapping("/confirmed")
+    @CrossOrigin
+    public ResponseEntity<?> getConfirmedOrdersForObject(@RequestHeader("Authorization") String token) {
+    	try {
+    		JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+			UUID objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());
+			
+            return new ResponseEntity<>(orderService.getConfirmedOrdersForObject(objectId), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
+	@PutMapping("/{orderId}/ready")
+    @CrossOrigin
+    public ResponseEntity<?> setOrderToReady(@PathVariable String orderId) {
+        try {
+			
+        	orderService.setOrderToReady(UUID.fromString(orderId));
+            return new ResponseEntity<>(HttpStatus.OK);
+
         } catch (NoSuchElementException e) {
         	e.printStackTrace();
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
