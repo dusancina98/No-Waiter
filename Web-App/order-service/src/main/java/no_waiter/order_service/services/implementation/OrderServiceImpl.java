@@ -19,6 +19,7 @@ import no_waiter.order_service.repository.OrderEventRepository;
 import no_waiter.order_service.repository.OrderRepository;
 import no_waiter.order_service.services.contracts.OrderService;
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
+import no_waiter.order_service.services.contracts.dto.CompletedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OnRouteOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
@@ -241,5 +242,35 @@ public class OrderServiceImpl implements OrderService{
 		
 		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.COMPLETED, new Date(), order.getEstimatedTime(), order.getObjectId());
 		orderEventRepository.save(newOrderEvent);	
+	}
+
+	@Override
+	public List<CompletedOrderDTO> getCompletedOrdersForObject(UUID objectId) {
+		List<CompletedOrderDTO> completedOrderDTO = new ArrayList<CompletedOrderDTO>();
+		
+		Long setTime = (long) (3*60*3600*1000);
+		Date newDate = new Date();
+		newDate.setTime(newDate.getTime() - setTime);
+		
+		//povlaci orderEvente za dati restoran gde je vreme manje od 3h unazad
+		List<UUID> getOrderIdsForObjectAfterDate =  orderEventRepository.getOrderIdsForObjectAfterDate(objectId, newDate);
+		
+		for(UUID orderId : getOrderIdsForObjectAfterDate) {
+			List<OrderEvent> orderEvent = orderEventRepository.getOrderEventsByOrderId(orderId);
+			if(orderEvent.size()==0) 
+				continue;
+			
+			if(checkIfOrderIsGivenStatus(orderEvent,OrderStatus.COMPLETED)) {
+				completedOrderDTO.add(mapOrderToCompletedOrderDTO(orderEvent.get(0)));
+			}
+		}
+		
+		return completedOrderDTO;
+	}
+
+	private CompletedOrderDTO mapOrderToCompletedOrderDTO(OrderEvent orderEvent) {
+		CompletedOrderDTO dto = new CompletedOrderDTO(orderEvent.getOrder().getId(),"1",orderEvent.getOrder().getOrderType().toString(),getPriceForOrder(orderEvent.getOrder()),orderEvent.getCreatedTime(), "Ime i Prezime");
+		
+		return dto;
 	}
 }

@@ -250,6 +250,15 @@ export const orderReducer = (state, action) => {
 			ordCpy = { ...state };
 			ordCpy.waiterOrders.OnRouteOrders = [];
 			return ordCpy;
+		case orderConstants.GET_COMPLETED_ORDERS_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.CompletedOrders = action.orders;
+	
+			return ordCpy;
+		case orderConstants.GET_COMPLETED_ORDERS_FAILURE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.CompletedOrders = [];
+			return ordCpy;
 		default:
 			return state;
 	}

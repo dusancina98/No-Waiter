@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
+import no_waiter.order_service.services.contracts.dto.CompletedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OnRouteOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
@@ -32,4 +33,6 @@ public interface OrderService {
 	List<OnRouteOrderDTO> getOnRouteOrdersForObject(UUID objectId);
 
 	void setOrderToComplete(UUID orderId);
+
+	List<CompletedOrderDTO> getCompletedOrdersForObject(UUID objectId);
 }

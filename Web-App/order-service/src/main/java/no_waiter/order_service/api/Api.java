@@ -214,4 +214,18 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+	
+	@GetMapping("/completed")
+    @CrossOrigin
+    public ResponseEntity<?> getCompletedOrdersForObject(@RequestHeader("Authorization") String token) {
+    	try {
+    		JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+			UUID objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());
+			
+            return new ResponseEntity<>(orderService.getCompletedOrdersForObject(objectId), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

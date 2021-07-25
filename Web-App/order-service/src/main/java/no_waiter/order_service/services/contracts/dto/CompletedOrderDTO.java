@@ -3,7 +3,7 @@ package no_waiter.order_service.services.contracts.dto;
 import java.util.Date;
 import java.util.UUID;
 
-public class ConfirmedOrderDTO {
+public class CompletedOrderDTO {
 	public UUID OrderId;
 	
 	public String Table;
@@ -14,15 +14,15 @@ public class ConfirmedOrderDTO {
 	
 	public Date CreatedTimeStamp;
 	
-	public Date EstimatedDate;
-		
-	public ConfirmedOrderDTO(UUID orderId, String table, String orderType, Double price, Date timeStamp,Date estimatedDate) {
+	public String Deliverer;
+	
+	public CompletedOrderDTO(UUID orderId, String table, String orderType, Double price, Date timeStamp, String deliverer) {
 		super();
 		OrderId = orderId;
 		Table = table;
 		OrderType = orderType;
 		Price = price;
 		CreatedTimeStamp = timeStamp;
-		EstimatedDate= estimatedDate;
+		Deliverer= deliverer;
 	}
 }
