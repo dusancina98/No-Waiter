@@ -132,6 +132,7 @@ export const orderReducer = (state, action) => {
 			ordCpy.waiterOrders.UnConfirmedOrders = ordCpy.waiterOrders.UnConfirmedOrders.filter((item) => item.OrderId !== action.orderId);
 			ordCpy.waiterOrders.ConfirmedOrders = ordCpy.waiterOrders.ConfirmedOrders.filter((item) => item.OrderId !== action.orderId);
 			ordCpy.waiterOrders.ReadyOrders = ordCpy.waiterOrders.ReadyOrders.filter((item) => item.OrderId !== action.orderId);
+			ordCpy.waiterOrders.OnRouteOrders = ordCpy.waiterOrders.OnRouteOrders.filter((item) => item.OrderId !== action.orderId);
 			return ordCpy;
 		case orderConstants.REJECT_ORDER_FAILURE:
 			ordCpy = { ...state };
@@ -239,6 +240,15 @@ export const orderReducer = (state, action) => {
 			ordCpy = { ...state };
 			ordCpy.waiterOrders.showErrorMessage=true;
 			ordCpy.waiterOrders.errorMessage=action.errorMessage;
+			return ordCpy;
+		case orderConstants.GET_ON_ROUTE_ORDERS_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.OnRouteOrders = action.orders;
+	
+			return ordCpy;
+		case orderConstants.GET_ON_ROUTE_ORDERS_FAILURE:
+			ordCpy = { ...state };
+			ordCpy.waiterOrders.OnRouteOrders = [];
 			return ordCpy;
 		default:
 			return state;
