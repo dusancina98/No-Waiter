@@ -14,6 +14,7 @@ export const orderService = {
 	setOrderToCompleted,
 	findAllOnRouteOrders,
 	findAllCompletedOrders,
+	getOrderDetails,
 };
 
 function createOrder(orderDTO, dispatch) {
@@ -260,5 +261,27 @@ async function findAllCompletedOrders(dispatch){
 	}
 	function failure(message) {
 		return { type: orderConstants.GET_COMPLETED_ORDERS_FAILURE, errorMessage: message };
+	}
+}
+
+async function getOrderDetails(id,dispatch){
+	await Axios.get(`/order-api/api/orders/${id}/details`, { validateStatus: () => true, headers: authHeader() })
+	.then((res) => {
+		console.log(res);
+		if (res.status === 200) {
+			dispatch(success(res.data));
+		} else {
+			dispatch(failure("Error"));
+		}
+	})
+	.catch((err) => {
+		dispatch(failure("Error"));
+	});
+
+	function success(data) {
+		return { type: orderConstants.GET_CONFIRMED_ORDER_SUCCESS, orders: data };
+	}
+	function failure(message) {
+		return { type: orderConstants.GET_CONFIRMED_ORDER_FAILURE, errorMessage: message };
 	}
 }

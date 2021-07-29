@@ -10,7 +10,6 @@ import no_waiter.order_service.services.contracts.dto.ProductValidationResponseD
 @FeignClient("product-service")
 public interface ProductClient {
 
-	
 	@PostMapping("api/products/order-items/validate")
 	ProductValidationResponseDTO validateOrderItems(@RequestBody OrderItemsDTO items);
 }

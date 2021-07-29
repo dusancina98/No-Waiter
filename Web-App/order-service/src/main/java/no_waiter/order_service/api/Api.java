@@ -228,4 +228,15 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+	
+	@GetMapping("/{orderId}/details")
+    @CrossOrigin
+    public ResponseEntity<?> getOrderDetails( @PathVariable String orderId) {
+    	try {
+            return new ResponseEntity<>(orderService.getOrderDetails(UUID.fromString(orderId)), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

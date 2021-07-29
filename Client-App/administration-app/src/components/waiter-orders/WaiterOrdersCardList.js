@@ -7,6 +7,7 @@ import UnConfirmedOrdersCard from "../../components/waiter-orders/UnConfirmedOrd
 import ConfirmedOrdersCard from "../../components/waiter-orders/ConfirmedOrdersCard"
 import OnRouteOrdersCard from "./OnRouteOrdersCard";
 import CompletedOrdersCard from "./CompletedOrdersCard";
+import OrderDetailsModal from "./modals/OrderDetailsModal";
 
 const WaiterOrdersCardList = () => {
     const { orderState,dispatch } = useContext(OrderContext);
@@ -39,6 +40,7 @@ const WaiterOrdersCardList = () => {
                     <div className="col-sm">
                         <CompletedOrdersCard/>        
                     </div>
+                    <OrderDetailsModal/>
                 </div>
             </div>
 		</React.Fragment>

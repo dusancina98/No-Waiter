@@ -259,6 +259,23 @@ export const orderReducer = (state, action) => {
 			ordCpy = { ...state };
 			ordCpy.waiterOrders.CompletedOrders = [];
 			return ordCpy;
+		case modalConstants.HIDE_ORDER_DETAILS_MODAL:
+			ordCpy = { ...state };
+			
+			ordCpy.orderDetails.showModal = false;
+			ordCpy.orderDetails.order = null;
+			ordCpy.orderDetails.orderId = null;
+
+			return ordCpy;
+		case modalConstants.SHOW_ORDER_DETAILS_MODAL:
+			return {
+				...state,
+				orderDetails: {
+					showModal: true,
+					orderId: action.orderId,
+					order: null,
+				}
+			}
 		default:
 			return state;
 	}

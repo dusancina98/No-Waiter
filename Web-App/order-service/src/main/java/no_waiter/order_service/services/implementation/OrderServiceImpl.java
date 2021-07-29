@@ -15,6 +15,7 @@ import no_waiter.order_service.entities.Order;
 import no_waiter.order_service.entities.OrderEvent;
 import no_waiter.order_service.entities.OrderItem;
 import no_waiter.order_service.entities.OrderStatus;
+import no_waiter.order_service.intercomm.ProductClient;
 import no_waiter.order_service.repository.OrderEventRepository;
 import no_waiter.order_service.repository.OrderRepository;
 import no_waiter.order_service.services.contracts.OrderService;
@@ -22,9 +23,15 @@ import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CompletedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OnRouteOrderDTO;
+import no_waiter.order_service.services.contracts.dto.OrderDetailsDTO;
+import no_waiter.order_service.services.contracts.dto.OrderItemDTO;
+import no_waiter.order_service.services.contracts.dto.OrderItemResponseDTO;
+import no_waiter.order_service.services.contracts.dto.OrderItemsDTO;
 import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
+import no_waiter.order_service.services.contracts.dto.ProductValidationDTO;
 import no_waiter.order_service.services.contracts.dto.ProductValidationResponseDTO;
 import no_waiter.order_service.services.contracts.dto.ReadyOrderDTO;
+import no_waiter.order_service.services.contracts.dto.SideDishDTO;
 import no_waiter.order_service.services.contracts.dto.UnConfirmedOrderDTO;
 import no_waiter.order_service.services.implementation.util.OrderMapper;
 
@@ -36,6 +43,9 @@ public class OrderServiceImpl implements OrderService{
 	
 	@Autowired
 	private OrderEventRepository orderEventRepository;
+	
+	@Autowired
+	private ProductClient productClient;
 	
 	@Override
 	public UUID createOrder(OrderRequestDTO requestDTO, ProductValidationResponseDTO products, UUID objectId) {
@@ -272,5 +282,24 @@ public class OrderServiceImpl implements OrderService{
 		CompletedOrderDTO dto = new CompletedOrderDTO(orderEvent.getOrder().getId(),"1",orderEvent.getOrder().getOrderType().toString(),getPriceForOrder(orderEvent.getOrder()),orderEvent.getCreatedTime(), "Ime i Prezime");
 		
 		return dto;
+	}
+
+	@Override
+	public OrderDetailsDTO getOrderDetails(UUID orderId) {
+		Order order = orderRepository.findById(orderId).get();
+		
+		Date estimatedDate = new Date();
+		estimatedDate.setTime(order.getCreatedTime().getTime() + (order.getEstimatedTime()*60*1000));	
+		
+		List<OrderItemResponseDTO> orderItems = mapOrderItemsToOrderItemsResponseDTO(order.getItems());
+		
+		OrderDetailsDTO retVal = new OrderDetailsDTO(order.getId(),order.getCreatedTime(),order.getAddress().getAddress(),estimatedDate,order.getOrderType().toString(),order.getTableId().toString(),getPriceForOrder(order),orderItems);
+				
+		return retVal;
+	}
+
+	private List<OrderItemResponseDTO> mapOrderItemsToOrderItemsResponseDTO(List<OrderItem> items) {
+		List<OrderItemResponseDTO> orderItemsResponseDTO = new ArrayList<OrderItemResponseDTO>();
+		return orderItemsResponseDTO;
 	}
 }

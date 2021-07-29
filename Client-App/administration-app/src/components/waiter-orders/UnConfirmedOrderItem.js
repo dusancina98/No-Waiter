@@ -29,6 +29,10 @@ const UnConfirmedOrderItem = ({ order }) => {
         dispatch({type: modalConstants.SHOW_ACCEPT_UNCONFIRMED_ORDER_MODAL, orderId})
     }
 
+    const orderDetails = (orderId) => {
+        dispatch({type: modalConstants.SHOW_ORDER_DETAILS_MODAL, orderId})
+    }
+
 	return (
         <div className="hover-div">
             <AcceptUnConfirmedOrderModal/>
@@ -75,7 +79,7 @@ const UnConfirmedOrderItem = ({ order }) => {
                             </button>
                         </div>
                         <div className="col-4 text-center">
-                            <button style={{"minHeight":"75px"}}>
+                            <button style={{"minHeight":"75px"}} onClick={()=>orderDetails(order.OrderId)}>
                                 Details
                             </button>
                         </div>

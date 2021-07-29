@@ -47,6 +47,11 @@ const OrderContextProvider = (props) => {
 			showModal:false, 
 			showErrorMessage:false,
 			errorMessage:'',
+		},
+		orderDetails: {
+			showModal: false,
+			orderId: '', 
+			order: null,
 		}
 	});
 
