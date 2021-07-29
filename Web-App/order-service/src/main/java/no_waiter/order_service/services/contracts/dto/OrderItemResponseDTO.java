@@ -6,14 +6,14 @@ import java.util.UUID;
 public class OrderItemResponseDTO {
 	public UUID Id;
 	public String Name;
-	public String Count;
+	public int Count;
 	public UUID ProductId;
 	public Double Price;
 	public String ImageUrl;
-	public List<SideDishDTO> SideDishes;
+	public List<SideDishResponseDTO> SideDishes;
 	
-	public OrderItemResponseDTO(UUID id, String name, String count, UUID productId, Double price, String imageUrl,
-			List<SideDishDTO> sideDishes) {
+	public OrderItemResponseDTO(UUID id, String name, int count, UUID productId, Double price, String imageUrl,
+			List<SideDishResponseDTO> sideDishes) {
 		super();
 		Id = id;
 		Name = name;

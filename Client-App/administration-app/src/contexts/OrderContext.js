@@ -51,7 +51,7 @@ const OrderContextProvider = (props) => {
 		orderDetails: {
 			showModal: false,
 			orderId: '', 
-			order: null,
+			order: [],
 		}
 	});
 

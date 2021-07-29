@@ -269,7 +269,7 @@ async function getOrderDetails(id,dispatch){
 	.then((res) => {
 		console.log(res);
 		if (res.status === 200) {
-			dispatch(success(res.data));
+			dispatch(success(id,res.data));
 		} else {
 			dispatch(failure("Error"));
 		}
@@ -278,10 +278,10 @@ async function getOrderDetails(id,dispatch){
 		dispatch(failure("Error"));
 	});
 
-	function success(data) {
-		return { type: orderConstants.GET_CONFIRMED_ORDER_SUCCESS, orders: data };
+	function success(orderId,data) {
+		return { type: orderConstants.GET_ORDER_DETAILS_SUCCESS, orderId, orderDetails: data };
 	}
 	function failure(message) {
-		return { type: orderConstants.GET_CONFIRMED_ORDER_FAILURE, errorMessage: message };
+		return { type: orderConstants.GET_ORDER_DETAILS_FAILURE, errorMessage: message };
 	}
 }

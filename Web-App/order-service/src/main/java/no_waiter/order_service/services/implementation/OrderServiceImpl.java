@@ -9,12 +9,15 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import no_waiter.order_service.entities.Order;
 import no_waiter.order_service.entities.OrderEvent;
 import no_waiter.order_service.entities.OrderItem;
 import no_waiter.order_service.entities.OrderStatus;
+import no_waiter.order_service.entities.SideDish;
 import no_waiter.order_service.intercomm.ProductClient;
 import no_waiter.order_service.repository.OrderEventRepository;
 import no_waiter.order_service.repository.OrderRepository;
@@ -22,6 +25,7 @@ import no_waiter.order_service.services.contracts.OrderService;
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CompletedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
+import no_waiter.order_service.services.contracts.dto.NameDTO;
 import no_waiter.order_service.services.contracts.dto.OnRouteOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OrderDetailsDTO;
 import no_waiter.order_service.services.contracts.dto.OrderItemDTO;
@@ -32,6 +36,7 @@ import no_waiter.order_service.services.contracts.dto.ProductValidationDTO;
 import no_waiter.order_service.services.contracts.dto.ProductValidationResponseDTO;
 import no_waiter.order_service.services.contracts.dto.ReadyOrderDTO;
 import no_waiter.order_service.services.contracts.dto.SideDishDTO;
+import no_waiter.order_service.services.contracts.dto.SideDishResponseDTO;
 import no_waiter.order_service.services.contracts.dto.UnConfirmedOrderDTO;
 import no_waiter.order_service.services.implementation.util.OrderMapper;
 
@@ -292,14 +297,30 @@ public class OrderServiceImpl implements OrderService{
 		estimatedDate.setTime(order.getCreatedTime().getTime() + (order.getEstimatedTime()*60*1000));	
 		
 		List<OrderItemResponseDTO> orderItems = mapOrderItemsToOrderItemsResponseDTO(order.getItems());
-		
-		OrderDetailsDTO retVal = new OrderDetailsDTO(order.getId(),order.getCreatedTime(),order.getAddress().getAddress(),estimatedDate,order.getOrderType().toString(),order.getTableId().toString(),getPriceForOrder(order),orderItems);
+
+		OrderDetailsDTO retVal = new OrderDetailsDTO(order.getId(),order.getCreatedTime(),order.getAddress().getAddress(),estimatedDate,order.getOrderType().toString(),"123",getPriceForOrder(order),orderItems);
 				
 		return retVal;
 	}
 
 	private List<OrderItemResponseDTO> mapOrderItemsToOrderItemsResponseDTO(List<OrderItem> items) {
 		List<OrderItemResponseDTO> orderItemsResponseDTO = new ArrayList<OrderItemResponseDTO>();
+		
+		for(OrderItem item : items) {
+			orderItemsResponseDTO.add(new OrderItemResponseDTO(item.getId(),item.getProduct().getName(),item.getCount(),item.getProduct().getId(),item.getSingleItemPrice(), item.getProduct().getImagePath(), mapSideDishToSideDishDTO(item.getSideDishes())));
+		}
+		
 		return orderItemsResponseDTO;
 	}
+
+	private List<SideDishResponseDTO> mapSideDishToSideDishDTO(List<SideDish> sideDishes) {
+		List<SideDishResponseDTO> retVal = new ArrayList<SideDishResponseDTO>();
+		
+		for(SideDish sideDish : sideDishes) {
+			retVal.add(new SideDishResponseDTO(sideDish.getId(),new NameDTO(sideDish.getName())));
+		}
+		
+		return retVal;
+	}
+
 }

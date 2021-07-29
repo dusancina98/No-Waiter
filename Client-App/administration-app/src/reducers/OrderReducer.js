@@ -263,8 +263,8 @@ export const orderReducer = (state, action) => {
 			ordCpy = { ...state };
 			
 			ordCpy.orderDetails.showModal = false;
-			ordCpy.orderDetails.order = null;
-			ordCpy.orderDetails.orderId = null;
+			ordCpy.orderDetails.order = [];
+			ordCpy.orderDetails.orderId = '';
 
 			return ordCpy;
 		case modalConstants.SHOW_ORDER_DETAILS_MODAL:
@@ -273,9 +273,31 @@ export const orderReducer = (state, action) => {
 				orderDetails: {
 					showModal: true,
 					orderId: action.orderId,
-					order: null,
+					order: [],
 				}
 			}
+		case orderConstants.GET_ORDER_DETAILS_SUCCESS:
+			return {
+				...state,
+				orderDetails: {
+					showModal: true,
+					orderId: action.orderId,
+					order: action.orderDetails,
+				}
+			}
+		case orderConstants.GET_ORDER_DETAILS_FAILURE:
+			return {
+				...state,
+				orderDetails: {
+					showModal: true,
+					orderId: '',
+					order: [],
+				}
+			}
+		case orderConstants.REMOVE_PRODUCT_FROM_ORDER_FROM_ORDER_DETAILS:
+			ordCpy = { ...state };
+			ordCpy.orderDetails.order.OrderItems = ordCpy.orderDetails.order.OrderItems.filter((item) => item.Id !== action.id);
+			return ordCpy;
 		default:
 			return state;
 	}

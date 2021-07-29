@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment';
 
 const OrderDetailsInformationSideBar = ({ orderType, address, table, createdDate, estimatedDate, price }) => {
 	return (
@@ -15,10 +16,10 @@ const OrderDetailsInformationSideBar = ({ orderType, address, table, createdDate
 			    </div>  
             }
 			<div className="mt-2">
-				Created date: <b>{createdDate}</b>
+				Created date: <b>{moment.utc(createdDate).local().startOf('seconds').fromNow()}</b>
 			</div>
 			<div className="mt-2">
-				Estimated date: <b>{estimatedDate}</b>
+				Estimated date: <b>{moment.utc(estimatedDate).local().startOf('seconds').fromNow()}</b>
 			</div>
 			<div className="mt-2">
 				Price: <b>{price} RSD</b>
