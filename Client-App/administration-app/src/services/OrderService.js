@@ -67,45 +67,50 @@ async function findAllUnConfirmedOrders(dispatch){
 	}
 }
 
-function rejectOrder(orderId, dispatch) {
+function rejectOrder(orderId, dispatch, notifyManager) {
 	Axios.put(`/order-api/api/orders/${orderId}/reject`, null, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 200) {
 				dispatch(success(orderId));
 			} else {
-				dispatch(failure('We have some internal problem, please try later'));
+				dispatch(failure('We have some internal problem, please try later',notifyManager));
+				notifyManager('FAILURE','Currently imposible to reject order')
 			}
 		})
 		.catch((err) => {
-			dispatch(failure('We have some internal problem, please try later'));
+
 		});
 
 	function success(orderId) {
+		notifyManager('SUCCESS','Successfuly rejected order')
 		return { type: orderConstants.REJECT_ORDER_SUCCESS, orderId: orderId };
 	}
 	function failure(message) {
+		notifyManager('FAILURE','Currently imposible to reject order')
 		return { type: orderConstants.REJECT_ORDER_FAILURE, errorMessage: message };
 	}
 }
 
-function acceptUnConfirmedOrder(acceptOrderDTO, dispatch) {
+function acceptUnConfirmedOrder(acceptOrderDTO, dispatch, notifyManager) {
 	Axios.put(`/order-api/api/orders/accept`, acceptOrderDTO, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 200) {
-				dispatch(success(acceptOrderDTO.OrderId));
+				dispatch(success(acceptOrderDTO.OrderId,notifyManager));
 				findAllConfirmedOrders(dispatch)
 			} else {
-				dispatch(failure('We have some internal problem, please try later'));
+				dispatch(failure('We have some internal problem, please try later',notifyManager));
 			}
 		})
 		.catch((err) => {
-			console.log(failure('We have some internal problem, please try later'));
+			console.log(failure('We have some internal problem, please try later',notifyManager));
 		});
 
-	function success(orderId) {
+	function success(orderId,notifyManager) {
+		notifyManager('SUCCESS','Successfuly accepted order')
 		return { type: orderConstants.ACCEPT_UNCONFIRMED_ORDER_SUCCESS, orderId: orderId };
 	}
-	function failure(message) {
+	function failure(message,notifyManager) {
+		notifyManager('FAILURE','Currently imposible to accept order')
 		return { type: orderConstants.ACCEPT_UNCONFIRMED_ORDER_FAILURE, errorMessage: message };
 	}
 }
@@ -133,7 +138,7 @@ async function findAllConfirmedOrders(dispatch){
 	}
 }
 
-function readyOrder(orderId, dispatch) {
+function readyOrder(orderId, dispatch, notifyManager) {
 	Axios.put(`/order-api/api/orders/${orderId}/ready`, null, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 200) {
@@ -148,9 +153,11 @@ function readyOrder(orderId, dispatch) {
 		});
 	
 	function success(orderId) {
+		notifyManager('SUCCESS','Successfuly move order to ready')
 		return { type: orderConstants.SET_READY_ORDER_SUCCESS, orderId: orderId };
 	}
 	function failure(message) {
+		notifyManager('FAILURE','Currently imposible to move order to ready')
 		return { type: orderConstants.SET_READY_ORDER_FAILURE, errorMessage: message };
 	}
 }
@@ -177,7 +184,7 @@ async function findAllReadyOrders(dispatch){
 	}
 }
 
-function setOnRouteOrder(orderId, dispatch) {
+function setOnRouteOrder(orderId, dispatch, notifyManager) {
 	Axios.put(`/order-api/api/orders/${orderId}/on-route`, null, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 200) {
@@ -192,14 +199,16 @@ function setOnRouteOrder(orderId, dispatch) {
 		});
 	
 	function success(orderId) {
+		notifyManager('SUCCESS','Successfuly move order to on route')
 		return { type: orderConstants.SET_ON_ROUTE_ORDER_SUCCESS, orderId: orderId };
 	}
 	function failure(message) {
+		notifyManager('FAILURE','Currently imposible to move order to on route')
 		return { type: orderConstants.SET_ON_ROUTE_ORDER_FAILURE, errorMessage: message };
 	}
 }
 
-function setOrderToCompleted(orderId, dispatch) {
+function setOrderToCompleted(orderId, dispatch, notifyManager) {
 	Axios.put(`/order-api/api/orders/${orderId}/completed`, null, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 200) {
@@ -214,9 +223,11 @@ function setOrderToCompleted(orderId, dispatch) {
 		});
 	
 	function success(orderId) {
+		notifyManager('SUCCESS','Successfuly completed order')
 		return { type: orderConstants.SET_ORDER_TO_COMPLETE_SUCCESS, orderId: orderId };
 	}
 	function failure(message) {
+		notifyManager('FAILURE','Currently imposible to move order to completed')
 		return { type: orderConstants.SET_ORDER_TO_COMPLETE_FAILURE, errorMessage: message };
 	}
 }
@@ -287,23 +298,17 @@ async function getOrderDetails(id,dispatch){
 	}
 }
 
-function updateOrder(order,dispatch){
+function updateOrder(order,notifyManager){
 	Axios.put(`/order-api/api/orders/`, order, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 200) {
-				dispatch(success(''));
-				findAllReadyOrders(dispatch);
+				notifyManager('SUCCESS','Successfuly updated order')
 			} else {
-				dispatch(failure("Error message"))
+				notifyManager('FAILURE','Currently imposible to update order')
 			}
 		})
 		.catch((err) => {
+			notifyManager('FAILURE','Currently imposible to update order')
 		});
 	
-	function success(orderId) {
-		return { type: orderConstants.ORDER_UPDATE_BY_WAITER_SUCCESS, orderId: orderId };
-	}
-	function failure(message) {
-		return { type: orderConstants.ORDER_UPDATE_BY_WAITER_FAILURE, errorMessage: message };
-	}
 }

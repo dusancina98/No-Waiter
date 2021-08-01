@@ -7,7 +7,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css'
 import { modalConstants } from '../../constants/ModalConstants';
 import AcceptUnConfirmedOrderModal from './modals/AcceptUnConfirmedOrderModal';
 
-const UnConfirmedOrderItem = ({ order }) => {
+const UnConfirmedOrderItem = ({ order,notifyManager }) => {
 	const { dispatch } = useContext(OrderContext);
 
     const rejectOrder = (orderId) => {
@@ -16,7 +16,7 @@ const UnConfirmedOrderItem = ({ order }) => {
 			buttons: [
 			  {
 				label: 'Yes',
-				onClick: () => orderService.rejectOrder(orderId, dispatch)
+				onClick: () => orderService.rejectOrder(orderId, dispatch, notifyManager)
 			  },
 			  {
 				label: 'No',
@@ -35,7 +35,8 @@ const UnConfirmedOrderItem = ({ order }) => {
 
 	return (
         <div className="hover-div">
-            <AcceptUnConfirmedOrderModal/>
+            <AcceptUnConfirmedOrderModal 
+                notifyManager={notifyManager}/>
             <li className="list-group-item hover-div" style= {{"width":"auto","minHeight":"100px","minWidth":"250px"}}>
                 <div className="hover-div--off">
                     <div className="row align-items-center" >

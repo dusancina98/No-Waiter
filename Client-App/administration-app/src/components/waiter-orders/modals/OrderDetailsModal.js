@@ -12,9 +12,11 @@ import OrderDetailsInformationSideBar from "./OrderDetailsInformationSideBar";
 import OrderItemsHeaderModalView from "./OrderItemsHeaderModalView";
 import OrderItemsListSideBarModalView from "./OrderItemsListSideBarModalView";
 
-const OrderDetailsModal = () => {
+const OrderDetailsModal = ({notifyManager}) => {
 	const { orderState , dispatch } = useContext(OrderContext);
 	const [disabledSaveButton, setDisabledSaveButton] = useState(true)
+
+
 	const handleModalClose = () => {
 		dispatch({ type: modalConstants.HIDE_ORDER_DETAILS_MODAL });
 	};
@@ -62,7 +64,7 @@ const OrderDetailsModal = () => {
 
 	const handleUpdate = () => {
 		setDisabledSaveButton(true)
-		orderService.updateOrder(orderState.orderDetailsModal.order,dispatch)
+		orderService.updateOrder(orderState.orderDetailsModal.order,notifyManager)
 	}
 
 	const enableSaveButton= () => {

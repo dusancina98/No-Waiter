@@ -1,8 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import moment from 'moment';
 import 'react-confirm-alert/src/react-confirm-alert.css'
+import { modalConstants } from '../../constants/ModalConstants';
+import { OrderContext } from '../../contexts/OrderContext';
 
 const CompletedOrderItem = ({ order }) => {
+	const { dispatch } = useContext(OrderContext);
+
+    const orderDetails = (orderId) => {
+        dispatch({type: modalConstants.SHOW_ORDER_DETAILS_MODAL, orderId})
+    }
+
 	return (
         <div className="hover-div">
             <li className="list-group-item hover-div" style= {{"width":"auto","minHeight":"100px","minWidth":"250px"}}>
@@ -45,7 +53,7 @@ const CompletedOrderItem = ({ order }) => {
                 <div >
                     <div className="row">
                         <div className="col-12 text-center">
-                            <button style={{"minHeight":"75px"}}>
+                            <button style={{"minHeight":"75px"}} onClick={()=>orderDetails(order.OrderId)}>
                                 Details
                             </button>
                         </div>

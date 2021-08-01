@@ -3,7 +3,7 @@ import { OrderContext } from "../../contexts/OrderContext";
 import { orderService } from "../../services/OrderService"
 import OnRouteOrderItem from "./OnRouteOrderItem";
 
-const OnRouteOrdersCard = () => {
+const OnRouteOrdersCard = ({ notifyManager }) => {
 	const { orderState, dispatch } = useContext(OrderContext);
 
     useEffect(() => {
@@ -24,7 +24,9 @@ const OnRouteOrdersCard = () => {
 					<div>
 						{orderState.waiterOrders.OnRouteOrders.map((order) => {
 							return (
-								<OnRouteOrderItem order = {order}/>    
+								<OnRouteOrderItem 
+									order = {order}
+									notifyManager= {notifyManager}/>    
 						)})}
 					</div>:
 					<div>

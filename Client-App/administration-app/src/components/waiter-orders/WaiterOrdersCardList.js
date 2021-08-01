@@ -9,7 +9,7 @@ import OnRouteOrdersCard from "./OnRouteOrdersCard";
 import CompletedOrdersCard from "./CompletedOrdersCard";
 import OrderDetailsModal from "./modals/OrderDetailsModal";
 
-const WaiterOrdersCardList = () => {
+const WaiterOrdersCardList = ({notifyManager}) => {
     const { orderState,dispatch } = useContext(OrderContext);
 
 	return (
@@ -26,21 +26,22 @@ const WaiterOrdersCardList = () => {
                 <div className="row ">
 
                     <div className="col-sm">
-                        <UnConfirmedOrdersCard/>
+                        <UnConfirmedOrdersCard notifyManager={notifyManager}/>
                     </div>
                     <div className="col-sm">
-                        <ConfirmedOrdersCard/>
+                        <ConfirmedOrdersCard notifyManager={notifyManager}/>
                     </div>
                     <div className="col-sm">
-                        <ReadyOrdersCard/>
+                        <ReadyOrdersCard notifyManager={notifyManager}/>
                     </div>
                     <div className="col-sm">
-                        <OnRouteOrdersCard/>            
+                        <OnRouteOrdersCard notifyManager={notifyManager}/>            
                     </div>
                     <div className="col-sm">
                         <CompletedOrdersCard/>        
                     </div>
-                    <OrderDetailsModal/>
+                    <OrderDetailsModal notifyManager={notifyManager}
+                        />
                 </div>
             </div>
 		</React.Fragment>
