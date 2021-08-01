@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import MultiSelectListItems from "../../MultiSelectListItems";
 import { orderConstants } from '../../../constants/OrderConstants';
 
-const AddProductItemDetailsModelView = () => {
+const AddProductItemDetailsModelView = ({enableSaveButton}) => {
 	const { orderState,dispatch } = useContext(OrderContext);
 
     const [selectedSideDishes, setSelectedSideDishes] = useState([]);
@@ -48,6 +48,7 @@ const AddProductItemDetailsModelView = () => {
 			},
 		});
 
+		enableSaveButton()
 		setProductCount(1);
 		setNote("");
 		setSelectedSideDishes([]);

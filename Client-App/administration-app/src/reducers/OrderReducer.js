@@ -338,6 +338,21 @@ export const orderReducer = (state, action) => {
 			ordCpy.orderDetailsModal.showAddProductDetails = false;
 
 			return ordCpy;
+		case orderConstants.EDIT_ORDER_INFROMATION_BY_WAITER:
+			ordCpy = { ...state };
+			if(action.orderType!==''){
+				ordCpy.orderDetailsModal.order.OrderType=action.orderType;
+			}
+
+			if(action.address!==''){
+				ordCpy.orderDetailsModal.order.Address=action.address;
+			}
+
+			if(action.table!==''){
+				ordCpy.orderDetailsModal.order.Table=action.table;
+			}
+
+			return ordCpy;
 		default:
 			return state;
 	}

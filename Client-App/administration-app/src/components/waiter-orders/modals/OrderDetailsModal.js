@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
+import { colorConstants } from "../../../constants/ColorConstants";
 import { modalConstants } from "../../../constants/ModalConstants";
 import { orderConstants } from "../../../constants/OrderConstants";
 import { OrderContext } from "../../../contexts/OrderContext";
@@ -13,13 +14,9 @@ import OrderItemsListSideBarModalView from "./OrderItemsListSideBarModalView";
 
 const OrderDetailsModal = () => {
 	const { orderState , dispatch } = useContext(OrderContext);
-    const [ modalStyle, setModalStyle] = useState("details-modal-size");
-    const [ leftSideColSize ] = useState("col-7");
-    const [ rightSideColSize ] = useState("col-5");
-
+	const [disabledSaveButton, setDisabledSaveButton] = useState(true)
 	const handleModalClose = () => {
 		dispatch({ type: modalConstants.HIDE_ORDER_DETAILS_MODAL });
-		setModalStyle("details-modal-size")
 	};
 
 	const handleAddOrderItem = () => {
@@ -42,6 +39,7 @@ const OrderDetailsModal = () => {
 
 	const deleteFromShoppingCart = (id) => {
 		if(orderState.orderDetailsModal.order.OrderItems.length !== 1){
+			enableSaveButton()
 			dispatch({ type: orderConstants.REMOVE_PRODUCT_FROM_ORDER_FROM_ORDER_DETAILS, id });
 		}
 		//TODO: printati error da ne moze da ostane order bez itema
@@ -61,8 +59,18 @@ const OrderDetailsModal = () => {
 		return sum;
 	};
 
+	const handleUpdate = () => {
+		setDisabledSaveButton(true)
+		orderService.updateOrder(orderState.orderDetailsModal.order,dispatch)
+	}
+
+	const enableSaveButton= () => {
+		setDisabledSaveButton(false)
+	}
+
+
 	return ( 
-		<Modal dialogClassName={modalStyle} show={orderState.orderDetailsModal.showModal} aria-labelledby="contained-modal-title-vcenter" centered onHide={handleModalClose}>
+		<Modal dialogClassName="details-modal-size" show={orderState.orderDetailsModal.showModal} aria-labelledby="contained-modal-title-vcenter" centered onHide={handleModalClose}>
 			<Modal.Header closeButton>
 				<Modal.Title id="contained-modal-title-vcenter">
 					<h3>Order details</h3>
@@ -71,11 +79,12 @@ const OrderDetailsModal = () => {
 			<Modal.Body>
                 <div>
 					<div className="row">
-						<div className={leftSideColSize} >
+						<div className="col-7">
 							{orderState.orderDetailsModal.showAddProduct ? 
 								<ProductContextProvider>
 									{orderState.orderDetailsModal.showAddProductDetails ? 
 										<AddProductItemDetailsModelView
+											enableSaveButton={enableSaveButton}
 											/>
 										:
 										<ModifyOrderProductList 
@@ -89,10 +98,11 @@ const OrderDetailsModal = () => {
 									table={orderState.orderDetailsModal.order.Table}
 									createdDate={orderState.orderDetailsModal.order.CreatedTime}
 									estimatedDate={orderState.orderDetailsModal.order.EstimatedTime}
-									price={Number(getOrderSum()).toFixed(2)}/>
+									price={Number(getOrderSum()).toFixed(2)}
+									enableSaveButton={enableSaveButton}/>
 							}
 						</div>
-						<div className={rightSideColSize}>
+						<div className="col-5">
 							<OrderItemsHeaderModalView 
 								handleAddOrderItem ={handleAddOrderItem}/>
 							<OrderItemsListSideBarModalView
@@ -106,6 +116,14 @@ const OrderDetailsModal = () => {
 			</Modal.Body>
 			<Modal.Footer>
 				<Button onClick={handleModalClose}>Close</Button>
+				<button
+					onClick={handleUpdate}
+					className="btn btn-success"
+					disabled={disabledSaveButton}
+					style={{ background: colorConstants.COLOR_GREEN, borderColor: colorConstants.COLOR_GREEN }}
+				>
+					Save
+				</button>
 			</Modal.Footer>
 		</Modal>
 	);
