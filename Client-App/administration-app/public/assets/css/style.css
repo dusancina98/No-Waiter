@@ -15511,10 +15511,20 @@ dl {
 
 .details-modal-size{
   min-width: 1024px;
-  min-height: 720px;
+  max-height: 720px;
 }
 
 .add-products-details-modal-size{
-  min-width: 1256px;
-  min-height: 960px;
+  min-width: 1024px;
+  min-height: 780px;
+}
+
+.productModalScroll{
+    overflow-y: scroll;
+	  max-height: 400px;
+}
+
+.orderItemsSideBarModalScroll{
+  overflow-y: scroll;
+  max-height: 450px;
 }
