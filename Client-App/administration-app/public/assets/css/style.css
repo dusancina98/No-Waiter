@@ -15508,3 +15508,23 @@ dl {
 .hover-div:hover .hover-div--on {
   display: inline;
 }
+
+.details-modal-size{
+  min-width: 1024px;
+  max-height: 720px;
+}
+
+.add-products-details-modal-size{
+  min-width: 1024px;
+  min-height: 720px;
+}
+
+.productModalScroll{
+    overflow-y: scroll;
+	  max-height: 400px;
+}
+
+.orderItemsSideBarModalScroll{
+  overflow-y: scroll;
+  max-height: 450px;
+}

@@ -4,8 +4,9 @@ import { OrderContext } from '../../contexts/OrderContext';
 import { orderService } from "../../services/OrderService"
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'
+import { modalConstants } from '../../constants/ModalConstants';
 
-const ConfirmedOrderItem = ({ order }) => {
+const ConfirmedOrderItem = ({ order, notifyManager }) => {
 	const { dispatch } = useContext(OrderContext);
 
     const rejectOrder = (orderId) => {
@@ -15,7 +16,7 @@ const ConfirmedOrderItem = ({ order }) => {
 			buttons: [
 			  {
 				label: 'Yes',
-				onClick: () => orderService.rejectOrder(orderId, dispatch)
+				onClick: () => orderService.rejectOrder(orderId, dispatch, notifyManager)
 			  },
 			  {
 				label: 'No',
@@ -30,7 +31,7 @@ const ConfirmedOrderItem = ({ order }) => {
 			buttons: [
 			  {
 				label: 'Yes',
-				onClick: () => orderService.readyOrder(orderId, dispatch)
+				onClick: () => orderService.readyOrder(orderId, dispatch,notifyManager)
 			  },
 			  {
 				label: 'No',
@@ -39,6 +40,9 @@ const ConfirmedOrderItem = ({ order }) => {
 		  });
     }
 
+    const orderDetails = (orderId) => {
+        dispatch({type: modalConstants.SHOW_ORDER_DETAILS_MODAL, orderId})
+    }
 
 	return (
         <div className="hover-div">
@@ -89,7 +93,7 @@ const ConfirmedOrderItem = ({ order }) => {
                             </button>
                         </div>
                         <div className="col-4 text-center">
-                            <button style={{"minHeight":"75px"}}>
+                            <button style={{"minHeight":"75px"}} onClick={()=>orderDetails(order.OrderId)}>
                                 Details
                             </button>
                         </div>

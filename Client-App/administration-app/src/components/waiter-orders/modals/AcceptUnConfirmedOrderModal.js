@@ -7,7 +7,7 @@ import { colorConstants } from "../../../constants/ColorConstants";
 import FailureAlert from "../../FailureAlert";
 import { orderService } from "../../../services/OrderService";
 
-const AcceptUnConfirmedOrderModal = () => {
+const AcceptUnConfirmedOrderModal = ({notifyManager}) => {
 	const { orderState,dispatch } = useContext(OrderContext);
     const [ estimatedTime, setEstimatedTime] = useState("");
 
@@ -25,7 +25,7 @@ const AcceptUnConfirmedOrderModal = () => {
 				OrderId: orderState.acceptUnConfirmedOrder.orderId,
 				EstimatedTime: estimatedTime,
 			};
-			orderService.acceptUnConfirmedOrder(acceptOrderDTO, dispatch);
+			orderService.acceptUnConfirmedOrder(acceptOrderDTO, dispatch, notifyManager);
 		}
 	};
 

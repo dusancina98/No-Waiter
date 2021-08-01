@@ -4,8 +4,9 @@ import { OrderContext } from '../../contexts/OrderContext';
 import { orderService } from "../../services/OrderService"
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'
+import { modalConstants } from '../../constants/ModalConstants';
 
-const OnRouteOrderItem = ({ order }) => {
+const OnRouteOrderItem = ({ order, notifyManager }) => {
 	const { dispatch } = useContext(OrderContext);
 
     const rejectOrder = (orderId) => {
@@ -14,7 +15,7 @@ const OnRouteOrderItem = ({ order }) => {
 			buttons: [
 			  {
 				label: 'Yes',
-				onClick: () => orderService.rejectOrder(orderId, dispatch)
+				onClick: () => orderService.rejectOrder(orderId, dispatch, notifyManager)
 			  },
 			  {
 				label: 'No',
@@ -29,13 +30,17 @@ const OnRouteOrderItem = ({ order }) => {
 			buttons: [
 			  {
 				label: 'Yes',
-				onClick: () => orderService.setOrderToCompleted(orderId, dispatch)
+				onClick: () => orderService.setOrderToCompleted(orderId, dispatch, notifyManager)
 			  },
 			  {
 				label: 'No',
 			  }
 			]
 		  });
+    }
+
+    const orderDetails = (orderId) => {
+        dispatch({type: modalConstants.SHOW_ORDER_DETAILS_MODAL, orderId})
     }
 
 
@@ -84,7 +89,7 @@ const OnRouteOrderItem = ({ order }) => {
                             </button>
                         </div>
                         <div className="col-4 text-center">
-                            <button style={{"minHeight":"100px"}}>
+                            <button style={{"minHeight":"100px"}} onClick={()=>orderDetails(order.OrderId)}>
                                 Details
                             </button>
                         </div>

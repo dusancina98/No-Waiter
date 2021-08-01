@@ -3,7 +3,7 @@ import { OrderContext } from "../../contexts/OrderContext";
 import { orderService } from "../../services/OrderService"
 import ConfirmedOrderItem from "./ConfirmedOrderItem";
 
-const ConfirmedOrdersCard = () => {
+const ConfirmedOrdersCard = ({notifyManager}) => {
 	const { orderState, dispatch } = useContext(OrderContext);
 
     useEffect(() => {
@@ -24,7 +24,9 @@ const ConfirmedOrdersCard = () => {
 					<div>
 						{orderState.waiterOrders.ConfirmedOrders.map((order) => {
 							return (
-								<ConfirmedOrderItem order = {order}/>    
+								<ConfirmedOrderItem 
+									order = {order}
+									notifyManager={notifyManager}/>    
 						)})}
 					</div>:
 					<div>

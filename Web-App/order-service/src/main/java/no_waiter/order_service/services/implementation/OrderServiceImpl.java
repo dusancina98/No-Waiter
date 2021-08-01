@@ -9,22 +9,37 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import no_waiter.order_service.entities.Address;
 import no_waiter.order_service.entities.Order;
 import no_waiter.order_service.entities.OrderEvent;
 import no_waiter.order_service.entities.OrderItem;
 import no_waiter.order_service.entities.OrderStatus;
+import no_waiter.order_service.entities.OrderType;
+import no_waiter.order_service.entities.Product;
+import no_waiter.order_service.entities.SideDish;
+import no_waiter.order_service.intercomm.ProductClient;
 import no_waiter.order_service.repository.OrderEventRepository;
 import no_waiter.order_service.repository.OrderRepository;
 import no_waiter.order_service.services.contracts.OrderService;
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CompletedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
+import no_waiter.order_service.services.contracts.dto.NameDTO;
 import no_waiter.order_service.services.contracts.dto.OnRouteOrderDTO;
+import no_waiter.order_service.services.contracts.dto.OrderDetailsDTO;
+import no_waiter.order_service.services.contracts.dto.OrderItemDTO;
+import no_waiter.order_service.services.contracts.dto.OrderItemResponseDTO;
+import no_waiter.order_service.services.contracts.dto.OrderItemsDTO;
 import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
+import no_waiter.order_service.services.contracts.dto.ProductValidationDTO;
 import no_waiter.order_service.services.contracts.dto.ProductValidationResponseDTO;
 import no_waiter.order_service.services.contracts.dto.ReadyOrderDTO;
+import no_waiter.order_service.services.contracts.dto.SideDishDTO;
+import no_waiter.order_service.services.contracts.dto.SideDishResponseDTO;
 import no_waiter.order_service.services.contracts.dto.UnConfirmedOrderDTO;
 import no_waiter.order_service.services.implementation.util.OrderMapper;
 
@@ -36,6 +51,9 @@ public class OrderServiceImpl implements OrderService{
 	
 	@Autowired
 	private OrderEventRepository orderEventRepository;
+	
+	@Autowired
+	private ProductClient productClient;
 	
 	@Override
 	public UUID createOrder(OrderRequestDTO requestDTO, ProductValidationResponseDTO products, UUID objectId) {
@@ -273,4 +291,132 @@ public class OrderServiceImpl implements OrderService{
 		
 		return dto;
 	}
+
+	@Override
+	public OrderDetailsDTO getOrderDetails(UUID orderId) {
+		Order order = orderRepository.findById(orderId).get();
+		
+		Date estimatedDate = new Date();
+		estimatedDate.setTime(order.getCreatedTime().getTime() + (order.getEstimatedTime()*60*1000));	
+		
+		List<OrderItemResponseDTO> orderItems = mapOrderItemsToOrderItemsResponseDTO(order.getItems());
+
+		OrderDetailsDTO retVal = new OrderDetailsDTO(order.getId(),order.getCreatedTime(),order.getAddress().getAddress(),estimatedDate,order.getOrderType().toString(),"123",getPriceForOrder(order),orderItems);
+				
+		return retVal;
+	}
+
+	private List<OrderItemResponseDTO> mapOrderItemsToOrderItemsResponseDTO(List<OrderItem> items) {
+		List<OrderItemResponseDTO> orderItemsResponseDTO = new ArrayList<OrderItemResponseDTO>();
+		
+		for(OrderItem item : items) {
+			orderItemsResponseDTO.add(new OrderItemResponseDTO(item.getId(),item.getProduct().getName(),item.getCount(),item.getProduct().getId(),item.getSingleItemPrice(), item.getProduct().getImagePath(), mapSideDishToSideDishDTO(item.getSideDishes())));
+		}
+		
+		return orderItemsResponseDTO;
+	}
+
+	private List<SideDishResponseDTO> mapSideDishToSideDishDTO(List<SideDish> sideDishes) {
+		List<SideDishResponseDTO> retVal = new ArrayList<SideDishResponseDTO>();
+		
+		for(SideDish sideDish : sideDishes) {
+			retVal.add(new SideDishResponseDTO(sideDish.getId(),new NameDTO(sideDish.getName())));
+		}
+		
+		return retVal;
+	}
+
+	@Override
+	public void updateOrder(OrderDetailsDTO orderDetailsDTO) {
+		Order order = orderRepository.findById(orderDetailsDTO.OrderId).get();
+		
+		//TODO: odraditi set table
+		order.setAddress(new Address(orderDetailsDTO.Address));
+		order.setOrderType(OrderType.valueOf(orderDetailsDTO.OrderType));
+		
+		removeOrderItems(order,orderDetailsDTO.OrderItems);
+		addOrderItems(order,orderDetailsDTO.OrderItems);
+		
+		orderRepository.save(order);
+	}
+
+	private void addOrderItems(Order order, List<OrderItemResponseDTO> orderItems) {
+		 List<OrderItemDTO> newItems = new ArrayList<OrderItemDTO>();
+		
+		 for(OrderItemResponseDTO orderItemDTO : orderItems) {
+			  boolean found = false;
+			  for(OrderItem orderItem : order.getItems()) {
+				  if(orderItem.getId().equals(orderItemDTO.Id)) {
+					  orderItem.setCount(orderItemDTO.Count);
+					  found = true;
+				  }
+			  }
+			  if(!found) {
+				  newItems.add(mapOrderItemResponseDTOToOrderItemDTO(orderItemDTO));
+			  }
+		 }
+		 
+		 System.out.println(newItems.size());
+		 
+		 ProductValidationResponseDTO resp = productClient.validateOrderItems(new OrderItemsDTO(newItems));
+			
+		 if(resp.Products.size() == newItems.size()) {
+			 for(ProductValidationDTO product : resp.Products) {
+					for(OrderItemDTO item : newItems) {
+						if (item.Id.equals(product.Id)) {
+							order.getItems().add(new OrderItem(new Product(product.Id, product.Name, product.ImagePath), item.Note, item.Count, product.Price, MapSideDishesDTOToSideDishes(product.SideDishes)));
+						}
+					}
+				}
+		 } 
+		 
+		 System.out.println("BROJ ITEMA" + order.getItems().size());
+	}
+	
+	private List<SideDish> MapSideDishesDTOToSideDishes(List<SideDishDTO> sideDishes) {
+		List<SideDish> retVal = new ArrayList<SideDish>();
+		
+		sideDishes.forEach((sideDish) -> retVal.add(new SideDish(sideDish.Id, sideDish.Name)));
+		return retVal;
+	}
+
+	private OrderItemDTO mapOrderItemResponseDTOToOrderItemDTO(OrderItemResponseDTO orderItemDTO) {
+		List<UUID> sideDishes = new ArrayList<UUID>();
+		
+		for(SideDishResponseDTO sideDish : orderItemDTO.SideDishes) {
+			sideDishes.add(sideDish.Id);
+		}
+		
+		return new OrderItemDTO(orderItemDTO.ProductId,orderItemDTO.Count,sideDishes,"");
+	}
+
+	private void removeOrderItems(Order order, List<OrderItemResponseDTO> orderItems) {
+		for(OrderItem orderItem : order.getItems()) {
+			boolean found = false;
+			for(OrderItemResponseDTO orderItemDTO : orderItems) {
+				if(orderItem.getId().equals(orderItemDTO.Id)) {
+					orderItem.setCount(orderItemDTO.Count);
+					found = true;
+				}
+			}
+			
+			if(!found) {
+				order.getItems().remove(orderItem);
+			}
+		}
+		
+		
+	}	
+	
+	//@Override
+	//public UUID createOrder(OrderRequestDTO requestDTO, ProductValidationResponseDTO products, UUID objectId) {
+	//	Order order = OrderMapper.MapOrderRequestDTOToOrder(requestDTO, products, objectId);
+	//	orderRepository.save(order);
+	//	
+	//	OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), objectId);
+	//	orderEventRepository.save(newOrderEvent);
+	//	
+	//	return order.getId();
+	//}
+
 }

@@ -7,6 +7,7 @@ import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CompletedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OnRouteOrderDTO;
+import no_waiter.order_service.services.contracts.dto.OrderDetailsDTO;
 import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
 import no_waiter.order_service.services.contracts.dto.ProductValidationResponseDTO;
 import no_waiter.order_service.services.contracts.dto.ReadyOrderDTO;
@@ -35,4 +36,8 @@ public interface OrderService {
 	void setOrderToComplete(UUID orderId);
 
 	List<CompletedOrderDTO> getCompletedOrdersForObject(UUID objectId);
+
+	OrderDetailsDTO getOrderDetails(UUID orderId);
+
+	void updateOrder(OrderDetailsDTO orderDetailsDTO);
 }

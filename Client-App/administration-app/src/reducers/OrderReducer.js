@@ -259,6 +259,100 @@ export const orderReducer = (state, action) => {
 			ordCpy = { ...state };
 			ordCpy.waiterOrders.CompletedOrders = [];
 			return ordCpy;
+		case modalConstants.HIDE_ORDER_DETAILS_MODAL:
+			ordCpy = { ...state };
+			
+			ordCpy.orderDetailsModal.showModal = false;
+			ordCpy.orderDetailsModal.order = [];
+			ordCpy.orderDetailsModal.orderId = '';
+
+			return ordCpy;
+		case modalConstants.SHOW_ORDER_DETAILS_MODAL:
+			return {
+				...state,
+				orderDetailsModal: {
+					showModal: true,
+					orderId: action.orderId,
+					order: [],
+					showAddProduct: false,
+				showAddProductDetails: false,
+				}
+			}
+		case orderConstants.GET_ORDER_DETAILS_SUCCESS:
+			return {
+				...state,
+				orderDetailsModal: {
+					showModal: true,
+					orderId: action.orderId,
+					order: action.orderDetails,
+					showAddProduct: false,
+				showAddProductDetails: false,
+				}
+			}
+		case orderConstants.GET_ORDER_DETAILS_FAILURE:
+			return {
+				...state,
+				orderDetailsModal: {
+					showModal: true,
+					orderId: '',
+					order: [],
+					showAddProduct: false,
+				showAddProductDetails: false,
+				}
+			}
+		case orderConstants.REMOVE_PRODUCT_FROM_ORDER_FROM_ORDER_DETAILS:
+			ordCpy = { ...state };
+			ordCpy.orderDetailsModal.order.OrderItems = ordCpy.orderDetailsModal.order.OrderItems.filter((item) => item.Id !== action.id);
+			return ordCpy;
+		case orderConstants.SET_PRODUCT_COUNT_TO_ORDER_FROM_ORDER_DETAILS:
+			ordCpy = { ...state };
+			let prdId = ordCpy.orderDetailsModal.order.OrderItems.findIndex((item) => item.Id === action.id);
+			ordCpy.orderDetailsModal.order.OrderItems[prdId].Count = action.count;
+			return ordCpy;
+		case orderConstants.WAITER_MODIFY_ORDER_SHOW_ADD_PRODUCT:
+			ordCpy = { ...state };
+			ordCpy.orderDetailsModal.showAddProduct = true;
+			ordCpy.orderDetailsModal.showAddProductDetails = false;
+			return ordCpy;
+		case orderConstants.WAITER_MODIFY_ORDER_SHOW_ADD_PRODUCT_SET_DETAILS:
+			ordCpy = { ...state };
+			ordCpy.orderDetailsModal.showAddProduct = true;
+			ordCpy.orderDetailsModal.showAddProductDetails = true;
+			ordCpy.orderDetailsModal.addProductDetails = action.product;
+			return ordCpy;
+		case orderConstants.WAITER_MODIFY_ORDER_HIDE_ADD_PRODUCT:
+			ordCpy = { ...state };
+			ordCpy.orderDetailsModal.showAddProduct = false;
+			ordCpy.orderDetailsModal.showAddProductDetails = false;
+
+			return ordCpy;
+
+		case orderConstants.ADD_PRODUCT_TO_ORDER_BY_WAITER:
+			ordCpy = { ...state };
+
+			if (ordCpy.orderDetailsModal.order.OrderItems.find((prod) => prod.Id === action.item.Id) === undefined) {
+				ordCpy.orderDetailsModal.order.OrderItems.push(action.item);
+			}
+
+			ordCpy.orderDetailsModal.showAddProduct = true;
+			ordCpy.orderDetailsModal.showAddProductDetails = false;
+
+			return ordCpy;
+		case orderConstants.EDIT_ORDER_INFROMATION_BY_WAITER:
+			ordCpy = { ...state };
+			if(action.orderType!==''){
+				ordCpy.orderDetailsModal.order.OrderType=action.orderType;
+			}
+
+			if(action.address!==''){
+				ordCpy.orderDetailsModal.order.Address=action.address;
+			}
+
+			if(action.table!==''){
+				ordCpy.orderDetailsModal.order.Table=action.table;
+			}
+
+			return ordCpy;
 		default:
 			return state;
 	}
