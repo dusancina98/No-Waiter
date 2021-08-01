@@ -13,10 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import no_waiter.order_service.entities.Address;
 import no_waiter.order_service.entities.Order;
 import no_waiter.order_service.entities.OrderEvent;
 import no_waiter.order_service.entities.OrderItem;
 import no_waiter.order_service.entities.OrderStatus;
+import no_waiter.order_service.entities.OrderType;
+import no_waiter.order_service.entities.Product;
 import no_waiter.order_service.entities.SideDish;
 import no_waiter.order_service.intercomm.ProductClient;
 import no_waiter.order_service.repository.OrderEventRepository;
@@ -322,5 +325,98 @@ public class OrderServiceImpl implements OrderService{
 		
 		return retVal;
 	}
+
+	@Override
+	public void updateOrder(OrderDetailsDTO orderDetailsDTO) {
+		Order order = orderRepository.findById(orderDetailsDTO.OrderId).get();
+		
+		//TODO: odraditi set table
+		order.setAddress(new Address(orderDetailsDTO.Address));
+		order.setOrderType(OrderType.valueOf(orderDetailsDTO.OrderType));
+		
+		removeOrderItems(order,orderDetailsDTO.OrderItems);
+		addOrderItems(order,orderDetailsDTO.OrderItems);
+		
+		orderRepository.save(order);
+	}
+
+	private void addOrderItems(Order order, List<OrderItemResponseDTO> orderItems) {
+		 List<OrderItemDTO> newItems = new ArrayList<OrderItemDTO>();
+		
+		 for(OrderItemResponseDTO orderItemDTO : orderItems) {
+			  boolean found = false;
+			  for(OrderItem orderItem : order.getItems()) {
+				  if(orderItem.getId().equals(orderItemDTO.Id)) {
+					  orderItem.setCount(orderItemDTO.Count);
+					  found = true;
+				  }
+			  }
+			  if(!found) {
+				  newItems.add(mapOrderItemResponseDTOToOrderItemDTO(orderItemDTO));
+			  }
+		 }
+		 
+		 System.out.println(newItems.size());
+		 
+		 ProductValidationResponseDTO resp = productClient.validateOrderItems(new OrderItemsDTO(newItems));
+			
+		 if(resp.Products.size() == newItems.size()) {
+			 for(ProductValidationDTO product : resp.Products) {
+					for(OrderItemDTO item : newItems) {
+						if (item.Id.equals(product.Id)) {
+							order.getItems().add(new OrderItem(new Product(product.Id, product.Name, product.ImagePath), item.Note, item.Count, product.Price, MapSideDishesDTOToSideDishes(product.SideDishes)));
+						}
+					}
+				}
+		 } 
+		 
+		 System.out.println("BROJ ITEMA" + order.getItems().size());
+	}
+	
+	private List<SideDish> MapSideDishesDTOToSideDishes(List<SideDishDTO> sideDishes) {
+		List<SideDish> retVal = new ArrayList<SideDish>();
+		
+		sideDishes.forEach((sideDish) -> retVal.add(new SideDish(sideDish.Id, sideDish.Name)));
+		return retVal;
+	}
+
+	private OrderItemDTO mapOrderItemResponseDTOToOrderItemDTO(OrderItemResponseDTO orderItemDTO) {
+		List<UUID> sideDishes = new ArrayList<UUID>();
+		
+		for(SideDishResponseDTO sideDish : orderItemDTO.SideDishes) {
+			sideDishes.add(sideDish.Id);
+		}
+		
+		return new OrderItemDTO(orderItemDTO.ProductId,orderItemDTO.Count,sideDishes,"");
+	}
+
+	private void removeOrderItems(Order order, List<OrderItemResponseDTO> orderItems) {
+		for(OrderItem orderItem : order.getItems()) {
+			boolean found = false;
+			for(OrderItemResponseDTO orderItemDTO : orderItems) {
+				if(orderItem.getId().equals(orderItemDTO.Id)) {
+					orderItem.setCount(orderItemDTO.Count);
+					found = true;
+				}
+			}
+			
+			if(!found) {
+				order.getItems().remove(orderItem);
+			}
+		}
+		
+		
+	}	
+	
+	//@Override
+	//public UUID createOrder(OrderRequestDTO requestDTO, ProductValidationResponseDTO products, UUID objectId) {
+	//	Order order = OrderMapper.MapOrderRequestDTOToOrder(requestDTO, products, objectId);
+	//	orderRepository.save(order);
+	//	
+	//	OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), objectId);
+	//	orderEventRepository.save(newOrderEvent);
+	//	
+	//	return order.getId();
+	//}
 
 }

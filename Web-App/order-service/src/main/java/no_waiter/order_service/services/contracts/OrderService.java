@@ -38,4 +38,6 @@ public interface OrderService {
 	List<CompletedOrderDTO> getCompletedOrdersForObject(UUID objectId);
 
 	OrderDetailsDTO getOrderDetails(UUID orderId);
+
+	void updateOrder(OrderDetailsDTO orderDetailsDTO);
 }

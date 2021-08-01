@@ -35,6 +35,7 @@ const OrderDetailsModal = () => {
 
 	const setProductCount = (id,count) => {
 		dispatch({ type: orderConstants.SET_PRODUCT_COUNT_TO_ORDER_FROM_ORDER_DETAILS, id, count });
+		enableSaveButton()
 	}
 
 	const deleteFromShoppingCart = (id) => {

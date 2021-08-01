@@ -23,6 +23,7 @@ import no_waiter.order_service.intercomm.UserClient;
 import no_waiter.order_service.services.contracts.OrderService;
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.JwtParseResponseDTO;
+import no_waiter.order_service.services.contracts.dto.OrderDetailsDTO;
 import no_waiter.order_service.services.contracts.dto.OrderItemsDTO;
 import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
 import no_waiter.order_service.services.contracts.dto.ProductValidationResponseDTO;
@@ -234,6 +235,23 @@ public class Api {
     public ResponseEntity<?> getOrderDetails( @PathVariable String orderId) {
     	try {
             return new ResponseEntity<>(orderService.getOrderDetails(UUID.fromString(orderId)), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
+	@PutMapping
+    @CrossOrigin
+    public ResponseEntity<?> updateOrder(@RequestHeader("Authorization") String token,@RequestBody OrderDetailsDTO orderDetailsDTO) {
+
+        try {		
+
+        	orderService.updateOrder(orderDetailsDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

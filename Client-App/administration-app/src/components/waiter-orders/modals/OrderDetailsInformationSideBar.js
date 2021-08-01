@@ -24,6 +24,7 @@ const OrderDetailsInformationSideBar = ({ orderType, address, table, createdDate
 		setEditedOrderType(e.target.value)
 		setEditableOrderType(true)
 		setEditButtonDisabled(false)
+		
 	}
 
 	const handleEdit = () => {
@@ -43,7 +44,7 @@ const OrderDetailsInformationSideBar = ({ orderType, address, table, createdDate
 						<option value='ORDER_INSIDE'>DINE IN</option>
 					</select>
 				</div>
-				{ orderType==='DELIVERY' && (editedOrderType==='DELIVERY' || editedOrderType==='')? 
+				{ orderType==='DELIVERY' || (editedOrderType==='DELIVERY' && orderType!=='DELIVERY')? 
 					<div className="mt-2">
 						Address:
 						<input 
