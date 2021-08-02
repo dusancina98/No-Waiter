@@ -15538,7 +15538,7 @@ dl {
   display: -ms-flexbox;
 
   padding: 15px;
-  background: lightskyblue;
+  background: rgb(17, 89, 134);
 }
 
 @media (min-width: 768px) {
@@ -15553,4 +15553,8 @@ dl {
   height: 250px;
   width: 250px;
   border-radius: 50%;
+}
+
+.border-3 {
+    border-width:6px !important;
 }
