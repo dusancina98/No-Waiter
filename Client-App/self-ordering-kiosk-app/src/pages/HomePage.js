@@ -3,12 +3,12 @@ import React from "react";
 
 const HomePage = () => {
 	const handleOnClickTapToStart = () => {
-		window.location = "#/choose";
+		window.location = "#/choose-order-type";
 	}
 
 	return (
 		<React.Fragment>
-			<div className="d-md-flex h-md-100 align-items-center">
+			<div className="home-page-background align-items-center">
 				<div className="col-md-12 p-0 bg-indigo h-md-100">
 					<div className="row text-white d-md-flex align-items-center h-25 p-5 text-center justify-content-center">
 						<h1 className="display-2 w-100">Dear Customer,</h1>

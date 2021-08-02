@@ -15536,7 +15536,6 @@ dl {
   display: -webkit-flex;
   display: -moz-box;
   display: -ms-flexbox;
-
   padding: 15px;
   background: rgb(17, 89, 134);
 }
@@ -15558,3 +15557,21 @@ dl {
 .border-3 {
     border-width:6px !important;
 }
+
+.btn-circle-exit {
+  background-color: lightblue;
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+}
+
+.create-order-header {
+  width: 100%;  
+  height: 5em;  
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  background: rgb(17, 89, 134);
+}
+
