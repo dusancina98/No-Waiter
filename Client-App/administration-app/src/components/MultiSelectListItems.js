@@ -1,6 +1,7 @@
 import React from "react";
 
 const MultiSelectListItems = ({ list, selectedItems, handleItemDelete, handleItemAdd, handleItemsAddAll, itemsName, hiddenSelectAll = true }) => {
+	
 	return (
 		<React.Fragment>
 			<div>

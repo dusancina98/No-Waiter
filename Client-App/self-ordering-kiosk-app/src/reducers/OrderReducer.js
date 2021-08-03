@@ -4,24 +4,18 @@ var ordCpy = {};
 
 export const orderReducer = (state, action) => {
 	switch (action.type) {
-		case orderConstants.ADD_PRODUCT_TO_ORDER:
+		case orderConstants.SHOW_ORDER_ITEM_DETAILS:
 			ordCpy = { ...state };
-			ordCpy.createOrder.items.push(action.item);
 
-			ordCpy.orderItemDetails = {
-				showModal: false,
-				selectedProduct: {
-					Id: "",
-					EntityDTO: {
-						Name: "",
-						Image: "",
-						Ingredients: [],
-						MeasureUnit: "",
-						Price: 0,
-						SideDishes: [],
-					},
-				},
-			};
+			ordCpy.createOrder.pageVisible=2;
+			ordCpy.createOrder.selectedProduct=action.product;
+
+			return ordCpy;
+		case orderConstants.HIDE_ORDER_ITEM_DETAILS:
+			ordCpy = { ...state };
+
+			ordCpy.createOrder.pageVisible=1;
+			ordCpy.createOrder.selectedProduct=null;
 
 			return ordCpy;
 		default:

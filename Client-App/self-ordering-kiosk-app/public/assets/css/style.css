@@ -15526,7 +15526,6 @@ dl {
 
 .orderItemsSideBarModalScroll{
   overflow-y: scroll;
-  max-height: 450px;
 }
 
 .home-page-background {
@@ -15575,3 +15574,86 @@ dl {
   background: rgb(17, 89, 134);
 }
 
+/*  bhoechie tab */
+div.bhoechie-tab-container{
+  z-index: 10;
+  background-color: #ffffff;
+  padding: 0 !important;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  border:1px solid #ddd;
+  margin-top: 20px;
+  margin-left: 50px;
+  -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+  box-shadow: 0 6px 12px rgba(0,0,0,.175);
+  -moz-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+  background-clip: padding-box;
+  opacity: 0.97;
+  filter: alpha(opacity=97);
+}
+
+div.bhoechie-tab-menu{
+  padding-right: 0;
+  padding-left: 0;
+  padding-bottom: 0;
+}
+div.bhoechie-tab-menu div.list-group{
+  margin-bottom: 0;
+}
+div.bhoechie-tab-menu div.list-group>p{
+  margin-bottom: 0;
+  min-height: 5em;
+  min-width: 10em;
+  max-width: 10em;
+  max-height: 5em;
+}
+div.bhoechie-tab-menu div.list-group>p .glyphicon,
+div.bhoechie-tab-menu div.list-group>p .fa {
+  color: #5A55A3;
+}
+div.bhoechie-tab-menu div.list-group>p:first-child{
+  border-top-right-radius: 0;
+  -moz-border-top-right-radius: 0;
+}
+div.bhoechie-tab-menu div.list-group>p:last-child{
+  border-bottom-right-radius: 0;
+  -moz-border-bottom-right-radius: 0;
+}
+div.bhoechie-tab-menu div.list-group>p.active,
+div.bhoechie-tab-menu div.list-group>p.active .glyphicon,
+div.bhoechie-tab-menu div.list-group>p.active .fa{
+  background-color: rgb(17, 89, 134);
+  background-image: #5A55A3;
+  color: #ffffff;
+}
+div.bhoechie-tab-menu div.list-group>p.active:after{
+  content: '';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  margin-top: -13px;
+  border-left: 0;
+  border-bottom: 13px solid transparent;
+  border-top: 13px solid transparent;
+  border-left: 10px solid #5A55A3;
+}
+
+div.bhoechie-tab-content{
+  background-color: #ffffff;
+  /* border: 1px solid #eeeeee; */
+  padding-left: 20px;
+  padding-top: 10px;
+}
+
+div.bhoechie-tab div.bhoechie-tab-content:not(.active){
+  display: none;
+}
+
+.quantity {
+  max-width: 250px;
+  width: 100%;
+}
+
+.quantity input {
+  text-align: center;
+}
