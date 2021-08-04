@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { OrderContext } from "../contexts/OrderContext";
 import CreateOrderProductList from "./CreateOrderProductList";
 import ProductsTabs from "./ProductsTabs";
+import ShoppingCartSideBar from "./ShoppingCartSideBar";
 
 const CreateOrderWrapper = () => {
 	const { orderState } = useContext(OrderContext);
@@ -16,7 +17,8 @@ const CreateOrderWrapper = () => {
                     <CreateOrderProductList />
                 </div>
                 <div className="col-3 p-2">
-                    <h1>Korpa</h1>
+                    <h1>Shopping Cart</h1>
+                    <ShoppingCartSideBar/>
                 </div>
             </div>
     	</div>

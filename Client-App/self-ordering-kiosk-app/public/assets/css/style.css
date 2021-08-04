@@ -15524,9 +15524,6 @@ dl {
 	  max-height: 400px;
 }
 
-.orderItemsSideBarModalScroll{
-  overflow-y: scroll;
-}
 
 .home-page-background {
   width: 100%;  
@@ -15651,6 +15648,12 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
 
 .quantity {
   max-width: 250px;
+  width: 100%;
+}
+
+
+.shopping-cart-quantity {
+  max-width: 150px;
   width: 100%;
 }
 

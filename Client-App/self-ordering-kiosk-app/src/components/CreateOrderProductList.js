@@ -7,6 +7,7 @@ import CreateOrderProductItem from "./CreateOrderProductItem";
 import { orderConstants } from "../constants/OrderConstants";
 import MultiSelectListItems from "./MultiSelectListItems";
 import InputSpinner from 'react-bootstrap-input-spinner'  
+import { v4 as uuidv4 } from "uuid";
 
 const CreateOrderProductList = () => {
 	const { productState, dispatch } = useContext(ProductContext);
@@ -33,7 +34,20 @@ const CreateOrderProductList = () => {
 	}
 
 	const handleClickOnAddToOrder = () => {
-		alert('TODO')
+		orderCtx.dispatch({
+			type: orderConstants.ADD_PRODUCT_TO_SHOPPING_CART,
+			item: {
+				Id: uuidv4(),
+				ProductId: orderCtx.orderState.createOrder.selectedProduct.Id,
+				ImageUrl: orderCtx.orderState.createOrder.selectedProduct.EntityDTO.Image,
+				Name: orderCtx.orderState.createOrder.selectedProduct.EntityDTO.Name,
+				Price: orderCtx.orderState.createOrder.selectedProduct.EntityDTO.Price,
+				SideDishes: selectedSideDishes,
+				Count: productCount,
+			},
+		});
+		setSelectedSideDishes([])
+		setProductCount(1)
 	}
 
 	const handleItemsAddAll = (sideDishes) => {

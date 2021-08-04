@@ -7,7 +7,7 @@ const OrderContextProvider = (props) => {
 	const [orderState, dispatch] = useReducer(orderReducer, {
 		createOrder: {
 			pageVisible: 1,
-			items: [],
+			orderItems: [],
 			selectedProduct: "",
 		},
 		orderType: "",
