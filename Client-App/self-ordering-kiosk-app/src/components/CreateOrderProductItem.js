@@ -6,7 +6,7 @@ const CreateOrderProductItem = ({ product, handleItemSelect }) => {
         <React.Fragment>
             <div className="col-4 mb-4" style={{ cursor: "pointer" }} onClick={() => handleItemSelect(product)}>
                 <div className="card">
-                    <img class="card-img-top" src={product.EntityDTO.Image} alt="Card image cap"/>
+                    <img class="card-img-top" src={product.EntityDTO.Image} alt=""/>
 
                     <div class="card-body">
                         <h4 class="card-title">{product.EntityDTO.Name}</h4>

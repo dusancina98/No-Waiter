@@ -9,7 +9,7 @@ const MultiSelectListItems = ({ list, selectedItems, handleItemDelete, handleIte
 
 			<div className="row col-12" >
 
-				<div className="col-4 mb-2" >
+				<div className="col-md-4 mb-2" >
 						<span >
 							<button style={{'heigth':'30px','width':'250px'}} type="button" onClick={() => handleItemsAddAll(list)} className="btn btn-secondary btn-lg btn-icon-text">
 								All <i className="mdi mdi-plus btn-icon-append"></i>
@@ -18,7 +18,7 @@ const MultiSelectListItems = ({ list, selectedItems, handleItemDelete, handleIte
 					</div>
 				{list.map((listItem, index) => {
 				return (
-					<div className="col-4 mb-2" >
+					<div className="col-md-4 mb-2" >
 						<span key={listItem.Id} className={index === 0 && hiddenSelectAll === true ? "" : ""}>
 							<button style={{'heigth':'30px','width':'250px'}} type="button" onClick={() => handleItemAdd(listItem)} className="btn btn-secondary btn-lg btn-icon-text">
 								{listItem.EntityDTO.Name} <i className="mdi mdi-plus btn-icon-append"></i>

@@ -18,6 +18,21 @@ export const orderReducer = (state, action) => {
 			ordCpy.createOrder.selectedProduct=null;
 
 			return ordCpy;
+		case orderConstants.CHOOSE_ORDER_TYPE:
+			ordCpy = { ...state };
+
+			ordCpy.orderType = action.orderType;
+
+			return ordCpy;
+		case orderConstants.RESET_ORDER:
+			ordCpy = { ...state };
+
+			ordCpy.orderType = "";
+			ordCpy.createOrder.pageVisible=1;
+			ordCpy.createOrder.items=[];  
+			ordCpy.createOrder.selectedProduct=""; 
+
+			return ordCpy;
 		default:
 			return state;
 	}

@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { ProductContext } from "../contexts/ProductContext";
 
 const SelectedProductCategoryTitle = () => {
-	const { productState, dispatch } = useContext(ProductContext);
+	const { productState } = useContext(ProductContext);
 
 
 	return (

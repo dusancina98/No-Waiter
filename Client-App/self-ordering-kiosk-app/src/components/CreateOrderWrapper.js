@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { OrderContext } from "../contexts/OrderContext";
 import CreateOrderProductList from "./CreateOrderProductList";
 import ProductsTabs from "./ProductsTabs";
@@ -12,7 +12,7 @@ const CreateOrderWrapper = () => {
                 <div className="col-2 p-2" hidden={orderState.createOrder.pageVisible !== 1}>
                     <ProductsTabs/> 
                 </div>             
-                <div className="col-7 p-2">
+                <div className= {orderState.createOrder.pageVisible !== 1? "col-9 p-2":"col-7 p-2"}>
                     <CreateOrderProductList />
                 </div>
                 <div className="col-3 p-2">
