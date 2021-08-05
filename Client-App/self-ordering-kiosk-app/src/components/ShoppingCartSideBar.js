@@ -2,6 +2,7 @@ import React, {useContext} from 'react'
 import { OrderContext } from '../contexts/OrderContext';
 import OrderItem from '../components/OrderItem'
 import { orderConstants } from '../constants/OrderConstants';
+import { orderService } from '../services/OrderService';
 
 const ShoppingCartSideBar = () => {
     const { orderState, dispatch } = useContext(OrderContext);
@@ -20,6 +21,10 @@ const ShoppingCartSideBar = () => {
 	
 	const setProductCount = (id,count) =>{
 		dispatch({ type: orderConstants.SET_ORDER_ITEM_COUNT, id, count });
+	}
+
+	const handleClickOnFinishOrder = () =>{
+		dispatch({ type: orderConstants.FINISH_ORDER });
 	}
 
 	return (
@@ -46,16 +51,17 @@ const ShoppingCartSideBar = () => {
 									);
 								})}
 					</div>
-				
-							<div className="row d-flex justify-content-end mt-3">
-								<div className="mr-3 display-4">
-									<b>Total:</b>
-									<span style={{ color: "#198ae3" }} className="ml-2">
-										<b>{Number(getOrderSum()).toFixed(2)} RSD</b>
-									</span>
-								</div>
+						<div className=" d-flex justify-content-end display-4 mr-2">
+							<b>Total:</b>
+							<span style={{ color: "#198ae3" }} className="ml-2">
+							<b>{Number(getOrderSum()).toFixed(2)} RSD</b>
+							</span>
+				</div>
+						<div className=" d-flex justify-content-end display-4 mt-3 mr-2">
+							<button onClick={() => handleClickOnFinishOrder()} type="button" style={{'backgroundColor':'rgb(17, 89, 134)'}} className="btn btn-primary btn-lg">Finish order</button>
+						</div>
 							</div>
-							</div>:
+							:
                             <div className="row">
 								
                             </div>

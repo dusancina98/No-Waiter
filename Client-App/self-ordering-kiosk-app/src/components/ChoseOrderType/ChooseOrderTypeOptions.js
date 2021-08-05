@@ -7,13 +7,13 @@ const ChooseOrderTypeOptions = () => {
 
 
     const handleClickOnEatIn = () => {
-		window.location = "#/create-order";
         dispatch({ type: orderConstants.CHOOSE_ORDER_TYPE, orderType: "ORDER_INSIDE"})
+		window.location = "#/create-order";
 	}
 
     const handleClickOnTakeOut = () => {
-		window.location = "#/create-order";
         dispatch({ type: orderConstants.CHOOSE_ORDER_TYPE, orderType: "TAKEOVER"})
+		window.location = "#/create-order";
 	}
 
 	return (

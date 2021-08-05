@@ -21,12 +21,12 @@ export const orderReducer = (state, action) => {
 		case orderConstants.CHOOSE_ORDER_TYPE:
 			ordCpy = { ...state };
 
-			ordCpy.orderType = action.orderType;
+			ordCpy.orderType=action.orderType;
+			ordCpy.pageVisible=2;
 
 			return ordCpy;
 		case orderConstants.RESET_ORDER:
 			ordCpy = { ...state };
-
 			ordCpy.orderType = "";
 			ordCpy.createOrder.pageVisible=1;
 			ordCpy.createOrder.items=[];  
@@ -51,6 +51,10 @@ export const orderReducer = (state, action) => {
 			ordCpy = { ...state };
 			ordCpy.createOrder.orderItems = ordCpy.createOrder.orderItems.filter((item) => item.Id !== action.id);
 			return ordCpy;
+		case orderConstants.FINISH_ORDER:
+			ordCpy = { ...state };
+			ordCpy.pageVisible=3;
+		 	return ordCpy;
 		default:
 			return state;
 	}

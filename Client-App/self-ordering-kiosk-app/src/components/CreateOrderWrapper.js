@@ -8,7 +8,7 @@ const CreateOrderWrapper = () => {
 	const { orderState } = useContext(OrderContext);
 
 	return (
-		<div className="row portfolio-container">
+		<div className="row portfolio-container" >
 			<div className="row w-100 h-100 justify-content-center">
                 <div className="col-2 p-2" hidden={orderState.createOrder.pageVisible !== 1}>
                     <ProductsTabs/> 

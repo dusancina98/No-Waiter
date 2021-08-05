@@ -10,8 +10,8 @@ const OrderContextProvider = (props) => {
 			orderItems: [],
 			selectedProduct: "",
 		},
+		pageVisible: 1,
 		orderType: "",
-		
 	});
 
 	return <OrderContext.Provider value={{ orderState, dispatch }}>{props.children}</OrderContext.Provider>;

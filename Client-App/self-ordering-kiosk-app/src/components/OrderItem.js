@@ -12,7 +12,7 @@ const OrderItem = ({ id, name, count, sideDishes, imageUrl, setProductCount, del
 							sideDishes.indexOf(sideDish) === sideDishes.length - 1 ? capitalizeFirstLetter(sideDish.EntityDTO.Name) : capitalizeFirstLetter(sideDish.EntityDTO.Name + ", ")
 						)}
 					</p>
-					<div className="row align-items-center shopping-cart-quantity">
+					<div className="row shopping-cart-quantity">
 						<InputSpinner
 							type={'real'}
 							precision={1}

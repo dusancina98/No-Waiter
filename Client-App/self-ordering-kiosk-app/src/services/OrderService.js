@@ -1,35 +1,35 @@
 import { orderConstants } from "../constants/OrderConstants";
 import Axios from "axios";
-import { productConstants } from "../constants/ProductConstants";
+import { authHeader } from "../helpers/auth-header";
 
 export const orderService = {
-	findAllProductCategories,
+	createOrder,
 };
 
-async function findAllProductCategories(dispatch) {
-	dispatch(request());
+function createOrder(orderDTO, dispatch) {
+	//dispatch(request());
 
-	await Axios.get(`/product-api/api/products/categories`, { validateStatus: () => true, headers: authHeader() })
+	Axios.post(`/order-api/api/orders`, orderDTO, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
-			console.log(res);
-			if (res.status === 200) {
-				dispatch(success(res.data));
+			if (res.status === 201) {
+				window.location = "#/finished";
+
+				//dispatch(success("Order successfully created"));
 			} else {
-				dispatch(failure("Error"));
+				//dispatch(failure(res.data.message));
 			}
 		})
 		.catch((err) => {
 			console.log(err);
-			dispatch(failure("Error"));
 		});
 
-	function request() {
-		return { type: productConstants.SET_CATEGORIES_REQUEST };
+	/*function request() {
+		return { type: orderConstants.ORDER_CREATE_REQUEST };
 	}
-	function success(data) {
-		return { type: productConstants.SET_CATEGORIES_SUCCESS, categories: data };
+	function success(message) {
+		return { type: orderConstants.ORDER_CREATE_SUCCESS, successMessage: message };
 	}
 	function failure(message) {
-		return { type: productConstants.SET_CATEGORIES_ERROR, errorMessage: message };
-	}
+		return { type: orderConstants.ORDER_CREATE_FAILURE, errorMessage: message };
+	}*/
 }

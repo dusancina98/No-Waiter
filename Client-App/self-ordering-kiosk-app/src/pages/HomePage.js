@@ -3,7 +3,7 @@ import React from "react";
 
 const HomePage = () => {
 	const handleOnClickTapToStart = () => {
-		window.location = "#/choose-order-type";
+		window.location = "#/create-order";
 	}
 
 	return (
