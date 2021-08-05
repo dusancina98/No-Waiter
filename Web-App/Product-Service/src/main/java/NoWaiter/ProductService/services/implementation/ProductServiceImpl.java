@@ -173,10 +173,11 @@ public class ProductServiceImpl implements ProductService {
 					}
 				}
 				if(!found) {
-					System.out.println("USAO");
+					throw new InvalidOrderItemException();
 				} 
 			}
 			products.add(new ProductValidationDTO(product.getId(), product.getName(), product.getImagePath(), product.getPrice(), sideDishes));
+
 		}
 		
 		return new ProductValidationResponseDTO(products);
