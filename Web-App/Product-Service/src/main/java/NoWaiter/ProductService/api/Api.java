@@ -137,7 +137,9 @@ public class Api {
 			UUID objectId;
 			if (hasRole(jwtResponse.getAuthorities(), "ROLE_OBJADMIN")) {
 				 objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());
-			} else {
+			}else if(hasRole(jwtResponse.getAuthorities(), "ROLE_SELF_ORDER_PULT")) {
+				 objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());
+			}  else {
 				objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());
 			}
 			System.out.println(objectId);
@@ -155,6 +157,7 @@ public class Api {
 	
 	private boolean hasRole(List<String> authorities, String role) {
 		System.out.println(role);
+
 		for (String auth : authorities) {
 			System.out.println(auth);
 			if(auth.equals(role)) {
@@ -231,7 +234,10 @@ public class Api {
 		try {
 			JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
 			UUID objectId;
+
 			if (hasRole(jwtResponse.getAuthorities(), "ROLE_OBJADMIN")) {
+				 objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());
+			}else if(hasRole(jwtResponse.getAuthorities(), "ROLE_SELF_ORDER_PULT")) {
 				 objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());
 			} else {
 				objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());

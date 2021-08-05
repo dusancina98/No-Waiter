@@ -375,4 +375,16 @@ public class Api {
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
     }
+    
+    @PostMapping("/self-ordering-jwt")
+    @CrossOrigin
+    public ResponseEntity<?> generateSelfOrderingJWTToken(@RequestHeader("Authorization") String token) {
+        try {
+        	String jwtToken = authClient.generateSelfOrderingJWTToken(token);
+            return new ResponseEntity<>(jwtToken,HttpStatus.CREATED);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

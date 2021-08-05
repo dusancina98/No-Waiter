@@ -363,7 +363,14 @@ export const objectReducer = (state, action) => {
 			let prom = { ...state };
 			prom.objectDetails.readOnly = false;
 			return prom;
-
+		case objectConstants.GENERATE_SELF_ORDERING_TOKEN_SUCCESS:
+			let selfOrderingSuccess = { ...state };
+			selfOrderingSuccess.generatedToken = action.jwtToken;
+			return selfOrderingSuccess;
+		case objectConstants.GENERATE_SELF_ORDERING_TOKEN_FAILURE:
+			let selfOrderingFailure = { ...state };
+			selfOrderingFailure.generatedToken = '';
+			return selfOrderingFailure;
 		default:
 			return state;
 	}

@@ -112,4 +112,21 @@ public class Api {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
 	}
+    
+    @PostMapping("/selt-ordering-jwt-token")
+    @CrossOrigin
+	public ResponseEntity<?> generateSelfOrderingJWTToken(HttpServletRequest request) {
+    	try {
+            JwtParseResponseDTO jwtParseResponseDto = tokenUtils.parseJwt(tokenUtils.getToken(request));
+    		List<String> roles = new ArrayList<String>();
+    		roles.add("ROLE_SELF_ORDER_PULT");
+			String jwt = tokenUtils.generateSelfOrderingToken(jwtParseResponseDto.getId() ,roles); // username
+
+            return new ResponseEntity<>(jwt, HttpStatus.OK);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+	}
 }

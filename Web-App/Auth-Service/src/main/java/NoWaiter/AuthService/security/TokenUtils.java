@@ -24,8 +24,11 @@ public class TokenUtils {
 	@Value("somesecret")
 	public String SECRET;
 	
-	@Value("3600000")
+	@Value("3600000") // 1 hour
 	private int EXPIRES_IN;
+	
+	@Value("31556952000") // 1 year
+	private long SELF_ORDER_EXPIRES_IN;
 	
 	@Value("Authorization")
 	private String AUTH_HEADER;
@@ -217,5 +220,16 @@ public class TokenUtils {
 		public JwtParseResponseDTO parseJwt(String token) {
 			// TODO Auto-generated method stub
 			return new JwtParseResponseDTO(getUserIdFromToken(token),getUsernameFromToken(token),getAuthorities(token));
+		}
+
+		public String generateSelfOrderingToken(UUID id, List<String> roles) {
+			return Jwts.builder()
+					.setIssuer(APP_NAME)
+					.setAudience(generateAudience())
+					.setIssuedAt(new Date())
+					.setExpiration(new Date(new Date().getTime() + SELF_ORDER_EXPIRES_IN))
+					.claim("authorities", roles) //moguce je postavljanje proizvoljnih podataka u telo JWT tokena
+					.claim("userId", id) 
+					.signWith(SIGNATURE_ALGORITHM, SECRET).compact();
 		}
 }
