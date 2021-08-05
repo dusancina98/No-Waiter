@@ -1,0 +1,4 @@
+export const config = {
+	API_URL: "http://localhost:8090",
+	ACCESS_TOKEN: "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzcHJpbmctc2VjdXJpdHktZXhhbXBsZSIsInN1YiI6ImV4YW1wbGUxQGV4YW1wbGUuY29tIiwiYXVkIjoid2ViIiwiaWF0IjoxNjI4MTkzOTkyLCJleHAiOjE2MjgxOTc1OTIsImF1dGhvcml0aWVzIjpbIlJPTEVfV0FJVEVSIl0sInVzZXJJZCI6IjIyNzkzMTYyLTUyZDMtMTFlYi1hZTkzLTAyNDJhYzEzMDIyMiJ9.L-3RnPLnKtWmS_0tpvOWl-9BdH1hZ0tT5B_fKLpsv5ZVaTxcYkWHmXhHrfgbKsoVj35t44A8hk-SkfuF0MQXbw"
+};

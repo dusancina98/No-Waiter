@@ -15528,3 +15528,8 @@ dl {
   overflow-y: scroll;
   max-height: 450px;
 }
+
+.border-3 {
+    border-width:15px !important;
+}
+
