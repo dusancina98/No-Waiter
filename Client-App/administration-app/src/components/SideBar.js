@@ -133,6 +133,12 @@ const SideBar = () => {
 					</Link>
 				</li>
 				<li className="nav-item">
+					<Link className="nav-link" to="/self-ordering-token">
+						<i className="mdi mdi-contacts menu-icon"></i>
+						<span className="menu-title">Self-ordering token</span>
+					</Link>
+				</li>
+				<li className="nav-item">
 					<a className="nav-link" href="pages/icons/mdi.html">
 						<i className="mdi mdi-contacts menu-icon"></i>
 						<span className="menu-title">Icons</span>

@@ -1,5 +1,6 @@
 package no_waiter.order_service.api;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import feign.FeignException;
 import no_waiter.order_service.intercomm.AuthClient;
+import no_waiter.order_service.intercomm.ObjectClient;
 import no_waiter.order_service.intercomm.ProductClient;
 import no_waiter.order_service.intercomm.UserClient;
 import no_waiter.order_service.services.contracts.OrderService;
@@ -39,6 +41,9 @@ public class Api {
 	private UserClient userClient;
 	
 	@Autowired
+	private ObjectClient objectClient;
+	
+	@Autowired
 	private ProductClient productClient;
 	
 	@Autowired
@@ -56,7 +61,12 @@ public class Api {
                 return new ResponseEntity<>("Invalid order items", HttpStatus.BAD_REQUEST);
 			}
 			JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
-			UUID objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());
+			UUID objectId;
+			if(hasRole(jwtResponse.getAuthorities(), "ROLE_SELF_ORDER_PULT")) {
+				 objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());
+			} else {
+				objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());
+			}
 			
 			return new ResponseEntity<>(orderService.createOrder(requestDTO, resp, objectId), HttpStatus.CREATED);
 		} catch (FeignException e) {
@@ -257,4 +267,14 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+	
+	private boolean hasRole(List<String> authorities, String role) {
+		for (String auth : authorities) {
+			System.out.println(auth);
+			if(auth.equals(role)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

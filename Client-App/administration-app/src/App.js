@@ -22,6 +22,7 @@ import ProductsPage from "./pages/ProductsPage";
 import ListOfDelivererPage from "./pages/ListOfDelivererPage";
 import CreateOrderPage from "./pages/CreateOrderPage";
 import WaiterOrdersPage from "./pages/WaiterOrdersPage";
+import SelfOrderingTokenPage from "./pages/SelfOrderingTokenPage";
 
 function App() {
 	return (
@@ -53,7 +54,9 @@ function App() {
 
 				<ProtectedRoute roles={"ROLE_SYSADMIN"} redirectTo="/unauthorized" path="/deliverer/requests" component={ListDelivererRequestPage} />
 				<ProtectedRoute roles={"ROLE_SYSADMIN"} redirectTo="/unauthorized" path="/deliverers" component={ListOfDelivererPage} />
+				<ProtectedRoute roles={"ROLE_OBJADMIN"} redirectTo="/unauthorized" path="/self-ordering-token" component={SelfOrderingTokenPage} />
 
+			
 				<Route path="/404" component={PageNotFoundPage} />
 				<Redirect to="/404" />
 			</Switch>

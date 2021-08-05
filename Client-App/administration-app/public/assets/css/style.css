@@ -15533,3 +15533,7 @@ dl {
     border-width:15px !important;
 }
 
+.text-area-border{
+  height: 280px;
+  border: 3x solid !important;
+}

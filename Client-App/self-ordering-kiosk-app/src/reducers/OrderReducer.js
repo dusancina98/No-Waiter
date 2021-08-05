@@ -55,6 +55,28 @@ export const orderReducer = (state, action) => {
 			ordCpy = { ...state };
 			ordCpy.pageVisible=3;
 		 	return ordCpy;
+		case orderConstants.ORDER_CREATE_SUCCESS:
+			return{
+				...state,
+				createOrder: {
+					pageVisible: 1,
+					orderItems: [],
+					selectedProduct: "",
+				},
+				pageVisible: 1,
+				orderType: "",
+			}
+		case orderConstants.ORDER_CREATE_FAILURE:
+			return{
+				...state,
+				createOrder: {
+					pageVisible: 1,
+					orderItems: [],
+					selectedProduct: "",
+				},
+				pageVisible: 1,
+				orderType: "",
+			}	 
 		default:
 			return state;
 	}

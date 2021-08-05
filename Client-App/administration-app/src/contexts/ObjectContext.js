@@ -51,6 +51,7 @@ const ObjectContextProvider = (props) => {
 		objects: [],
 		showError: false,
 		errorMessage: "",
+		generatedToken:"",
 	});
 
 	return <ObjectContext.Provider value={{ objectState, dispatch }}>{props.children}</ObjectContext.Provider>;

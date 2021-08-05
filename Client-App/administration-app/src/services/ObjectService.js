@@ -12,6 +12,7 @@ export const objectService = {
 	deactivateObject,
 	blockObject,
 	unblockObject,
+	generateNewToken,
 };
 
 function createObject(object, dispatch) {
@@ -296,4 +297,26 @@ function unblockObject(object, dispatch) {
 	function failure(message) {
 		return { type: objectConstants.OBJECT_UNBLOCKING_FAILURE, errorMessage: message };
 	}
+}
+
+function generateNewToken(dispatch) {
+
+	Axios.post(`/object-api/api/objects/self-ordering-jwt`, null, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 201) {
+				dispatch(success(res.data));
+			} else {
+				dispatch(failure(res.data.message));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+	
+		function success(jwtToken) {
+			return { type: objectConstants.GENERATE_SELF_ORDERING_TOKEN_SUCCESS,jwtToken };
+		}
+		function failure(message) {
+			return { type: objectConstants.GENERATE_SELF_ORDERING_TOKEN_FAILURE, errorMessage: message };
+		}
 }

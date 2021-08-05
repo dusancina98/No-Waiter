@@ -13,4 +13,6 @@ public interface AuthClient {
 	@PostMapping("api/auth/user-jwt")
 	JwtParseResponseDTO getLoggedUserInfo(@RequestHeader("Authorization") String token);
 	
+	@PostMapping("api/auth/selt-ordering-jwt-token")
+	String generateSelfOrderingJWTToken(@RequestHeader("Authorization") String token);
 }

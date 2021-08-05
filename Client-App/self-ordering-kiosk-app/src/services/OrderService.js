@@ -7,29 +7,26 @@ export const orderService = {
 };
 
 function createOrder(orderDTO, dispatch) {
-	//dispatch(request());
 
 	Axios.post(`/order-api/api/orders`, orderDTO, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 201) {
 				window.location = "#/finished";
-
-				//dispatch(success("Order successfully created"));
+				dispatch(success());
 			} else {
-				//dispatch(failure(res.data.message));
+				window.location = "#/failure";
+				dispatch(failure());
 			}
 		})
 		.catch((err) => {
-			console.log(err);
+			window.location = "#/failure";
+			dispatch(failure());
 		});
-
-	/*function request() {
-		return { type: orderConstants.ORDER_CREATE_REQUEST };
+	
+	function success() {
+		return { type: orderConstants.ORDER_CREATE_SUCCESS };
 	}
-	function success(message) {
-		return { type: orderConstants.ORDER_CREATE_SUCCESS, successMessage: message };
+	function failure() {
+		return { type: orderConstants.ORDER_CREATE_FAILURE };
 	}
-	function failure(message) {
-		return { type: orderConstants.ORDER_CREATE_FAILURE, errorMessage: message };
-	}*/
 }
