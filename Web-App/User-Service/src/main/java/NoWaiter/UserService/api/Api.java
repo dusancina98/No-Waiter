@@ -87,7 +87,7 @@ public class Api {
     @CrossOrigin
     public ResponseEntity<?> createRestaurantAdmin(@RequestBody ObjectAdminDTO objectAdminDTO) {
         try {
-       
+ 
             objectClient.checkObject(objectAdminDTO.ObjectId);
             UUID adminId = userService.createObjectAdmin(objectAdminDTO);
             objectClient.addAdminToObject(new AddAdminDTO(objectAdminDTO.ObjectId, adminId));

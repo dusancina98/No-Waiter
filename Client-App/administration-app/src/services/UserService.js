@@ -229,8 +229,10 @@ function createWaiter(waiter, dispatch) {
 			.then((res) => {
 				if (res.status === 201) {
 					dispatch(success());
-				} else {
-					dispatch(failure(res.data.message));
+				} else if (res.status === 409) {
+					dispatch(failure("User with email: "+waiter.Email+" already exist, please enter other email"));
+				}else {
+					dispatch(failure(res.data));
 				}
 			})
 			.catch((err) => {

@@ -144,7 +144,6 @@ public class UserServiceImpl implements UserService {
 	public UUID isUserFirstLogin(String token) {
 		AccountActivationToken accountActivation = accountActivationTokenRepository.findToken(token);
 
-
 		List<AccountActivationToken> accountActivations =  accountActivationTokenRepository.getUsedActivationsForUser(accountActivation.getUserId());
 		
 		if(accountActivations.size()==0) 
@@ -179,11 +178,12 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public UUID createWaiter(WaiterDTO entity, UUID objectAdminId) throws ClassFieldValidationException {
+	public UUID createWaiter(WaiterDTO entity, UUID objectAdminId) throws Exception {
 		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
 		Waiter waiter = UserMapper.MapWaiterDTOToWaiter(entity, objectAdmin.getObjectId());	
 		waiter.addAuthority(new Authority(UUID.fromString("f98f5538-4d52-4e3e-bae3-598e523a6222"), "ROLE_WAITER"));
 		waiterRepository.save(waiter);
+		createActivationLink(waiter.getId());
 		return waiter.getId();
 	}
 

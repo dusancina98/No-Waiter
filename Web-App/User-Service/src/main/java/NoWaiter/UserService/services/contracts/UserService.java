@@ -34,7 +34,7 @@ public interface UserService {
         
     void updateObjects(UserClientObjectDTO entity);
     
-    UUID createWaiter(WaiterDTO entity, UUID objectAdminId) throws ClassFieldValidationException;
+    UUID createWaiter(WaiterDTO entity, UUID objectAdminId) throws ClassFieldValidationException, Exception;
     
     Iterable<IdentifiableDTO<ObjectAdminDTO>> findAllObjectAdmins();
     

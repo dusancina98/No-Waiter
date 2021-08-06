@@ -40,7 +40,7 @@ const SideBar = () => {
 					</a>
 				</li>
 				<li className="nav-item">
-					<a hidden={!hasRoles("ROLE_OBJADMIN") && !hasRoles("ROLE_SYSADMIN")} className="nav-link" data-toggle="collapse" href="#object-menu" aria-expanded="false" aria-controls="ui-basic">
+					<a hidden={!hasRoles("ROLE_SYSADMIN")} className="nav-link" data-toggle="collapse" href="#object-menu" aria-expanded="false" aria-controls="ui-basic">
 						<i className="mdi mdi-home menu-icon"></i>
 						<span className="menu-title">Objects</span>
 						<i className="menu-arrow"></i>

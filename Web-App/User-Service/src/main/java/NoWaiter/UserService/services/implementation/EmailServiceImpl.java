@@ -33,7 +33,7 @@ public class EmailServiceImpl {
 		System.out.println("Slanje emaila...");
 		
 		String url = LOCAL_URL + "/api/users/activate-user/token=" + token;
-		
+		System.out.println(url);
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 		String htmlMsg = "<p>Hello " + user.getName() + ",</p>" +
@@ -50,7 +50,7 @@ public class EmailServiceImpl {
 	@Async
 	public void sendResetPasswordLinkAsync(User user, String token) throws MessagingException {
 		System.out.println("Slanje emaila...");
-		
+		System.out.println("USAO OVDE54543");
 		String url = CLIENT_APP_URL + "#/reset-password/" + user.getId() +"/"+ token;
 		
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -84,7 +84,6 @@ public class EmailServiceImpl {
 		javaMailSender.send(mimeMessage);
 		System.out.println("Email poslat!");
 	}
-
 
 	public void sendDelivererRejectReasonEmailAsync(DelivererRequest delivererRequest, String reason) throws MessagingException {
 		System.out.println("Slanje emaila...");
