@@ -2,7 +2,6 @@ import React, {useContext} from 'react'
 import { OrderContext } from '../contexts/OrderContext';
 import OrderItem from '../components/OrderItem'
 import { orderConstants } from '../constants/OrderConstants';
-import { orderService } from '../services/OrderService';
 
 const ShoppingCartSideBar = () => {
     const { orderState, dispatch } = useContext(OrderContext);
