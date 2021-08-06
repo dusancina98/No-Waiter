@@ -1,11 +1,20 @@
+import React, {useEffect, useContext} from 'react';
 import { Link } from "react-router-dom";
+import { userConstants } from '../constants/UserConstants';
+import { UserContext } from '../contexts/UserContext';
 import { hasRoles } from "../helpers/auth-header";
 import { userService } from "../services/UserService";
 
 const SideBar = () => {
+	const {userState, dispatch} = useContext(UserContext)
 	const handleLogout = () => {
 		userService.logout();
 	};
+
+	useEffect(() => {
+		dispatch({type: userConstants.SET_NAME_AND_SURNAME_AFTER_LOGIN })
+	} ,[userState.loggedUserInfo, dispatch]);
+
 
 	return (
 		<nav className="sidebar sidebar-offcanvas" id="sidebar">
@@ -25,8 +34,7 @@ const SideBar = () => {
 							<span className="login-status online"></span>
 						</div>
 						<div className="nav-profile-text d-flex flex-column pr-3">
-							<span className="font-weight-medium mb-2">Ime  Prezime</span>
-							<span className="font-weight-normal">$8,753.00</span>
+							<span className="font-weight-medium mb-2">{userState.loggedUserInfo.name}  {userState.loggedUserInfo.surname}</span>
 						</div>
 						{/*<span className="badge badge-danger text-white ml-3 rounded">3</span>  - Broj posle imena,za notify*/}
 					</a>
@@ -144,7 +152,7 @@ const SideBar = () => {
 					<div className="nav-link">
 						<div className="mt-4">
 							<ul className="mt-4 pl-0">
-								<li onClick={handleLogout}>Log Out</li>
+								<li onClick={() => handleLogout()}>Log Out</li>
 							</ul>
 						</div>
 					</div>

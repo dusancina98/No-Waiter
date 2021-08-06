@@ -24,7 +24,6 @@ public class EmailServiceImpl {
 	
 	private final String CLIENT_APP_URL = "http://localhost:3000";
 
-
 	@Autowired
 	private Environment env;
 	

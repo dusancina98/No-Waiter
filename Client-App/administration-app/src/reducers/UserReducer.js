@@ -802,7 +802,12 @@ export const userReducer = (state, action) => {
 					errorMessage: "",
 				}
 			}
-		
+		case userConstants.SET_NAME_AND_SURNAME_AFTER_LOGIN:{
+			let setNameAndSurname = { ...state };
+			setNameAndSurname.loggedUserInfo.name = localStorage.getItem('name');
+			setNameAndSurname.loggedUserInfo.surname = localStorage.getItem('surname');
+			return setNameAndSurname;
+		}
 		default:
 			return state;
 	}
