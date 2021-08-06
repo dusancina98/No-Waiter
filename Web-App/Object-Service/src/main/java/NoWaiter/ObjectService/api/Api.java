@@ -390,4 +390,17 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @DeleteMapping("/{objectId}")
+    @CrossOrigin
+    public ResponseEntity<?> updateObjectImage(@PathVariable String objectId) {
+
+        try {
+        	objectService.deleteObject(UUID.fromString(objectId));
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -182,4 +182,12 @@ public class ObjectServiceImpl implements ObjectService {
 		
 		System.out.println("TEST22");
 	}
+
+	@Override
+	public void deleteObject(UUID objectId) {
+		Object object = objectRepository.findById(objectId).get();
+		object.Delete();
+		
+		objectRepository.save(object);
+	}
 }

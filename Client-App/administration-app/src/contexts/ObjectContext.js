@@ -51,6 +51,8 @@ const ObjectContextProvider = (props) => {
 		objects: [],
 		showError: false,
 		errorMessage: "",
+		showSuccessMessage: false,
+		successMessage:'',
 		generatedToken:"",
 	});
 

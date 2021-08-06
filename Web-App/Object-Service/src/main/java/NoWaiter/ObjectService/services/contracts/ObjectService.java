@@ -34,4 +34,6 @@ public interface ObjectService {
     void toggleObjectActivation(UUID id, boolean status);
 
 	void worktime() throws InvalidTimeRangeException;
+
+	void deleteObject(UUID objectId);
 }

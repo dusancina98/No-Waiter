@@ -369,6 +369,53 @@ export const objectReducer = (state, action) => {
 			let selfOrderingFailure = { ...state };
 			selfOrderingFailure.generatedToken = '';
 			return selfOrderingFailure;
+		case objectConstants.OBJECT_DELETE_SUCCESS:
+			let deleteOrderSuccess = { ...state };
+
+			deleteOrderSuccess.editObject.showSuccessMessage= false;
+			deleteOrderSuccess.editObject.successMessage= '';
+			deleteOrderSuccess.editObject.showErrorMessage= false;
+			deleteOrderSuccess.editObject.errorMessage= '';
+
+			deleteOrderSuccess.objectDetails.showModal= false;
+			deleteOrderSuccess.objectDetails.readOnly= true;
+			deleteOrderSuccess.objectDetails.object= {
+				Id: "",
+				EntityDTO: {
+					Email: "",
+					Name: "",
+					Address: "",
+					PhoneNumber: "",
+					ImagePath: "",
+				},
+			};
+
+			deleteOrderSuccess.showSuccessMessage =true;
+			deleteOrderSuccess.successMessage =action.successMessage;
+
+			deleteOrderSuccess.objects= deleteOrderSuccess.objects.filter((item) => item.Id !== action.object.Id);
+
+			return deleteOrderSuccess;
+		case objectConstants.OBJECT_DELETE_FAILURE:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: '',
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+				objectDetails: {
+					showModal: true,
+					readOnly: true,
+					object: action.object,
+				},
+			};
+		case objectConstants.DELETE_OBJECT_HIDE_SUCCESS_MESSAGE:
+			let hideSuccessMessage = { ...state };
+			hideSuccessMessage.showSuccessMessage =false;
+			hideSuccessMessage.successMessage ='';
+			return hideSuccessMessage;
 		default:
 			return state;
 	}

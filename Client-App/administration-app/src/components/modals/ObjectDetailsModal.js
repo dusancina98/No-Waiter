@@ -33,6 +33,10 @@ const ObjectDetailsModal = () => {
 		objectService.unblockObject(objectState.objectDetails.object, dispatch);
 	};
 
+	const handleDelete = () => {
+		objectService.deleteObject(objectState.objectDetails.object, dispatch);
+	}
+
 	return (
 		<Modal show={objectState.objectDetails.showModal} size="xl" aria-labelledby="contained-modal-title-vcenter" centered onHide={handleModalClose}>
 			<Modal.Header closeButton>
@@ -63,6 +67,7 @@ const ObjectDetailsModal = () => {
 									handleUnblock={handleObjectUnblock}
 									handleActivation={handleObjectActivation}
 									handleDeactivation={handleObjectDeactivation}
+									handleDelete={handleDelete}
 								/>
 							</div>
 						</div>

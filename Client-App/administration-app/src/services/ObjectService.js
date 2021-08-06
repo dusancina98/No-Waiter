@@ -13,6 +13,7 @@ export const objectService = {
 	blockObject,
 	unblockObject,
 	generateNewToken,
+	deleteObject,
 };
 
 function createObject(object, dispatch) {
@@ -323,4 +324,27 @@ function generateNewToken(dispatch) {
 		function failure(message) {
 			return { type: objectConstants.GENERATE_SELF_ORDERING_TOKEN_FAILURE, errorMessage: message };
 		}
+}
+
+function deleteObject(object, dispatch) {
+	Axios.delete(`/object-api/api/objects/${object.Id}`,  { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			console.log(res);
+			if (res.status === 200) {
+				dispatch(success("Object successfully deleted", object));
+			} else {
+				dispatch(failure("Unable to delete object"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function success(message, object) {
+		return { type: objectConstants.OBJECT_DELETE_SUCCESS, successMessage: message, object };
+	}
+	function failure(message) {
+		return { type: objectConstants.OBJECT_DELETE_FAILURE, errorMessage: message, object };
+	}
 }
