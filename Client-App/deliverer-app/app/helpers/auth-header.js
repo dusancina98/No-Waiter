@@ -36,14 +36,22 @@ export async function hasAnyRole() {
 	}
 }
 
-async function validateAccessToken() {
-	let expireTime = await AsyncStorage.getItem("expireTime");
+export async function validateAccessToken() {
+	try {
+		let expireTime = await AsyncStorage.getItem("expireTime");
 
-	if (expireTime <= new Date().getTime()) {
-		deleteLocalStorage();
+		if (expireTime <= new Date().getTime()) {
+			deleteLocalStorage();
+		}
+	} catch (error) {
+		console.log(error);
 	}
 }
 
 export async function deleteLocalStorage() {
-	await AsyncStorage.multiRemove("accessToken", "roles", "expireTime");
+	try {
+		await AsyncStorage.multiRemove("accessToken", "roles", "expireTime");
+	} catch (error) {
+		console.log(error);
+	}
 }

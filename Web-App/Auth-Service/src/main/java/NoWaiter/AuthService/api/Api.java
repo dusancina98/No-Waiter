@@ -38,6 +38,8 @@ public class Api {
     public static final String HEADER = "Authorization";
 
     public static final String HEADER_VALUE_PREFIX = "Bearer";
+    
+    public static final String ROLE_DELIVERER = "ROLE_DELIVERER";
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -84,6 +86,56 @@ public class Api {
         response.addHeader(HEADER, HEADER_VALUE_PREFIX + " " + jwt);
 		
 		return new ResponseEntity<UserTokenStateDTO>(new UserTokenStateDTO(jwt, new Date().getTime() + expiresIn, roles, name,surname,image), HttpStatus.OK);
+	}
+	
+	@PostMapping("/login/deliverer")
+    @CrossOrigin
+	public ResponseEntity<?> authenticateDeliverer(@RequestBody JwtAuthenticationRequest authenticationRequest,
+			HttpServletResponse response) {
+		String jwt;
+		int expiresIn;
+		List<String> roles = new ArrayList<String>();
+		String name;
+		String surname;
+		String image = "URL";
+
+		try {
+			Authentication authentication = authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
+							authenticationRequest.getPassword()));
+
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			User user = (User) authentication.getPrincipal();
+			user.getUserAuthorities().forEach((a) -> roles.add(a.getName()));
+			if (!hasRole(roles, ROLE_DELIVERER))
+				return new ResponseEntity<>("Unauthorized access", HttpStatus.BAD_REQUEST);
+
+			name=user.getName();
+			surname= user.getSurname();
+			jwt = tokenUtils.generateToken(user.getUsername(), user.getId() ,roles); // username
+			expiresIn = tokenUtils.getExpiredIn();
+		} catch (BadCredentialsException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} catch (DisabledException e) {
+			UUID id = userService.GetUserIdByEmail(authenticationRequest.getUsername());
+			return new ResponseEntity<>(id,HttpStatus.FORBIDDEN);
+		}catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+        response.addHeader(HEADER, HEADER_VALUE_PREFIX + " " + jwt);
+		
+		return new ResponseEntity<UserTokenStateDTO>(new UserTokenStateDTO(jwt, new Date().getTime() + expiresIn, roles, name,surname,image), HttpStatus.OK);
+	}
+	
+	private boolean hasRole(List<String> userRoles, String desiredRole) {
+		for (String role : userRoles) {
+			if (role.equals(desiredRole)) {
+				return true;
+			}
+		}
+		return false;
 	}
     
     @PostMapping("/parse-jwt")

@@ -7,7 +7,6 @@ import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import LoginScreen from "./app/screens/LoginScreen";
 import AuthContextProvider from "./app/contexts/AuthContext";
-import { hasAnyRole } from "./app/helpers/auth-header";
 
 const Stack = createStackNavigator();
 
@@ -28,7 +27,7 @@ export default function App() {
 						screenOptions={{
 							headerShown: false,
 						}}
-						initialRouteName={hasAnyRole() ? "Home" : "Welcome"}
+						initialRouteName={"Welcome"}
 					>
 						<Stack.Screen name="Home" component={Tabs} />
 						<Stack.Screen name="Welcome" component={WelcomeScreen} />

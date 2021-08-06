@@ -12,7 +12,7 @@ function login(loginRequest, dispatch) {
 	dispatch(request());
 
 	if (validateLoginRequest(loginRequest, dispatch)) {
-		Axios.post(`${API_URL}/auth-api/api/auth/login`, loginRequest, { validateStatus: () => true })
+		Axios.post(`${API_URL}/auth-api/api/auth/login/deliverer`, loginRequest, { validateStatus: () => true })
 			.then((res) => {
 				if (res.status === 200) {
 					setAuthInLocalStorage(res.data);
@@ -21,6 +21,7 @@ function login(loginRequest, dispatch) {
 					dispatch(failure(res.data.message));
 				} else if (res.status === 403) {
 					//window.location = "#/inactive-user/" + res.data;
+					dispatch(failure(res.data.message));
 				} else {
 					dispatch(failure(res.data.message));
 				}
