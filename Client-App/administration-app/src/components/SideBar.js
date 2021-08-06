@@ -52,20 +52,20 @@ const SideBar = () => {
 						</ul>
 					</div>
 				</li>
-				<li className="nav-item">
+				<li className="nav-item" hidden={!hasRoles("ROLE_SYSADMIN")}>
 					<a className="nav-link" data-toggle="collapse" href="#admins" aria-expanded="false" aria-controls="admins">
 						<i className="mdi mdi-account-plus menu-icon"></i>
 						<span className="menu-title">Object Admins</span>
 						<i className="menu-arrow"></i>
 					</a>
-					<div className="collapse" id="admins">
+					<div className="collapse" id="admins" >
 						<ul className="nav flex-column sub-menu">
-							<li className="nav-item">
+							<li className="nav-item" hidden={!hasRoles("ROLE_SYSADMIN")}>
 								<Link className="nav-link" to="/object-admins">
 									All Object Admins
 								</Link>
 							</li>
-							<li className="nav-item">
+							<li className="nav-item" hidden={!hasRoles("ROLE_SYSADMIN")}>
 								<Link className="nav-link" to="/add-object-admin">
 									Add Object Admin
 								</Link>
@@ -73,7 +73,7 @@ const SideBar = () => {
 						</ul>
 					</div>
 				</li>
-				<li className="nav-item">
+				<li className="nav-item" hidden={!hasRoles("ROLE_OBJADMIN")}>
 					<a className="nav-link" data-toggle="collapse" href="#employees" aria-expanded="false" aria-controls="employees">
 						<i className="mdi mdi-account-plus menu-icon"></i>
 						<span className="menu-title">Employees</span>
@@ -94,7 +94,7 @@ const SideBar = () => {
 						</ul>
 					</div>
 				</li>
-				<li className="nav-item">
+				<li className="nav-item" hidden={!hasRoles("ROLE_SYSADMIN")}>
 					<a className="nav-link" data-toggle="collapse" href="#deliverers" aria-expanded="false" aria-controls="deliverers">
 						<i className="mdi mdi-account-plus menu-icon"></i>
 						<span className="menu-title">Deliverer</span>
@@ -115,71 +115,34 @@ const SideBar = () => {
 						</ul>
 					</div>
 				</li>
-				<li className="nav-item">
+				<li className="nav-item" hidden={!hasRoles("ROLE_OBJADMIN")}>
 					<Link className="nav-link" to="/tables">
 						<i className="mdi mdi-contacts menu-icon"></i>
 						<span className="menu-title">Tables</span>
 					</Link>
 				</li>
-				<li className="nav-item">
+				<li className="nav-item" hidden={!hasRoles("ROLE_OBJADMIN")}>
 					<Link className="nav-link" to="/object-details">
 						<i className="mdi mdi-contacts menu-icon"></i>
 						<span className="menu-title">Object Details</span>
 					</Link>
 				</li>
-				<li className="nav-item">
+				<li className="nav-item" hidden={!hasRoles("ROLE_WAITER")}>
 					<Link className="nav-link" to="/waiter-orders">
 						<i className="mdi mdi-contacts menu-icon"></i>
 						<span className="menu-title">Orders</span>
 					</Link>
 				</li>
-				<li className="nav-item">
+				<li className="nav-item"  hidden={!hasRoles("ROLE_OBJADMIN")}>
 					<Link className="nav-link" to="/self-ordering-token">
 						<i className="mdi mdi-contacts menu-icon"></i>
 						<span className="menu-title">Self-ordering token</span>
 					</Link>
 				</li>
-				<li className="nav-item">
-					<a className="nav-link" href="pages/icons/mdi.html">
-						<i className="mdi mdi-contacts menu-icon"></i>
-						<span className="menu-title">Icons</span>
-					</a>
-				</li>
-				<li className="nav-item">
-					<a className="nav-link" href="pages/forms/basic_elements.html">
-						<i className="mdi mdi-format-list-bulleted menu-icon"></i>
-						<span className="menu-title">Forms</span>
-					</a>
-				</li>
-				<li className="nav-item">
-					<a className="nav-link" href="pages/charts/chartjs.html">
-						<i className="mdi mdi-chart-bar menu-icon"></i>
-						<span className="menu-title">Charts</span>
-					</a>
-				</li>
-				<li className="nav-item">
-					<a className="nav-link" href="pages/tables/basic-table.html">
-						<i className="mdi mdi-table-large menu-icon"></i>
-						<span className="menu-title">Tables</span>
-					</a>
-				</li>
-				<li className="nav-item">
-					<span className="nav-link" href="index.html">
-						<span className="menu-title">Docs</span>
-					</span>
-				</li>
-				<li className="nav-item">
-					<a className="nav-link" href="index.html">
-						<i className="mdi mdi-file-document-box menu-icon"></i>
-						<span className="menu-title">Documentation</span>
-					</a>
-				</li>
+
 				<li className="nav-item sidebar-actions">
 					<div className="nav-link">
 						<div className="mt-4">
-							<div className="border-none">
-								<p className="text-black">Notification</p>
-							</div>
 							<ul className="mt-4 pl-0">
 								<li onClick={handleLogout}>Log Out</li>
 							</ul>
