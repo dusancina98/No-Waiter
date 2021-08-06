@@ -230,7 +230,10 @@ public class Api {
         	objectService.update(objectDTO);
             return new ResponseEntity<>(HttpStatus.OK);
 
-        } catch (FeignException e) {
+        }catch (DataIntegrityViolationException e) {
+			e.printStackTrace();
+            return new ResponseEntity<>(e.getRootCause().getMessage(), HttpStatus.CONFLICT);
+		} catch (FeignException e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoSuchElementException e) {

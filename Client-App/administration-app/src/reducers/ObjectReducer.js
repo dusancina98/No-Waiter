@@ -265,20 +265,18 @@ export const objectReducer = (state, action) => {
 				},
 			};
 		case objectConstants.OBJECT_BLOCKING_SUCCESS:
-			return {
-				...state,
-				editObject: {
-					showSuccessMessage: true,
-					successMessage: action.successMessage,
-					showErrorMessage: false,
-					errorMessage: "",
-				},
-				objectDetails: {
-					showModal: true,
-					readOnly: true,
-					object: action.object,
-				},
-			};
+			let blockingObject = { ...state };
+			blockingObject.editObject.showSuccessMessage= true;
+			blockingObject.editObject.successMessage= action.successMessage;
+			blockingObject.editObject.showErrorMessage= false;
+			blockingObject.editObject.errorMessage= "";
+
+			blockingObject.objectDetails.showModal= true;
+			blockingObject.objectDetails.readOnly= true;
+			blockingObject.objectDetails.object= action.object;
+			blockingObject.objectDetails.object.EntityDTO.Active = false;
+			
+			return blockingObject;
 		case objectConstants.OBJECT_BLOCKING_FAILURE:
 			return {
 				...state,

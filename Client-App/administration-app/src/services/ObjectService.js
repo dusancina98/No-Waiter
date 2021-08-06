@@ -64,8 +64,10 @@ function updateObject(object, dispatch) {
 			.then((res) => {
 				if (res.status === 200) {
 					dispatch(success("Object successfully updated", object));
-				} else {
-					dispatch(failure(res.data.message));
+				}else if(res.status===409){
+					dispatch(failure("Restaurant with name " + object.Name +" already exist, please enter unique name"));
+				}else{
+					dispatch(failure(res.data));
 				}
 			})
 			.catch((err) => {
@@ -188,7 +190,7 @@ function validateObject(object, dispatch, type) {
 function activateObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`/object-api/api/objects/${object.Id}/activate`, { validateStatus: () => true, headers: authHeader() })
+	Axios.put(`/object-api/api/objects/${object.Id}/activate`, null,  { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -217,7 +219,7 @@ function activateObject(object, dispatch) {
 function deactivateObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`/object-api/api/objects/${object.Id}/deactivate`, { validateStatus: () => true, headers: authHeader() })
+	Axios.put(`/object-api/api/objects/${object.Id}/deactivate`,null,  { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -246,7 +248,7 @@ function deactivateObject(object, dispatch) {
 function blockObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`/object-api/api/objects/${object.Id}/block`, { validateStatus: () => true, headers: authHeader() })
+	Axios.put(`/object-api/api/objects/${object.Id}/block`, null, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -275,7 +277,7 @@ function blockObject(object, dispatch) {
 function unblockObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`/object-api/api/objects/${object.Id}/unblock`, { validateStatus: () => true, headers: authHeader() })
+	Axios.put(`/object-api/api/objects/${object.Id}/unblock`, null, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {

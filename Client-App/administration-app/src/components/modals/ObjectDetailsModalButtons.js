@@ -23,7 +23,7 @@ const ObjectDetailsModalButtons = (props) => {
 			<button onClick={props.handleDeactivation} hidden={!objectState.objectDetails.object.EntityDTO.Active} className="btn btn-warning ml-3 mt-2">
 				Deactivate
 			</button>
-			<button onClick={props.handleActivation} hidden={objectState.objectDetails.object.EntityDTO.Active} className="btn btn-warning ml-3 mt-2">
+			<button onClick={objectState.objectDetails.object.EntityDTO.Blocked? '': props.handleActivation} hidden={objectState.objectDetails.object.EntityDTO.Active} className= {objectState.objectDetails.object.EntityDTO.Blocked? "btn btn-warning ml-3 mt-2 disabled":"btn btn-warning ml-3 mt-2"} >
 				Activate
 			</button>
 		</React.Fragment>

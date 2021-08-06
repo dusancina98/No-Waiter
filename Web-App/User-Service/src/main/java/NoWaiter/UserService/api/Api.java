@@ -75,7 +75,9 @@ public class Api {
         try {
         	userService.updateObjects(userObjectDTO);       
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
+        }catch (ConstraintViolationException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+		} catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

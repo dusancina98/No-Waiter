@@ -102,7 +102,10 @@ public class ObjectServiceImpl implements ObjectService {
 		
 		Object object = objectRepository.findById(id).get();
 		
-		if (status == true) object.Block();
+		if (status == true) {
+			object.Block();
+			object.Deactivate();
+		}
 		else object.Unblock();
 		
 		objectRepository.save(object);
