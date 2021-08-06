@@ -57,11 +57,11 @@ public class EmailServiceImpl {
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 		String htmlMsg = "<p>Hello " + user.getName() + ",</p>" +
-					"<p>You registered an account on PQuince portal, before being able to use your account you need to verify that this is your email address by clicking here:</p>"
-					+ "<a href=\"" + url + "\">Verify your account</a>.</p>" + "<p>Kind Regards, No-Waiter</p>"; 
+					"<p>You have sent a password reset request, if you want to reset password please click on link bellow</p>"
+					+ "<a href=\"" + url + "\">Reset your password</a>.</p>" + "<p>Kind Regards, No-Waiter</p>"; 
 		helper.setText(htmlMsg, true);
 		helper.setTo(user.getEmail());
-		helper.setSubject("Activate account");
+		helper.setSubject("Reset password");
 		helper.setFrom(env.getProperty("spring.mail.username"));
 		javaMailSender.send(mimeMessage);
 		System.out.println("Email poslat!");
