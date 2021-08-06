@@ -88,20 +88,39 @@ public class EmailServiceImpl {
 
 
 	public void sendDelivererRejectReasonEmailAsync(DelivererRequest delivererRequest, String reason) throws MessagingException {
-System.out.println("Slanje emaila...");
+		System.out.println("Slanje emaila...");
 		
-		String url = CLIENT_APP_URL + "#/reset-password/" + delivererRequest.getId() +"/"+ reason;
 		
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 		String htmlMsg = "<p>Hello " + delivererRequest.getName() + ",</p>" +
-					"<p>You registered an account on PQuince portal, before being able to use your account you need to verify that this is your email address by clicking here:</p>"
-					+ "<a href=\"" + url + "\">Verify your account</a>.</p>" + "<p>Kind Regards, No-Waiter</p>"; 
+					"<p>Your request for deliverer is rejected</p>"+
+					"<p>Reason: </p>" + "<b>" + reason + "</b>" 
+					+ "<p>Kind Regards, No-Waiter</p>"; 
 		helper.setText(htmlMsg, true);
 		helper.setTo(delivererRequest.getEmail());
-		helper.setSubject("Activate account");
+		helper.setSubject("Rejected deliverer request");
 		helper.setFrom(env.getProperty("spring.mail.username"));
 		javaMailSender.send(mimeMessage);
 		System.out.println("Email poslat!");
 	}
+
+	public void sendDelivererAcceptedRequestEmailAsync(DelivererRequest delivererRequest) throws MessagingException {
+		System.out.println("Slanje emaila...");
+		
+
+		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+		String htmlMsg = "<p>Hello " + delivererRequest.getName() + ",</p>" +
+					"<p>Your request for deliverer is accepted</p>"+
+					"<p>You will receive an email soon to activate your account </p>"   
+					+ "<p>Kind Regards, No-Waiter</p>"; 
+		helper.setText(htmlMsg, true);
+		helper.setTo(delivererRequest.getEmail());
+		helper.setSubject("Accepted deliverer request");
+		helper.setFrom(env.getProperty("spring.mail.username"));
+		javaMailSender.send(mimeMessage);
+		System.out.println("Email poslat!");
+	}
+
 }

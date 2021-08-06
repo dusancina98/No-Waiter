@@ -535,7 +535,7 @@ function checkIfResetPasswordTokenIsValid(token) {
 
 function approveDelivererRequest(requestIdDTO,dispatch){
 
-	Axios.put(`/user-api/api/users/deliverer-request/approve/${requestIdDTO.id}`, { validateStatus: () => true, headers: authHeader() })
+	Axios.put(`/user-api/api/users/deliverer-request/approve/${requestIdDTO.id}`,null, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 200) {
 				findAllDelivererRequests(dispatch)
@@ -589,7 +589,7 @@ function rejectDelivererRequest(rejectRequestDTO,dispatch){
 function activateDeliverer(deliverer, dispatch) {
 	dispatch(request());
 
-	Axios.put(`/user-api/api/users/deliverers/${deliverer.Id}/activate`, { validateStatus: () => true, headers: authHeader() })
+	Axios.put(`/user-api/api/users/deliverers/${deliverer.Id}/activate`, null, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -618,7 +618,7 @@ function activateDeliverer(deliverer, dispatch) {
 function deactivateDeliverer(deliverer, dispatch) {
 	dispatch(request());
 
-	Axios.put(`/user-api/api/users/deliverers/${deliverer.Id}/deactivate`, { validateStatus: () => true, headers: authHeader() })
+	Axios.put(`/user-api/api/users/deliverers/${deliverer.Id}/deactivate`, null,{ validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
