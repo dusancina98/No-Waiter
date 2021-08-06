@@ -23,8 +23,10 @@ function createObject(object, dispatch) {
 			.then((res) => {
 				if (res.status === 201) {
 					dispatch(success());
-				} else {
-					dispatch(failure(res.data.message));
+				} else if(res.status===409){
+					dispatch(failure("Restaurant with name " + object.Name +" already exist, please enter unique name"));
+				}else{
+					dispatch(failure(res.data));
 				}
 			})
 			.catch((err) => {

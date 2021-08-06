@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { hasRoles } from "../helpers/auth-header";
 import { userService } from "../services/UserService";
 
 const SideBar = () => {
@@ -18,7 +19,7 @@ const SideBar = () => {
 			</div>
 			<ul className="nav">
 				<li className="nav-item nav-profile">
-					<a href="index.html" className="nav-link">
+					<a href="#/" className="nav-link">
 						<div className="nav-profile-image">
 							<img src="assets/images/faces/face1.jpg" alt="profile" />
 							<span className="login-status online"></span>
@@ -27,11 +28,11 @@ const SideBar = () => {
 							<span className="font-weight-medium mb-2">Ime  Prezime</span>
 							<span className="font-weight-normal">$8,753.00</span>
 						</div>
-						<span className="badge badge-danger text-white ml-3 rounded">3</span>
+						{/*<span className="badge badge-danger text-white ml-3 rounded">3</span>  - Broj posle imena,za notify*/}
 					</a>
 				</li>
 				<li className="nav-item">
-					<a className="nav-link" data-toggle="collapse" href="#object-menu" aria-expanded="false" aria-controls="ui-basic">
+					<a hidden={!hasRoles("ROLE_OBJADMIN") && !hasRoles("ROLE_SYSADMIN")} className="nav-link" data-toggle="collapse" href="#object-menu" aria-expanded="false" aria-controls="ui-basic">
 						<i className="mdi mdi-home menu-icon"></i>
 						<span className="menu-title">Objects</span>
 						<i className="menu-arrow"></i>
@@ -39,11 +40,11 @@ const SideBar = () => {
 					<div className="collapse" id="object-menu">
 						<ul className="nav flex-column sub-menu">
 							<li className="nav-item">
-								<Link className="nav-link" to="/objects">
+								<Link className="nav-link" to="/objects" hidden={!hasRoles("ROLE_OBJADMIN") && !hasRoles("ROLE_SYSADMIN")}>
 									All Objects
 								</Link>
 							</li>
-							<li className="nav-item">
+							<li className="nav-item" hidden={!hasRoles("ROLE_SYSADMIN")}>
 								<Link className="nav-link" to="/add-object">
 									Add Object
 								</Link>
