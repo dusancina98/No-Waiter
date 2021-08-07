@@ -9,6 +9,7 @@ import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectWithStatusDTO;
+import NoWaiter.ObjectService.services.contracts.dto.UpdateWorkTimeDTO;
 import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeException;
 
 public interface ObjectService {
@@ -36,4 +37,6 @@ public interface ObjectService {
 	void worktime() throws InvalidTimeRangeException;
 
 	void deleteObject(UUID objectId);
+
+	void updateWorkTime(UpdateWorkTimeDTO updateWorkTimeDTO);
 }

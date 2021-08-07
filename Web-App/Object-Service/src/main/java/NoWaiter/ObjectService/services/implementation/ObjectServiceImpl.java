@@ -26,6 +26,7 @@ import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectWithStatusDTO;
+import NoWaiter.ObjectService.services.contracts.dto.UpdateWorkTimeDTO;
 import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeException;
 import NoWaiter.ObjectService.services.implementation.util.ImageUtil;
 import NoWaiter.ObjectService.services.implementation.util.ObjectMapper;
@@ -187,6 +188,15 @@ public class ObjectServiceImpl implements ObjectService {
 	public void deleteObject(UUID objectId) {
 		Object object = objectRepository.findById(objectId).get();
 		object.Delete();
+		
+		objectRepository.save(object);
+	}
+
+	@Override
+	public void updateWorkTime(UpdateWorkTimeDTO updateWorkTimeDTO) {
+		Object object = objectRepository.findById(UUID.fromString(updateWorkTimeDTO.Id)).get();
+
+		object.getWorkTime().Update(updateWorkTimeDTO.WorkTime.EntityDTO.WorkDays);
 		
 		objectRepository.save(object);
 	}

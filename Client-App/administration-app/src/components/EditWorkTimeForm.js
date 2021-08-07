@@ -250,7 +250,7 @@ const EditWorkTimeForm = () => {
                         value={mondayWorking}
                         disabled={objectState.objectDetails.workTimeReadOnly} 
                         defaultChecked={objectState.objectInfo.object.EntityDTO.WorkTime.EntityDTO.WorkDays.MONDAY.Working}
-                        onChange={(e) => setMondayWorking(e.target.value)}
+                        onChange={(e) => setMondayWorking(!mondayWorking)}
                         id="flexCheckChecked" />
                     <label class="form-check-label mt-1" for="flexCheckChecked">
                         Working
@@ -258,7 +258,7 @@ const EditWorkTimeForm = () => {
                 </div>
             </div>
 			<div class="row">
-                <label for="monday" class="col-sm-3 col-form-label">Thuesday</label>
+                <label for="monday" class="col-sm-3 col-form-label">Tuesday</label>
 
                 <div class="col-sm-3 mt-1">
                     <TimeField 
@@ -283,8 +283,8 @@ const EditWorkTimeForm = () => {
                         type="checkbox" 
                         value={thuesdayWorking}
                         disabled={objectState.objectDetails.workTimeReadOnly} 
-                        defaultChecked={objectState.objectInfo.object.EntityDTO.WorkTime.EntityDTO.WorkDays.THURSDAY.Working}
-                        onChange={(e) => setThuesdayWorking(e.target.value)}
+                        defaultChecked={objectState.objectInfo.object.EntityDTO.WorkTime.EntityDTO.WorkDays.TUESDAY.Working}
+                        onChange={(e) =>{ setThuesdayWorking(!thuesdayWorking)}}
                         id="flexCheckChecked" />
                     <label class="form-check-label mt-1" for="flexCheckChecked">
                         Working
@@ -319,7 +319,7 @@ const EditWorkTimeForm = () => {
                         value={wednesdayWorking}
                         disabled={objectState.objectDetails.workTimeReadOnly} 
                         defaultChecked={objectState.objectInfo.object.EntityDTO.WorkTime.EntityDTO.WorkDays.WEDNESDAY.Working}
-                        onChange={(e) => setWednesdayWorking(e.target.value)}
+                        onChange={(e) => setWednesdayWorking(!wednesdayWorking)}
                         id="flexCheckChecked" />
                     <label class="form-check-label mt-1" for="flexCheckChecked">
                         Working
@@ -354,7 +354,7 @@ const EditWorkTimeForm = () => {
                         disabled={objectState.objectDetails.workTimeReadOnly} 
                         value={thursdayWorking}
                         defaultChecked={objectState.objectInfo.object.EntityDTO.WorkTime.EntityDTO.WorkDays.THURSDAY.Working}
-                        onChange={(e) => setThursdayWorking(e.target.value)}
+                        onChange={(e) => setThursdayWorking(!thursdayWorking)}
                         id="flexCheckChecked" />
                     <label class="form-check-label mt-1" for="flexCheckChecked">
                         Working
@@ -389,7 +389,7 @@ const EditWorkTimeForm = () => {
                         disabled={objectState.objectDetails.workTimeReadOnly} 
                         value={fridayWorking}
                         defaultChecked={objectState.objectInfo.object.EntityDTO.WorkTime.EntityDTO.WorkDays.FRIDAY.Working}
-                        onChange={(e) => setFridayWorking(e.target.value)}
+                        onChange={(e) => setFridayWorking(!fridayWorking)}
                         id="flexCheckChecked" />
                     <label class="form-check-label mt-1" for="flexCheckChecked">
                         Working
@@ -424,7 +424,7 @@ const EditWorkTimeForm = () => {
                         value={saturdayWorking}
                         disabled={objectState.objectDetails.workTimeReadOnly} 
                         defaultChecked={objectState.objectInfo.object.EntityDTO.WorkTime.EntityDTO.WorkDays.SATURDAY.Working}
-                        onChange={(e) => setSaturdayWorking(e.target.value)}
+                        onChange={(e) => setSaturdayWorking(!saturdayWorking)}
                         id="flexCheckChecked" />
                     <label class="form-check-label mt-1" for="flexCheckChecked">
                         Working
@@ -459,7 +459,7 @@ const EditWorkTimeForm = () => {
                         value={sundayWorking}
                         disabled={objectState.objectDetails.workTimeReadOnly} 
                         defaultChecked={objectState.objectInfo.object.EntityDTO.WorkTime.EntityDTO.WorkDays.SUNDAY.Working}
-                        onChange={(e) => setSundayWorking(e.target.value)}
+                        onChange={(e) => setSundayWorking(!sundayWorking)}
                         id="flexCheckChecked" />
                         <label class="form-check-label mt-1" for="flexCheckChecked">
                             Working

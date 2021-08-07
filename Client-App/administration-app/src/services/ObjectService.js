@@ -88,26 +88,24 @@ function updateObject(object, dispatch) {
 	}
 }
 
-function updateObjectWorkTime(object, dispatch) {
-	Axios.put(`/object-api/api/objects/worktime`, object, { validateStatus: () => true, headers: authHeader() })
+function updateObjectWorkTime(objectWorktime, dispatch) {
+	Axios.put(`/object-api/api/objects/worktime`, objectWorktime, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 200) {
-				//dispatch(success("Object successfully updated", object));
-			}else if(res.status===409){
-				//dispatch(failure("Restaurant with name " + object.Name +" already exist, please enter unique name"));
+				dispatch(success("Object worktime successfully updated", objectWorktime));
 			}else{
-				//dispatch(failure("error"));
+				dispatch(failure("error"));
 			}
 		})
 		.catch((err) => {
 			console.log(err);
 		});
 
-	function success(message, object) {
-		return { type: objectConstants.OBJECT_UPDATE_SUCCESS, successMessage: message, object };
+	function success(message, objectWorktime) {
+		return { type: objectConstants.OBJECT_UPDATE_WORKTIME_SUCCESS, successMessage: message, objectWorktime };
 	}
 	function failure(message) {
-		return { type: objectConstants.OBJECT_UPDATE_FAILURE, errorMessage: message };
+		return { type: objectConstants.OBJECT_UPDATE_WORKTIME_FAILURE, errorMessage: message };
 	}
 }
 

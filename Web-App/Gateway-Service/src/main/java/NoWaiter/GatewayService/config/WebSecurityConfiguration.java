@@ -41,8 +41,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 	.antMatchers(HttpMethod.POST ,"/object-api/api/objects").hasRole("SYSADMIN")
                 	.antMatchers(HttpMethod.PUT ,"/object-api/api/objects/image/**").hasRole("OBJADMIN")
-                	.antMatchers(HttpMethod.PUT ,"/object-api/api/objects/**").hasRole("SYSADMIN")
+                	.antMatchers(HttpMethod.PUT ,"/object-api/api/objects/worktime").hasRole("OBJADMIN")
                 	.antMatchers(HttpMethod.PUT ,"/object-api/api/objects").hasAnyRole("SYSADMIN", "OBJADMIN")
+                	.antMatchers(HttpMethod.PUT ,"/object-api/api/objects/**").hasRole("SYSADMIN")
 
                 	.antMatchers(HttpMethod.POST ,"/user-api/api/users/object-admin").hasRole("SYSADMIN")
                 	.antMatchers(HttpMethod.GET ,"/user-api/api/users/object-admin").hasRole("SYSADMIN")

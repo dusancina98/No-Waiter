@@ -70,6 +70,33 @@ export const objectReducer = (state, action) => {
 					errorMessage: action.errorMessage,
 				},
 			};
+		case objectConstants.OBJECT_UPDATE_WORKTIME_SUCCESS:
+			let objectUpdateWorkTimeSuccess = {
+				...state,
+				editObject: {
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+			objectUpdateWorkTimeSuccess.objectDetails.showModal = true;
+			objectUpdateWorkTimeSuccess.objectDetails.readOnly = true;
+			objectUpdateWorkTimeSuccess.objectDetails.workTimeReadOnly = true;
+			objectUpdateWorkTimeSuccess.objectInfo.object.EntityDTO.WorkTime = action.objectWorktime.WorkTime;
+		
+			return objectUpdateWorkTimeSuccess;
+		case objectConstants.OBJECT_UPDATE_WORKTIME_FAILURE:{
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+			};
+		}
 		case objectConstants.SET_OBJECTS_REQUEST:
 			return {
 				...state,
