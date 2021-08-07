@@ -14,11 +14,12 @@ import NoWaiter.ProductService.services.contracts.dto.ProductUpdateRequestDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductValidationResponseDTO;
 import NoWaiter.ProductService.services.contracts.exceptions.InvalidOrderItemException;
 import NoWaiter.ProductService.services.contracts.exceptions.InvalidProductCategoryException;
+import NoWaiter.ProductService.services.contracts.exceptions.InvalidProductCategoryNameException;
 import NoWaiter.ProductService.services.contracts.exceptions.UnauthorizedRequestException;
 
 public interface ProductService {
 
-	UUID createProductCategory(NameDTO categoryDTO, UUID objectId);
+	UUID createProductCategory(NameDTO categoryDTO, UUID objectId) throws InvalidProductCategoryNameException;
 	
 	UUID createProduct(ProductRequestDTO productDTO, UUID objectId) throws InvalidProductCategoryException, IOException;
 	

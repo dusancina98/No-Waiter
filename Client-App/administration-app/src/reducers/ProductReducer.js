@@ -261,7 +261,9 @@ export const productReducer = (state, action) => {
 				showSuccessMessage: false,
 				successMessage: "",
 				createCategory: {
-					showModal: false,
+					showModal: true,
+					showErrorMessage: false,
+					errorMessage: "",
 				},
 			};
 		case productConstants.CATEGORY_CREATE_SUCCESS:
@@ -275,18 +277,22 @@ export const productReducer = (state, action) => {
 				successMessage: action.successMessage,
 				createCategory: {
 					showModal: false,
+					showErrorMessage: false,
+					errorMessage: "",
 				},
 				categories: arrCategories,
 			};
 		case productConstants.CATEGORY_CREATE_FAILURE:
 			return {
 				...state,
-				showError: true,
-				errorMessage: action.errorMessage,
+				showError: false,
+				errorMessage: '',
 				showSuccessMessage: false,
 				successMessage: "",
 				createCategory: {
-					showModal: false,
+					showModal: true,
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
 				},
 			};
 		case productConstants.SET_CATEGORIES_REQUEST:

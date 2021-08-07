@@ -7,6 +7,8 @@ const ProductContextProvider = (props) => {
 	const [productState, dispatch] = useReducer(productReducer, {
 		createCategory: {
 			showModal: false,
+			showErrorMessage: false,
+			errorMessage: ''
 		},
 		createProduct: {
 			imageSelected: false,

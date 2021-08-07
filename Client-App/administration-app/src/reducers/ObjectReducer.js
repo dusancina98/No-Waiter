@@ -58,6 +58,10 @@ export const objectReducer = (state, action) => {
 			};
 			var foundIndex = pom.objects.findIndex((object) => object.Id === action.object.Id);
 			pom.objects[foundIndex] = action.object;
+			pom.objectInfo.object.EntityDTO.Name= action.object.EntityDTO.Name;
+			pom.objectInfo.object.EntityDTO.Email= action.object.EntityDTO.Email;
+			pom.objectInfo.object.EntityDTO.PhoneNumber= action.object.EntityDTO.PhoneNumber;
+			pom.objectInfo.object.EntityDTO.Address= action.object.EntityDTO.Address;
 
 			return pom;
 		case objectConstants.OBJECT_UPDATE_FAILURE:
@@ -70,6 +74,16 @@ export const objectReducer = (state, action) => {
 					errorMessage: action.errorMessage,
 				},
 			};
+		case objectConstants.INVALID_WORKTIMES_INPUT_FAILURE:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+			}
 		case objectConstants.OBJECT_UPDATE_WORKTIME_SUCCESS:
 			let objectUpdateWorkTimeSuccess = {
 				...state,

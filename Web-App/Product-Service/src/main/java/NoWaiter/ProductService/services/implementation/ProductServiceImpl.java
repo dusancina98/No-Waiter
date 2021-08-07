@@ -34,6 +34,7 @@ import NoWaiter.ProductService.services.contracts.dto.ProductValidationResponseD
 import NoWaiter.ProductService.services.contracts.dto.SideDishDTO;
 import NoWaiter.ProductService.services.contracts.exceptions.InvalidOrderItemException;
 import NoWaiter.ProductService.services.contracts.exceptions.InvalidProductCategoryException;
+import NoWaiter.ProductService.services.contracts.exceptions.InvalidProductCategoryNameException;
 import NoWaiter.ProductService.services.contracts.exceptions.UnauthorizedRequestException;
 import NoWaiter.ProductService.services.implementation.util.ImageUtil;
 import NoWaiter.ProductService.services.implementation.util.ProductCategoryMapper;
@@ -56,7 +57,12 @@ public class ProductServiceImpl implements ProductService {
 	private Environment env;
 	
 	@Override
-	public UUID createProductCategory(NameDTO categoryDTO, UUID objectId) {
+	public UUID createProductCategory(NameDTO categoryDTO, UUID objectId) throws InvalidProductCategoryNameException {
+		List<ProductCategory> existWithNameProductCategory = productCategoryRepository.findWithCategoryNameAndObject(categoryDTO.Name.toLowerCase(), objectId);
+		
+		if(existWithNameProductCategory.size()!=0) {
+			throw new InvalidProductCategoryNameException("Category with this name already exist");
+		}
 		
 		ProductCategory productCategory = ProductCategoryMapper.MapProductCategoryDTOToProductCategory(categoryDTO, objectId);
 		productCategoryRepository.save(productCategory);

@@ -5,6 +5,7 @@ import { objectService } from "../services/ObjectService";
 import TimeField from 'react-simple-timefield';
 import { modalConstants } from "../constants/ModalConstants";
 import React from "react";
+import { objectConstants } from "../constants/ObjectConstants";
 
 const EditWorkTimeForm = () => {
 	const { objectState, dispatch } = useContext(ObjectContext);
@@ -113,7 +114,7 @@ const EditWorkTimeForm = () => {
             };
             objectService.updateObjectWorkTime(object, dispatch);
         }else{
-            alert('INVALID')
+            dispatch({type: objectConstants.INVALID_WORKTIMES_INPUT_FAILURE , errorMessage: "Invalid worktime input" })
         }
 	};
 
@@ -127,7 +128,7 @@ const EditWorkTimeForm = () => {
             }
 
             if(Number(mondayTimeFromVar[0]) === Number(mondayTimeToVar[0])){
-                if(Number(mondayTimeFromVar[1]) > Number(mondayTimeToVar[1]))
+                if(Number(mondayTimeFromVar[1]) >= Number(mondayTimeToVar[1]))
                     return false
             }
         }
@@ -141,7 +142,7 @@ const EditWorkTimeForm = () => {
             }
 
             if(Number(thuesdayTimeFromVar[0]) === Number(thuesdayTimeToVar[0])){
-                if(Number(thuesdayTimeFromVar[1]) > Number(thuesdayTimeToVar[1]))
+                if(Number(thuesdayTimeFromVar[1]) >= Number(thuesdayTimeToVar[1]))
                     return false
             }
         }
@@ -155,7 +156,7 @@ const EditWorkTimeForm = () => {
             }
 
             if(Number(wednesdayTimeFromVar[0]) === Number(wednesdayTimeToVar[0])){
-                if(Number(wednesdayTimeFromVar[1]) > Number(wednesdayTimeToVar[1]))
+                if(Number(wednesdayTimeFromVar[1]) >= Number(wednesdayTimeToVar[1]))
                     return false
             }
         }
@@ -169,7 +170,7 @@ const EditWorkTimeForm = () => {
             }
 
             if(Number(thursdayTimeFromVar[0]) === Number(thursdayTimeToVar[0])){
-                if(Number(thursdayTimeFromVar[1]) > Number(thursdayTimeToVar[1]))
+                if(Number(thursdayTimeFromVar[1]) >= Number(thursdayTimeToVar[1]))
                     return false
             }
         }
@@ -183,7 +184,7 @@ const EditWorkTimeForm = () => {
             }
 
             if(Number(fridayTimeFromVar[0]) === Number(fridayTimeToVar[0])){
-                if(Number(fridayTimeFromVar[1]) > Number(fridayTimeToVar[1]))
+                if(Number(fridayTimeFromVar[1]) >= Number(fridayTimeToVar[1]))
                     return false
             }
         }
@@ -197,7 +198,7 @@ const EditWorkTimeForm = () => {
             }
 
             if(Number(saturdayTimeFromVar[0]) === Number(saturdayTimeToVar[0])){
-                if(Number(saturdayTimeFromVar[1]) > Number(saturdayTimeToVar[1]))
+                if(Number(saturdayTimeFromVar[1]) >= Number(saturdayTimeToVar[1]))
                     return false
             }
         }
@@ -211,7 +212,7 @@ const EditWorkTimeForm = () => {
             }
 
             if(Number(sundayTimeFromVar[0]) === Number(sundayTimeToVar[0])){
-                if(Number(sundayTimeFromVar[1]) > Number(sundayTimeToVar[1]))
+                if(Number(sundayTimeFromVar[1]) >= Number(sundayTimeToVar[1]))
                     return false
             }
         }

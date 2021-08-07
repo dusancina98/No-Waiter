@@ -21,6 +21,8 @@ function createProductCategory(categoryName, dispatch) {
 			if (res.status === 201) {
 				let category = { Id: res.data, EntityDTO: { Name: categoryName } };
 				dispatch(success(category, "Table successfully added"));
+			} else if(res.status === 400){
+				dispatch(failure("Category with this name already exist"));
 			} else {
 				dispatch(failure(res.data.message));
 			}
