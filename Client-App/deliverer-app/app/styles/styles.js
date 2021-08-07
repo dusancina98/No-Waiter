@@ -200,3 +200,42 @@ export const orderConfirmStyles = StyleSheet.create({
 		textAlign: "center",
 	},
 });
+
+export const employmentRequestStyle = StyleSheet.create({
+	logoContainer: {
+		marginTop: 20,
+		marginBottom: 30,
+	},
+	logoText: {
+		color: "black",
+		fontSize: 35,
+		fontFamily: "roboto-light",
+		fontWeight: "200",
+	},
+	textForm: {
+		color: "black",
+		fontSize: 20,
+		fontFamily: "roboto-regular",
+		fontWeight: "400",
+	},
+	textInput: {
+		paddingHorizontal: 10,
+		fontSize: 18,
+		height: 50,
+		marginTop: 5,
+		borderWidth: 1,
+		borderRadius: 15,
+		width: "90%",
+		backgroundColor: "white",
+	},
+	multilineTextInput: {
+		paddingHorizontal: 10,
+		fontSize: 18,
+		height: 90,
+		marginTop: 5,
+		borderWidth: 1,
+		borderRadius: 15,
+		width: "90%",
+		backgroundColor: "white",
+	},
+});

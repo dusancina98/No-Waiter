@@ -10,6 +10,7 @@ import AuthContextProvider from "./app/contexts/AuthContext";
 import OrderContextProvider from "./app/contexts/OrderContext";
 import { hasAnyRole } from "./app/helpers/auth-header";
 import OrderConfirmScreen from "./app/screens/OrderConfirmScreen";
+import EmploymentRequestScreen from "./app/screens/EmploymentRequestScreen";
 
 const Stack = createStackNavigator();
 
@@ -41,6 +42,7 @@ export default function App() {
 							<Stack.Screen name="Home" component={Tabs} />
 							<Stack.Screen name="Welcome" component={WelcomeScreen} />
 							<Stack.Screen name="Login" component={LoginScreen} />
+							<Stack.Screen name="Employment request" component={EmploymentRequestScreen} />
 							<Stack.Screen name="Order Confirm" component={OrderConfirmScreen} options={{ headerShown: true }} />
 						</Stack.Navigator>
 					</NavigationContainer>
