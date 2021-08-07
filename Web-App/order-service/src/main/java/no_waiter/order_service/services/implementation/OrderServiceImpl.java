@@ -9,8 +9,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import no_waiter.order_service.entities.Address;
@@ -21,6 +19,7 @@ import no_waiter.order_service.entities.OrderStatus;
 import no_waiter.order_service.entities.OrderType;
 import no_waiter.order_service.entities.Product;
 import no_waiter.order_service.entities.SideDish;
+import no_waiter.order_service.intercomm.ObjectClient;
 import no_waiter.order_service.intercomm.ProductClient;
 import no_waiter.order_service.repository.OrderEventRepository;
 import no_waiter.order_service.repository.OrderRepository;
@@ -28,7 +27,9 @@ import no_waiter.order_service.services.contracts.OrderService;
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CompletedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
+import no_waiter.order_service.services.contracts.dto.DelivererOrdeDTO;
 import no_waiter.order_service.services.contracts.dto.NameDTO;
+import no_waiter.order_service.services.contracts.dto.ObjectDetailsDTO;
 import no_waiter.order_service.services.contracts.dto.OnRouteOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OrderDetailsDTO;
 import no_waiter.order_service.services.contracts.dto.OrderItemDTO;
@@ -54,6 +55,9 @@ public class OrderServiceImpl implements OrderService{
 	
 	@Autowired
 	private ProductClient productClient;
+	
+	@Autowired
+	private ObjectClient objectClient;
 	
 	@Override
 	public UUID createOrder(OrderRequestDTO requestDTO, ProductValidationResponseDTO products, UUID objectId) {
@@ -406,7 +410,39 @@ public class OrderServiceImpl implements OrderService{
 		}
 		
 		
+	}
+
+	@Override
+	public List<DelivererOrdeDTO> getAllConfirmedOrders() {
+		List<DelivererOrdeDTO> confirmedOrderDTO = new ArrayList<DelivererOrdeDTO>();
+		
+		Long setTime = (long) (5*60*3600*1000);
+		Date newDate = new Date();
+		newDate.setTime(newDate.getTime() - setTime);
+		
+		List<OrderEvent> confirmedOrderEvents =  orderEventRepository.getConfirmedOrderEventsForDelivery(newDate);
+		List<UUID> objectIds = orderEventRepository.getDistinctObjectIdsForDelivery(newDate);
+		List<ObjectDetailsDTO> objectDetails = objectClient.getObjectDetailsByObjectIds(objectIds);
+		
+		confirmedOrderEvents.forEach((orderEvent) -> confirmedOrderDTO.add(mapOrderToDelivererOrderDTO(orderEvent, objectDetails)));
+		return confirmedOrderDTO;
 	}	
+	
+	private DelivererOrdeDTO mapOrderToDelivererOrderDTO(OrderEvent orderEvent, List<ObjectDetailsDTO> objectDetails) {
+		Date estimatedDate = new Date();
+		estimatedDate.setTime(orderEvent.getCreatedTime().getTime() + (orderEvent.getEstimatedTime()*60*1000));		
+		
+		DelivererOrdeDTO retVal = new DelivererOrdeDTO(getPriceForOrder(orderEvent.getOrder()), estimatedDate, orderEvent.getOrder().getId(), orderEvent.getObjectId(), "", "", "");
+		for (ObjectDetailsDTO objectDetailsDTO : objectDetails) {
+			if (objectDetailsDTO.ObjectId.equals(orderEvent.getObjectId())) {
+				retVal.ObjectImage = objectDetailsDTO.ObjectImage;
+				retVal.ObjectName = objectDetailsDTO.ObjectName;
+				retVal.ObjectAddress = objectDetailsDTO.ObjectAddress;
+				break;
+			}
+		}
+		return retVal;
+	}
 	
 	//@Override
 	//public UUID createOrder(OrderRequestDTO requestDTO, ProductValidationResponseDTO products, UUID objectId) {

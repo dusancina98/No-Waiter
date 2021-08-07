@@ -1,6 +1,7 @@
 package NoWaiter.ObjectService.services.contracts;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -8,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
+import NoWaiter.ObjectService.services.contracts.dto.ObjectDetailsDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectWithStatusDTO;
 import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeException;
 
@@ -22,6 +24,8 @@ public interface ObjectService {
     void addAdminToObject(AddAdminDTO addAdminDTO);
     
     void deleteObjectAdminHandlingObjectActivation(UUID objectAdminId);
+    
+    List<ObjectDetailsDTO> findAllObjectDetailsById(List<UUID> objectIds);
 
     IdentifiableDTO<ObjectDTO> findById(UUID id);
         

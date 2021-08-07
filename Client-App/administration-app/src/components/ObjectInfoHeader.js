@@ -40,6 +40,7 @@ const ObjectInfoHeader = () => {
 		dispatch({ type: objectConstants.OBJECT_IMAGE_DESELECTED });
 	};
 
+	console.log(objectState.objectInfo);
 	return (
 		<React.Fragment>
 			<SuccessAlert

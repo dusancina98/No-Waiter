@@ -147,6 +147,17 @@ public class Api {
         }
     }
 	
+	@GetMapping("/confirmed/deliverer")
+    @CrossOrigin
+    public ResponseEntity<?> getConfirmedOrdersForDeliverer() {
+    	try {
+            return new ResponseEntity<>(orderService.getAllConfirmedOrders(), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
 	@PutMapping("/{orderId}/ready")
     @CrossOrigin
     public ResponseEntity<?> setOrderToReady(@PathVariable String orderId) {

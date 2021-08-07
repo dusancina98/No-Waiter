@@ -7,6 +7,7 @@ import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import LoginScreen from "./app/screens/LoginScreen";
 import AuthContextProvider from "./app/contexts/AuthContext";
+import OrderContextProvider from "./app/contexts/OrderContext";
 
 const Stack = createStackNavigator();
 
@@ -22,18 +23,20 @@ export default function App() {
 	if (fontsLoaded) {
 		return (
 			<AuthContextProvider>
-				<NavigationContainer>
-					<Stack.Navigator
-						screenOptions={{
-							headerShown: false,
-						}}
-						initialRouteName={"Welcome"}
-					>
-						<Stack.Screen name="Home" component={Tabs} />
-						<Stack.Screen name="Welcome" component={WelcomeScreen} />
-						<Stack.Screen name="Login" component={LoginScreen} />
-					</Stack.Navigator>
-				</NavigationContainer>
+				<OrderContextProvider>
+					<NavigationContainer>
+						<Stack.Navigator
+							screenOptions={{
+								headerShown: false,
+							}}
+							initialRouteName={"Welcome"}
+						>
+							<Stack.Screen name="Home" component={Tabs} />
+							<Stack.Screen name="Welcome" component={WelcomeScreen} />
+							<Stack.Screen name="Login" component={LoginScreen} />
+						</Stack.Navigator>
+					</NavigationContainer>
+				</OrderContextProvider>
 			</AuthContextProvider>
 		);
 	} else {

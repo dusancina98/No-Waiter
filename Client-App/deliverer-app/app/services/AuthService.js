@@ -12,9 +12,13 @@ function login(loginRequest, dispatch) {
 	dispatch(request());
 
 	if (validateLoginRequest(loginRequest, dispatch)) {
+		console.log("USAO", `${API_URL}/auth-api/api/auth/login/deliverer`);
+
 		Axios.post(`${API_URL}/auth-api/api/auth/login/deliverer`, loginRequest, { validateStatus: () => true })
 			.then((res) => {
+				console.log("USAO122");
 				if (res.status === 200) {
+					console.log("USAO1");
 					setAuthInLocalStorage(res.data);
 					dispatch(success(res.data));
 				} else if (res.status === 401) {
@@ -27,6 +31,8 @@ function login(loginRequest, dispatch) {
 				}
 			})
 			.catch((err) => {
+				console.log("USAO14");
+
 				console.error(err);
 			});
 	}

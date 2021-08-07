@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export async function authHeader() {
 	validateAccessToken();
 	let token = await AsyncStorage.getItem("accessToken");
-
+	console.log(token);
 	if (token) {
 		return { Authorization: "Bearer " + token };
 	} else {
@@ -11,11 +11,16 @@ export async function authHeader() {
 	}
 }
 
-export async function setAuthInLocalStorage(data) {
+export function setAuthInLocalStorage(data) {
+	console.log(data);
 	try {
-		await AsyncStorage.multiSet({ accessToken: data.accessToken, expireTime: data.expiresIn, roles: data.roles });
+		AsyncStorage.multiSet([
+			["accessToken", data.accessToken],
+			["expireTime", data.expiresIn.toString()],
+			["roles", JSON.stringify(data.roles)],
+		]);
 	} catch (error) {
-		console.log(error);
+		console.log("LALA", error);
 	}
 }
 

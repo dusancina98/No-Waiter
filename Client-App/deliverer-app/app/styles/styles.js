@@ -103,3 +103,39 @@ export const loginStyles = StyleSheet.create({
 		textAlign: "center",
 	},
 });
+
+export const orderListStyles = StyleSheet.create({
+	containerWrapper: {
+		flex: 1,
+		flexDirection: "row",
+		marginLeft: 20,
+		marginRight: 20,
+		height: 100,
+		borderRadius: 10,
+		borderColor: "gray",
+		borderWidth: 1,
+		paddingHorizontal: 10,
+		shadowColor: "grey",
+		shadowOffset: {
+			width: 0,
+			height: 10,
+		},
+		shadowOpacity: 0.45,
+		shadowRadius: 3.5,
+		elevation: 5,
+		marginTop: 10,
+	},
+	objectImageContainer: {
+		flex: 1,
+		alignSelf: "center",
+	},
+	objectImage: {
+		width: "100%",
+		height: "100%",
+	},
+	orderInfo: {
+		marginLeft: 15,
+		alignSelf: "center",
+		flex: 2,
+	},
+});

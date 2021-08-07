@@ -6,6 +6,7 @@ import java.util.UUID;
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CompletedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
+import no_waiter.order_service.services.contracts.dto.DelivererOrdeDTO;
 import no_waiter.order_service.services.contracts.dto.OnRouteOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OrderDetailsDTO;
 import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
@@ -24,6 +25,8 @@ public interface OrderService {
 	void acceptOrder(AcceptOrderDTO acceptOrderDTO);
 
 	List<ConfirmedOrderDTO> getConfirmedOrdersForObject(UUID objectId);
+	
+	List<DelivererOrdeDTO> getAllConfirmedOrders();
 
 	void setOrderToReady(UUID orderId);
 
