@@ -34,4 +34,6 @@ public interface ProductService {
 	Iterable<IdentifiableDTO<NameDTO>> findAllProductTypes();
 	
 	ProductValidationResponseDTO validateOrderItems(OrderItemsDTO items) throws InvalidOrderItemException;
+
+	void deleteProduct(UUID productId);
 }

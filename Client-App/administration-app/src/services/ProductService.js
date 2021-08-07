@@ -11,6 +11,7 @@ export const productService = {
 	updateProduct,
 	updateProductImage,
 	findAllProducts,
+	deleteProduct,
 };
 
 function createProductCategory(categoryName, dispatch) {
@@ -277,4 +278,27 @@ function validateProduct(product, dispatch, type) {
 	}
 
 	return true;
+}
+
+function deleteProduct(productId, dispatch) {
+	Axios.delete(`/product-api/api/products/${productId}`,  { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			console.log(res);
+			if (res.status === 200) {
+				dispatch(success("Product successfully deleted", productId));
+			} else {
+				dispatch(failure("Unable to delete object"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function success(message, productId) {
+		return { type: productConstants.PRODUCT_DELETE_SUCCESS, successMessage: message, productId };
+	}
+	function failure(message) {
+		return { type: productConstants.PRODUCT_DELETE_FAILURE, errorMessage: message };
+	}
 }

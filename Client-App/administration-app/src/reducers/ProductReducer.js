@@ -472,7 +472,35 @@ export const productReducer = (state, action) => {
 				successMessage: "",
 				createProduct: ssssstate.createProduct,
 			};
+		case productConstants.PRODUCT_DELETE_SUCCESS:
+			let productDeleteSuccess = {...state };
+			productDeleteSuccess.showedProducts= productDeleteSuccess.showedProducts.filter((product) => product.Id !== action.productId);
+			productDeleteSuccess.products= productDeleteSuccess.products.filter((product) => product.Id !== action.productId);
+			
+			productDeleteSuccess.showError= false;
+			productDeleteSuccess.showSuccessMessage= '';
+			productDeleteSuccess.showSuccessMessage= true;
+			productDeleteSuccess.successMessage= action.successMessage;
 
+			return productDeleteSuccess;
+		case productConstants.PRODUCT_DELETE_FAILURE:
+			let productDeleteFailure = {...state };
+			
+			productDeleteFailure.showError= true;
+			productDeleteFailure.showSuccessMessage= action.errorMessage;
+			productDeleteFailure.showSuccessMessage= false;
+			productDeleteFailure.successMessage= '';
+
+			return productDeleteFailure;
+		case productConstants.HIDE_PRODUCT_ALERT_MESSAGE:
+			let hideProductAlertMessage = {...state };
+			
+			hideProductAlertMessage.showError= false;
+			hideProductAlertMessage.showSuccessMessage= '';
+			hideProductAlertMessage.showSuccessMessage= false;
+			hideProductAlertMessage.successMessage= '';
+
+			return hideProductAlertMessage;
 		default:
 			return state;
 	}

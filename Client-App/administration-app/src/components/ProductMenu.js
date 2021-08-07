@@ -17,13 +17,13 @@ const ProductMenu = () => {
 				hidden={!productState.showSuccessMessage}
 				header="Success"
 				message={productState.successMessage}
-				handleCloseAlert={() => dispatch({ type: productConstants.CATEGORY_CREATE_REQUEST })}
+				handleCloseAlert={() => dispatch({ type: productConstants.HIDE_PRODUCT_ALERT_MESSAGE })}
 			/>
 			<FailureAlert
 				hidden={!productState.showErrorMessage}
 				header="Error"
 				message={productState.errorMessage}
-				handleCloseAlert={() => dispatch({ type: productConstants.CATEGORY_CREATE_REQUEST })}
+				handleCloseAlert={() => dispatch({ type: productConstants.HIDE_PRODUCT_ALERT_MESSAGE })}
 			/>
 
 			<div id="portfolio" className="portfolio">

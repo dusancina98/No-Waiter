@@ -43,6 +43,8 @@ public class Product {
 	
 	private String imagePath;
 	
+	private boolean deleted;
+	
 	@DecimalMin("1.0")
 	private double price;
 	
@@ -74,7 +76,7 @@ public class Product {
 		this.ingredients = ingredients;
 		this.sideDishes = sideDishes;	
 		this.productAmount = new ProductAmount(amount, amountName);
-		
+		this.deleted=false;
 		validate();
 	}
 	
@@ -174,5 +176,13 @@ public class Product {
 
 	public void setSideDishes(List<SideDish> sideDishes) {
 		this.sideDishes = sideDishes;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
 	}	
+	
+	public void delete() {
+		this.deleted= true;
+	}
 }

@@ -65,4 +65,8 @@ public class ProductCategory {
 		
 		products.add(product);
 	}
+
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
 }

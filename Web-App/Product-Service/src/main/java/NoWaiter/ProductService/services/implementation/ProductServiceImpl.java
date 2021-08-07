@@ -71,7 +71,27 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Iterable<IdentifiableDTO<NameDTO>> findAllProductCategories(UUID objectId) {
-		return ProductCategoryMapper.MapProductCategoryCollectionToIdentifiableCategoryDTOCollection(productCategoryRepository.findAllByObjectId(objectId));
+		return ProductCategoryMapper.MapProductCategoryCollectionToIdentifiableCategoryDTOCollection(filterProductCategoryMapByDeletedProducts(productCategoryRepository.findAllByObjectId(objectId)));
+	}
+
+	private List<ProductCategory> filterProductCategoryMapByDeletedProducts(
+			Iterable<ProductCategory> findAllByObjectId) {
+		
+		List<ProductCategory> productCategory = new ArrayList<ProductCategory>();
+		
+		for(ProductCategory productCategoryItem : findAllByObjectId) {
+			List<Product> filteredProducts = new ArrayList<Product>();
+			
+			for(Product productItem : productCategoryItem.getProducts()) {
+				if(!productItem.isDeleted())
+					filteredProducts.add(productItem);
+			}
+			productCategoryItem.setProducts(filteredProducts);
+			productCategory.add(productCategoryItem);
+		}
+		
+		// TODO Auto-generated method stub
+		return productCategory;
 	}
 
 	@Override
@@ -122,7 +142,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Iterable<IdentifiableDTO<ProductDTO>> findAllProducts(UUID objectId) {
-		return ProductMapper.MapProductCategoryCollectionToIdentifiableProductDTOCollection(productCategoryRepository.findAllByObjectId(objectId));
+		return ProductMapper.MapProductCategoryCollectionToIdentifiableProductDTOCollection(filterProductCategoryMapByDeletedProducts(productCategoryRepository.findAllByObjectId(objectId)));
 	}
 
 	@Override
@@ -187,5 +207,14 @@ public class ProductServiceImpl implements ProductService {
 		}
 		
 		return new ProductValidationResponseDTO(products);
+	}
+
+	@Override
+	public void deleteProduct(UUID productId) {
+		Product product = productRepository.findById(productId).get();
+		
+		product.delete();
+		
+		productRepository.save(product);
 	}
 }
