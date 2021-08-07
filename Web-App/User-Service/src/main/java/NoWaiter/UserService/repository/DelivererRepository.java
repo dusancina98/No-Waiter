@@ -10,8 +10,6 @@ import NoWaiter.UserService.entities.Deliverer;
 
 public interface DelivererRepository extends JpaRepository<Deliverer, UUID> {
 	
-	@Query(value = "SELECT d FROM Deliverer d WHERE d.deleted = 'false'")
+	@Query(value = "SELECT d FROM Deliverer d")
 	List<Deliverer> getAll();
-	
-
 }

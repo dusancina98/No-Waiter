@@ -11,7 +11,7 @@ const ListWaitersPage = () => {
 				<div className="main-panel">
 					<UserContextProvider>
 						<WaiterTable />
-						<WaiterDetailsModal />
+						<WaiterDetailsModal/>
 					</UserContextProvider>
 				</div>	
 			</HeaderAndSideBarWrapper>

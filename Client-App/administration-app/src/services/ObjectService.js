@@ -143,7 +143,6 @@ async function findAll(dispatch) {
 }
 
 async function findByAdminId(dispatch) {
-	dispatch(request());
 
 	await Axios.get(`/object-api/api/objects/admin`, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
@@ -158,10 +157,7 @@ async function findByAdminId(dispatch) {
 			console.log(err);
 			dispatch(failure("Error"));
 		});
-
-	function request() {
-		return { type: objectConstants.OBJECT_INFO_REQUEST };
-	}
+		
 	function success(data) {
 		return { type: objectConstants.OBJECT_INFO_SUCCESS, objectInfo: data };
 	}

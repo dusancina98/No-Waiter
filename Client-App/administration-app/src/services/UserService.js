@@ -27,6 +27,7 @@ export const userService = {
 	activateDeliverer,
 	deactivateDeliverer,
 	deleteDeliverer,
+	deleteWaiter,
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -673,5 +674,28 @@ function deleteDeliverer(deliverer, dispatch) {
 	}
 	function failure(message) {
 		return { type: userConstants.DELIVERER_DELETE_FAILURE, errorMessage: message };
+	}
+}
+
+function deleteWaiter(waiterId, dispatch) {
+	Axios.delete(`/user-api/api/users/employee/waiter/${waiterId}`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			console.log(res);
+			if (res.status === 200) {
+				dispatch(success("Waiter successfully deleted", waiterId));
+			} else {
+				dispatch(failure("Error"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function success(message, waiterId) {
+		return { type: userConstants.WAITER_DELETE_SUCCESS, successMessage: message, waiterId };
+	}
+	function failure(message) {
+		return { type: userConstants.WAITER_DELETE_FAILURE, errorMessage: message };
 	}
 }

@@ -60,4 +60,6 @@ public interface UserService {
 
 	ResetPasswordToken isValidResetPasswordToken(String token) throws TokenNotFoundException, ResetPasswordTokenExpiredOrUsedException;
 
+	void deleteWaiter(UUID waiterId);
+
 }

@@ -808,6 +808,30 @@ export const userReducer = (state, action) => {
 			setNameAndSurname.loggedUserInfo.surname = localStorage.getItem('surname');
 			return setNameAndSurname;
 		}
+		case userConstants.WAITER_DELETE_SUCCESS:{
+			let deletedWaiterSuccess = { ...state };
+			deletedWaiterSuccess.waiters = deletedWaiterSuccess.waiters.filter((waiter) => waiter.Id !== action.waiterId);
+			deletedWaiterSuccess.waiterDetails.showModal=false;
+			deletedWaiterSuccess.waiterDetails.readOnly=true;
+			deletedWaiterSuccess.waiterDetails.waiter= {
+				Id: "",
+				EntityDTO: {
+					Email: "",
+					Name: "",
+					Surname: "",
+					Address: "",
+					PhoneNumber: "",
+				},
+			};
+
+			return deletedWaiterSuccess;
+		}
+		case userConstants.WAITER_DELETE_FAILURE:{
+			let deletedWaiterFailure= { ...state };
+			deletedWaiterFailure.editWaiter.showErrorMessage = true;
+			deletedWaiterFailure.editWaiter.errorMessage= action.errorMessage;
+			return deletedWaiterFailure;
+		}
 		default:
 			return state;
 	}

@@ -14,7 +14,7 @@ public class ObjectAdmin {
 	
 	@ManyToOne
 	private Object object;
-	
+		
 	public ObjectAdmin() { }
 	
 	public ObjectAdmin(Object object) {
@@ -38,4 +38,5 @@ public class ObjectAdmin {
 	public void setObject(Object object) {
 		this.object = object;
 	}
+
 }

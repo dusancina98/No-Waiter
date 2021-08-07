@@ -14,7 +14,7 @@ const ObjectDetailsPage = () => {
 			<HeaderAndSideBarWrapper>
 				<div className="main-panel">
 					<ObjectContextProvider>
-						<ObjectInfoHeader />
+						<ObjectInfoHeader/>
 						<div className="row">
 							<div className="col-12 grid-margin stretch-card">
 								<div className="card">

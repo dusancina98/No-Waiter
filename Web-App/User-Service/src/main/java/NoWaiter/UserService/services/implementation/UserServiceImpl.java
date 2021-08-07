@@ -88,7 +88,18 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Iterable<IdentifiableDTO<ObjectAdminDTO>> findAllObjectAdmins() {
-		return UserMapper.MapObjectAdminCollectionToIdentifiableObjectAdminDTOCollection(objectAdminRepository.findAll());
+		return UserMapper.MapObjectAdminCollectionToIdentifiableObjectAdminDTOCollection(filterDeletedObjectAdmin(objectAdminRepository.findAll()));
+	}
+
+	private List<ObjectAdmin> filterDeletedObjectAdmin(Iterable<ObjectAdmin> allAdmins) {
+		List<ObjectAdmin> filteredObjectAdmins = new ArrayList<ObjectAdmin>();
+		
+		for(ObjectAdmin objectAdmin : allAdmins) {
+			if(!objectAdmin.isDeleted())
+				filteredObjectAdmins.add(objectAdmin);
+		}
+		
+		return filteredObjectAdmins;
 	}
 
 	@Override
@@ -249,9 +260,20 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Iterable<IdentifiableDTO<WaiterDTO>> findAllWaiters(UUID objectAdminId) {
 		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
-		return UserMapper.MapWaiterCollectionToIdentifiableWaiterDTOCollection(waiterRepository.findAllByObjectId(objectAdmin.getObjectId()));
+		return UserMapper.MapWaiterCollectionToIdentifiableWaiterDTOCollection(filterDeletedWaiters(waiterRepository.findAllByObjectId(objectAdmin.getObjectId())));
 	}
 
+
+	private List<Waiter> filterDeletedWaiters(List<Waiter> findAllByObjectId) {
+		List<Waiter> filteredWaiters = new ArrayList<Waiter>();
+		
+		for(Waiter waiter : findAllByObjectId) {
+			if(!waiter.isDeleted())
+				filteredWaiters.add(waiter);
+		}
+		
+		return filteredWaiters;
+	}
 
 	@Override
 	public void updateWaiter(IdentifiableDTO<UpdateWaiterDTO> entity) throws ClassFieldValidationException {
@@ -266,7 +288,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void deleteObjectAdmin(UUID objectAdminId) {
-		objectAdminRepository.deleteById(objectAdminId);
+		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
+		
+		objectAdmin.delete();
+		
+		objectAdminRepository.save(objectAdmin);
 	}
 
 
@@ -285,6 +311,15 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UUID findObjectIdByWaiterId(UUID waiterId) {
 		return waiterRepository.findById(waiterId).get().getObjectId();
+	}
+
+	@Override
+	public void deleteWaiter(UUID waiterId) {
+		Waiter waiter = waiterRepository.findById(waiterId).get();
+		
+		waiter.delete();
+		
+		waiterRepository.save(waiter);		
 	}
 	
 	

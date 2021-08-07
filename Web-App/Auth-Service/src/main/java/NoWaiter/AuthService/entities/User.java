@@ -47,6 +47,9 @@ public class User implements UserDetails{
     @Column(name = "active", nullable = false)
     private boolean active;
     
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted;
+    
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_authority",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -62,6 +65,7 @@ public class User implements UserDetails{
         this.name = name;
         this.surname = surname;
         this.active=false;
+        this.deleted=false;
     }
 
     public User(String email, String password, String name, String surname) {
@@ -133,8 +137,7 @@ public class User implements UserDetails{
 	@JsonIgnore
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return true;
+		return !this.deleted;
 	}
 
 	@JsonIgnore
