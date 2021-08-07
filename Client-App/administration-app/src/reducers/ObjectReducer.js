@@ -52,6 +52,7 @@ export const objectReducer = (state, action) => {
 				objectDetails: {
 					showModal: true,
 					readOnly: true,
+					workTimeReadOnly: true,
 					object: action.object,
 				},
 			};
@@ -144,6 +145,48 @@ export const objectReducer = (state, action) => {
 							Address: "",
 							PhoneNumber: "",
 							ImagePath: "",
+							WorkTime : {
+								EntityDTO: {
+									Id: "",
+									WorkDays: {
+										SUNDAY :{
+											Working:'false',
+											TimeFrom:'',
+											TimeTo:'',
+										},
+										TUESDAY :{
+											Working:'false',
+											TimeFrom:'',
+											TimeTo:'',
+										},
+										THURSDAY :{
+											Working:'false',
+											TimeFrom:'',
+											TimeTo:'',
+										},
+										SATURDAY :{
+											Working:'false',
+											TimeFrom:'',
+											TimeTo:'',
+										},
+										MONDAY :{
+											Working:'false',
+											TimeFrom:'',
+											TimeTo:'',
+										},
+										FRIDAY :{
+											Working:'false',
+											TimeFrom:'',
+											TimeTo:'',
+										},
+										WEDNESDAY:{
+											Working:'false',
+											TimeFrom:'',
+											TimeTo:'',
+										},
+									}
+								}
+							}
 						},
 					},
 				},
@@ -206,6 +249,7 @@ export const objectReducer = (state, action) => {
 				objectDetails: {
 					showModal: true,
 					readOnly: true,
+					workTimeReadOnly: true,
 					object: action.object,
 				},
 			};
@@ -241,6 +285,7 @@ export const objectReducer = (state, action) => {
 				objectDetails: {
 					showModal: true,
 					readOnly: true,
+					workTimeReadOnly:true,
 					object: action.object,
 				},
 			};
@@ -310,6 +355,7 @@ export const objectReducer = (state, action) => {
 				objectDetails: {
 					showModal: true,
 					readOnly: true,
+					workTimeReadOnly:true,
 					object: action.object,
 				},
 			};
@@ -330,6 +376,7 @@ export const objectReducer = (state, action) => {
 				objectDetails: {
 					showModal: true,
 					readOnly: true,
+					workTimeReadOnly: true,
 					object: action.object,
 				},
 			};
@@ -345,6 +392,7 @@ export const objectReducer = (state, action) => {
 				objectDetails: {
 					showModal: false,
 					readOnly: true,
+					workTimeReadOnly:true,
 					object: {
 						Id: "",
 						EntityDTO: {
@@ -361,6 +409,10 @@ export const objectReducer = (state, action) => {
 			let prom = { ...state };
 			prom.objectDetails.readOnly = false;
 			return prom;
+		case modalConstants.ALLOW_OBJECT_WORKTIME_INPUT_FIELDS:
+			let worktimeField = { ...state };
+			worktimeField.objectDetails.workTimeReadOnly = false;
+			return worktimeField;
 		case objectConstants.GENERATE_SELF_ORDERING_TOKEN_SUCCESS:
 			let selfOrderingSuccess = { ...state };
 			selfOrderingSuccess.generatedToken = action.jwtToken;
@@ -408,6 +460,7 @@ export const objectReducer = (state, action) => {
 				objectDetails: {
 					showModal: true,
 					readOnly: true,
+					workTimeReadOnly:true,
 					object: action.object,
 				},
 			};

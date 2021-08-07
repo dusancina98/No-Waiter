@@ -3,8 +3,10 @@ import { Button, Modal } from "react-bootstrap";
 import { modalConstants } from "../../constants/ModalConstants";
 import { objectConstants } from "../../constants/ObjectConstants";
 import { ObjectContext } from "../../contexts/ObjectContext";
+import { hasRoles } from "../../helpers/auth-header";
 import { objectService } from "../../services/ObjectService";
 import EditObjectForm from "../EditObjectForm";
+import EditWorkTimeForm from "../EditWorkTimeForm";
 import FailureAlert from "../FailureAlert";
 import SuccessAlert from "../SuccessAlert";
 import ObjectDetailsModalButtons from "./ObjectDetailsModalButtons";
@@ -74,9 +76,14 @@ const ObjectDetailsModal = () => {
 					</div>
 
 					<div className="col-md-6 grid-margin stretch-card">
-						<div className="card">
+						<div className="card" hidden={!hasRoles("ROLE_SYSADMIN")}>
 							<div className="card-body">
 								<img src={objectState.objectDetails.object.EntityDTO.ImagePath} alt="restaurant" className="img-fluid" />
+							</div>
+						</div>
+						<div className="card" style={{ border: "0" }} hidden={!hasRoles("ROLE_OBJADMIN")}>
+							<div className="card-body">
+								<EditWorkTimeForm/>
 							</div>
 						</div>
 					</div>

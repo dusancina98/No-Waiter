@@ -19,6 +19,7 @@ const ObjectContextProvider = (props) => {
 		objectDetails: {
 			showModal: false,
 			readOnly: true,
+			workTimeReadOnly: true,
 			object: {
 				Id: "",
 				EntityDTO: {

@@ -14,6 +14,7 @@ export const objectService = {
 	unblockObject,
 	generateNewToken,
 	deleteObject,
+	updateObjectWorkTime,
 };
 
 function createObject(object, dispatch) {
@@ -68,7 +69,7 @@ function updateObject(object, dispatch) {
 				}else if(res.status===409){
 					dispatch(failure("Restaurant with name " + object.Name +" already exist, please enter unique name"));
 				}else{
-					dispatch(failure(res.data));
+					dispatch(failure("error"));
 				}
 			})
 			.catch((err) => {
@@ -79,6 +80,29 @@ function updateObject(object, dispatch) {
 	function request() {
 		return { type: objectConstants.OBJECT_UPDATE_REQUEST };
 	}
+	function success(message, object) {
+		return { type: objectConstants.OBJECT_UPDATE_SUCCESS, successMessage: message, object };
+	}
+	function failure(message) {
+		return { type: objectConstants.OBJECT_UPDATE_FAILURE, errorMessage: message };
+	}
+}
+
+function updateObjectWorkTime(object, dispatch) {
+	Axios.put(`/object-api/api/objects/worktime`, object, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				//dispatch(success("Object successfully updated", object));
+			}else if(res.status===409){
+				//dispatch(failure("Restaurant with name " + object.Name +" already exist, please enter unique name"));
+			}else{
+				//dispatch(failure("error"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+
 	function success(message, object) {
 		return { type: objectConstants.OBJECT_UPDATE_SUCCESS, successMessage: message, object };
 	}
