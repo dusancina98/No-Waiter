@@ -21,7 +21,6 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -56,7 +55,6 @@ public class Product {
 	private ProductType productType;
 	
 	@OneToMany(cascade={CascadeType.ALL})
-    @Size(min=1, message = "Product must have at least one ingredient")
 	private List<Ingredient> ingredients;
 	
 	@OneToMany(cascade = CascadeType.ALL)
@@ -86,8 +84,7 @@ public class Product {
     	Set<ConstraintViolation<Product>> violations =  validator.validate(this);
     	
     	if(!violations.isEmpty())
-    		throw new ConstraintViolationException(violations);
-		
+    		throw new ConstraintViolationException(violations);		
 	}
 	
 	public Product(String name, String description, boolean available, String imagePath, double price, int amount, String amountName, ProductType productType, List<Ingredient> ingredients, List<SideDish> sideDishes) {
