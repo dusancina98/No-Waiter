@@ -137,7 +137,7 @@ const Tabs = () => {
 				name="Orders"
 				component={OrdersScreen}
 				options={{
-					headerShown: false,
+					headerShown: true,
 					tabBarIcon: ({ focused }) => (
 						<Image
 							source={icons.cutlery}

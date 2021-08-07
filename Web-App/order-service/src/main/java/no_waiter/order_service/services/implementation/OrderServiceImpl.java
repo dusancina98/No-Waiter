@@ -175,6 +175,18 @@ public class OrderServiceImpl implements OrderService{
 		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId());
 		orderEventRepository.save(newOrderEvent);
 	}
+	
+
+	@Override
+	public void acceptOrderDeliverer(AcceptOrderDTO acceptOrderDTO) {
+		Order order = orderRepository.findById(acceptOrderDTO.OrderId).get();
+		
+		order.setEstimatedTime(acceptOrderDTO.EstimatedTime);
+		orderRepository.save(order);
+		
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED_DELIVERY, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId());
+		orderEventRepository.save(newOrderEvent);		
+	}
 
 	@Override
 	public void setOrderToReady(UUID orderId) {
@@ -432,7 +444,7 @@ public class OrderServiceImpl implements OrderService{
 		Date estimatedDate = new Date();
 		estimatedDate.setTime(orderEvent.getCreatedTime().getTime() + (orderEvent.getEstimatedTime()*60*1000));		
 		
-		DelivererOrdeDTO retVal = new DelivererOrdeDTO(getPriceForOrder(orderEvent.getOrder()), estimatedDate, orderEvent.getOrder().getId(), orderEvent.getObjectId(), "", "", "");
+		DelivererOrdeDTO retVal = new DelivererOrdeDTO(getPriceForOrder(orderEvent.getOrder()), estimatedDate, orderEvent.getOrder().getId(), orderEvent.getObjectId(), "", "", "", orderEvent.getOrder().getAddress().getAddress());
 		for (ObjectDetailsDTO objectDetailsDTO : objectDetails) {
 			if (objectDetailsDTO.ObjectId.equals(orderEvent.getObjectId())) {
 				retVal.ObjectImage = objectDetailsDTO.ObjectImage;
@@ -443,6 +455,7 @@ public class OrderServiceImpl implements OrderService{
 		}
 		return retVal;
 	}
+
 	
 	//@Override
 	//public UUID createOrder(OrderRequestDTO requestDTO, ProductValidationResponseDTO products, UUID objectId) {

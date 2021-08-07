@@ -1,5 +1,7 @@
 import { orderConstants } from "../constants/OrderConstants";
 
+let ordCpy = {};
+
 export const orderReducer = (state, action) => {
 	switch (action.type) {
 		case orderConstants.SET_PENDING_ORDERS_REQUEST:
@@ -16,6 +18,28 @@ export const orderReducer = (state, action) => {
 			return {
 				...state,
 				pendingOrders: [],
+			};
+
+		case orderConstants.ACCEPT_ORDER_REQUEST:
+			return {
+				...state,
+				orderAccept: {
+					accepted: false,
+				},
+			};
+		case orderConstants.ACCEPT_ORDER_SUCCESS:
+			ordCpy = { ...state };
+			let arOrders = state.pendingOrders.filter((order) => order.OrderId !== action.orderId);
+			ordCpy.pendingOrders = arOrders;
+			ordCpy.orderAccept.accepted = true;
+			console.log(ordCpy);
+			return ordCpy;
+		case orderConstants.ACCEPT_ORDER_FAILURE:
+			return {
+				...state,
+				orderAccept: {
+					accepted: false,
+				},
 			};
 		default:
 			return state;

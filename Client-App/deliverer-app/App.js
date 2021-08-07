@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Tabs from "./app/navigation/Tabs";
 import WelcomeScreen from "./app/screens/WelcomeScreen";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -8,6 +8,8 @@ import AppLoading from "expo-app-loading";
 import LoginScreen from "./app/screens/LoginScreen";
 import AuthContextProvider from "./app/contexts/AuthContext";
 import OrderContextProvider from "./app/contexts/OrderContext";
+import { hasAnyRole } from "./app/helpers/auth-header";
+import OrderConfirmScreen from "./app/screens/OrderConfirmScreen";
 
 const Stack = createStackNavigator();
 
@@ -19,6 +21,11 @@ const getFonts = () =>
 
 export default function App() {
 	const [fontsLoaded, setFontsLoaded] = useState(false);
+	const [token, setToken] = useState(false);
+
+	useEffect(() => {
+		setToken(hasAnyRole());
+	}, []);
 
 	if (fontsLoaded) {
 		return (
@@ -29,11 +36,12 @@ export default function App() {
 							screenOptions={{
 								headerShown: false,
 							}}
-							initialRouteName={"Welcome"}
+							initialRouteName={token === true ? "Home" : "Welcome"}
 						>
 							<Stack.Screen name="Home" component={Tabs} />
 							<Stack.Screen name="Welcome" component={WelcomeScreen} />
 							<Stack.Screen name="Login" component={LoginScreen} />
+							<Stack.Screen name="Order Confirm" component={OrderConfirmScreen} options={{ headerShown: true }} />
 						</Stack.Navigator>
 					</NavigationContainer>
 				</OrderContextProvider>

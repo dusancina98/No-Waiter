@@ -17,7 +17,8 @@ public interface OrderEventRepository extends PagingAndSortingRepository<OrderEv
 	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.order.id = ?1")
 	List<OrderEvent> getOrderEventsByOrderId(UUID orderId);
 	
-	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.orderStatus = 'CONFIRMED' and oe.createdTime >= ?1 and oe.order.orderType = 'DELIVERY'")
+	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.orderStatus = 'CONFIRMED' and oe.createdTime >= ?1 and oe.order.orderType = 'DELIVERY'"
+				 + "AND oe.order.id NOT IN (SELECT oe.order.id FROM OrderEvent oe WHERE oe.orderStatus = 'CONFIRMED_DELIVERY' and oe.createdTime >= ?1) and oe.order.orderType = 'DELIVERY'")
 	List<OrderEvent> getConfirmedOrderEventsForDelivery(Date timeStamp);
 	
 	@Query(value = "SELECT distinct(oe.objectId) FROM OrderEvent oe WHERE oe.orderStatus = 'CONFIRMED' and oe.createdTime >= ?1 and oe.order.orderType = 'DELIVERY'")

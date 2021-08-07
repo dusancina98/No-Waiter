@@ -63,7 +63,15 @@ const ObjectInfoHeader = () => {
 					<i>
 						<b>{objectState.objectInfo.object.EntityDTO.Name}</b>
 					</i>
+
+					<button hidden={!objectState.objectInfo.imageSelected} type="button" onClick={handleSubmit} className="btn btn-outline-secondary btn-icon-text border-0">
+						<i className="mdi mdi-file-check btn-icon-prepend"></i> Submit
+					</button>
+					<button hidden={objectState.objectInfo.imageSelected} type="button" onClick={() => imgRef.current.click()} className="btn btn-outline-secondary btn-icon-text border-0">
+						<i className="mdi mdi-upload btn-icon-prepend"></i> Upload
+					</button>
 				</h1>
+
 				<div className="row mt-auto w-100">
 					<div className="col-6 d-flex justify-content-start">
 						<h3 className="ml-3" style={{ color: colorConstants.COLOR_WHITE }}>

@@ -133,6 +133,23 @@ public class Api {
         }
     }
 	
+	@PutMapping("/accept/deliverer")
+    @CrossOrigin
+    public ResponseEntity<?> acceptOrderDeliverer(@RequestBody AcceptOrderDTO acceptOrderDTO) {
+
+        try {		
+        	
+        	orderService.acceptOrderDeliverer(acceptOrderDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
 	@GetMapping("/confirmed")
     @CrossOrigin
     public ResponseEntity<?> getConfirmedOrdersForObject(@RequestHeader("Authorization") String token) {

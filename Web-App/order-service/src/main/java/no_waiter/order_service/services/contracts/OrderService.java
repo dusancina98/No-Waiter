@@ -24,6 +24,8 @@ public interface OrderService {
 
 	void acceptOrder(AcceptOrderDTO acceptOrderDTO);
 
+	void acceptOrderDeliverer(AcceptOrderDTO acceptOrderDTO);
+	
 	List<ConfirmedOrderDTO> getConfirmedOrdersForObject(UUID objectId);
 	
 	List<DelivererOrdeDTO> getAllConfirmedOrders();
