@@ -231,11 +231,57 @@ export const employmentRequestStyle = StyleSheet.create({
 	multilineTextInput: {
 		paddingHorizontal: 10,
 		fontSize: 18,
-		height: 90,
+		height: 120,
 		marginTop: 5,
 		borderWidth: 1,
 		borderRadius: 15,
 		width: "90%",
 		backgroundColor: "white",
+	},
+});
+
+export const userInfoStyle = StyleSheet.create({
+	containerWrapper: {
+		flex: 1,
+		paddingHorizontal: 10,
+		marginTop: 20,
+	},
+	userDetailsContainer: {
+		height: 70,
+		borderRadius: 10,
+		backgroundColor: "lightgray",
+		flexDirection: "row",
+		alignSelf: "center",
+		paddingHorizontal: 20,
+	},
+	userImageContainer: {
+		flex: 1,
+		alignSelf: "center",
+	},
+	userInfo: {
+		marginLeft: 15,
+		alignSelf: "center",
+		fontSize: 25,
+		flex: 4,
+	},
+	button: {
+		width: "100%",
+		marginTop: 20,
+		paddingTop: 15,
+		paddingBottom: 15,
+		marginLeft: 30,
+		marginRight: 30,
+		backgroundColor: "white",
+		borderRadius: 10,
+		borderWidth: 1,
+		alignSelf: "center",
+		borderColor: "black",
+	},
+	buttonText: {
+		color: "black",
+		fontSize: 20,
+		fontFamily: "roboto-regular",
+		fontWeight: "400",
+		textAlign: "center",
 	},
 });

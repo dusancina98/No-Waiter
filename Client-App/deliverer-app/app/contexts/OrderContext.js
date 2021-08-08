@@ -6,6 +6,7 @@ export const OrderContext = createContext();
 const OrderContextProvider = (props) => {
 	const [orderState, dispatch] = useReducer(orderReducer, {
 		pendingOrders: [],
+		acceptedOrders: [],
 		orderAccept: {
 			accepted: false,
 		},

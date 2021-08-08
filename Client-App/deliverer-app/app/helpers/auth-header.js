@@ -18,6 +18,8 @@ export function setAuthInLocalStorage(data) {
 			["accessToken", data.accessToken],
 			["expireTime", data.expiresIn.toString()],
 			["roles", JSON.stringify(data.roles)],
+			["name", data.name],
+			["surname", data.surname],
 		]);
 	} catch (error) {
 		console.log("LALA", error);
@@ -55,7 +57,7 @@ export async function validateAccessToken() {
 
 export async function deleteLocalStorage() {
 	try {
-		await AsyncStorage.multiRemove("accessToken", "roles", "expireTime");
+		await AsyncStorage.clear();
 	} catch (error) {
 		console.log(error);
 	}

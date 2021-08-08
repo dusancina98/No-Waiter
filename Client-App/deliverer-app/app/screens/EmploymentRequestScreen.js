@@ -1,7 +1,9 @@
-import React, { useContext, useState } from "react";
-import { ImageBackground, View, Text, TouchableOpacity, StatusBar, TextInput, TouchableWithoutFeedback, Keyboard, SafeAreaView } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { View, Text, TouchableOpacity, StatusBar, TextInput, TouchableWithoutFeedback, Keyboard, SafeAreaView, DatePickerAndroid } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { authConstants } from "../constants/AuthConstants";
 import { AuthContext } from "../contexts/AuthContext";
+import { authService } from "../services/AuthService";
 import { employmentRequestStyle, loginStyles, welcomeStyles } from "../styles/styles";
 
 function EmploymentRequestScreen({ navigation }) {
@@ -13,7 +15,21 @@ function EmploymentRequestScreen({ navigation }) {
 	const [experience, setExperience] = useState("");
 	const [email, setEmail] = useState("");
 
-	const handleSendRequest = () => {};
+	const handleSendRequest = () => {
+		let requestDTO = {
+			Email: email,
+			Name: name,
+			Surname: surname,
+			PhoneNumber: phoneNumber,
+			Reference: experience,
+		};
+
+		authService.createEmploymentRequest(requestDTO, dispatch);
+	};
+
+	useEffect(() => {
+		dispatch({ type: authConstants.CREATE_EMPLOYMENT_REQUEST_REQUEST });
+	}, []);
 
 	return (
 		<KeyboardAwareScrollView>
@@ -22,9 +38,10 @@ function EmploymentRequestScreen({ navigation }) {
 					<View style={loginStyles.containerWrapper}>
 						<StatusBar barStyle="dark-content" />
 						<View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-							<View style={employmentRequestStyle.logoContainer}>
+							{/* <View style={employmentRequestStyle.logoContainer}>
 								<Text style={employmentRequestStyle.logoText}>Employment Request</Text>
-							</View>
+							</View> */}
+							<View style={{ marginBottom: 20 }}></View>
 							<View style={loginStyles.loginForm}>
 								<Text style={employmentRequestStyle.textForm}>Email</Text>
 								<TextInput style={employmentRequestStyle.textInput} placeholder="Email" onChangeText={(val) => setEmail(val)}></TextInput>
@@ -35,9 +52,18 @@ function EmploymentRequestScreen({ navigation }) {
 								<Text style={employmentRequestStyle.textForm}>Phone number</Text>
 								<TextInput style={employmentRequestStyle.textInput} placeholder="Phone number" onChangeText={(val) => setPhoneNumber(val)}></TextInput>
 								<Text style={employmentRequestStyle.textForm}>Working experience</Text>
-								<TextInput style={employmentRequestStyle.multilineTextInput} placeholder="Working experience" onChangeText={(val) => setExperience(val)}></TextInput>
+								<TextInput multiline={true} style={employmentRequestStyle.multilineTextInput} placeholder="Working experience" onChangeText={(val) => setExperience(val)}></TextInput>
 							</View>
-							{/* {authState.userLogin.showError && <Text style={loginStyles.errorMessage}>{authState.userLogin.errorMessage}</Text>} */}
+							{authState.employmentRequest.showError && (
+								<Text style={loginStyles.errorMessage}>
+									{authState.employmentRequest.errorMessage.length > 130
+										? authState.employmentRequest.errorMessage.substring(0, 130) + "..."
+										: authState.employmentRequest.errorMessage}
+								</Text>
+							)}
+							{authState.employmentRequest.successfullySent && (
+								<Text style={{ color: "green", fontSize: 18, alignSelf: "center", marginTop: 10 }}>Employment request sent seuccessfully</Text>
+							)}
 							<TouchableOpacity style={loginStyles.loginButton} activeOpacity={0.5} onPress={handleSendRequest}>
 								<Text style={welcomeStyles.loginText}> Send request </Text>
 							</TouchableOpacity>

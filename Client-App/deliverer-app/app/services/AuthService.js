@@ -6,19 +6,69 @@ import { API_URL } from "../constants/ApiUrl";
 export const authService = {
 	login,
 	logout,
+	createEmploymentRequest,
 };
+
+function createEmploymentRequest(requestDTO, dispatch) {
+	dispatch(request());
+
+	if (validateEmploymentRequest(requestDTO, dispatch)) {
+		Axios.post(`${API_URL}/user-api/api/users/deliverer-request`, requestDTO, { validateStatus: () => true })
+			.then((res) => {
+				console.log(res.data);
+				if (res.status === 201) {
+					dispatch(success(res.data));
+				} else {
+					dispatch(failure(res.data));
+				}
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+	}
+
+	function request() {
+		return { type: authConstants.CREATE_EMPLOYMENT_REQUEST_REQUEST };
+	}
+	function success() {
+		return { type: authConstants.CREATE_EMPLOYMENT_REQUEST_SUCCESS };
+	}
+	function failure(error) {
+		return { type: authConstants.CREATE_EMPLOYMENT_REQUEST_FAILURE, error };
+	}
+}
+
+function validateEmploymentRequest(requestDTO, dispatch) {
+	if (requestDTO.Email === "") {
+		dispatch(failure("Email address must be entered"));
+		return false;
+	} else if (requestDTO.Name === "") {
+		dispatch(failure("Name must be entered"));
+		return false;
+	} else if (requestDTO.Surname === "") {
+		dispatch(failure("Surname must be entered"));
+		return false;
+	} else if (requestDTO.PhoneNumber === "") {
+		dispatch(failure("PhoneNumber must be entered"));
+		return false;
+	} else if (requestDTO.Reference === "") {
+		dispatch(failure("Reference must be entered"));
+		return false;
+	}
+	function failure(error) {
+		return { type: authConstants.CREATE_EMPLOYMENT_REQUEST_VALIDATION_FAILURE, error };
+	}
+	return true;
+}
 
 function login(loginRequest, dispatch) {
 	dispatch(request());
 
 	if (validateLoginRequest(loginRequest, dispatch)) {
-		console.log("USAO", `${API_URL}/auth-api/api/auth/login/deliverer`);
-
 		Axios.post(`${API_URL}/auth-api/api/auth/login/deliverer`, loginRequest, { validateStatus: () => true })
 			.then((res) => {
-				console.log("USAO122");
+				console.log(res.data);
 				if (res.status === 200) {
-					console.log("USAO1");
 					setAuthInLocalStorage(res.data);
 					dispatch(success(res.data));
 				} else if (res.status === 401) {
@@ -31,8 +81,6 @@ function login(loginRequest, dispatch) {
 				}
 			})
 			.catch((err) => {
-				console.log("USAO14");
-
 				console.error(err);
 			});
 	}
@@ -62,6 +110,11 @@ function validateLoginRequest(loginRequest, dispatch) {
 	return true;
 }
 
-function logout() {
-	deleteLocalStorage();
+async function logout(dispatch) {
+	await deleteLocalStorage();
+	dispatch(success());
+
+	function success() {
+		return { type: authConstants.LOGOUT_SUCCESS };
+	}
 }

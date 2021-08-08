@@ -5,21 +5,18 @@ import { orderService } from "../services/OrderService";
 import moment from "moment";
 import { orderListStyles } from "../styles/styles";
 import { API_URL } from "../constants/ApiUrl";
-import { authHeader } from "../helpers/auth-header";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function OrdersScreen({ navigation }) {
+function AcceptedOrdersScreen({ navigation }) {
 	const [isFetching, setIsFetching] = useState(false);
 	const { orderState, dispatch } = useContext(OrderContext);
 
 	useEffect(() => {
-		orderService.getAllConfirmedOrders(dispatch);
+		orderService.getAllAcceptedOrders(dispatch);
 	}, []);
 
 	useEffect(() => {
-		console.log("Usao", isFetching);
 		if (isFetching === true) {
-			orderService.getAllConfirmedOrders(dispatch);
+			orderService.getAllAcceptedOrders(dispatch);
 			setIsFetching(false);
 		}
 	}, [isFetching]);
@@ -40,9 +37,9 @@ function OrdersScreen({ navigation }) {
 				refreshing={isFetching}
 				onRefresh={() => setIsFetching(true)}
 				keyExtractor={(item) => item.OrderId}
-				data={orderState.pendingOrders}
+				data={orderState.acceptedOrders}
 				renderItem={({ item }) => (
-					<TouchableOpacity onPress={() => navigation.navigate("Order Confirm", item)}>
+					<TouchableOpacity>
 						<View style={orderListStyles.containerWrapper}>
 							<View style={orderListStyles.objectInfoContainer}>
 								<Text style={{ fontWeight: "bold", fontSize: 22 }}>{item.DeliveryAddress}</Text>
@@ -70,4 +67,4 @@ function OrdersScreen({ navigation }) {
 	);
 }
 
-export default OrdersScreen;
+export default AcceptedOrdersScreen;

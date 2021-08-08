@@ -3,7 +3,7 @@ package no_waiter.order_service.services.contracts.dto;
 import java.util.Date;
 import java.util.UUID;
 
-public class DelivererOrdeDTO {
+public class DelivererOrderDTO {
 
 	public Double Price;
 		
@@ -21,9 +21,9 @@ public class DelivererOrdeDTO {
 	
 	public String DeliveryAddress;
 	
-	public DelivererOrdeDTO() {}
+	public DelivererOrderDTO() {}
 
-	public DelivererOrdeDTO(Double price, Date estimatedTime, UUID orderId, UUID objectId, String objectName,
+	public DelivererOrderDTO(Double price, Date estimatedTime, UUID orderId, UUID objectId, String objectName,
 			String objectImage, String objectAddress, String deliveryAddress) {
 		super();
 		Price = price;

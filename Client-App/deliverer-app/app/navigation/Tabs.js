@@ -7,6 +7,7 @@ import { isIphoneX } from "react-native-iphone-x-helper";
 import icons from "../constants/Icons";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import OrdersScreen from "../screens/OrdersScreen";
+import UserInfoScreen from "../screens/UserInfoScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -174,10 +175,10 @@ const Tabs = () => {
 			/>
 
 			<Tab.Screen
-				name="User"
-				component={WelcomeScreen}
+				name="User Info"
+				component={UserInfoScreen}
 				options={{
-					headerShown: false,
+					headerShown: true,
 					tabBarIcon: ({ focused }) => (
 						<Image
 							source={icons.user}

@@ -5,8 +5,38 @@ import { orderConstants } from "../constants/OrderConstants";
 
 export const orderService = {
 	getAllConfirmedOrders,
+	getAllAcceptedOrders,
 	confirmOrder,
 };
+
+async function getAllAcceptedOrders(dispatch) {
+	dispatch(request());
+
+	let header = await authHeader();
+
+	await Axios.get(`${API_URL}/order-api/api/orders/accepted/deliverer`, { validateStatus: () => true, headers: header })
+		.then((res) => {
+			console.log(res.data);
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else {
+				dispatch(failure(res.data.message));
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+
+	function request() {
+		return { type: orderConstants.SET_ACCEPTED_ORDERS_REQUEST };
+	}
+	function success(orders) {
+		return { type: orderConstants.SET_ACCEPTED_ORDERS_SUCCESS, orders };
+	}
+	function failure(error) {
+		return { type: orderConstants.SET_ACCEPTED_ORDERS_FAILURE, error };
+	}
+}
 
 async function getAllConfirmedOrders(dispatch) {
 	dispatch(request());

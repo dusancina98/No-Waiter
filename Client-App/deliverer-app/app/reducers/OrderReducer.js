@@ -20,6 +20,22 @@ export const orderReducer = (state, action) => {
 				pendingOrders: [],
 			};
 
+		case orderConstants.SET_ACCEPTED_ORDERS_REQUEST:
+			return {
+				...state,
+				acceptedOrders: [],
+			};
+		case orderConstants.SET_ACCEPTED_ORDERS_SUCCESS:
+			return {
+				...state,
+				acceptedOrders: action.orders,
+			};
+		case orderConstants.SET_ACCEPTED_ORDERS_FAILURE:
+			return {
+				...state,
+				acceptedOrders: [],
+			};
+
 		case orderConstants.ACCEPT_ORDER_REQUEST:
 			return {
 				...state,

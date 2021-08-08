@@ -37,6 +37,59 @@ export const authReducer = (state, action) => {
 					errorMessage: "",
 					successLogin: true,
 				},
+				userLogout: {
+					successLogout: false,
+				},
+			};
+
+		case authConstants.LOGOUT_SUCCESS:
+			return {
+				...state,
+				userLogout: {
+					successLogout: true,
+				},
+				userLogin: {
+					showError: false,
+					errorMessage: "",
+					successLogin: false,
+				},
+			};
+
+		case authConstants.CREATE_EMPLOYMENT_REQUEST_REQUEST:
+			return {
+				...state,
+				employmentRequest: {
+					showError: false,
+					errorMessage: "",
+					successfullySent: false,
+				},
+			};
+		case authConstants.CREATE_EMPLOYMENT_REQUEST_VALIDATION_FAILURE:
+			return {
+				...state,
+				employmentRequest: {
+					showError: true,
+					errorMessage: action.error,
+					successfullySent: false,
+				},
+			};
+		case authConstants.CREATE_EMPLOYMENT_REQUEST_FAILURE:
+			return {
+				...state,
+				employmentRequest: {
+					showError: true,
+					errorMessage: action.error,
+					successfullySent: false,
+				},
+			};
+		case authConstants.CREATE_EMPLOYMENT_REQUEST_SUCCESS:
+			return {
+				...state,
+				employmentRequest: {
+					showError: false,
+					errorMessage: "",
+					successfullySent: true,
+				},
 			};
 		default:
 			return state;

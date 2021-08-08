@@ -10,6 +10,14 @@ const AuthContextProvider = (props) => {
 			errorMessage: "",
 			successLogin: false,
 		},
+		userLogout: {
+			successLogout: false,
+		},
+		employmentRequest: {
+			showError: false,
+			errorMessage: "",
+			successfullySent: false,
+		},
 	});
 
 	return <AuthContext.Provider value={{ authState, dispatch }}>{props.children}</AuthContext.Provider>;
