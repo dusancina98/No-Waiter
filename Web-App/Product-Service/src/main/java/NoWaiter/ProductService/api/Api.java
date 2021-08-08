@@ -170,6 +170,19 @@ public class Api {
         }
     }
 	
+	@DeleteMapping("/{categoryId}/category")
+    @CrossOrigin
+    public ResponseEntity<?> deleteCategory(@PathVariable UUID categoryId) {
+
+        try {
+        	productService.deleteCategory(categoryId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
 	private boolean hasRole(List<String> authorities, String role) {
 		System.out.println(role);
 

@@ -501,6 +501,36 @@ export const productReducer = (state, action) => {
 			hideProductAlertMessage.successMessage= '';
 
 			return hideProductAlertMessage;
+		case productConstants.CATEGORY_DELETE_SUCCESS:{
+			let categoryDeleteSuccess = {...state};
+
+			categoryDeleteSuccess.categories = categoryDeleteSuccess.categories.filter((category) => category.Id !== action.categoryId);
+			categoryDeleteSuccess.selectedCategory = {
+				Id: "",
+				EntityDTO: {
+					Name: "",
+				},
+			};
+			categoryDeleteSuccess.products = categoryDeleteSuccess.products.filter((product) => product.EntityDTO.ProductCategory.Id !== action.categoryId);
+			categoryDeleteSuccess.showedProducts = categoryDeleteSuccess.showedProducts.filter((product) => product.EntityDTO.ProductCategory.Id !== action.categoryId);
+
+			categoryDeleteSuccess.showError= false;
+			categoryDeleteSuccess.showErrorMessage= '';
+			categoryDeleteSuccess.showSuccessMessage= true;
+			categoryDeleteSuccess.successMessage=action.successMessage;
+
+			return categoryDeleteSuccess;
+		}
+		case productConstants.CATEGORY_DELETE_FAILURE:{
+			let categoryDeleteFailure = {...state };
+			
+			categoryDeleteFailure.showError= true;
+			categoryDeleteFailure.showErrorMessage= action.errorMessage;
+			categoryDeleteFailure.showSuccessMessage= false;
+			categoryDeleteFailure.successMessage= '';
+
+			return categoryDeleteFailure;
+		}
 		default:
 			return state;
 	}

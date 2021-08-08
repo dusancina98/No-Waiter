@@ -8,7 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Where;
+
 @Entity
+@Where(clause = "deleted=false")
 public class ProductCategory {
 	
 	@Id
@@ -20,6 +23,8 @@ public class ProductCategory {
 	
 	@OneToMany(mappedBy = "productCategory")
 	private List<Product> products;
+	
+    private boolean deleted = Boolean.FALSE;
 	
 	public ProductCategory() { }
 
@@ -68,5 +73,15 @@ public class ProductCategory {
 
 	public void setProducts(List<Product> products) {
 		this.products = products;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+	
+	public void delete() {
+		this.deleted=true;
+		for(Product product : products)
+			product.delete();
 	}
 }

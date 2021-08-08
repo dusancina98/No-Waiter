@@ -13,5 +13,6 @@ insert into work_days (worktime_id, time_from, time_to, week_day, working, work_
 -- object 
 insert into object (id, email, name, address,phone_number, image_path, blocked ,active ,work_time_id,deleted) values ('11193162-52d3-11eb-ae93-0242ac130111','loft@loft.com','Loft','Novi Sad','021 225 226','assets/images/restaurant.jpg', false, true, '64c77f36-c53c-49ff-a02a-2a751a2677ea',false);
 
+
 -- object - admin
-insert into object_admin (id, object_id) values ('22793162-52d3-11eb-ae93-0242ac130111','11193162-52d3-11eb-ae93-0242ac130111');
+insert into object_admin (id, object_id, deleted) values ('22793162-52d3-11eb-ae93-0242ac130111','11193162-52d3-11eb-ae93-0242ac130111',false);

@@ -492,6 +492,23 @@ public class Api {
         }
     }
     
+	 @DeleteMapping("/object-workers/{objectId}")
+	 @CrossOrigin
+	    public ResponseEntity<?> deleteObjectWorkers(@PathVariable UUID objectId) {
+
+	        try {
+	        	userService.deleteObjectWorkers(objectId);
+	            return new ResponseEntity<>(HttpStatus.OK);
+
+	        } catch (NoSuchElementException e) {
+	        	e.printStackTrace();
+	            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+	        } catch (Exception e) {
+	        	e.printStackTrace();
+	            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	        }
+	    }
+    
     @DeleteMapping("/employee/waiter/{waiterId}")
     @CrossOrigin
     public ResponseEntity<?> deleteWaiter(@PathVariable UUID waiterId) {

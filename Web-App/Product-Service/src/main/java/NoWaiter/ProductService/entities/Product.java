@@ -22,8 +22,11 @@ import javax.validation.ValidatorFactory;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 
+import org.hibernate.annotations.Where;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@Where(clause = "deleted=false")
 public class Product {
 
 	@Id
@@ -42,7 +45,7 @@ public class Product {
 	
 	private String imagePath;
 	
-	private boolean deleted;
+    private boolean deleted = Boolean.FALSE;
 	
 	@DecimalMin("1.0")
 	private double price;

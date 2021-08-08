@@ -59,20 +59,18 @@ const OrderDetailsInformationSideBar = ({ orderType, address, table, createdDate
 			<form  onSubmit={handleEdit}>
 				<div className="row ml-1 mr-1">
 					Order type: 
-					<select hidden={orderStatus!=='CONFIRMED' && orderStatus!=='UNCONFIRMED'} className="form-control mt-2" value={editableOrderType === true ? editedOrderType : orderType} onChange={(e)=>handleSetOrderType(e)}>
+					<select disabled={orderStatus!=='CONFIRMED' && orderStatus!=='UNCONFIRMED'} className="form-control mt-2" value={editableOrderType === true ? editedOrderType : orderType} onChange={(e)=>handleSetOrderType(e)}>
 						<option value='TAKEOVER'>TAKE OVER</option>
 						<option value='DELIVERY'>DELIVERY</option>
 						<option value='ORDER_INSIDE'>DINE IN</option>
 					</select>
-					<div className="ml-2" hidden={orderStatus==='CONFIRMED' || orderStatus==='UNCONFIRMED'}>
-						{orderType}
-					</div>
+					
 				</div>
 				{ (orderType==='DELIVERY' && editedOrderType==='') || editedOrderType==='DELIVERY'? 
 					<div className="row mt-2 ml-1 mr-1">
 						Address:
 						<input 
-							hidden={orderStatus!=='CONFIRMED' && orderStatus!=='UNCONFIRMED'}
+							disabled={orderStatus!=='CONFIRMED' && orderStatus!=='UNCONFIRMED'}
 							type="text"
 							required
 							className="form-control mt-2"
@@ -81,9 +79,6 @@ const OrderDetailsInformationSideBar = ({ orderType, address, table, createdDate
 							placeholder="Address"
 							onChange={(e) => handleSetAddress(e.target.value)}
 						/>	
-						<div  className="ml-2" hidden={orderStatus==='CONFIRMED' || orderStatus==='UNCONFIRMED'}>
-							{address}
-						</div>
 
 					</div>:
 					{ ...orderType==='ORDER_INSIDE' || editedOrderType==='ORDER_INSIDE' ? 
@@ -94,7 +89,7 @@ const OrderDetailsInformationSideBar = ({ orderType, address, table, createdDate
 						</div>:
 						<div className="mt-2">
 							Table:
-							<select className="form-control mt-2" value={editableTable === true ? editedTableId : table.Id} onChange={(e)=>handleSetTable(e)}>
+							<select disabled={orderStatus!=='CONFIRMED' && orderStatus!=='UNCONFIRMED'} className="form-control mt-2" value={editableTable === true ? editedTableId : table.Id} onChange={(e)=>handleSetTable(e)}>
 
 								{tableState.tables.map((item) => {
 									return (

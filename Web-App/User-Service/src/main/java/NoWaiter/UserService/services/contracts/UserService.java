@@ -62,4 +62,6 @@ public interface UserService {
 
 	void deleteWaiter(UUID waiterId);
 
+	void deleteObjectWorkers(UUID objectId);
+
 }

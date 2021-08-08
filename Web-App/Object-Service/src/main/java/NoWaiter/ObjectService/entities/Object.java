@@ -11,9 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.Where;
+
 import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeException;
 
 @Entity
+@Where(clause = "deleted=false")
 public class Object {
 
     @Id
@@ -34,7 +37,7 @@ public class Object {
 
     private boolean blocked;
     
-    private boolean deleted;
+    private boolean deleted = Boolean.FALSE;
 
     @OneToMany(mappedBy = "object")
     private List<ObjectAdmin> admins;

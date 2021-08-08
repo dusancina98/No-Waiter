@@ -88,18 +88,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Iterable<IdentifiableDTO<ObjectAdminDTO>> findAllObjectAdmins() {
-		return UserMapper.MapObjectAdminCollectionToIdentifiableObjectAdminDTOCollection(filterDeletedObjectAdmin(objectAdminRepository.findAll()));
-	}
-
-	private List<ObjectAdmin> filterDeletedObjectAdmin(Iterable<ObjectAdmin> allAdmins) {
-		List<ObjectAdmin> filteredObjectAdmins = new ArrayList<ObjectAdmin>();
-		
-		for(ObjectAdmin objectAdmin : allAdmins) {
-			if(!objectAdmin.isDeleted())
-				filteredObjectAdmins.add(objectAdmin);
-		}
-		
-		return filteredObjectAdmins;
+		return UserMapper.MapObjectAdminCollectionToIdentifiableObjectAdminDTOCollection(objectAdminRepository.findAll());
 	}
 
 	@Override
@@ -260,20 +249,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Iterable<IdentifiableDTO<WaiterDTO>> findAllWaiters(UUID objectAdminId) {
 		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
-		return UserMapper.MapWaiterCollectionToIdentifiableWaiterDTOCollection(filterDeletedWaiters(waiterRepository.findAllByObjectId(objectAdmin.getObjectId())));
+		return UserMapper.MapWaiterCollectionToIdentifiableWaiterDTOCollection(waiterRepository.findAllByObjectId(objectAdmin.getObjectId()));
 	}
 
-
-	private List<Waiter> filterDeletedWaiters(List<Waiter> findAllByObjectId) {
-		List<Waiter> filteredWaiters = new ArrayList<Waiter>();
-		
-		for(Waiter waiter : findAllByObjectId) {
-			if(!waiter.isDeleted())
-				filteredWaiters.add(waiter);
-		}
-		
-		return filteredWaiters;
-	}
 
 	@Override
 	public void updateWaiter(IdentifiableDTO<UpdateWaiterDTO> entity) throws ClassFieldValidationException {
@@ -320,6 +298,23 @@ public class UserServiceImpl implements UserService {
 		waiter.delete();
 		
 		waiterRepository.save(waiter);		
+	}
+
+	@Override
+	public void deleteObjectWorkers(UUID objectId) {
+		List<Waiter> objectWaiters = waiterRepository.findAllByObjectId(objectId);
+		
+		for(Waiter waiter : objectWaiters) {
+			waiter.delete();
+			waiterRepository.save(waiter);
+		}
+		
+		List<ObjectAdmin> objectAdmins = objectAdminRepository.findByObjectId(objectId);
+		
+		for(ObjectAdmin objectAdmin : objectAdmins) {
+			objectAdmin.delete();
+			objectAdminRepository.save(objectAdmin);
+		}
 	}
 	
 	

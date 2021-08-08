@@ -1,9 +1,7 @@
 package NoWaiter.UserService.services.implementation;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -114,18 +112,7 @@ public class DelivererServiceImpl implements DelivererService{
 
 	@Override
 	public Iterable<IdentifiableDTO<DelivererDTO>> getAllDeliverer() {
-		return UserMapper.MapDelivererCollectionToIdentifiableODelivererDTOCollection(filterDeletedDeliverer(delivererRepository.getAll()));
-	}
-
-	private List<Deliverer> filterDeletedDeliverer(List<Deliverer> all) {
-		List<Deliverer> filteredDeliverer= new ArrayList<Deliverer>();
-		
-		for(Deliverer deliverer : all) {
-			if(!deliverer.isDeleted())
-				filteredDeliverer.add(deliverer);
-		}
-		
-		return filteredDeliverer;
+		return UserMapper.MapDelivererCollectionToIdentifiableODelivererDTOCollection(delivererRepository.getAll());
 	}
 
 	@Override

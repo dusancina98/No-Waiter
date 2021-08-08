@@ -36,4 +36,6 @@ public interface ProductService {
 	ProductValidationResponseDTO validateOrderItems(OrderItemsDTO items) throws InvalidOrderItemException;
 
 	void deleteProduct(UUID productId);
+
+	void deleteCategory(UUID categoryId);
 }

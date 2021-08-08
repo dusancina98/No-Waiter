@@ -23,6 +23,8 @@ import javax.validation.ValidatorFactory;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
+import org.hibernate.annotations.Where;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import NoWaiter.UserService.services.contracts.exceptions.ClassFieldValidationException;
@@ -30,6 +32,7 @@ import NoWaiter.UserService.services.contracts.exceptions.ClassFieldValidationEx
 @Entity
 @Table(name="USERS")
 @Inheritance(strategy = InheritanceType.JOINED)
+@Where(clause = "deleted=false")
 public class User{
 
 	@Id
@@ -55,7 +58,7 @@ public class User{
     private boolean active;
     
     @Column(name="deleted", nullable = false)
-	private boolean deleted;
+	private boolean deleted = Boolean.FALSE;
    
 
     @ManyToMany(fetch = FetchType.EAGER)

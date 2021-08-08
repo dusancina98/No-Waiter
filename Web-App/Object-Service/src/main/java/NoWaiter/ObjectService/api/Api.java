@@ -428,6 +428,7 @@ public class Api {
     public ResponseEntity<?> updateObjectImage(@PathVariable String objectId) {
 
         try {
+        	userClient.deleteObjectWorkers(UUID.fromString(objectId));
         	objectService.deleteObject(UUID.fromString(objectId));
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {

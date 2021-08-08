@@ -130,7 +130,8 @@ public class ObjectServiceImpl implements ObjectService {
 	public void deleteObjectAdminHandlingObjectActivation(UUID objectAdminId) {
 		
 		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
-		objectAdminRepository.deleteById(objectAdminId);
+		objectAdmin.delete();
+		objectAdminRepository.save(objectAdmin);
 		Object object = objectRepository.findById(objectAdmin.getObject().getId()).get();
 		if(object.getAdmins().isEmpty()) 
 			toggleObjectActivation(object.getId(), false);
@@ -189,6 +190,9 @@ public class ObjectServiceImpl implements ObjectService {
 	public void deleteObject(UUID objectId) {
 		Object object = objectRepository.findById(objectId).get();
 		object.Delete();
+		
+		for(ObjectAdmin objectAdmin : object.getAdmins())
+			deleteObjectAdminHandlingObjectActivation(objectAdmin.getId());
 		
 		objectRepository.save(object);
 	}
