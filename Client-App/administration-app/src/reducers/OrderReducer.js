@@ -388,6 +388,37 @@ export const orderReducer = (state, action) => {
 
 			return ordCpy;
 		}
+		case orderConstants.ORDER_CREATE_SUCCESS:
+			ordCpy = { ...state };
+
+			ordCpy.createOrder.pageVisible=1;
+			ordCpy.createOrder.items=[];
+			ordCpy.createOrder.showError=false;
+			ordCpy.createOrder.errorMessage='';
+			ordCpy.createOrder.showSuccessMessage=true;
+			ordCpy.createOrder.successMessage=action.successMessage;
+			ordCpy.deliveryInfo.estimatedTime="";
+			ordCpy.deliveryInfo.address="";
+
+			return ordCpy;
+		case orderConstants.ORDER_CREATE_FAILURE:
+			ordCpy = { ...state };
+
+			ordCpy.createOrder.showError=true;
+			ordCpy.createOrder.errorMessage=action.errorMessage;
+			ordCpy.createOrder.showSuccessMessage=false;
+			ordCpy.createOrder.successMessage='';
+
+			return ordCpy;
+		case orderConstants.HIDE_CREATE_ORDER_MESSAGES:
+			ordCpy = { ...state };
+
+			ordCpy.createOrder.showError=false;
+			ordCpy.createOrder.errorMessage='';
+			ordCpy.createOrder.showSuccessMessage=false;
+			ordCpy.createOrder.successMessage='';
+
+			return ordCpy;
 		default:
 			return state;
 	}
