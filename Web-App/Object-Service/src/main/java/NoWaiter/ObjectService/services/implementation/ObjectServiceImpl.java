@@ -2,7 +2,9 @@ package NoWaiter.ObjectService.services.implementation;
 
 import java.io.IOException;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -26,6 +28,7 @@ import NoWaiter.ObjectService.services.contracts.ObjectService;
 import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
+import NoWaiter.ObjectService.services.contracts.dto.ObjectDetailsDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectWithStatusDTO;
 import NoWaiter.ObjectService.services.contracts.dto.UpdateWorkTimeDTO;
 import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeException;
@@ -148,7 +151,7 @@ public class ObjectServiceImpl implements ObjectService {
 		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
 		Object object = objectRepository.findById(objectAdmin.getObject().getId()).get();
 		ImageUtil.saveFile(env.getProperty("rel-image-path"), object.getId().toString() + ".jpg", multipartFile);
-		object.setImagePath(env.getProperty("abs-image-path") + "//" + object.getId().toString() + ".jpg");
+		object.setImagePath(env.getProperty("abs-image-path") + "/" + object.getId().toString() + ".jpg");
 		objectRepository.save(object);
 	}
 
@@ -195,6 +198,7 @@ public class ObjectServiceImpl implements ObjectService {
 			deleteObjectAdminHandlingObjectActivation(objectAdmin.getId());
 		
 		objectRepository.save(object);
+		
 	}
 
 	@Override
@@ -216,5 +220,17 @@ public class ObjectServiceImpl implements ObjectService {
 		}
 		
 		return 0;
+	}
+	
+	public List<ObjectDetailsDTO> findAllObjectDetailsById(List<UUID> objectIds) {
+		List<ObjectDetailsDTO> details = new ArrayList<ObjectDetailsDTO>();
+		List<Object> objects = objectRepository.findAllObjectByIds(objectIds);
+		
+		objects.forEach((object) -> details.add(mapObjectToObjectDetailsDTO(object)));
+		return details;
+	}
+	
+	public ObjectDetailsDTO mapObjectToObjectDetailsDTO(Object object) {
+		return new ObjectDetailsDTO(object.getId(), object.getName(), object.getImagePath(), object.getAddress().getAddress());
 	}
 }

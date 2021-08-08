@@ -133,6 +133,35 @@ public class Api {
         }
     }
 	
+	@PutMapping("/accept/deliverer")
+    @CrossOrigin
+    public ResponseEntity<?> acceptOrderDeliverer(@RequestHeader("Authorization") String token, @RequestBody AcceptOrderDTO acceptOrderDTO) {
+
+        try {		
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+        	orderService.acceptOrderDeliverer(acceptOrderDTO, jwtResponse.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
+	@GetMapping("/accepted/deliverer")
+    @CrossOrigin
+    public ResponseEntity<?> getAcceptedOrdersForDeliverer(@RequestHeader("Authorization") String token) {
+    	try {
+    		JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);			
+            return new ResponseEntity<>(orderService.getAllAcceptedOrders(jwtResponse.getId()), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
 	@GetMapping("/confirmed")
     @CrossOrigin
     public ResponseEntity<?> getConfirmedOrdersForObject(@RequestHeader("Authorization") String token) {
@@ -141,6 +170,17 @@ public class Api {
 			UUID objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());
 			
             return new ResponseEntity<>(orderService.getConfirmedOrdersForObject(objectId), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
+	@GetMapping("/confirmed/deliverer")
+    @CrossOrigin
+    public ResponseEntity<?> getConfirmedOrdersForDeliverer() {
+    	try {
+            return new ResponseEntity<>(orderService.getAllConfirmedOrders(), HttpStatus.OK);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

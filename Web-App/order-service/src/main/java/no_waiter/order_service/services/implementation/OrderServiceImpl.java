@@ -26,7 +26,9 @@ import no_waiter.order_service.services.contracts.OrderService;
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CompletedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
+import no_waiter.order_service.services.contracts.dto.DelivererOrderDTO;
 import no_waiter.order_service.services.contracts.dto.NameDTO;
+import no_waiter.order_service.services.contracts.dto.ObjectDetailsDTO;
 import no_waiter.order_service.services.contracts.dto.OnRouteOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OrderDetailsDTO;
 import no_waiter.order_service.services.contracts.dto.OrderItemDTO;
@@ -62,7 +64,7 @@ public class OrderServiceImpl implements OrderService{
 		Order order = OrderMapper.MapOrderRequestDTOToOrder(requestDTO, products, objectId);
 		orderRepository.save(order);
 		
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), objectId);
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), objectId, null);
 		orderEventRepository.save(newOrderEvent);
 		
 		return order.getId();
@@ -169,7 +171,7 @@ public class OrderServiceImpl implements OrderService{
 	public void rejectOrder(UUID orderId, UUID objectId) {
 		Order order = orderRepository.findById(orderId).get();
 		
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.REJECTED, new Date(), order.getEstimatedTime(), objectId);
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.REJECTED, new Date(), order.getEstimatedTime(), objectId, null);
 		orderEventRepository.save(newOrderEvent);
 	}
 
@@ -180,15 +182,27 @@ public class OrderServiceImpl implements OrderService{
 		order.setEstimatedTime(acceptOrderDTO.EstimatedTime);
 		orderRepository.save(order);
 		
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId());
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId(), null);
 		orderEventRepository.save(newOrderEvent);
+	}
+	
+
+	@Override
+	public void acceptOrderDeliverer(AcceptOrderDTO acceptOrderDTO, UUID delivererId) {
+		Order order = orderRepository.findById(acceptOrderDTO.OrderId).get();
+		
+		order.setEstimatedTime(acceptOrderDTO.EstimatedTime);
+		orderRepository.save(order);
+		
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED_DELIVERY, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId(), delivererId);
+		orderEventRepository.save(newOrderEvent);		
 	}
 
 	@Override
 	public void setOrderToReady(UUID orderId) {
 		Order order = orderRepository.findById(orderId).get();
 				
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.READY, new Date(), order.getEstimatedTime(), order.getObjectId());
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.READY, new Date(), order.getEstimatedTime(), order.getObjectId(), null);
 		orderEventRepository.save(newOrderEvent);
 	}
 
@@ -234,7 +248,7 @@ public class OrderServiceImpl implements OrderService{
 	public void setOnRouteOrder(UUID orderId) {
 		Order order = orderRepository.findById(orderId).get();
 		
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.DELIVERING, new Date(), order.getEstimatedTime(), order.getObjectId());
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.DELIVERING, new Date(), order.getEstimatedTime(), order.getObjectId(), null);
 		orderEventRepository.save(newOrderEvent);
 	}
 
@@ -275,7 +289,7 @@ public class OrderServiceImpl implements OrderService{
 	public void setOrderToComplete(UUID orderId) {
 		Order order = orderRepository.findById(orderId).get();
 		
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.COMPLETED, new Date(), order.getEstimatedTime(), order.getObjectId());
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.COMPLETED, new Date(), order.getEstimatedTime(), order.getObjectId(), null);
 		orderEventRepository.save(newOrderEvent);	
 	}
 
@@ -449,6 +463,50 @@ public class OrderServiceImpl implements OrderService{
 		}
 		
 		
+	}
+
+	@Override
+	public List<DelivererOrderDTO> getAllConfirmedOrders() {
+		List<DelivererOrderDTO> confirmedOrderDTO = new ArrayList<DelivererOrderDTO>();
+		
+		Long setTime = (long) (5*60*3600*1000);
+		Date newDate = new Date();
+		newDate.setTime(newDate.getTime() - setTime);
+		
+		List<OrderEvent> confirmedOrderEvents =  orderEventRepository.getConfirmedOrderEventsForDelivery(newDate);
+		List<UUID> objectIds = orderEventRepository.getDistinctObjectIdsForDelivery(newDate);
+		List<ObjectDetailsDTO> objectDetails = objectClient.getObjectDetailsByObjectIds(objectIds);
+		
+		confirmedOrderEvents.forEach((orderEvent) -> confirmedOrderDTO.add(mapOrderToDelivererOrderDTO(orderEvent, objectDetails)));
+		return confirmedOrderDTO;
 	}	
+	
+	private DelivererOrderDTO mapOrderToDelivererOrderDTO(OrderEvent orderEvent, List<ObjectDetailsDTO> objectDetails) {
+		Date estimatedDate = new Date();
+		estimatedDate.setTime(orderEvent.getCreatedTime().getTime() + (orderEvent.getEstimatedTime()*60*1000));		
+		
+		DelivererOrderDTO retVal = new DelivererOrderDTO(getPriceForOrder(orderEvent.getOrder()), estimatedDate, orderEvent.getOrder().getId(), orderEvent.getObjectId(), "", "", "", orderEvent.getOrder().getAddress().getAddress());
+		for (ObjectDetailsDTO objectDetailsDTO : objectDetails) {
+			if (objectDetailsDTO.ObjectId.equals(orderEvent.getObjectId())) {
+				retVal.ObjectImage = objectDetailsDTO.ObjectImage;
+				retVal.ObjectName = objectDetailsDTO.ObjectName;
+				retVal.ObjectAddress = objectDetailsDTO.ObjectAddress;
+				break;
+			}
+		}
+		return retVal;
+	}
+
+	@Override
+	public List<DelivererOrderDTO> getAllAcceptedOrders(UUID delivererId) {
+		List<DelivererOrderDTO> acceptedOrderDTO = new ArrayList<DelivererOrderDTO>();
+		
+		List<OrderEvent> confirmedOrderEvents =  orderEventRepository.getAcceptedOrderEventsForDeliveryByDeliverer(delivererId);
+		List<UUID> objectIds = orderEventRepository.getDistinctObjectIdsForAcceptedDelivery(delivererId);
+		List<ObjectDetailsDTO> objectDetails = objectClient.getObjectDetailsByObjectIds(objectIds);
+
+		confirmedOrderEvents.forEach((orderEvent) -> acceptedOrderDTO.add(mapOrderToDelivererOrderDTO(orderEvent, objectDetails)));
+		return acceptedOrderDTO;
+	}
 
 }

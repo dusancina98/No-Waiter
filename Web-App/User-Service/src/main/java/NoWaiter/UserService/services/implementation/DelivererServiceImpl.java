@@ -11,6 +11,7 @@ import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
 import NoWaiter.UserService.entities.AccountActivationToken;
+import NoWaiter.UserService.entities.Authority;
 import NoWaiter.UserService.entities.Deliverer;
 import NoWaiter.UserService.entities.DelivererRequest;
 import NoWaiter.UserService.entities.RequestStatus;
@@ -70,7 +71,8 @@ public class DelivererServiceImpl implements DelivererService{
 
 	private void createNewDeliverer(DelivererRequest delivererRequest) throws ClassFieldValidationException, NoSuchAlgorithmException {
 		Deliverer deliverer = UserMapper.MapDelivererRequestToDeliverer(delivererRequest);
-		
+		deliverer.addAuthority(new Authority(UUID.fromString("f98f5538-4d52-4e3e-bae3-598e523a6200"), "ROLE_DELIVERER"));
+
 		AccountActivationToken accountActivation = new AccountActivationToken(deliverer.getId(), new Date(System.currentTimeMillis()));
 		accountActivationTokenRepository.save(accountActivation);
 		

@@ -16,5 +16,21 @@ public interface OrderEventRepository extends PagingAndSortingRepository<OrderEv
 
 	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.order.id = ?1")
 	List<OrderEvent> getOrderEventsByOrderId(UUID orderId);
+	
+	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.orderStatus = 'CONFIRMED' and oe.createdTime >= ?1 and oe.order.orderType = 'DELIVERY'"
+				 + " AND oe.order.id NOT IN (SELECT oe.order.id FROM OrderEvent oe WHERE oe.orderStatus = 'CONFIRMED_DELIVERY' and oe.createdTime >= ?1)")
+	List<OrderEvent> getConfirmedOrderEventsForDelivery(Date timeStamp);
+	
+	@Query(value = "SELECT distinct(oe.objectId) FROM OrderEvent oe WHERE oe.orderStatus = 'CONFIRMED' and oe.createdTime >= ?1 and oe.order.orderType = 'DELIVERY'"
+				+ " AND oe.order.id NOT IN (SELECT oe.order.id FROM OrderEvent oe WHERE oe.orderStatus = 'CONFIRMED_DELIVERY' and oe.createdTime >= ?1)")
+	List<UUID> getDistinctObjectIdsForDelivery(Date timeStamp);
+	
+	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.orderStatus = 'CONFIRMED_DELIVERY' and oe.delivererId = ?1 and oe.order.orderType = 'DELIVERY'"
+			 + "AND oe.order.id NOT IN (SELECT oe.order.id FROM OrderEvent oe WHERE oe.orderStatus = 'DELIVERING')")
+	List<OrderEvent> getAcceptedOrderEventsForDeliveryByDeliverer(UUID delivererId);
+	
+	@Query(value = "SELECT distinct(oe.objectId) FROM OrderEvent oe WHERE oe.orderStatus = 'CONFIRMED_DELIVERY' and oe.delivererId = ?1 and oe.order.orderType = 'DELIVERY'"
+			 + "AND oe.order.id NOT IN (SELECT oe.order.id FROM OrderEvent oe WHERE oe.orderStatus = 'DELIVERING')")
+	List<UUID> getDistinctObjectIdsForAcceptedDelivery(UUID delivererId);
 
 }
