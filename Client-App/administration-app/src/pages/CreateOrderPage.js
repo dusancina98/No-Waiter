@@ -20,8 +20,8 @@ const CreateOrderPage = () => {
 											<ProductContextProvider>
 												<OrderContextProvider>
 													<TableContextProvider>
-													<CreateOrderWrapper />
-												</TableContextProvider>
+														<CreateOrderWrapper />
+													</TableContextProvider>
 											</OrderContextProvider>
 										</ProductContextProvider>
 									</ObjectContextProvider>

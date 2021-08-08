@@ -11,9 +11,10 @@ public class OrderItemResponseDTO {
 	public Double Price;
 	public String ImageUrl;
 	public List<SideDishResponseDTO> SideDishes;
+	public String Note; 
 	
 	public OrderItemResponseDTO(UUID id, String name, int count, UUID productId, Double price, String imageUrl,
-			List<SideDishResponseDTO> sideDishes) {
+			List<SideDishResponseDTO> sideDishes, String note) {
 		super();
 		Id = id;
 		Name = name;
@@ -22,6 +23,7 @@ public class OrderItemResponseDTO {
 		Price = price;
 		ImageUrl = imageUrl;
 		SideDishes = sideDishes;
+		Note = note;
 	}
 	
 	

@@ -146,6 +146,12 @@ const SideBar = () => {
 					</Link>
 				</li>
 				<li className="nav-item" hidden={!hasRoles("ROLE_WAITER")}>
+					<Link className="nav-link" to="/create-order">
+						<i className="mdi mdi-contacts menu-icon"></i>
+						<span className="menu-title">Create-Order</span>
+					</Link>
+				</li>
+				<li className="nav-item" hidden={!hasRoles("ROLE_WAITER")}>
 					<Link className="nav-link" to="/waiter-orders">
 						<i className="mdi mdi-contacts menu-icon"></i>
 						<span className="menu-title">Orders</span>

@@ -121,7 +121,19 @@ public class Api {
         }
     }
     
-    
+    @GetMapping("/table/{objectId}/{tableId}")
+    @CrossOrigin	
+    public ResponseEntity<?> getTableNumberByTableIdForResturant(@PathVariable UUID objectId,  @PathVariable UUID tableId) {
+    	try {
+    		int tableNumber = objectService.getTableNumberByTableIdForResturant(objectId,tableId);
+            return new ResponseEntity<>(tableNumber, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e){
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
+    }
     
     @PostMapping("/tables")
     @CrossOrigin

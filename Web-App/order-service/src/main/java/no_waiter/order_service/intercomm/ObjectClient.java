@@ -11,4 +11,7 @@ public interface ObjectClient {
 	
 	@GetMapping("api/objects/admin/{objectAdminId}")
 	UUID getObjectIdByObjectAdminId(@PathVariable UUID objectAdminId);
+	
+	@GetMapping("api/objects/table/{objectId}/{tableId}")
+	int getTableNumberByTableIdForResturant(@PathVariable UUID objectId, @PathVariable UUID tableId);
 }

@@ -39,4 +39,6 @@ public interface ObjectService {
 	void deleteObject(UUID objectId);
 
 	void updateWorkTime(UpdateWorkTimeDTO updateWorkTimeDTO);
+
+	int getTableNumberByTableIdForResturant(UUID objectId, UUID tableId);
 }

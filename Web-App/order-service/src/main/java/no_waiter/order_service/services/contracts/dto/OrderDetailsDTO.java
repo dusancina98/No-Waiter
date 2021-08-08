@@ -16,14 +16,16 @@ public class OrderDetailsDTO {
 	
 	public String OrderType;
 	
-	public String Table;
+	public TableResponseDTO Table;
 	
 	public Double Price;
 	
 	public List<OrderItemResponseDTO> OrderItems;
 	
+	public String OrderStatus;
+	
 	public OrderDetailsDTO(UUID orderId, Date createdTime, String address, Date estimatedTime, String orderType,
-			String table, Double price, List<OrderItemResponseDTO> orderItems) {
+			TableResponseDTO table, Double price, List<OrderItemResponseDTO> orderItems, String orderStatus) {
 		super();
 		OrderId = orderId;
 		CreatedTime = createdTime;
@@ -33,5 +35,6 @@ public class OrderDetailsDTO {
 		Table = table;
 		Price = price;
 		OrderItems = orderItems;
+		OrderStatus = orderStatus;
 	}
 }

@@ -268,9 +268,6 @@ function validateProduct(product, dispatch, type) {
 	} else if (product.ProductTypeId === "") {
 		dispatch(validatioFailure("Product type must be selected"));
 		return false;
-	} else if (product.Ingredients.length === 0 && product.ProductTypeId === "833200ce-bce5-11eb-8529-0242ac130003") {
-		dispatch(validatioFailure("Product must have at least one ingredient"));
-		return false;
 	}
 
 	function validatioFailure(message) {

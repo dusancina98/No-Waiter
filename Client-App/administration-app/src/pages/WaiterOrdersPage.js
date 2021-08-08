@@ -3,6 +3,7 @@ import WaiterOrdersCardList from "../components/waiter-orders/WaiterOrdersCardLi
 import OrderContextProvider from "../contexts/OrderContext"
 import Notiflix from "notiflix";
 import HeaderAndSideBarWrapper from "../components/HeaderAndSideBarWrapper";
+import TableContextProvider from "../contexts/TableContext";
 
 const WaiterOrdersPage = () => {
 	
@@ -25,10 +26,12 @@ const WaiterOrdersPage = () => {
 		<React.Fragment>
 			<HeaderAndSideBarWrapper>
 				<div className="main-panel">
-                    <OrderContextProvider>
-                        <WaiterOrdersCardList
-							notifyManager={notifyManager}/>
-                    </OrderContextProvider> 
+					<TableContextProvider>
+						<OrderContextProvider>
+                        	<WaiterOrdersCardList
+								notifyManager={notifyManager}/>
+                    	</OrderContextProvider> 
+					</TableContextProvider>
 				</div>
 			</HeaderAndSideBarWrapper>
 		</React.Fragment>

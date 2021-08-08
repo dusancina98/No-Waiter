@@ -15,6 +15,7 @@ import NoWaiter.ObjectService.entities.Address;
 import NoWaiter.ObjectService.entities.Contact;
 import NoWaiter.ObjectService.entities.Object;
 import NoWaiter.ObjectService.entities.ObjectAdmin;
+import NoWaiter.ObjectService.entities.Table;
 import NoWaiter.ObjectService.entities.WeekDay;
 import NoWaiter.ObjectService.entities.WorkDay;
 import NoWaiter.ObjectService.entities.WorkTime;
@@ -199,5 +200,17 @@ public class ObjectServiceImpl implements ObjectService {
 		object.getWorkTime().Update(updateWorkTimeDTO.WorkTime.EntityDTO.WorkDays);
 		
 		objectRepository.save(object);
+	}
+
+	@Override
+	public int getTableNumberByTableIdForResturant(UUID objectId, UUID tableId) {
+		Object object = objectRepository.findById(objectId).get();
+
+		for(Table table : object.getTables()) {
+			if(table.getId().equals(tableId))
+				return table.getNumber();
+		}
+		
+		return 0;
 	}
 }

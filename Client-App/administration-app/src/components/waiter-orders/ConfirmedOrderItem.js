@@ -70,7 +70,7 @@ const ConfirmedOrderItem = ({ order, notifyManager }) => {
                             {order.OrderType==="DELIVERY" ? 
                             <div></div>:
                             <div className="row">
-                                <b>Table</b>:  {order.Table}
+                                <b>Table</b>:  {order.Table.Number}
                             </div>
                             }
                         </div>

@@ -35,7 +35,7 @@ const CompletedOrderItem = ({ order }) => {
                                 <b>Deliverer</b>: {order.Deliverer}
                             </div>:
                             <div className="row">
-                                <b>Table</b>: {order.Table}
+                                <b>Table</b>: {order.Table.Number}
                             </div>
                             }
                         </div>

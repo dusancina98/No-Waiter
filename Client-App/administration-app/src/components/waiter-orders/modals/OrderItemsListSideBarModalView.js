@@ -31,6 +31,8 @@ const OrderItemsListSideBarModalView = ({setProductCount,deleteFromShoppingCart}
 									imageUrl={item.ImageUrl}
 									setProductCount={(id,count)=>setProductCount(id,count)}
 									deleteFromShoppingCart={(id)=>deleteFromShoppingCart(id)}
+									note={item.Note}
+									hiddenEdited={orderState.orderDetailsModal.order.OrderStatus!=="CONFIRMED" && orderState.orderDetailsModal.order.OrderStatus!=="UNCONFIRMED"}
 								/>
 							
 											<hr />
