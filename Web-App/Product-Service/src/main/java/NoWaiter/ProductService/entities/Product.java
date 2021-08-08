@@ -21,10 +21,12 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.Where;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@Where(clause = "deleted=false")
 public class Product {
 
 	@Id
@@ -43,6 +45,8 @@ public class Product {
 	
 	private String imagePath;
 	
+    private boolean deleted = Boolean.FALSE;
+	
 	@DecimalMin("1.0")
 	private double price;
 	
@@ -54,7 +58,6 @@ public class Product {
 	private ProductType productType;
 	
 	@OneToMany(cascade={CascadeType.ALL})
-    @Size(min=1, message = "Product must have at least one ingredient")
 	private List<Ingredient> ingredients;
 	
 	@OneToMany(cascade = CascadeType.ALL)
@@ -74,7 +77,7 @@ public class Product {
 		this.ingredients = ingredients;
 		this.sideDishes = sideDishes;	
 		this.productAmount = new ProductAmount(amount, amountName);
-		
+		this.deleted=false;
 		validate();
 	}
 	
@@ -84,8 +87,7 @@ public class Product {
     	Set<ConstraintViolation<Product>> violations =  validator.validate(this);
     	
     	if(!violations.isEmpty())
-    		throw new ConstraintViolationException(violations);
-		
+    		throw new ConstraintViolationException(violations);		
 	}
 	
 	public Product(String name, String description, boolean available, String imagePath, double price, int amount, String amountName, ProductType productType, List<Ingredient> ingredients, List<SideDish> sideDishes) {
@@ -174,5 +176,13 @@ public class Product {
 
 	public void setSideDishes(List<SideDish> sideDishes) {
 		this.sideDishes = sideDishes;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
 	}	
+	
+	public void delete() {
+		this.deleted= true;
+	}
 }

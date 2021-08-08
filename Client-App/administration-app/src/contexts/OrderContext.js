@@ -8,6 +8,10 @@ const OrderContextProvider = (props) => {
 		createOrder: {
 			pageVisible: 1,
 			items: [],
+			showError:false,
+			errorMessage:'',
+			showSuccessMessage:false,
+			successMessage:'',
 		},
 		loadTables: false,
 		orderType: "",

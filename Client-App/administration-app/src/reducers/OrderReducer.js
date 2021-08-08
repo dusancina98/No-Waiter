@@ -263,7 +263,6 @@ export const orderReducer = (state, action) => {
 			ordCpy = { ...state };
 			
 			ordCpy.orderDetailsModal.showModal = false;
-			ordCpy.orderDetailsModal.order = [];
 			ordCpy.orderDetailsModal.orderId = '';
 
 			return ordCpy;
@@ -353,7 +352,85 @@ export const orderReducer = (state, action) => {
 			}
 
 			return ordCpy;
+		case orderConstants.UPDATE_ORDER_SUCCESS:{
+			ordCpy = { ...state };
+			console.log(action.order)
+			console.log(ordCpy.waiterOrders.UnConfirmedOrders)
+			let prdIdx = ordCpy.waiterOrders.UnConfirmedOrders.findIndex((item) => item.OrderId === action.order.OrderId);
+			if(prdIdx !== -1){
+				ordCpy.waiterOrders.UnConfirmedOrders[prdIdx].OrderType = action.order.OrderType;
+				ordCpy.waiterOrders.UnConfirmedOrders[prdIdx].Price = getOrderSum(action.order);
+			}
+
+			prdIdx = ordCpy.waiterOrders.ConfirmedOrders.findIndex((item) => item.OrderId === action.order.OrderId);
+			if(prdIdx !== -1){
+				ordCpy.waiterOrders.ConfirmedOrders[prdIdx].OrderType = action.order.OrderType;
+				ordCpy.waiterOrders.ConfirmedOrders[prdIdx].Price = getOrderSum(action.order);
+			}
+
+			prdIdx = ordCpy.waiterOrders.ReadyOrders.findIndex((item) => item.OrderId === action.order.OrderId);
+			if(prdIdx !== -1){
+				ordCpy.waiterOrders.ReadyOrders[prdIdx].OrderType = action.order.OrderType;
+				ordCpy.waiterOrders.ReadyOrders[prdIdx].Price = getOrderSum(action.order);
+			}
+
+			prdIdx = ordCpy.waiterOrders.OnRouteOrders.findIndex((item) => item.OrderId === action.order.OrderId);
+			if(prdIdx !== -1){
+				ordCpy.waiterOrders.ReadyOrders[prdIdx].OrderType = action.order.OrderType;
+				ordCpy.waiterOrders.ReadyOrders[prdIdx].Price = getOrderSum(action.order);
+			}
+
+			prdIdx = ordCpy.waiterOrders.CompletedOrders.findIndex((item) => item.OrderId === action.order.OrderId);
+			if(prdIdx !== -1){
+				ordCpy.waiterOrders.ReadyOrders[prdIdx].OrderType = action.order.OrderType;
+				ordCpy.waiterOrders.ReadyOrders[prdIdx].Price = getOrderSum(action.order);
+			}
+
+			return ordCpy;
+		}
+		case orderConstants.ORDER_CREATE_SUCCESS:
+			ordCpy = { ...state };
+
+			ordCpy.createOrder.pageVisible=1;
+			ordCpy.createOrder.items=[];
+			ordCpy.createOrder.showError=false;
+			ordCpy.createOrder.errorMessage='';
+			ordCpy.createOrder.showSuccessMessage=true;
+			ordCpy.createOrder.successMessage=action.successMessage;
+			ordCpy.deliveryInfo.estimatedTime="";
+			ordCpy.deliveryInfo.address="";
+
+			return ordCpy;
+		case orderConstants.ORDER_CREATE_FAILURE:
+			ordCpy = { ...state };
+
+			ordCpy.createOrder.showError=true;
+			ordCpy.createOrder.errorMessage=action.errorMessage;
+			ordCpy.createOrder.showSuccessMessage=false;
+			ordCpy.createOrder.successMessage='';
+
+			return ordCpy;
+		case orderConstants.HIDE_CREATE_ORDER_MESSAGES:
+			ordCpy = { ...state };
+
+			ordCpy.createOrder.showError=false;
+			ordCpy.createOrder.errorMessage='';
+			ordCpy.createOrder.showSuccessMessage=false;
+			ordCpy.createOrder.successMessage='';
+
+			return ordCpy;
 		default:
 			return state;
 	}
+	
+};
+
+const getOrderSum = (order) => {
+	let sum = 0;
+	if(order.OrderItems !== undefined){
+		order.OrderItems.forEach((item) => {
+			sum += item.Count * item.Price;
+		});
+	}
+	return sum;
 };

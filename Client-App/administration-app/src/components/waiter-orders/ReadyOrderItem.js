@@ -83,13 +83,13 @@ const ReadyOrderItem = ({ order,notifyManager }) => {
                             <div className="row">
                                 <b>Expired</b>: {moment.utc(order.ExpiredTimeStamp).local().startOf('seconds').fromNow()}
                             </div>
-                            <div className="row">
-                                    <b>Deliverer</b>: {order.Deliverer}
-                            </div>
+
                             {order.OrderType==="DELIVERY" ? 
-                            <div></div>:
                             <div className="row">
-                                <b>Table</b>:  {order.Table}
+                                <b>Deliverer</b>: {order.Deliverer}
+                            </div>:
+                            <div className="row">
+                                <b>Table</b>:  {order.Table.Number}
                             </div>
                             }
                         </div>

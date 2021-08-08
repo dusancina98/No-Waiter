@@ -19,6 +19,7 @@ const ObjectContextProvider = (props) => {
 		objectDetails: {
 			showModal: false,
 			readOnly: true,
+			workTimeReadOnly: true,
 			object: {
 				Id: "",
 				EntityDTO: {
@@ -45,12 +46,56 @@ const ObjectContextProvider = (props) => {
 					Address: "",
 					PhoneNumber: "",
 					ImagePath: "",
+					WorkTime : {
+						EntityDTO: {
+							Id: "",
+							WorkDays: {
+								SUNDAY :{
+									Working:'false',
+									TimeFrom:'',
+									TimeTo:'',
+								},
+								TUESDAY :{
+									Working:'false',
+									TimeFrom:'',
+									TimeTo:'',
+								},
+								THURSDAY :{
+									Working:'false',
+									TimeFrom:'',
+									TimeTo:'',
+								},
+								SATURDAY :{
+									Working:'false',
+									TimeFrom:'',
+									TimeTo:'',
+								},
+								MONDAY :{
+									Working:'false',
+									TimeFrom:'',
+									TimeTo:'',
+								},
+								FRIDAY :{
+									Working:'false',
+									TimeFrom:'',
+									TimeTo:'',
+								},
+								WEDNESDAY:{
+									Working:'false',
+									TimeFrom:'',
+									TimeTo:'',
+								},
+							}
+						}
+					}
 				},
 			},
 		},
 		objects: [],
 		showError: false,
 		errorMessage: "",
+		showSuccessMessage: false,
+		successMessage:'',
 		generatedToken:"",
 	});
 

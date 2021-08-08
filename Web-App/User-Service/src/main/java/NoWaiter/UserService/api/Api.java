@@ -75,7 +75,9 @@ public class Api {
         try {
         	userService.updateObjects(userObjectDTO);       
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
+        }catch (ConstraintViolationException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+		} catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -85,7 +87,7 @@ public class Api {
     @CrossOrigin
     public ResponseEntity<?> createRestaurantAdmin(@RequestBody ObjectAdminDTO objectAdminDTO) {
         try {
-       
+ 
             objectClient.checkObject(objectAdminDTO.ObjectId);
             UUID adminId = userService.createObjectAdmin(objectAdminDTO);
             objectClient.addAdminToObject(new AddAdminDTO(objectAdminDTO.ObjectId, adminId));
@@ -479,6 +481,40 @@ public class Api {
 
         try {
             delivererService.deleteDeliverer(delivererId);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+	 @DeleteMapping("/object-workers/{objectId}")
+	 @CrossOrigin
+	    public ResponseEntity<?> deleteObjectWorkers(@PathVariable UUID objectId) {
+
+	        try {
+	        	userService.deleteObjectWorkers(objectId);
+	            return new ResponseEntity<>(HttpStatus.OK);
+
+	        } catch (NoSuchElementException e) {
+	        	e.printStackTrace();
+	            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+	        } catch (Exception e) {
+	        	e.printStackTrace();
+	            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	        }
+	    }
+    
+    @DeleteMapping("/employee/waiter/{waiterId}")
+    @CrossOrigin
+    public ResponseEntity<?> deleteWaiter(@PathVariable UUID waiterId) {
+
+        try {
+            userService.deleteWaiter(waiterId);
             return new ResponseEntity<>(HttpStatus.OK);
 
         } catch (NoSuchElementException e) {

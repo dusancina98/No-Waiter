@@ -27,6 +27,7 @@ export const userService = {
 	activateDeliverer,
 	deactivateDeliverer,
 	deleteDeliverer,
+	deleteWaiter,
 };
 
 function createObjectAdmin(objectAdmin, dispatch) {
@@ -37,8 +38,10 @@ function createObjectAdmin(objectAdmin, dispatch) {
 			.then((res) => {
 				if (res.status === 201) {
 					dispatch(success());
-				} else {
-					dispatch(failure(res.data.message));
+				} else if(res.status === 409) {
+					dispatch(failure("User with email: "+objectAdmin.Email+" already exist, please enter other email"));
+				} else{
+					dispatch(failure(res.data));
 				}
 			})
 			.catch((err) => {
@@ -227,8 +230,10 @@ function createWaiter(waiter, dispatch) {
 			.then((res) => {
 				if (res.status === 201) {
 					dispatch(success());
-				} else {
-					dispatch(failure(res.data.message));
+				} else if (res.status === 409) {
+					dispatch(failure("User with email: "+waiter.Email+" already exist, please enter other email"));
+				}else {
+					dispatch(failure(res.data));
 				}
 			})
 			.catch((err) => {
@@ -533,6 +538,7 @@ function checkIfResetPasswordTokenIsValid(token) {
 		});
 }
 
+
 function approveDelivererRequest(requestIdDTO, dispatch) {
 	Axios.put(`/user-api/api/users/deliverer-request/approve/${requestIdDTO.id}`, requestIdDTO, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
@@ -586,7 +592,7 @@ function rejectDelivererRequest(rejectRequestDTO, dispatch) {
 function activateDeliverer(deliverer, dispatch) {
 	dispatch(request());
 
-	Axios.put(`/user-api/api/users/deliverers/${deliverer.Id}/activate`, { validateStatus: () => true, headers: authHeader() })
+	Axios.put(`/user-api/api/users/deliverers/${deliverer.Id}/activate`, null, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -615,7 +621,7 @@ function activateDeliverer(deliverer, dispatch) {
 function deactivateDeliverer(deliverer, dispatch) {
 	dispatch(request());
 
-	Axios.put(`/user-api/api/users/deliverers/${deliverer.Id}/deactivate`, { validateStatus: () => true, headers: authHeader() })
+	Axios.put(`/user-api/api/users/deliverers/${deliverer.Id}/deactivate`, null,{ validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -666,5 +672,27 @@ function deleteDeliverer(deliverer, dispatch) {
 	}
 	function failure(message) {
 		return { type: userConstants.DELIVERER_DELETE_FAILURE, errorMessage: message };
+	}
+}
+function deleteWaiter(waiterId, dispatch) {
+	Axios.delete(`/user-api/api/users/employee/waiter/${waiterId}`, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			console.log(res);
+			if (res.status === 200) {
+				dispatch(success("Waiter successfully deleted", waiterId));
+			} else {
+				dispatch(failure("Error"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function success(message, waiterId) {
+		return { type: userConstants.WAITER_DELETE_SUCCESS, successMessage: message, waiterId };
+	}
+	function failure(message) {
+		return { type: userConstants.WAITER_DELETE_FAILURE, errorMessage: message };
 	}
 }

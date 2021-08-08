@@ -6,7 +6,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.Where;
+
 @Entity
+@Where(clause = "deleted=false")
 public class ObjectAdmin {
 	
 	@Id
@@ -15,6 +18,8 @@ public class ObjectAdmin {
 	@ManyToOne
 	private Object object;
 	
+	private boolean deleted = Boolean.FALSE;
+		
 	public ObjectAdmin() { }
 	
 	public ObjectAdmin(Object object) {
@@ -25,6 +30,7 @@ public class ObjectAdmin {
 		super();
 		this.id = id;
 		this.object = object;
+		this.deleted=false;
 	}
 
 	public UUID getId() {
@@ -38,4 +44,13 @@ public class ObjectAdmin {
 	public void setObject(Object object) {
 		this.object = object;
 	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+	
+	public void delete() {
+		this.deleted=true;
+	}
+
 }

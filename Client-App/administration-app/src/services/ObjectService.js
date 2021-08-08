@@ -13,6 +13,8 @@ export const objectService = {
 	blockObject,
 	unblockObject,
 	generateNewToken,
+	deleteObject,
+	updateObjectWorkTime,
 };
 
 function createObject(object, dispatch) {
@@ -23,8 +25,10 @@ function createObject(object, dispatch) {
 			.then((res) => {
 				if (res.status === 201) {
 					dispatch(success());
-				} else {
-					dispatch(failure(res.data.message));
+				} else if(res.status===409){
+					dispatch(failure("Restaurant with name " + object.Name +" already exist, please enter unique name"));
+				}else{
+					dispatch(failure(res.data));
 				}
 			})
 			.catch((err) => {
@@ -62,8 +66,10 @@ function updateObject(object, dispatch) {
 			.then((res) => {
 				if (res.status === 200) {
 					dispatch(success("Object successfully updated", object));
-				} else {
-					dispatch(failure(res.data.message));
+				}else if(res.status===409){
+					dispatch(failure("Restaurant with name " + object.Name +" already exist, please enter unique name"));
+				}else{
+					dispatch(failure("error"));
 				}
 			})
 			.catch((err) => {
@@ -79,6 +85,27 @@ function updateObject(object, dispatch) {
 	}
 	function failure(message) {
 		return { type: objectConstants.OBJECT_UPDATE_FAILURE, errorMessage: message };
+	}
+}
+
+function updateObjectWorkTime(objectWorktime, dispatch) {
+	Axios.put(`/object-api/api/objects/worktime`, objectWorktime, { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success("Object worktime successfully updated", objectWorktime));
+			}else{
+				dispatch(failure("error"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+
+	function success(message, objectWorktime) {
+		return { type: objectConstants.OBJECT_UPDATE_WORKTIME_SUCCESS, successMessage: message, objectWorktime };
+	}
+	function failure(message) {
+		return { type: objectConstants.OBJECT_UPDATE_WORKTIME_FAILURE, errorMessage: message };
 	}
 }
 
@@ -138,7 +165,6 @@ async function findAll(dispatch) {
 }
 
 async function findByAdminId(dispatch) {
-	dispatch(request());
 
 	await Axios.get(`/object-api/api/objects/admin`, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
@@ -153,10 +179,7 @@ async function findByAdminId(dispatch) {
 			console.log(err);
 			dispatch(failure("Error"));
 		});
-
-	function request() {
-		return { type: objectConstants.OBJECT_INFO_REQUEST };
-	}
+		
 	function success(data) {
 		return { type: objectConstants.OBJECT_INFO_SUCCESS, objectInfo: data };
 	}
@@ -186,7 +209,7 @@ function validateObject(object, dispatch, type) {
 function activateObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`/object-api/api/objects/${object.Id}/activate`, { validateStatus: () => true, headers: authHeader() })
+	Axios.put(`/object-api/api/objects/${object.Id}/activate`, null,  { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -215,7 +238,7 @@ function activateObject(object, dispatch) {
 function deactivateObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`/object-api/api/objects/${object.Id}/deactivate`, { validateStatus: () => true, headers: authHeader() })
+	Axios.put(`/object-api/api/objects/${object.Id}/deactivate`,null,  { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -244,7 +267,7 @@ function deactivateObject(object, dispatch) {
 function blockObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`/object-api/api/objects/${object.Id}/block`, { validateStatus: () => true, headers: authHeader() })
+	Axios.put(`/object-api/api/objects/${object.Id}/block`, null, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -273,7 +296,7 @@ function blockObject(object, dispatch) {
 function unblockObject(object, dispatch) {
 	dispatch(request());
 
-	Axios.put(`/object-api/api/objects/${object.Id}/unblock`, { validateStatus: () => true, headers: authHeader() })
+	Axios.put(`/object-api/api/objects/${object.Id}/unblock`, null, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -319,4 +342,27 @@ function generateNewToken(dispatch) {
 		function failure(message) {
 			return { type: objectConstants.GENERATE_SELF_ORDERING_TOKEN_FAILURE, errorMessage: message };
 		}
+}
+
+function deleteObject(object, dispatch) {
+	Axios.delete(`/object-api/api/objects/${object.Id}`,  { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			console.log(res);
+			if (res.status === 200) {
+				dispatch(success("Object successfully deleted", object));
+			} else {
+				dispatch(failure("Unable to delete object"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function success(message, object) {
+		return { type: objectConstants.OBJECT_DELETE_SUCCESS, successMessage: message, object };
+	}
+	function failure(message) {
+		return { type: objectConstants.OBJECT_DELETE_FAILURE, errorMessage: message, object };
+	}
 }

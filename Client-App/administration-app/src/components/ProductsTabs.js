@@ -26,6 +26,7 @@ const ProductsTabs = () => {
 
 	return (
 		<React.Fragment>
+			<div id="portfolio" className="portfolio">
 			<div className="row">
 				<div className="col-lg-12 d-flex justify-content-center">
 					<ul id="portfolio-flters">
@@ -50,6 +51,7 @@ const ProductsTabs = () => {
 						</button>
 					</ul>
 				</div>
+			</div>
 			</div>
 		</React.Fragment>
 	);

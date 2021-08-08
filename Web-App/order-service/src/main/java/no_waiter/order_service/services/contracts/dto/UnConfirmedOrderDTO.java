@@ -7,15 +7,15 @@ public class UnConfirmedOrderDTO {
 	
 	public UUID OrderId;
 	
-	public String Table;
+	public TableResponseDTO Table;
 	
 	public String OrderType;
 	
 	public Double Price;
 	
 	public Date TimeStamp;
-	
-	public UnConfirmedOrderDTO(UUID orderId, String table, String orderType, Double price, Date timeStamp) {
+		
+	public UnConfirmedOrderDTO(UUID orderId, TableResponseDTO table, String orderType, Double price, Date timeStamp) {
 		super();
 		OrderId = orderId;
 		Table = table;

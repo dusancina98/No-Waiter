@@ -1,8 +1,10 @@
 import { useContext, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { modalConstants } from "../../constants/ModalConstants";
+import { productConstants } from "../../constants/ProductConstants";
 import { ProductContext } from "../../contexts/ProductContext";
 import { productService } from "../../services/ProductService";
+import FailureAlert from "../FailureAlert";
 
 const CreateProductCategoryModal = () => {
 	const { productState, dispatch } = useContext(ProductContext);
@@ -26,6 +28,12 @@ const CreateProductCategoryModal = () => {
 				</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
+				<FailureAlert
+					hidden={!productState.createCategory.showErrorMessage}
+					header="Error"
+					message={productState.createCategory.errorMessage}
+					handleCloseAlert={() => dispatch({ type: productConstants.CATEGORY_CREATE_REQUEST })}
+				/>
 				<form className="forms-sample" method="post" onSubmit={handleSubmit}>
 					<div className="form-group">
 						<label for="restaurantName">Category name</label>

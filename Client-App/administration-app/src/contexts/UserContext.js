@@ -152,7 +152,10 @@ const UserContextProvider = (props) => {
 			showErrorMessage: false,
 			errorMessage: "",
 		},
-
+		loggedUserInfo:{
+			name:'',
+			surname:'',
+		}
 	});
 
 	return <UserContext.Provider value={{ userState, dispatch }}>{props.children}</UserContext.Provider>;

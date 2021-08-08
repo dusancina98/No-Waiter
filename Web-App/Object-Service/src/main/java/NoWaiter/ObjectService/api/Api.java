@@ -34,6 +34,7 @@ import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.JwtParseResponseDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
+import NoWaiter.ObjectService.services.contracts.dto.UpdateWorkTimeDTO;
 import NoWaiter.ObjectService.services.contracts.dto.UserClientObjectDTO;
 import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeException;
 import feign.FeignException;
@@ -133,7 +134,19 @@ public class Api {
         }
     }
     
-    
+    @GetMapping("/table/{objectId}/{tableId}")
+    @CrossOrigin	
+    public ResponseEntity<?> getTableNumberByTableIdForResturant(@PathVariable UUID objectId,  @PathVariable UUID tableId) {
+    	try {
+    		int tableNumber = objectService.getTableNumberByTableIdForResturant(objectId,tableId);
+            return new ResponseEntity<>(tableNumber, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e){
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
+    }
     
     @PostMapping("/tables")
     @CrossOrigin
@@ -243,7 +256,10 @@ public class Api {
         	objectService.update(objectDTO);
             return new ResponseEntity<>(HttpStatus.OK);
 
-        } catch (FeignException e) {
+        }catch (DataIntegrityViolationException e) {
+			e.printStackTrace();
+            return new ResponseEntity<>(e.getRootCause().getMessage(), HttpStatus.CONFLICT);
+		} catch (FeignException e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoSuchElementException e) {
@@ -254,6 +270,7 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
     
     @PutMapping("/image")
     @CrossOrigin
@@ -269,6 +286,24 @@ public class Api {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PutMapping("/worktime")
+    @CrossOrigin
+    public ResponseEntity<?> updateWorkTime(@RequestBody UpdateWorkTimeDTO updateWorkTimeDTO) {
+
+        try {
+        	objectService.updateWorkTime(updateWorkTimeDTO);
+        	
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (NoSuchElementException e) {
         	e.printStackTrace();
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
@@ -395,6 +430,20 @@ public class Api {
         try {
         	String jwtToken = authClient.generateSelfOrderingJWTToken(token);
             return new ResponseEntity<>(jwtToken,HttpStatus.CREATED);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @DeleteMapping("/{objectId}")
+    @CrossOrigin
+    public ResponseEntity<?> updateObjectImage(@PathVariable String objectId) {
+
+        try {
+        	userClient.deleteObjectWorkers(UUID.fromString(objectId));
+        	objectService.deleteObject(UUID.fromString(objectId));
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

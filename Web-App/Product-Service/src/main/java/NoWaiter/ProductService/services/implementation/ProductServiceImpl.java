@@ -34,6 +34,7 @@ import NoWaiter.ProductService.services.contracts.dto.ProductValidationResponseD
 import NoWaiter.ProductService.services.contracts.dto.SideDishDTO;
 import NoWaiter.ProductService.services.contracts.exceptions.InvalidOrderItemException;
 import NoWaiter.ProductService.services.contracts.exceptions.InvalidProductCategoryException;
+import NoWaiter.ProductService.services.contracts.exceptions.InvalidProductCategoryNameException;
 import NoWaiter.ProductService.services.contracts.exceptions.UnauthorizedRequestException;
 import NoWaiter.ProductService.services.implementation.util.ImageUtil;
 import NoWaiter.ProductService.services.implementation.util.ProductCategoryMapper;
@@ -56,7 +57,12 @@ public class ProductServiceImpl implements ProductService {
 	private Environment env;
 	
 	@Override
-	public UUID createProductCategory(NameDTO categoryDTO, UUID objectId) {
+	public UUID createProductCategory(NameDTO categoryDTO, UUID objectId) throws InvalidProductCategoryNameException {
+		List<ProductCategory> existWithNameProductCategory = productCategoryRepository.findWithCategoryNameAndObject(categoryDTO.Name.toLowerCase(), objectId);
+		
+		if(existWithNameProductCategory.size()!=0) {
+			throw new InvalidProductCategoryNameException("Category with this name already exist");
+		}
 		
 		ProductCategory productCategory = ProductCategoryMapper.MapProductCategoryDTOToProductCategory(categoryDTO, objectId);
 		productCategoryRepository.save(productCategory);
@@ -181,5 +187,24 @@ public class ProductServiceImpl implements ProductService {
 		}
 		
 		return new ProductValidationResponseDTO(products);
+	}
+
+	@Override
+	public void deleteProduct(UUID productId) {
+		Product product = productRepository.findById(productId).get();
+		
+		product.delete();
+		
+		productRepository.save(product);
+	}
+
+	@Override
+	public void deleteCategory(UUID categoryId) {
+		// TODO Auto-generated method stub
+		ProductCategory productCategory = productCategoryRepository.findById(categoryId).get();
+		
+		productCategory.delete();
+		
+		productCategoryRepository.save(productCategory);
 	}
 }

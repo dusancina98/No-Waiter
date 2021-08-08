@@ -34,7 +34,7 @@ public interface UserService {
         
     void updateObjects(UserClientObjectDTO entity);
     
-    UUID createWaiter(WaiterDTO entity, UUID objectAdminId) throws ClassFieldValidationException;
+    UUID createWaiter(WaiterDTO entity, UUID objectAdminId) throws ClassFieldValidationException, Exception;
     
     Iterable<IdentifiableDTO<ObjectAdminDTO>> findAllObjectAdmins();
     
@@ -59,5 +59,9 @@ public interface UserService {
 	AccountActivationToken isValidAccountActivationLink(String token) throws TokenNotFoundException, ActivationLinkExpiredOrUsedException;
 
 	ResetPasswordToken isValidResetPasswordToken(String token) throws TokenNotFoundException, ResetPasswordTokenExpiredOrUsedException;
+
+	void deleteWaiter(UUID waiterId);
+
+	void deleteObjectWorkers(UUID objectId);
 
 }

@@ -11,9 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.Where;
+
 import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeException;
 
 @Entity
+@Where(clause = "deleted=false")
 public class Object {
 
     @Id
@@ -34,6 +37,8 @@ public class Object {
 
     private boolean blocked;
     
+    private boolean deleted = Boolean.FALSE;
+
     @OneToMany(mappedBy = "object")
     private List<ObjectAdmin> admins;
     
@@ -43,7 +48,7 @@ public class Object {
     @OneToOne(optional= false)
     private WorkTime workTime;
 
-    public Object(UUID id, String name, Address address, Contact contact, String imagePath, boolean active, boolean blocked, List<ObjectAdmin> admins, List<Table> tables, WorkTime workTime) throws InvalidTimeRangeException {
+    public Object(UUID id, String name, Address address, Contact contact, String imagePath, boolean active, boolean blocked, List<ObjectAdmin> admins, List<Table> tables, WorkTime workTime, boolean deleted) throws InvalidTimeRangeException {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -54,10 +59,11 @@ public class Object {
         this.admins = admins;
         this.tables = tables;
         this.workTime= workTime;
+        this.deleted= deleted;
     }
 
     public Object(String name, Address address, Contact contact, String imagePath, WorkTime workTime) throws InvalidTimeRangeException {
-        this (UUID.randomUUID(), name, address, contact, imagePath, false, false, new ArrayList<ObjectAdmin>(), new ArrayList<Table>(), workTime);
+        this (UUID.randomUUID(), name, address, contact, imagePath, false, false, new ArrayList<ObjectAdmin>(), new ArrayList<Table>(), workTime,false);
     }
 
     public Object() { }
@@ -146,5 +152,18 @@ public class Object {
 
 	public WorkTime getWorkTime() {
 		return workTime;
+	}
+	
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
+	public void Delete() {
+		this.setDeleted(true);
 	}
 }

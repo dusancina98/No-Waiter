@@ -13,13 +13,15 @@ export function setAuthInLocalStorage(data) {
 	localStorage.setItem("accessToken", data.accessToken);
 	localStorage.setItem("expireTime", data.expiresIn);
 	localStorage.setItem("roles", data.roles);
+	localStorage.setItem("name", data.name);
+	localStorage.setItem("surname", data.surname);
 }
 
 export function hasRoles(desiredRoles) {
 	validateAccessToken();
 
 	let roles = localStorage.getItem("roles"); //JSON.parse(localStorage.getItem("roles"));
-	console.log(roles);
+	//console.log(roles);
 
 	let retVal = false;
 	if (roles) {
@@ -30,7 +32,7 @@ export function hasRoles(desiredRoles) {
 		retVal = true;
 	}
 
-	console.log(retVal);
+	//console.log(retVal);
 	return retVal;
 }
 
@@ -65,4 +67,7 @@ export function deleteLocalStorage() {
 	localStorage.removeItem("accessToken");
 	localStorage.removeItem("roles");
 	localStorage.removeItem("expireTime");
+	localStorage.removeItem("name");
+	localStorage.removeItem("surname");
+
 }
