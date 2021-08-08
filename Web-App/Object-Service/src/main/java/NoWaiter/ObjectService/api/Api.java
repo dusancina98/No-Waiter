@@ -90,6 +90,19 @@ public class Api {
         }
     }
     
+    @PostMapping("/details")
+    @CrossOrigin
+    public ResponseEntity<?> getObjectDetailsByObjectIds(@RequestBody List<UUID> objectIds){
+
+        try {
+            return new ResponseEntity<>(objectService.findAllObjectDetailsById(objectIds), HttpStatus.OK);
+
+        } catch (Exception e) {
+			e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
     @GetMapping("/{objectId}")
     @CrossOrigin
     public ResponseEntity<?> findById(@PathVariable UUID objectId) {

@@ -6,6 +6,10 @@ export const OrderContext = createContext();
 const OrderContextProvider = (props) => {
 	const [orderState, dispatch] = useReducer(orderReducer, {
 		pendingOrders: [],
+		acceptedOrders: [],
+		orderAccept: {
+			accepted: false,
+		},
 	});
 
 	return <OrderContext.Provider value={{ orderState, dispatch }}>{props.children}</OrderContext.Provider>;

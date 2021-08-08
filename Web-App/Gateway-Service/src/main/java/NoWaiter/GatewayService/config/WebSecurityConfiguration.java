@@ -33,7 +33,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 	.antMatchers("/auth-api/api/auth/login").permitAll()
                 	
                 	.antMatchers(HttpMethod.POST ,"/order-api/api/orders").hasAnyRole("WAITER","SELF_ORDER_PULT")
-                	
+                	.antMatchers(HttpMethod.GET ,"/order-api/api/orders/confirmed/deliverer").hasRole("DELIVERER")
+                	.antMatchers(HttpMethod.GET ,"/order-api/api/orders/accepted/deliverer").hasRole("DELIVERER")
+
                 	.antMatchers(HttpMethod.POST ,"/product-api/api/products/categories").hasRole("OBJADMIN")
                 	.antMatchers(HttpMethod.GET ,"/product-api/api/products/categories").hasAnyRole("OBJADMIN", "WAITER","SELF_ORDER_PULT")
                 	.antMatchers(HttpMethod.POST ,"/product-api/api/products").hasRole("OBJADMIN")

@@ -6,7 +6,136 @@ import { API_URL } from "../constants/ApiUrl";
 export const authService = {
 	login,
 	logout,
+	createEmploymentRequest,
+	checkIfUserIdExist,
+	resendActivationLinkRequest,
+	resetPasswordLinkRequest,
 };
+
+function resetPasswordLinkRequest(resetPasswordLinkRequest, dispatch) {
+	dispatch(request());
+
+	Axios.post(`${API_URL}/user-api/api/users/reset-password-link-request`, resetPasswordLinkRequest, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(resetPasswordLinkRequest.email));
+			} else if (res.status === 404) {
+				dispatch(failure("Sorry, your email was not found. Please double-check your email."));
+			} else {
+				dispatch(failure(res.data.message));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+
+	function request() {
+		return { type: authConstants.RESET_PASSWORD_LINK_REQUEST };
+	}
+	function success(emailAddress) {
+		return { type: authConstants.RESET_PASSWORD_LINK_SUCCESS, emailAddress };
+	}
+	function failure(error) {
+		return { type: authConstants.RESET_PASSWORD_LINK_FAILURE, errorMessage: error };
+	}
+}
+
+function checkIfUserIdExist(userId, dispatch) {
+	Axios.get(`${API_URL}/user-api/api/users/check-existence/` + userId, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else if (res.status === 404) {
+				dispatch(failure("User not found"));
+			}
+		})
+		.catch((err) => {});
+
+	function success(emailAddress) {
+		return { type: authConstants.INACTIVE_USER_EMAIL_SUCCESS, emailAddress };
+	}
+
+	function failure(error) {
+		return { type: authConstants.INACTIVE_USER_EMAIL_FAILURE, errorMessage: error };
+	}
+}
+
+function resendActivationLinkRequest(userId, dispatch) {
+	dispatch(request());
+	Axios.post(`${API_URL}/user-api/api/users/activation-link-request`, userId, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 201) {
+				dispatch(success());
+			} else {
+				dispatch(failure("Activation mail was not sent. Please, try again."));
+			}
+		})
+		.catch((err) => {
+			dispatch(failure("Activation mail was not sent. Please, try again."));
+		});
+
+	function request() {
+		return { type: authConstants.RESEND_ACTIVATION_LINK_REQUEST };
+	}
+	function success() {
+		return { type: authConstants.RESEND_ACTIVATION_LINK_SUCCESS };
+	}
+	function failure(error) {
+		return { type: authConstants.RESEND_ACTIVATION_LINK_FAILURE, errorMessage: error };
+	}
+}
+
+function createEmploymentRequest(requestDTO, dispatch) {
+	dispatch(request());
+
+	if (validateEmploymentRequest(requestDTO, dispatch)) {
+		Axios.post(`${API_URL}/user-api/api/users/deliverer-request`, requestDTO, { validateStatus: () => true })
+			.then((res) => {
+				console.log(res.data);
+				if (res.status === 201) {
+					dispatch(success(res.data));
+				} else {
+					dispatch(failure(res.data));
+				}
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+	}
+
+	function request() {
+		return { type: authConstants.CREATE_EMPLOYMENT_REQUEST_REQUEST };
+	}
+	function success() {
+		return { type: authConstants.CREATE_EMPLOYMENT_REQUEST_SUCCESS };
+	}
+	function failure(error) {
+		return { type: authConstants.CREATE_EMPLOYMENT_REQUEST_FAILURE, error };
+	}
+}
+
+function validateEmploymentRequest(requestDTO, dispatch) {
+	if (requestDTO.Email === "") {
+		dispatch(failure("Email address must be entered"));
+		return false;
+	} else if (requestDTO.Name === "") {
+		dispatch(failure("Name must be entered"));
+		return false;
+	} else if (requestDTO.Surname === "") {
+		dispatch(failure("Surname must be entered"));
+		return false;
+	} else if (requestDTO.PhoneNumber === "") {
+		dispatch(failure("PhoneNumber must be entered"));
+		return false;
+	} else if (requestDTO.Reference === "") {
+		dispatch(failure("Reference must be entered"));
+		return false;
+	}
+	function failure(error) {
+		return { type: authConstants.CREATE_EMPLOYMENT_REQUEST_VALIDATION_FAILURE, error };
+	}
+	return true;
+}
 
 function login(loginRequest, dispatch) {
 	dispatch(request());
@@ -14,6 +143,7 @@ function login(loginRequest, dispatch) {
 	if (validateLoginRequest(loginRequest, dispatch)) {
 		Axios.post(`${API_URL}/auth-api/api/auth/login/deliverer`, loginRequest, { validateStatus: () => true })
 			.then((res) => {
+				console.log(res.data);
 				if (res.status === 200) {
 					setAuthInLocalStorage(res.data);
 					dispatch(success(res.data));
@@ -21,7 +151,7 @@ function login(loginRequest, dispatch) {
 					dispatch(failure(res.data.message));
 				} else if (res.status === 403) {
 					//window.location = "#/inactive-user/" + res.data;
-					dispatch(failure(res.data.message));
+					dispatch(userUnactive(res.data));
 				} else {
 					dispatch(failure(res.data.message));
 				}
@@ -40,6 +170,9 @@ function login(loginRequest, dispatch) {
 	function failure(error) {
 		return { type: authConstants.LOGIN_FAILURE, error };
 	}
+	function userUnactive(userId) {
+		return { type: authConstants.LOGIN_USER_NOT_ACTIVE, userId };
+	}
 }
 
 function validateLoginRequest(loginRequest, dispatch) {
@@ -56,6 +189,11 @@ function validateLoginRequest(loginRequest, dispatch) {
 	return true;
 }
 
-function logout() {
-	deleteLocalStorage();
+async function logout(dispatch) {
+	await deleteLocalStorage();
+	dispatch(success());
+
+	function success() {
+		return { type: authConstants.LOGOUT_SUCCESS };
+	}
 }
