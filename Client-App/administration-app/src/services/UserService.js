@@ -533,57 +533,54 @@ function checkIfResetPasswordTokenIsValid(token) {
 		});
 }
 
-function approveDelivererRequest(requestIdDTO,dispatch){
-
-	Axios.put(`/user-api/api/users/deliverer-request/approve/${requestIdDTO.id}`, { validateStatus: () => true, headers: authHeader() })
+function approveDelivererRequest(requestIdDTO, dispatch) {
+	Axios.put(`/user-api/api/users/deliverer-request/approve/${requestIdDTO.id}`, requestIdDTO, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 200) {
-				findAllDelivererRequests(dispatch)
-				dispatch(success("Uspesno ste odobrili novog dostavljaca"))
-			}else{
-				dispatch(failure("Trenutno nije moguce odobriti datog dostavljaca"))
+				findAllDelivererRequests(dispatch);
+				dispatch(success("Uspesno ste odobrili novog dostavljaca"));
+			} else {
+				dispatch(failure("Trenutno nije moguce odobriti datog dostavljaca"));
 			}
 		})
 		.catch((err) => {
-			dispatch(failure("Trenutno nije moguce odobriti datog dostavljaca"))
+			dispatch(failure("Trenutno nije moguce odobriti datog dostavljaca"));
 		});
 
-		function success(message) {
-			return { type: userConstants.ACCEPT_DELIVERER_REQUEST_SUCCESS, successMessage: message };
-		}
-		function failure(message) {
-			return { type: userConstants.OBJECT_ADMIN_DELETE_FAILURE, errorMessage: message };
-		}
+	function success(message) {
+		return { type: userConstants.ACCEPT_DELIVERER_REQUEST_SUCCESS, successMessage: message };
+	}
+	function failure(message) {
+		return { type: userConstants.OBJECT_ADMIN_DELETE_FAILURE, errorMessage: message };
+	}
 }
 
-function rejectDelivererRequest(rejectRequestDTO,dispatch){
-
-
-	if(rejectRequestDTO.Reason.length<10){
-		dispatch(failure("Razlog odbijanja zahteva mora sadrzati minimalno 10 slova"))
+function rejectDelivererRequest(rejectRequestDTO, dispatch) {
+	if (rejectRequestDTO.Reason.length < 10) {
+		dispatch(failure("Razlog odbijanja zahteva mora sadrzati minimalno 10 slova"));
 		return;
 	}
 
 	Axios.put(`/user-api/api/users/deliverer-request/reject/`, rejectRequestDTO, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 200) {
-				findAllDelivererRequests(dispatch)
-				dispatch(success("Uspesno ste odbili zahtev za novog dostavljaca"))
-			}else{
-				dispatch(failure("Trenutno nije moguce odbiti zahtev za datog dostavljaca"))
+				findAllDelivererRequests(dispatch);
+				dispatch(success("Uspesno ste odbili zahtev za novog dostavljaca"));
+			} else {
+				dispatch(failure("Trenutno nije moguce odbiti zahtev za datog dostavljaca"));
 			}
 		})
 		.catch((err) => {
-			dispatch(failure("Trenutno nije moguce odbiti zahtev za datog dostavljaca"))
+			dispatch(failure("Trenutno nije moguce odbiti zahtev za datog dostavljaca"));
 		});
 
-		function success(message) {
-			return { type: userConstants.REJECT_DELIVERER_REQUEST_SUCCESS, successMessage: message };
-		}
+	function success(message) {
+		return { type: userConstants.REJECT_DELIVERER_REQUEST_SUCCESS, successMessage: message };
+	}
 
-		function failure(message) {
-			return { type: userConstants.REJECT_DELIVERER_REQUEST_FAILURE, errorMessage: message };
-		}
+	function failure(message) {
+		return { type: userConstants.REJECT_DELIVERER_REQUEST_FAILURE, errorMessage: message };
+	}
 }
 
 function activateDeliverer(deliverer, dispatch) {
@@ -593,7 +590,7 @@ function activateDeliverer(deliverer, dispatch) {
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
-				deliverer.EntityDTO.DelivererStatus = 'ACTIVE';
+				deliverer.EntityDTO.DelivererStatus = "ACTIVE";
 				dispatch(success("Deliverer successfully activated", deliverer));
 			} else {
 				dispatch(failure("Error"));
@@ -622,7 +619,7 @@ function deactivateDeliverer(deliverer, dispatch) {
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
-				deliverer.EntityDTO.DelivererStatus = 'INACTIVE';
+				deliverer.EntityDTO.DelivererStatus = "INACTIVE";
 				dispatch(success("Deliverer successfully deactivated", deliverer));
 			} else {
 				dispatch(failure("Error"));

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ImageBackground, View, Text, TouchableOpacity, StatusBar, TextInput, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { authConstants } from "../constants/AuthConstants";
 import { AuthContext } from "../contexts/AuthContext";
 import { authService } from "../services/AuthService";
 import { loginStyles, welcomeStyles } from "../styles/styles";
@@ -25,6 +26,19 @@ function LoginScreen({ navigation }) {
 		}
 	}, [authState.userLogin.successLogin]);
 
+	useEffect(() => {
+		console.log("UDJE");
+		if (authState.userActivate.notActivated === true) {
+			navigation.navigate("Activate User");
+			setEmail("");
+			setPassword("");
+		}
+	}, [authState.userActivate.notActivated]);
+
+	useEffect(() => {
+		dispatch({ type: authConstants.LOGIN_REQUEST });
+	}, []);
+
 	return (
 		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 			<View style={loginStyles.containerWrapper}>
@@ -38,6 +52,20 @@ function LoginScreen({ navigation }) {
 						<TextInput style={loginStyles.textInput} placeholder="Email" onChangeText={(val) => setEmail(val)}></TextInput>
 						<Text style={loginStyles.textForm}>Password</Text>
 						<TextInput style={loginStyles.textInput} placeholder="Password" secureTextEntry={true} onChangeText={(val) => setPassword(val)}></TextInput>
+					</View>
+					<View style={{ flexDirection: "row" }}>
+						<Text style={{ marginTop: 10, fontSize: 15 }}>Forgot your password?</Text>
+						<TouchableOpacity
+							style={{ marginTop: 10 }}
+							activeOpacity={0.5}
+							onPress={() => {
+								navigation.navigate("Reset Password");
+								setPassword("");
+								setEmail("");
+							}}
+						>
+							<Text style={{ color: "blue", fontSize: 15 }}> Reset password </Text>
+						</TouchableOpacity>
 					</View>
 					{authState.userLogin.showError && <Text style={loginStyles.errorMessage}>{authState.userLogin.errorMessage}</Text>}
 					<TouchableOpacity style={loginStyles.loginButton} activeOpacity={0.5} onPress={handleLogin}>

@@ -10,6 +10,14 @@ const AuthContextProvider = (props) => {
 			errorMessage: "",
 			successLogin: false,
 		},
+		userActivate: {
+			notActivated: false,
+			userId: "",
+			userEmail: "",
+			showError: false,
+			errorMessage: "",
+			showSuccessMessage: false,
+		},
 		userLogout: {
 			successLogout: false,
 		},
@@ -17,6 +25,12 @@ const AuthContextProvider = (props) => {
 			showError: false,
 			errorMessage: "",
 			successfullySent: false,
+		},
+		resetPassword: {
+			showError: false,
+			errorMessage: "",
+			showSuccessMessage: false,
+			emailAddress: "",
 		},
 	});
 

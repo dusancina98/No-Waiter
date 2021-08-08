@@ -7,7 +7,83 @@ export const authService = {
 	login,
 	logout,
 	createEmploymentRequest,
+	checkIfUserIdExist,
+	resendActivationLinkRequest,
+	resetPasswordLinkRequest,
 };
+
+function resetPasswordLinkRequest(resetPasswordLinkRequest, dispatch) {
+	dispatch(request());
+
+	Axios.post(`${API_URL}/user-api/api/users/reset-password-link-request`, resetPasswordLinkRequest, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(resetPasswordLinkRequest.email));
+			} else if (res.status === 404) {
+				dispatch(failure("Sorry, your email was not found. Please double-check your email."));
+			} else {
+				dispatch(failure(res.data.message));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+
+	function request() {
+		return { type: authConstants.RESET_PASSWORD_LINK_REQUEST };
+	}
+	function success(emailAddress) {
+		return { type: authConstants.RESET_PASSWORD_LINK_SUCCESS, emailAddress };
+	}
+	function failure(error) {
+		return { type: authConstants.RESET_PASSWORD_LINK_FAILURE, errorMessage: error };
+	}
+}
+
+function checkIfUserIdExist(userId, dispatch) {
+	Axios.get(`${API_URL}/user-api/api/users/check-existence/` + userId, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else if (res.status === 404) {
+				dispatch(failure("User not found"));
+			}
+		})
+		.catch((err) => {});
+
+	function success(emailAddress) {
+		return { type: authConstants.INACTIVE_USER_EMAIL_SUCCESS, emailAddress };
+	}
+
+	function failure(error) {
+		return { type: authConstants.INACTIVE_USER_EMAIL_FAILURE, errorMessage: error };
+	}
+}
+
+function resendActivationLinkRequest(userId, dispatch) {
+	dispatch(request());
+	Axios.post(`${API_URL}/user-api/api/users/activation-link-request`, userId, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 201) {
+				dispatch(success());
+			} else {
+				dispatch(failure("Activation mail was not sent. Please, try again."));
+			}
+		})
+		.catch((err) => {
+			dispatch(failure("Activation mail was not sent. Please, try again."));
+		});
+
+	function request() {
+		return { type: authConstants.RESEND_ACTIVATION_LINK_REQUEST };
+	}
+	function success() {
+		return { type: authConstants.RESEND_ACTIVATION_LINK_SUCCESS };
+	}
+	function failure(error) {
+		return { type: authConstants.RESEND_ACTIVATION_LINK_FAILURE, errorMessage: error };
+	}
+}
 
 function createEmploymentRequest(requestDTO, dispatch) {
 	dispatch(request());
@@ -75,7 +151,7 @@ function login(loginRequest, dispatch) {
 					dispatch(failure(res.data.message));
 				} else if (res.status === 403) {
 					//window.location = "#/inactive-user/" + res.data;
-					dispatch(failure(res.data.message));
+					dispatch(userUnactive(res.data));
 				} else {
 					dispatch(failure(res.data.message));
 				}
@@ -93,6 +169,9 @@ function login(loginRequest, dispatch) {
 	}
 	function failure(error) {
 		return { type: authConstants.LOGIN_FAILURE, error };
+	}
+	function userUnactive(userId) {
+		return { type: authConstants.LOGIN_USER_NOT_ACTIVE, userId };
 	}
 }
 
