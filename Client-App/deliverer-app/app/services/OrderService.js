@@ -9,6 +9,8 @@ export const orderService = {
 	getAllPickedUpOrders,
 	confirmOrder,
 	pickupOrder,
+	dismissOrder,
+	cancelOrder,
 };
 
 async function getAllPickedUpOrders(dispatch) {
@@ -76,6 +78,7 @@ async function getAllConfirmedOrders(dispatch) {
 
 	await Axios.get(`${API_URL}/order-api/api/orders/confirmed/deliverer`, { validateStatus: () => true, headers: header })
 		.then((res) => {
+			console.log(res.data);
 			if (res.status === 200) {
 				dispatch(success(res.data));
 			} else {
@@ -152,5 +155,65 @@ async function pickupOrder(orderId, dispatch) {
 	}
 	function failure(error) {
 		return { type: orderConstants.PICKUP_ORDER_FAILURE, errorMessage: error };
+	}
+}
+
+async function dismissOrder(orderId, dispatch) {
+	dispatch(request());
+
+	let header = await authHeader();
+
+	Axios.put(`${API_URL}/order-api/api/orders/${orderId}/dismiss`, null, { validateStatus: () => true, headers: header })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(orderId));
+			} else if (res.status === 404) {
+				dispatch(failure("Order not found"));
+			} else {
+				dispatch(failure(res.data.message));
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+
+	function request() {
+		return { type: orderConstants.DISMISS_ORDER_REQUEST };
+	}
+	function success(orderId) {
+		return { type: orderConstants.DISMISS_ORDER_SUCCESS, orderId };
+	}
+	function failure(error) {
+		return { type: orderConstants.DISMISS_ORDER_FAILURE, errorMessage: error };
+	}
+}
+
+async function cancelOrder(orderId, dispatch) {
+	dispatch(request());
+
+	let header = await authHeader();
+
+	Axios.put(`${API_URL}/order-api/api/orders/${orderId}/cancel`, null, { validateStatus: () => true, headers: header })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(orderId));
+			} else if (res.status === 404) {
+				dispatch(failure("Order not found"));
+			} else {
+				dispatch(failure(res.data.message));
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+
+	function request() {
+		return { type: orderConstants.CANCEL_ORDER_REQUEST };
+	}
+	function success(orderId) {
+		return { type: orderConstants.CANCEL_ORDER_SUCCESS, orderId };
+	}
+	function failure(error) {
+		return { type: orderConstants.CANCEL_ORDER_FAILURE, errorMessage: error };
 	}
 }
