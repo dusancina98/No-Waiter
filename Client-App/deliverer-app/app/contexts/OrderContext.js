@@ -16,6 +16,16 @@ const OrderContextProvider = (props) => {
 			showError: false,
 			errorMessage: "",
 		},
+		orderDismiss: {
+			scannedQr: false,
+			showError: false,
+			errorMessage: "",
+		},
+		orderCancel: {
+			success: false,
+			showError: false,
+			errorMessage: "",
+		},
 	});
 
 	return <OrderContext.Provider value={{ orderState, dispatch }}>{props.children}</OrderContext.Provider>;

@@ -233,6 +233,40 @@ public class Api {
         }
     }
 	
+	
+	@PutMapping("/{orderId}/cancel")
+    @CrossOrigin
+    public ResponseEntity<?> cancelOrder(@RequestHeader("Authorization") String token, @PathVariable String orderId) {
+        try {
+    		JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+        	orderService.cancelOrderDeliverer(UUID.fromString(orderId), jwtResponse.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NotFoundException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
+	@PutMapping("/{orderId}/dismiss")
+    @CrossOrigin
+    public ResponseEntity<?> dismissOrder(@RequestHeader("Authorization") String token, @PathVariable String orderId) {
+        try {
+    		JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+        	orderService.dismissOrderDeliverer(UUID.fromString(orderId), jwtResponse.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NotFoundException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
+	
 	@GetMapping("/ready")
     @CrossOrigin
     public ResponseEntity<?> getReadyOrdersForObject(@RequestHeader("Authorization") String token) {

@@ -29,6 +29,10 @@ public interface OrderService {
 	
 	void pickupOrderDeliverer(UUID orderId, UUID delivererId) throws NotFoundException;
 	
+	void cancelOrderDeliverer(UUID orderId, UUID delivererId) throws NotFoundException;
+	
+	void dismissOrderDeliverer(UUID orderId, UUID delivererId) throws NotFoundException;
+	
 	List<ConfirmedOrderDTO> getConfirmedOrdersForObject(UUID objectId);
 	
 	List<DelivererOrderDTO> getAllConfirmedOrders();

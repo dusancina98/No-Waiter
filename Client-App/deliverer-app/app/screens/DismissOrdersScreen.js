@@ -7,7 +7,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { orderConstants } from "../constants/OrderConstants";
 import { orderService } from "../services/OrderService";
 
-const ScanQrScreen = (props) => {
+const DismissOrdersScreen = ({ navigation }) => {
 	const { orderState, dispatch } = useContext(OrderContext);
 	const isFocused = useIsFocused();
 
@@ -23,22 +23,23 @@ const ScanQrScreen = (props) => {
 
 	const handleBarCodeScanned = ({ type, data }) => {
 		setScanned(true);
-		orderService.pickupOrder(data, dispatch);
+		orderService.dismissOrder(data, dispatch);
 	};
 
 	useEffect(() => {
-		if (orderState.orderDelivering.scannedQr === true) {
-			Alert.alert("Success", "Order successfully scanned!", [{ text: "OK" }]);
-			dispatch({ type: orderConstants.PICKUP_ORDER_REQUEST });
+		if (orderState.orderDismiss.scannedQr === true) {
+			Alert.alert("Success", "Order successfully dismissed!", [{ text: "OK" }]);
+			dispatch({ type: orderConstants.DISMISS_ORDER_REQUEST });
+			navigation.goBack();
 		}
-	}, [orderState.orderDelivering.scannedQr]);
+	}, [orderState.orderDismiss.scannedQr]);
 
 	useEffect(() => {
-		if (orderState.orderDelivering.showError === true) {
-			Alert.alert("Error", orderState.orderDelivering.errorMessage, [{ text: "OK" }]);
-			dispatch({ type: orderConstants.PICKUP_ORDER_REQUEST });
+		if (orderState.orderDismiss.showError === true) {
+			Alert.alert("Error", orderState.orderDismiss.errorMessage, [{ text: "OK" }]);
+			dispatch({ type: orderConstants.DISMISS_ORDER_REQUEST });
 		}
-	}, [orderState.orderDelivering.showError]);
+	}, [orderState.orderDismiss.showError]);
 
 	if (hasPermission === null) {
 		return <Text>Requesting for camera permission</Text>;
@@ -59,4 +60,4 @@ const ScanQrScreen = (props) => {
 	);
 };
 
-export default ScanQrScreen;
+export default DismissOrdersScreen;

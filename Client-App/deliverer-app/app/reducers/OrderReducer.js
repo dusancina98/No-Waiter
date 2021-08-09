@@ -99,6 +99,62 @@ export const orderReducer = (state, action) => {
 					errorMessage: action.errorMessage,
 				},
 			};
+
+		case orderConstants.DISMISS_ORDER_REQUEST:
+			return {
+				...state,
+				orderDismiss: {
+					scannedQr: false,
+					showError: false,
+					errorMessage: "",
+				},
+			};
+		case orderConstants.DISMISS_ORDER_SUCCESS:
+			ordCpy = { ...state };
+			//let arOrders = state.pendingOrders.filter((order) => order.OrderId !== action.orderId);
+			ordCpy.orderDismiss.scannedQr = true;
+			ordCpy.orderDismiss.showError = false;
+			ordCpy.orderDismiss.errorMessage = "";
+			console.log(ordCpy);
+			return ordCpy;
+		case orderConstants.DISMISS_ORDER_FAILURE:
+			console.log(state);
+			return {
+				...state,
+				orderDismiss: {
+					scannedQr: false,
+					showError: true,
+					errorMessage: action.errorMessage,
+				},
+			};
+
+		case orderConstants.CANCEL_ORDER_REQUEST:
+			return {
+				...state,
+				orderCancel: {
+					success: false,
+					showError: false,
+					errorMessage: "",
+				},
+			};
+		case orderConstants.CANCEL_ORDER_SUCCESS:
+			ordCpy = { ...state };
+			ordCpy.acceptedOrders = state.acceptedOrders.filter((order) => order.OrderId !== action.orderId);
+			ordCpy.orderCancel.success = true;
+			ordCpy.orderCancel.showError = false;
+			ordCpy.orderCancel.errorMessage = "";
+			console.log(ordCpy);
+			return ordCpy;
+		case orderConstants.CANCEL_ORDER_FAILURE:
+			console.log(state);
+			return {
+				...state,
+				orderCancel: {
+					success: false,
+					showError: true,
+					errorMessage: action.errorMessage,
+				},
+			};
 		default:
 			return state;
 	}
