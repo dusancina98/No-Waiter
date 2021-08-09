@@ -53,7 +53,7 @@ function AcceptedOrdersScreen({ navigation }) {
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
 			<StatusBar barStyle="dark-content" />
-			<Text style={{ fontSize: 12, color: "gray", marginLeft: 10, marginTop: 10 }}>Tap to cancel order</Text>
+			{orderState.acceptedOrders.length > 0 && <Text style={{ fontSize: 14, color: "gray", marginLeft: 20, marginTop: 10 }}>Tap to cancel order</Text>}
 			<FlatList
 				refreshing={isFetching}
 				onRefresh={() => setIsFetching(true)}
@@ -71,13 +71,14 @@ function AcceptedOrdersScreen({ navigation }) {
 								</View>
 								<View style={orderListStyles.orderInfo}>
 									<Text>
-										<Text style={{ fontWeight: "bold" }}>{item.ObjectName}</Text>
-										<Text style={{ fontSize: 14, marginLeft: 10 }}>{"(" + item.ObjectAddress + ")"}</Text>
+										<Text style={{ fontSize: 16, fontWeight: "bold" }}>{item.ObjectName}</Text>
+										<Text style={{ fontSize: 16, marginLeft: 10 }}>{"(" + item.ObjectAddress + ")"}</Text>
 									</Text>
 
-									<Text>{item.DeliveryAddress}</Text>
-									<Text>{moment.utc(item.ExpiredTime).utc().endOf("minutes").fromNow()}</Text>
-									<Text>RSD {Number(item.Price).toFixed(2)}</Text>
+									<Text style={{ fontSize: 16, fontWeight: "bold" }}>{moment.utc(item.EstimatedTime).local().startOf("second").fromNow()}</Text>
+									<Text>
+										{Number(item.Price).toFixed(2)} <Text style={{ color: "green", fontWeight: "bold" }}>RSD</Text>
+									</Text>
 								</View>
 							</View>
 						</View>
