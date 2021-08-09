@@ -26,11 +26,25 @@ public interface OrderEventRepository extends PagingAndSortingRepository<OrderEv
 	List<UUID> getDistinctObjectIdsForDelivery(Date timeStamp);
 	
 	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.orderStatus = 'CONFIRMED_DELIVERY' and oe.delivererId = ?1 and oe.order.orderType = 'DELIVERY'"
-			 + "AND oe.order.id NOT IN (SELECT oe.order.id FROM OrderEvent oe WHERE oe.orderStatus = 'DELIVERING')")
+			 + " AND oe.order.id NOT IN (SELECT oe.order.id FROM OrderEvent oe WHERE oe.orderStatus = 'DELIVERING')")
 	List<OrderEvent> getAcceptedOrderEventsForDeliveryByDeliverer(UUID delivererId);
 	
 	@Query(value = "SELECT distinct(oe.objectId) FROM OrderEvent oe WHERE oe.orderStatus = 'CONFIRMED_DELIVERY' and oe.delivererId = ?1 and oe.order.orderType = 'DELIVERY'"
-			 + "AND oe.order.id NOT IN (SELECT oe.order.id FROM OrderEvent oe WHERE oe.orderStatus = 'DELIVERING')")
+			 + " AND oe.order.id NOT IN (SELECT oe.order.id FROM OrderEvent oe WHERE oe.orderStatus = 'DELIVERING')")
 	List<UUID> getDistinctObjectIdsForAcceptedDelivery(UUID delivererId);
+	
+	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.order.id = ?1 and oe.orderStatus = 'CONFIRMED_DELIVERY' and oe.delivererId = ?2 and oe.order.orderType = 'DELIVERY'"
+			 + " AND oe.order.id IN (SELECT oe.order.id FROM OrderEvent oe WHERE oe.order.id = ?1 and ( oe.orderStatus = 'CONFIRMED_DELIVERY' or oe.orderStatus = 'READY'))"
+			 + " AND oe.order.id NOT IN (SELECT oe.order.id FROM OrderEvent oe WHERE oe.order.id = ?1 and oe.orderStatus = 'DELIVERING')")
+	OrderEvent getLastConfirmedDeliveryOrderEventForOrder(UUID orderId, UUID delivererId);
+	
+	
+	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.orderStatus = 'DELIVERING' and oe.delivererId = ?1 and oe.order.orderType = 'DELIVERY'"
+			 + " AND oe.order.id NOT IN (SELECT oe.order.id FROM OrderEvent oe WHERE oe.orderStatus = 'COMPLETED')")
+	List<OrderEvent> getPickedUpOrderEventsForDeliveryByDeliverer(UUID delivererId);
+	
+	@Query(value = "SELECT distinct(oe.objectId) FROM OrderEvent oe WHERE oe.orderStatus = 'DELIVERING' and oe.delivererId = ?1 and oe.order.orderType = 'DELIVERY'"
+			 + " AND oe.order.id NOT IN (SELECT oe.order.id FROM OrderEvent oe WHERE oe.orderStatus = 'COMPLETED')")
+	List<UUID> getDistinctObjectIdsFortPickedUpDelivery(UUID delivererId);
 
 }

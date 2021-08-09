@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javassist.NotFoundException;
 import no_waiter.order_service.entities.Address;
 import no_waiter.order_service.entities.Order;
 import no_waiter.order_service.entities.OrderEvent;
@@ -196,6 +197,19 @@ public class OrderServiceImpl implements OrderService{
 		
 		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED_DELIVERY, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId(), delivererId);
 		orderEventRepository.save(newOrderEvent);		
+	}
+	
+
+	@Override
+	public void pickupOrderDeliverer(UUID orderId, UUID delivererId) throws NotFoundException {
+		OrderEvent orderEvent = orderEventRepository.getLastConfirmedDeliveryOrderEventForOrder(orderId, delivererId);
+
+		if (orderEvent == null) {
+			throw new NotFoundException("Order not found");
+		}
+		
+		OrderEvent newOrderEvent = new OrderEvent(orderEvent.getOrder(), OrderStatus.DELIVERING, new Date(), orderEvent.getOrder().getEstimatedTime(), orderEvent.getOrder().getObjectId(), delivererId);
+		orderEventRepository.save(newOrderEvent);	
 	}
 
 	@Override
@@ -508,5 +522,32 @@ public class OrderServiceImpl implements OrderService{
 		confirmedOrderEvents.forEach((orderEvent) -> acceptedOrderDTO.add(mapOrderToDelivererOrderDTO(orderEvent, objectDetails)));
 		return acceptedOrderDTO;
 	}
+
+
+	@Override
+	public List<DelivererOrderDTO> getAllPickedUpOrders(UUID delivererId) {
+		List<DelivererOrderDTO> acceptedOrderDTO = new ArrayList<DelivererOrderDTO>();
+		
+		List<OrderEvent> confirmedOrderEvents =  orderEventRepository.getPickedUpOrderEventsForDeliveryByDeliverer(delivererId);
+		System.out.println("CONFIRMEd " + confirmedOrderEvents.size());
+		List<UUID> objectIds = orderEventRepository.getDistinctObjectIdsFortPickedUpDelivery(delivererId);
+		List<ObjectDetailsDTO> objectDetails = objectClient.getObjectDetailsByObjectIds(objectIds);
+
+		confirmedOrderEvents.forEach((orderEvent) -> acceptedOrderDTO.add(mapOrderToDelivererOrderDTO(orderEvent, objectDetails)));
+		return acceptedOrderDTO;
+	}
+
+
+	
+	//@Override
+	//public UUID createOrder(OrderRequestDTO requestDTO, ProductValidationResponseDTO products, UUID objectId) {
+	//	Order order = OrderMapper.MapOrderRequestDTOToOrder(requestDTO, products, objectId);
+	//	orderRepository.save(order);
+	//	
+	//	OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), objectId);
+	//	orderEventRepository.save(newOrderEvent);
+	//	
+	//	return order.getId();
+	//}
 
 }
