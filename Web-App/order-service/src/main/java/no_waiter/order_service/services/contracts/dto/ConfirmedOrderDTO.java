@@ -6,7 +6,7 @@ import java.util.UUID;
 public class ConfirmedOrderDTO {
 	public UUID OrderId;
 	
-	public String Table;
+	public TableResponseDTO Table;	
 	
 	public String OrderType;
 	
@@ -15,8 +15,9 @@ public class ConfirmedOrderDTO {
 	public Date CreatedTimeStamp;
 	
 	public Date EstimatedDate;
+	
 		
-	public ConfirmedOrderDTO(UUID orderId, String table, String orderType, Double price, Date timeStamp,Date estimatedDate) {
+	public ConfirmedOrderDTO(UUID orderId, TableResponseDTO table, String orderType, Double price, Date timeStamp,Date estimatedDate) {
 		super();
 		OrderId = orderId;
 		Table = table;

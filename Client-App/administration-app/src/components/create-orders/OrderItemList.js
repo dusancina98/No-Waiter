@@ -30,6 +30,7 @@ const OrderItemList = () => {
 							imageUrl={item.imagePath}
 							setProductCount={setProductCount}
 							deleteFromShoppingCart={deleteFromShoppingCart}
+							note={item.note}
 						/>
 						<hr />
 					</React.Fragment>

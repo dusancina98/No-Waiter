@@ -3,6 +3,7 @@ package NoWaiter.ObjectService.intercomm;
 import java.util.UUID;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,4 +20,7 @@ public interface UserClient {
 	 
 	 @GetMapping("api/users/employee/waiter/{waiterId}/object-id")
 	 UUID findObjectIdByWaiterId(@PathVariable UUID waiterId);
+	 
+	 @DeleteMapping("api/users/object-workers/{objectId}")
+	 UUID deleteObjectWorkers(@PathVariable UUID objectId);
 }

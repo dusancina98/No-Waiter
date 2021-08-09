@@ -261,7 +261,9 @@ export const productReducer = (state, action) => {
 				showSuccessMessage: false,
 				successMessage: "",
 				createCategory: {
-					showModal: false,
+					showModal: true,
+					showErrorMessage: false,
+					errorMessage: "",
 				},
 			};
 		case productConstants.CATEGORY_CREATE_SUCCESS:
@@ -275,18 +277,22 @@ export const productReducer = (state, action) => {
 				successMessage: action.successMessage,
 				createCategory: {
 					showModal: false,
+					showErrorMessage: false,
+					errorMessage: "",
 				},
 				categories: arrCategories,
 			};
 		case productConstants.CATEGORY_CREATE_FAILURE:
 			return {
 				...state,
-				showError: true,
-				errorMessage: action.errorMessage,
+				showError: false,
+				errorMessage: '',
 				showSuccessMessage: false,
 				successMessage: "",
 				createCategory: {
-					showModal: false,
+					showModal: true,
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
 				},
 			};
 		case productConstants.SET_CATEGORIES_REQUEST:
@@ -466,7 +472,65 @@ export const productReducer = (state, action) => {
 				successMessage: "",
 				createProduct: ssssstate.createProduct,
 			};
+		case productConstants.PRODUCT_DELETE_SUCCESS:
+			let productDeleteSuccess = {...state };
+			productDeleteSuccess.showedProducts= productDeleteSuccess.showedProducts.filter((product) => product.Id !== action.productId);
+			productDeleteSuccess.products= productDeleteSuccess.products.filter((product) => product.Id !== action.productId);
+			
+			productDeleteSuccess.showError= false;
+			productDeleteSuccess.showSuccessMessage= '';
+			productDeleteSuccess.showSuccessMessage= true;
+			productDeleteSuccess.successMessage= action.successMessage;
 
+			return productDeleteSuccess;
+		case productConstants.PRODUCT_DELETE_FAILURE:
+			let productDeleteFailure = {...state };
+			
+			productDeleteFailure.showError= true;
+			productDeleteFailure.showSuccessMessage= action.errorMessage;
+			productDeleteFailure.showSuccessMessage= false;
+			productDeleteFailure.successMessage= '';
+
+			return productDeleteFailure;
+		case productConstants.HIDE_PRODUCT_ALERT_MESSAGE:
+			let hideProductAlertMessage = {...state };
+			
+			hideProductAlertMessage.showError= false;
+			hideProductAlertMessage.showSuccessMessage= '';
+			hideProductAlertMessage.showSuccessMessage= false;
+			hideProductAlertMessage.successMessage= '';
+
+			return hideProductAlertMessage;
+		case productConstants.CATEGORY_DELETE_SUCCESS:{
+			let categoryDeleteSuccess = {...state};
+
+			categoryDeleteSuccess.categories = categoryDeleteSuccess.categories.filter((category) => category.Id !== action.categoryId);
+			categoryDeleteSuccess.selectedCategory = {
+				Id: "",
+				EntityDTO: {
+					Name: "",
+				},
+			};
+			categoryDeleteSuccess.products = categoryDeleteSuccess.products.filter((product) => product.EntityDTO.ProductCategory.Id !== action.categoryId);
+			categoryDeleteSuccess.showedProducts = categoryDeleteSuccess.showedProducts.filter((product) => product.EntityDTO.ProductCategory.Id !== action.categoryId);
+
+			categoryDeleteSuccess.showError= false;
+			categoryDeleteSuccess.showErrorMessage= '';
+			categoryDeleteSuccess.showSuccessMessage= true;
+			categoryDeleteSuccess.successMessage=action.successMessage;
+
+			return categoryDeleteSuccess;
+		}
+		case productConstants.CATEGORY_DELETE_FAILURE:{
+			let categoryDeleteFailure = {...state };
+			
+			categoryDeleteFailure.showError= true;
+			categoryDeleteFailure.showErrorMessage= action.errorMessage;
+			categoryDeleteFailure.showSuccessMessage= false;
+			categoryDeleteFailure.successMessage= '';
+
+			return categoryDeleteFailure;
+		}
 		default:
 			return state;
 	}

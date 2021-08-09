@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 
+import NoWaiter.ObjectService.services.contracts.dto.WorkDayDTO;
 import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeException;
 
 @Entity
@@ -56,5 +57,15 @@ public class WorkTime {
 
 	public void addWorkDay(WorkDay workDay) throws InvalidTimeRangeException {
 		workDays.put(workDay.getWeekDay(),workDay);
+	}
+
+	public void Update(Map<WeekDay, WorkDayDTO> workDaysForUpdate) {
+		// TODO Auto-generated method stub
+		for (var entry : workDaysForUpdate.entrySet()) {
+			WorkDay workDayForUpdate = workDays.get(entry.getKey());
+			workDayForUpdate.setWorking(entry.getValue().Working);
+			workDayForUpdate.setTimeFrom(entry.getValue().TimeFrom);
+			workDayForUpdate.setTimeTo(entry.getValue().TimeTo);
+		}
 	}
 }

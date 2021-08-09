@@ -18,7 +18,13 @@ const CreateObjectForm = () => {
 
 		let object = { Name: name, Email: email, PhoneNumber: phoneNumber, ImagePath: "assets/images/restaurant.jpg", Address: address };
 		objectService.createObject(object, dispatch);
+
+		setName("");
+		setEmail("");
+		setPhoneNumber("");
+		setAddress("");
 	};
+
 
 	return (
 		<React.Fragment>

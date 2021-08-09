@@ -311,7 +311,7 @@ public class Api {
 	
 	@GetMapping("/{orderId}/details")
     @CrossOrigin
-    public ResponseEntity<?> getOrderDetails( @PathVariable String orderId) {
+    public ResponseEntity<?> getOrderDetails(@PathVariable String orderId) {
     	try {
             return new ResponseEntity<>(orderService.getOrderDetails(UUID.fromString(orderId)), HttpStatus.OK);
         } catch (Exception e) {

@@ -64,7 +64,7 @@ const OrderDetailsModal = ({notifyManager}) => {
 
 	const handleUpdate = () => {
 		setDisabledSaveButton(true)
-		orderService.updateOrder(orderState.orderDetailsModal.order,notifyManager)
+		orderService.updateOrder(orderState.orderDetailsModal.order,notifyManager,dispatch)
 	}
 
 	const enableSaveButton= () => {
@@ -102,12 +102,14 @@ const OrderDetailsModal = ({notifyManager}) => {
 									createdDate={orderState.orderDetailsModal.order.CreatedTime}
 									estimatedDate={orderState.orderDetailsModal.order.EstimatedTime}
 									price={Number(getOrderSum()).toFixed(2)}
-									enableSaveButton={enableSaveButton}/>
+									enableSaveButton={enableSaveButton}
+									orderStatus={orderState.orderDetailsModal.order.OrderStatus}/>
 							}
 						</div>
 						<div className="col-5">
 							<OrderItemsHeaderModalView 
-								handleAddOrderItem ={handleAddOrderItem}/>
+								handleAddOrderItem ={handleAddOrderItem}
+								orderStatus={orderState.orderDetailsModal.order.OrderStatus}/>
 							<OrderItemsListSideBarModalView
 								setProductCount= {setProductCount}
 								deleteFromShoppingCart= {deleteFromShoppingCart}
@@ -120,6 +122,7 @@ const OrderDetailsModal = ({notifyManager}) => {
 			<Modal.Footer>
 				<Button onClick={handleModalClose}>Close</Button>
 				<button
+					hidden={orderState.orderDetailsModal.order.OrderStatus!=='CONFIRMED' && orderState.orderDetailsModal.order.OrderStatus!=='UNCONFIRMED'}
 					onClick={handleUpdate}
 					className="btn btn-success"
 					disabled={disabledSaveButton}

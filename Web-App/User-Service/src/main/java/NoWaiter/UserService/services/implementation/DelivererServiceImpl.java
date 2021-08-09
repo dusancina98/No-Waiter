@@ -53,7 +53,18 @@ public class DelivererServiceImpl implements DelivererService{
 		DelivererRequest delivererRequest = delivererRequestRepository.getOne(requestId);
 		delivererRequest.setRequestStatus(RequestStatus.APPROVED);
 		
+		try {
+			emailService.sendDelivererAcceptedRequestEmailAsync(delivererRequest);
+		} catch (MailException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		createNewDeliverer(delivererRequest);
+		
 		
 		delivererRequestRepository.save(delivererRequest);
 	}

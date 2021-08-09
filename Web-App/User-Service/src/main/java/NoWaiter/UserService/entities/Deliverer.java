@@ -15,9 +15,6 @@ public class Deliverer extends Worker{
     @Enumerated(EnumType.STRING)
 	@Column(name="status", nullable = false)
 	private DelivererStatus delivererStatus;
-	
-    @Column(name="deleted")
-	private boolean deleted;
     
 	public Deliverer() {
     }
@@ -25,13 +22,11 @@ public class Deliverer extends Worker{
 	public Deliverer(UUID id, String email, String password, String name, String surname, UUID objectId, String objectName, String address, String phoneNumber, DelivererStatus delivererStatus, boolean deleted) throws ClassFieldValidationException {
         super(id, email, password, name, surname, phoneNumber);
         this.delivererStatus=delivererStatus;
-        this.deleted=deleted;
     }
 
     public Deliverer(String email, String password, String name, String surname, String phoneNumber, DelivererStatus delivererStatus, boolean deleted) throws ClassFieldValidationException {
         super(email, password, name, surname, phoneNumber);
         this.delivererStatus=delivererStatus;
-        this.deleted=deleted;
     }
 
 	public DelivererStatus getDelivererStatus() {
@@ -45,13 +40,4 @@ public class Deliverer extends Worker{
 	public void deactivateDeliverer() {
 		this.delivererStatus = DelivererStatus.INACTIVE;
 	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void delete() {
-		this.deleted=true;
-	}
-    
 }

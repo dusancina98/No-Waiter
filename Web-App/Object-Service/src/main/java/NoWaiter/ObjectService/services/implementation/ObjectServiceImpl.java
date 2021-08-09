@@ -17,6 +17,7 @@ import NoWaiter.ObjectService.entities.Address;
 import NoWaiter.ObjectService.entities.Contact;
 import NoWaiter.ObjectService.entities.Object;
 import NoWaiter.ObjectService.entities.ObjectAdmin;
+import NoWaiter.ObjectService.entities.Table;
 import NoWaiter.ObjectService.entities.WeekDay;
 import NoWaiter.ObjectService.entities.WorkDay;
 import NoWaiter.ObjectService.entities.WorkTime;
@@ -29,6 +30,7 @@ import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDetailsDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectWithStatusDTO;
+import NoWaiter.ObjectService.services.contracts.dto.UpdateWorkTimeDTO;
 import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeException;
 import NoWaiter.ObjectService.services.implementation.util.ImageUtil;
 import NoWaiter.ObjectService.services.implementation.util.ObjectMapper;
@@ -105,7 +107,10 @@ public class ObjectServiceImpl implements ObjectService {
 		
 		Object object = objectRepository.findById(id).get();
 		
-		if (status == true) object.Block();
+		if (status == true) {
+			object.Block();
+			object.Deactivate();
+		}
 		else object.Unblock();
 		
 		objectRepository.save(object);
@@ -128,7 +133,8 @@ public class ObjectServiceImpl implements ObjectService {
 	public void deleteObjectAdminHandlingObjectActivation(UUID objectAdminId) {
 		
 		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
-		objectAdminRepository.deleteById(objectAdminId);
+		objectAdmin.delete();
+		objectAdminRepository.save(objectAdmin);
 		Object object = objectRepository.findById(objectAdmin.getObject().getId()).get();
 		if(object.getAdmins().isEmpty()) 
 			toggleObjectActivation(object.getId(), false);
@@ -184,6 +190,38 @@ public class ObjectServiceImpl implements ObjectService {
 	}
 
 	@Override
+	public void deleteObject(UUID objectId) {
+		Object object = objectRepository.findById(objectId).get();
+		object.Delete();
+		
+		for(ObjectAdmin objectAdmin : object.getAdmins())
+			deleteObjectAdminHandlingObjectActivation(objectAdmin.getId());
+		
+		objectRepository.save(object);
+		
+	}
+
+	@Override
+	public void updateWorkTime(UpdateWorkTimeDTO updateWorkTimeDTO) {
+		Object object = objectRepository.findById(UUID.fromString(updateWorkTimeDTO.Id)).get();
+
+		object.getWorkTime().Update(updateWorkTimeDTO.WorkTime.EntityDTO.WorkDays);
+		
+		objectRepository.save(object);
+	}
+
+	@Override
+	public int getTableNumberByTableIdForResturant(UUID objectId, UUID tableId) {
+		Object object = objectRepository.findById(objectId).get();
+
+		for(Table table : object.getTables()) {
+			if(table.getId().equals(tableId))
+				return table.getNumber();
+		}
+		
+		return 0;
+	}
+	
 	public List<ObjectDetailsDTO> findAllObjectDetailsById(List<UUID> objectIds) {
 		List<ObjectDetailsDTO> details = new ArrayList<ObjectDetailsDTO>();
 		List<Object> objects = objectRepository.findAllObjectByIds(objectIds);

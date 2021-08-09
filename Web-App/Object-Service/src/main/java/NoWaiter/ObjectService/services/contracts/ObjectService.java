@@ -11,6 +11,7 @@ import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDetailsDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectWithStatusDTO;
+import NoWaiter.ObjectService.services.contracts.dto.UpdateWorkTimeDTO;
 import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeException;
 
 public interface ObjectService {
@@ -38,4 +39,10 @@ public interface ObjectService {
     void toggleObjectActivation(UUID id, boolean status);
 
 	void worktime() throws InvalidTimeRangeException;
+
+	void deleteObject(UUID objectId);
+
+	void updateWorkTime(UpdateWorkTimeDTO updateWorkTimeDTO);
+
+	int getTableNumberByTableIdForResturant(UUID objectId, UUID tableId);
 }

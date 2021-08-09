@@ -6,7 +6,7 @@ import java.util.UUID;
 public class ReadyOrderDTO {
 	public UUID OrderId;
 	
-	public String Table;
+	public TableResponseDTO Table;
 	
 	public String OrderType;
 	
@@ -17,8 +17,8 @@ public class ReadyOrderDTO {
 	public Date ExpiredTimeStamp;
 	
 	public String Deliverer;
-
-	public ReadyOrderDTO(UUID orderId, String table, String orderType, Double price, Date timeStamp, Date expiredTimeStamp, String deliverer) {
+	
+	public ReadyOrderDTO(UUID orderId, TableResponseDTO table, String orderType, Double price, Date timeStamp, Date expiredTimeStamp, String deliverer) {
 		super();
 		OrderId = orderId;
 		Table = table;

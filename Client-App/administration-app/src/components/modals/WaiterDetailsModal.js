@@ -3,6 +3,7 @@ import { Button, Modal } from "react-bootstrap";
 import { modalConstants } from "../../constants/ModalConstants";
 import { userConstants } from "../../constants/UserConstants";
 import { UserContext } from "../../contexts/UserContext";
+import { userService } from "../../services/UserService";
 import EditWaiterForm from "../EditWaiterForm";
 import FailureAlert from "../FailureAlert";
 import SuccessAlert from "../SuccessAlert";
@@ -14,6 +15,10 @@ const WaiterDetailsModal = () => {
 	const handleModalClose = () => {
 		dispatch({ type: modalConstants.HIDE_WAITER_DETAILS });
 	};
+
+	const handleDeleteWaiter = (id) => {
+		userService.deleteWaiter(id ,dispatch);
+	}
 
 	return (
 		<Modal show={userState.waiterDetails.showModal} aria-labelledby="contained-modal-title-vcenter" centered onHide={handleModalClose}>
@@ -35,7 +40,7 @@ const WaiterDetailsModal = () => {
 				<FailureAlert
 					hidden={!userState.editWaiter.showErrorMessage}
 					header="Error"
-					message={userState.editWaiter.successMessage}
+					message={userState.editWaiter.errorMessage}
 					handleCloseAlert={() => dispatch({ type: userConstants.WAITER_UPDATE_REQUEST })}
 				/>
 				<div className="row">
@@ -43,7 +48,7 @@ const WaiterDetailsModal = () => {
 						<div className="card" style={{ border: "0" }}>
 							<div className="card-body">
 								<EditWaiterForm />
-								<WaiterDetailsModalButtons />
+								<WaiterDetailsModalButtons handleDeleteWaiter={handleDeleteWaiter}/>
 							</div>
 						</div>
 					</div>

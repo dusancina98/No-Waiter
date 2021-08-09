@@ -1,4 +1,5 @@
 import Header from "../components/Header";
+import HeaderAndSideBarWrapper from "../components/HeaderAndSideBarWrapper";
 import SideBar from "../components/SideBar";
 import ObjectContextProvider from "../contexts/ObjectContext";
 import OrderContextProvider from "../contexts/OrderContext";
@@ -6,17 +7,13 @@ import OrderContextProvider from "../contexts/OrderContext";
 const ListOrdersPage = () => {
 	return (
 		<React.Fragment>
-			<div className="container-scroller">
-				<SideBar />
-				<div className="container-fluid page-body-wrapper">
-					<Header />
-					<div className="main-panel">
-						<ObjectContextProvider>
-							<OrderContextProvider></OrderContextProvider>
-						</ObjectContextProvider>
-					</div>
+			<HeaderAndSideBarWrapper>
+				<div className="main-panel">
+					<ObjectContextProvider>
+						<OrderContextProvider></OrderContextProvider>
+					</ObjectContextProvider>
 				</div>
-			</div>
+			</HeaderAndSideBarWrapper>
 		</React.Fragment>
 	);
 };

@@ -67,6 +67,10 @@ const ProductItem = (props) => {
 		setShowedDetails(props.product.Id === productState.productDetails.productId);
 	}, [props.product.Id, productState.productDetails.productId]);
 
+	const handleDeleteProduct = (productId) => {
+		productService.deleteProduct(productId,dispatch)
+	}
+
 	return (
 		<div className="col-12 portfolio-item">
 			<hr />
@@ -132,7 +136,7 @@ const ProductItem = (props) => {
 					<button type="button" className="btn btn-primary border-0 mr-4" onClick={handleEditProduct}>
 						Edit info
 					</button>
-					<button type="button" className="btn btn-danger border-0 mr-4">
+					<button type="button" className="btn btn-danger border-0 mr-4" onClick={() =>handleDeleteProduct(props.product.Id)}>
 						Delete product
 					</button>
 				</div>

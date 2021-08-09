@@ -52,11 +52,16 @@ export const objectReducer = (state, action) => {
 				objectDetails: {
 					showModal: true,
 					readOnly: true,
+					workTimeReadOnly: true,
 					object: action.object,
 				},
 			};
 			var foundIndex = pom.objects.findIndex((object) => object.Id === action.object.Id);
 			pom.objects[foundIndex] = action.object;
+			pom.objectInfo.object.EntityDTO.Name= action.object.EntityDTO.Name;
+			pom.objectInfo.object.EntityDTO.Email= action.object.EntityDTO.Email;
+			pom.objectInfo.object.EntityDTO.PhoneNumber= action.object.EntityDTO.PhoneNumber;
+			pom.objectInfo.object.EntityDTO.Address= action.object.EntityDTO.Address;
 
 			return pom;
 		case objectConstants.OBJECT_UPDATE_FAILURE:
@@ -69,6 +74,43 @@ export const objectReducer = (state, action) => {
 					errorMessage: action.errorMessage,
 				},
 			};
+		case objectConstants.INVALID_WORKTIMES_INPUT_FAILURE:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+			}
+		case objectConstants.OBJECT_UPDATE_WORKTIME_SUCCESS:
+			let objectUpdateWorkTimeSuccess = {
+				...state,
+				editObject: {
+					showSuccessMessage: true,
+					successMessage: action.successMessage,
+					showErrorMessage: false,
+					errorMessage: "",
+				},
+			};
+			objectUpdateWorkTimeSuccess.objectDetails.showModal = true;
+			objectUpdateWorkTimeSuccess.objectDetails.readOnly = true;
+			objectUpdateWorkTimeSuccess.objectDetails.workTimeReadOnly = true;
+			objectUpdateWorkTimeSuccess.objectInfo.object.EntityDTO.WorkTime = action.objectWorktime.WorkTime;
+		
+			return objectUpdateWorkTimeSuccess;
+		case objectConstants.OBJECT_UPDATE_WORKTIME_FAILURE:{
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: "",
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+			};
+		}
 		case objectConstants.SET_OBJECTS_REQUEST:
 			return {
 				...state,
@@ -144,6 +186,48 @@ export const objectReducer = (state, action) => {
 							Address: "",
 							PhoneNumber: "",
 							ImagePath: "",
+							WorkTime : {
+								EntityDTO: {
+									Id: "",
+									WorkDays: {
+										SUNDAY :{
+											Working:'false',
+											TimeFrom:'',
+											TimeTo:'',
+										},
+										TUESDAY :{
+											Working:'false',
+											TimeFrom:'',
+											TimeTo:'',
+										},
+										THURSDAY :{
+											Working:'false',
+											TimeFrom:'',
+											TimeTo:'',
+										},
+										SATURDAY :{
+											Working:'false',
+											TimeFrom:'',
+											TimeTo:'',
+										},
+										MONDAY :{
+											Working:'false',
+											TimeFrom:'',
+											TimeTo:'',
+										},
+										FRIDAY :{
+											Working:'false',
+											TimeFrom:'',
+											TimeTo:'',
+										},
+										WEDNESDAY:{
+											Working:'false',
+											TimeFrom:'',
+											TimeTo:'',
+										},
+									}
+								}
+							}
 						},
 					},
 				},
@@ -206,6 +290,7 @@ export const objectReducer = (state, action) => {
 				objectDetails: {
 					showModal: true,
 					readOnly: true,
+					workTimeReadOnly: true,
 					object: action.object,
 				},
 			};
@@ -241,6 +326,7 @@ export const objectReducer = (state, action) => {
 				objectDetails: {
 					showModal: true,
 					readOnly: true,
+					workTimeReadOnly:true,
 					object: action.object,
 				},
 			};
@@ -265,20 +351,18 @@ export const objectReducer = (state, action) => {
 				},
 			};
 		case objectConstants.OBJECT_BLOCKING_SUCCESS:
-			return {
-				...state,
-				editObject: {
-					showSuccessMessage: true,
-					successMessage: action.successMessage,
-					showErrorMessage: false,
-					errorMessage: "",
-				},
-				objectDetails: {
-					showModal: true,
-					readOnly: true,
-					object: action.object,
-				},
-			};
+			let blockingObject = { ...state };
+			blockingObject.editObject.showSuccessMessage= true;
+			blockingObject.editObject.successMessage= action.successMessage;
+			blockingObject.editObject.showErrorMessage= false;
+			blockingObject.editObject.errorMessage= "";
+
+			blockingObject.objectDetails.showModal= true;
+			blockingObject.objectDetails.readOnly= true;
+			blockingObject.objectDetails.object= action.object;
+			blockingObject.objectDetails.object.EntityDTO.Active = false;
+			
+			return blockingObject;
 		case objectConstants.OBJECT_BLOCKING_FAILURE:
 			return {
 				...state,
@@ -312,6 +396,7 @@ export const objectReducer = (state, action) => {
 				objectDetails: {
 					showModal: true,
 					readOnly: true,
+					workTimeReadOnly:true,
 					object: action.object,
 				},
 			};
@@ -332,6 +417,7 @@ export const objectReducer = (state, action) => {
 				objectDetails: {
 					showModal: true,
 					readOnly: true,
+					workTimeReadOnly: true,
 					object: action.object,
 				},
 			};
@@ -347,6 +433,7 @@ export const objectReducer = (state, action) => {
 				objectDetails: {
 					showModal: false,
 					readOnly: true,
+					workTimeReadOnly:true,
 					object: {
 						Id: "",
 						EntityDTO: {
@@ -363,6 +450,10 @@ export const objectReducer = (state, action) => {
 			let prom = { ...state };
 			prom.objectDetails.readOnly = false;
 			return prom;
+		case modalConstants.ALLOW_OBJECT_WORKTIME_INPUT_FIELDS:
+			let worktimeField = { ...state };
+			worktimeField.objectDetails.workTimeReadOnly = false;
+			return worktimeField;
 		case objectConstants.GENERATE_SELF_ORDERING_TOKEN_SUCCESS:
 			let selfOrderingSuccess = { ...state };
 			selfOrderingSuccess.generatedToken = action.jwtToken;
@@ -371,6 +462,54 @@ export const objectReducer = (state, action) => {
 			let selfOrderingFailure = { ...state };
 			selfOrderingFailure.generatedToken = '';
 			return selfOrderingFailure;
+		case objectConstants.OBJECT_DELETE_SUCCESS:
+			let deleteOrderSuccess = { ...state };
+
+			deleteOrderSuccess.editObject.showSuccessMessage= false;
+			deleteOrderSuccess.editObject.successMessage= '';
+			deleteOrderSuccess.editObject.showErrorMessage= false;
+			deleteOrderSuccess.editObject.errorMessage= '';
+
+			deleteOrderSuccess.objectDetails.showModal= false;
+			deleteOrderSuccess.objectDetails.readOnly= true;
+			deleteOrderSuccess.objectDetails.object= {
+				Id: "",
+				EntityDTO: {
+					Email: "",
+					Name: "",
+					Address: "",
+					PhoneNumber: "",
+					ImagePath: "",
+				},
+			};
+
+			deleteOrderSuccess.showSuccessMessage =true;
+			deleteOrderSuccess.successMessage =action.successMessage;
+
+			deleteOrderSuccess.objects= deleteOrderSuccess.objects.filter((item) => item.Id !== action.object.Id);
+
+			return deleteOrderSuccess;
+		case objectConstants.OBJECT_DELETE_FAILURE:
+			return {
+				...state,
+				editObject: {
+					showSuccessMessage: false,
+					successMessage: '',
+					showErrorMessage: true,
+					errorMessage: action.errorMessage,
+				},
+				objectDetails: {
+					showModal: true,
+					readOnly: true,
+					workTimeReadOnly:true,
+					object: action.object,
+				},
+			};
+		case objectConstants.DELETE_OBJECT_HIDE_SUCCESS_MESSAGE:
+			let hideSuccessMessage = { ...state };
+			hideSuccessMessage.showSuccessMessage =false;
+			hideSuccessMessage.successMessage ='';
+			return hideSuccessMessage;
 		default:
 			return state;
 	}

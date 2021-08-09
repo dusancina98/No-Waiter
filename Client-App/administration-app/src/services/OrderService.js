@@ -19,8 +19,6 @@ export const orderService = {
 };
 
 function createOrder(orderDTO, dispatch) {
-	dispatch(request());
-
 	Axios.post(`/order-api/api/orders`, orderDTO, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 201) {
@@ -33,9 +31,6 @@ function createOrder(orderDTO, dispatch) {
 			console.log(err);
 		});
 
-	function request() {
-		return { type: orderConstants.ORDER_CREATE_REQUEST };
-	}
 	function success(message) {
 		return { type: orderConstants.ORDER_CREATE_SUCCESS, successMessage: message };
 	}
@@ -298,11 +293,13 @@ async function getOrderDetails(id,dispatch){
 	}
 }
 
-function updateOrder(order,notifyManager){
+function updateOrder(order,notifyManager,dispatch){
 	Axios.put(`/order-api/api/orders/`, order, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 200) {
+				console.log(order)
 				notifyManager('SUCCESS','Successfuly updated order')
+				dispatch(success(order));
 			} else {
 				notifyManager('FAILURE','Currently imposible to update order')
 			}
@@ -310,5 +307,8 @@ function updateOrder(order,notifyManager){
 		.catch((err) => {
 			notifyManager('FAILURE','Currently imposible to update order')
 		});
-	
+
+		function success(order) {
+			return { type: orderConstants.UPDATE_ORDER_SUCCESS, order };
+		}
 }

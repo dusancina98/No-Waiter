@@ -11,6 +11,8 @@ export const productService = {
 	updateProduct,
 	updateProductImage,
 	findAllProducts,
+	deleteProduct,
+	deleteCategory,
 };
 
 function createProductCategory(categoryName, dispatch) {
@@ -21,6 +23,8 @@ function createProductCategory(categoryName, dispatch) {
 			if (res.status === 201) {
 				let category = { Id: res.data, EntityDTO: { Name: categoryName } };
 				dispatch(success(category, "Table successfully added"));
+			} else if(res.status === 400){
+				dispatch(failure("Category with this name already exist"));
 			} else {
 				dispatch(failure(res.data.message));
 			}
@@ -265,9 +269,6 @@ function validateProduct(product, dispatch, type) {
 	} else if (product.ProductTypeId === "") {
 		dispatch(validatioFailure("Product type must be selected"));
 		return false;
-	} else if (product.Ingredients.length === 0) {
-		dispatch(validatioFailure("Product must have at least one ingredient"));
-		return false;
 	}
 
 	function validatioFailure(message) {
@@ -275,4 +276,51 @@ function validateProduct(product, dispatch, type) {
 	}
 
 	return true;
+}
+
+function deleteProduct(productId, dispatch) {
+	Axios.delete(`/product-api/api/products/${productId}`,  { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			console.log(res);
+			if (res.status === 200) {
+				dispatch(success("Product successfully deleted", productId));
+			} else {
+				dispatch(failure("Unable to delete object"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function success(message, productId) {
+		return { type: productConstants.PRODUCT_DELETE_SUCCESS, successMessage: message, productId };
+	}
+	function failure(message) {
+		return { type: productConstants.PRODUCT_DELETE_FAILURE, errorMessage: message };
+	}
+}
+
+function deleteCategory(categoryId, dispatch) {
+	Axios.delete(`/product-api/api/products/${categoryId}/category`,  { validateStatus: () => true, headers: authHeader() })
+		.then((res) => {
+			console.log(res);
+			if (res.status === 200) {
+				dispatch(success("Category successfully deleted", categoryId));
+				dispatch({ type: productConstants.DISABLE_PRODUCTS_FILTER })
+			} else {
+				dispatch(failure("Unable to delete category"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function success(message, categoryId) {
+		return { type: productConstants.CATEGORY_DELETE_SUCCESS, successMessage: message, categoryId };
+	}
+	function failure(message) {
+		return { type: productConstants.CATEGORY_DELETE_FAILURE, errorMessage: message };
+	}
 }

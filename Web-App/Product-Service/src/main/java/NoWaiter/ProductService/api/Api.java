@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +40,7 @@ import NoWaiter.ProductService.services.contracts.dto.ProductUpdateRequestDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductValidationResponseDTO;
 import NoWaiter.ProductService.services.contracts.exceptions.InvalidOrderItemException;
 import NoWaiter.ProductService.services.contracts.exceptions.InvalidProductCategoryException;
+import NoWaiter.ProductService.services.contracts.exceptions.InvalidProductCategoryNameException;
 import NoWaiter.ProductService.services.contracts.exceptions.UnauthorizedRequestException;
 import feign.FeignException;
 
@@ -155,6 +157,32 @@ public class Api {
         }
 	}
 	
+	@DeleteMapping("/{productId}")
+    @CrossOrigin
+    public ResponseEntity<?> deleteProduct(@PathVariable UUID productId) {
+
+        try {
+        	productService.deleteProduct(productId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
+	@DeleteMapping("/{categoryId}/category")
+    @CrossOrigin
+    public ResponseEntity<?> deleteCategory(@PathVariable UUID categoryId) {
+
+        try {
+        	productService.deleteCategory(categoryId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
 	private boolean hasRole(List<String> authorities, String role) {
 		System.out.println(role);
 
@@ -201,7 +229,10 @@ public class Api {
 			JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
 			UUID objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());
 			return new ResponseEntity<>(productService.createProductCategory(categoryDTO, objectId), HttpStatus.CREATED);
-		} catch (FeignException e) {
+		} catch (InvalidProductCategoryNameException e) {
+            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+		}
+		catch (FeignException e) {
         	if(e.status() == HttpStatus.NOT_FOUND.value())
                 return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);
         	

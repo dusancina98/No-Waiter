@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +41,7 @@ import no_waiter.order_service.services.contracts.dto.ProductValidationResponseD
 import no_waiter.order_service.services.contracts.dto.ReadyOrderDTO;
 import no_waiter.order_service.services.contracts.dto.SideDishDTO;
 import no_waiter.order_service.services.contracts.dto.SideDishResponseDTO;
+import no_waiter.order_service.services.contracts.dto.TableResponseDTO;
 import no_waiter.order_service.services.contracts.dto.UnConfirmedOrderDTO;
 import no_waiter.order_service.services.implementation.util.OrderMapper;
 
@@ -77,7 +77,7 @@ public class OrderServiceImpl implements OrderService{
 		Long setTime = (long) (3*60*3600*1000);
 		Date newDate = new Date();
 		newDate.setTime(newDate.getTime() - setTime);
-		//povlaci orderEvente za dati restoran gde je vreme manje od 3h unazad
+		
 		List<UUID> getOrderIdsForObjectAfterDate =  orderEventRepository.getOrderIdsForObjectAfterDate(objectId, newDate);
 		
 		for(UUID orderId : getOrderIdsForObjectAfterDate) {
@@ -86,7 +86,7 @@ public class OrderServiceImpl implements OrderService{
 				continue;
 			
 			if(checkIfOrderIsGivenStatus(orderEvent,OrderStatus.UNCONFIRMED)) {
-				unConfirmedOrderDTO.add(mapOrderToUnConfirmedOrderDTO(orderId,orderEvent.get(0).getCreatedTime()));
+				unConfirmedOrderDTO.add(mapOrderToUnConfirmedOrderDTO(orderEvent.get(0),orderEvent.get(0).getCreatedTime()));
 			}
 		}
 		
@@ -121,7 +121,12 @@ public class OrderServiceImpl implements OrderService{
 		Date estimatedDate = new Date();
 		estimatedDate.setTime(orderEvent.getCreatedTime().getTime() + (orderEvent.getEstimatedTime()*60*1000));
 		
-		ConfirmedOrderDTO dto = new ConfirmedOrderDTO(orderEvent.getOrder().getId(),"1",orderEvent.getOrder().getOrderType().toString(),getPriceForOrder(orderEvent.getOrder()),orderEvent.getCreatedTime(),estimatedDate);
+		int tableNumber=1;
+		if(orderEvent.getOrder().getOrderType().equals(OrderType.ORDER_INSIDE) && orderEvent.getOrder().getTableId() != null) {
+			tableNumber = objectClient.getTableNumberByTableIdForResturant(orderEvent.getOrder().getObjectId(), orderEvent.getOrder().getTableId());
+		}
+		
+		ConfirmedOrderDTO dto = new ConfirmedOrderDTO(orderEvent.getOrder().getId(),new TableResponseDTO(orderEvent.getOrder().getTableId(), tableNumber),orderEvent.getOrder().getOrderType().toString(),getPriceForOrder(orderEvent.getOrder()),orderEvent.getCreatedTime(),estimatedDate);
 		
 		return dto;
 	}
@@ -140,10 +145,15 @@ public class OrderServiceImpl implements OrderService{
 		return false;
 	}
 
-	private UnConfirmedOrderDTO mapOrderToUnConfirmedOrderDTO(UUID orderId,Date date) {
-		Optional<Order> order = orderRepository.findById(orderId);
-
-		UnConfirmedOrderDTO dto = new UnConfirmedOrderDTO(order.get().getId(),"1",order.get().getOrderType().toString(),getPriceForOrder(order.get()),date);
+	private UnConfirmedOrderDTO mapOrderToUnConfirmedOrderDTO(OrderEvent orderEvent,Date date) {
+		Order order = orderEvent.getOrder();
+		
+		int tableNumber=1;
+		if(order.getOrderType().equals(OrderType.ORDER_INSIDE) && order.getTableId() != null) {
+			tableNumber = objectClient.getTableNumberByTableIdForResturant(order.getObjectId(), order.getTableId());
+		}
+		
+		UnConfirmedOrderDTO dto = new UnConfirmedOrderDTO(order.getId(),new TableResponseDTO(order.getTableId(),tableNumber),order.getOrderType().toString(),getPriceForOrder(order),date);
 		
 		return dto;
 	}
@@ -218,7 +228,6 @@ public class OrderServiceImpl implements OrderService{
 		Date newDate = new Date();
 		newDate.setTime(newDate.getTime() - setTime);
 		
-		//povlaci orderEvente za dati restoran gde je vreme manje od 3h unazad
 		List<UUID> getOrderIdsForObjectAfterDate =  orderEventRepository.getOrderIdsForObjectAfterDate(objectId, newDate);
 		
 		for(UUID orderId : getOrderIdsForObjectAfterDate) {
@@ -238,7 +247,13 @@ public class OrderServiceImpl implements OrderService{
 		Date estimatedDate = new Date();
 		estimatedDate.setTime(orderEvent.getCreatedTime().getTime() + (orderEvent.getEstimatedTime()*60*1000));		
 		
-		ReadyOrderDTO dto = new ReadyOrderDTO(orderEvent.getOrder().getId(),"1",orderEvent.getOrder().getOrderType().toString(),getPriceForOrder(orderEvent.getOrder()),orderEvent.getCreatedTime(),estimatedDate, "Ime i Prezime");
+		int tableNumber=1;
+		if(orderEvent.getOrder().getOrderType().equals(OrderType.ORDER_INSIDE) && orderEvent.getOrder().getTableId() != null) {
+			tableNumber = objectClient.getTableNumberByTableIdForResturant(orderEvent.getOrder().getObjectId(), orderEvent.getOrder().getTableId());
+		}
+		
+		//TODO: dodati Deliverer name kada preuzme za dostavu
+		ReadyOrderDTO dto = new ReadyOrderDTO(orderEvent.getOrder().getId(),new TableResponseDTO(orderEvent.getOrder().getTableId(),tableNumber),orderEvent.getOrder().getOrderType().toString(),getPriceForOrder(orderEvent.getOrder()),orderEvent.getCreatedTime(),estimatedDate, "");
 		
 		return dto;
 	}
@@ -315,9 +330,29 @@ public class OrderServiceImpl implements OrderService{
 		
 		return completedOrderDTO;
 	}
+	
+	private String getOrderStatusByOrderId(UUID orderId) {
+		List<OrderEvent> orderEvent = orderEventRepository.getOrderEventsByOrderId(orderId);
+
+		Collections.sort(orderEvent, new Comparator<OrderEvent>() {
+			  public int compare(OrderEvent o1, OrderEvent o2) {
+			      return o2.getCreatedTime().compareTo(o1.getCreatedTime());
+			  }});
+		
+		if(orderEvent.size()>0) {
+			return orderEvent.get(0).getOrderStatus().toString();
+		}
+		
+		return "";
+	}
 
 	private CompletedOrderDTO mapOrderToCompletedOrderDTO(OrderEvent orderEvent) {
-		CompletedOrderDTO dto = new CompletedOrderDTO(orderEvent.getOrder().getId(),"1",orderEvent.getOrder().getOrderType().toString(),getPriceForOrder(orderEvent.getOrder()),orderEvent.getCreatedTime(), "Ime i Prezime");
+		int tableNumber=1;
+		if(orderEvent.getOrder().getOrderType().equals(OrderType.ORDER_INSIDE) && orderEvent.getOrder().getTableId() != null) {
+			tableNumber = objectClient.getTableNumberByTableIdForResturant(orderEvent.getOrder().getObjectId(), orderEvent.getOrder().getTableId());
+		}
+		
+		CompletedOrderDTO dto = new CompletedOrderDTO(orderEvent.getOrder().getId(),new TableResponseDTO(orderEvent.getOrder().getTableId(),tableNumber),orderEvent.getOrder().getOrderType().toString(),getPriceForOrder(orderEvent.getOrder()),orderEvent.getCreatedTime(), "Ime i Prezime");
 		
 		return dto;
 	}
@@ -331,7 +366,13 @@ public class OrderServiceImpl implements OrderService{
 		
 		List<OrderItemResponseDTO> orderItems = mapOrderItemsToOrderItemsResponseDTO(order.getItems());
 
-		OrderDetailsDTO retVal = new OrderDetailsDTO(order.getId(),order.getCreatedTime(),order.getAddress().getAddress(),estimatedDate,order.getOrderType().toString(),"123",getPriceForOrder(order),orderItems);
+		int tableNumber=1;
+		if(order.getOrderType().equals(OrderType.ORDER_INSIDE) && order.getTableId() != null) {
+			tableNumber = objectClient.getTableNumberByTableIdForResturant(order.getObjectId(), order.getTableId());
+		}
+
+		
+		OrderDetailsDTO retVal = new OrderDetailsDTO(order.getId(),order.getCreatedTime(),order.getAddress().getAddress(),estimatedDate,order.getOrderType().toString(),new TableResponseDTO(order.getTableId(),tableNumber),getPriceForOrder(order),orderItems, getOrderStatusByOrderId(order.getId()));
 				
 		return retVal;
 	}
@@ -340,7 +381,7 @@ public class OrderServiceImpl implements OrderService{
 		List<OrderItemResponseDTO> orderItemsResponseDTO = new ArrayList<OrderItemResponseDTO>();
 		
 		for(OrderItem item : items) {
-			orderItemsResponseDTO.add(new OrderItemResponseDTO(item.getId(),item.getProduct().getName(),item.getCount(),item.getProduct().getId(),item.getSingleItemPrice(), item.getProduct().getImagePath(), mapSideDishToSideDishDTO(item.getSideDishes())));
+			orderItemsResponseDTO.add(new OrderItemResponseDTO(item.getId(),item.getProduct().getName(),item.getCount(),item.getProduct().getId(),item.getSingleItemPrice(), item.getProduct().getImagePath(), mapSideDishToSideDishDTO(item.getSideDishes()), item.getNote()));
 		}
 		
 		return orderItemsResponseDTO;
@@ -360,9 +401,9 @@ public class OrderServiceImpl implements OrderService{
 	public void updateOrder(OrderDetailsDTO orderDetailsDTO) {
 		Order order = orderRepository.findById(orderDetailsDTO.OrderId).get();
 		
-		//TODO: odraditi set table
 		order.setAddress(new Address(orderDetailsDTO.Address));
 		order.setOrderType(OrderType.valueOf(orderDetailsDTO.OrderType));
+		order.setTableId(orderDetailsDTO.Table.Id);
 		
 		removeOrderItems(order,orderDetailsDTO.OrderItems);
 		addOrderItems(order,orderDetailsDTO.OrderItems);
@@ -417,7 +458,7 @@ public class OrderServiceImpl implements OrderService{
 			sideDishes.add(sideDish.Id);
 		}
 		
-		return new OrderItemDTO(orderItemDTO.ProductId,orderItemDTO.Count,sideDishes,"");
+		return new OrderItemDTO(orderItemDTO.ProductId,orderItemDTO.Count,sideDishes,orderItemDTO.Note);
 	}
 
 	private void removeOrderItems(Order order, List<OrderItemResponseDTO> orderItems) {
@@ -481,6 +522,7 @@ public class OrderServiceImpl implements OrderService{
 		confirmedOrderEvents.forEach((orderEvent) -> acceptedOrderDTO.add(mapOrderToDelivererOrderDTO(orderEvent, objectDetails)));
 		return acceptedOrderDTO;
 	}
+
 
 	@Override
 	public List<DelivererOrderDTO> getAllPickedUpOrders(UUID delivererId) {
