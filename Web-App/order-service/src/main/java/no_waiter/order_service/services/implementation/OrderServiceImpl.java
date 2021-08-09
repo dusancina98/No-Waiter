@@ -193,9 +193,6 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public void pickupOrderDeliverer(UUID orderId, UUID delivererId) throws NotFoundException {
 		OrderEvent orderEvent = orderEventRepository.getLastConfirmedDeliveryOrderEventForOrder(orderId, delivererId);
-		
-		System.out.println("Order id " + orderId);
-		System.out.println("Deliverer id " + delivererId);
 
 		if (orderEvent == null) {
 			throw new NotFoundException("Order not found");
@@ -479,6 +476,19 @@ public class OrderServiceImpl implements OrderService{
 		
 		List<OrderEvent> confirmedOrderEvents =  orderEventRepository.getAcceptedOrderEventsForDeliveryByDeliverer(delivererId);
 		List<UUID> objectIds = orderEventRepository.getDistinctObjectIdsForAcceptedDelivery(delivererId);
+		List<ObjectDetailsDTO> objectDetails = objectClient.getObjectDetailsByObjectIds(objectIds);
+
+		confirmedOrderEvents.forEach((orderEvent) -> acceptedOrderDTO.add(mapOrderToDelivererOrderDTO(orderEvent, objectDetails)));
+		return acceptedOrderDTO;
+	}
+
+	@Override
+	public List<DelivererOrderDTO> getAllPickedUpOrders(UUID delivererId) {
+		List<DelivererOrderDTO> acceptedOrderDTO = new ArrayList<DelivererOrderDTO>();
+		
+		List<OrderEvent> confirmedOrderEvents =  orderEventRepository.getPickedUpOrderEventsForDeliveryByDeliverer(delivererId);
+		System.out.println("CONFIRMEd " + confirmedOrderEvents.size());
+		List<UUID> objectIds = orderEventRepository.getDistinctObjectIdsFortPickedUpDelivery(delivererId);
 		List<ObjectDetailsDTO> objectDetails = objectClient.getObjectDetailsByObjectIds(objectIds);
 
 		confirmedOrderEvents.forEach((orderEvent) -> acceptedOrderDTO.add(mapOrderToDelivererOrderDTO(orderEvent, objectDetails)));

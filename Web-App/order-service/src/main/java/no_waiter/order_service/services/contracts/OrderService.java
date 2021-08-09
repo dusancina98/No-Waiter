@@ -35,6 +35,8 @@ public interface OrderService {
 	
 	List<DelivererOrderDTO> getAllAcceptedOrders(UUID delivererId);
 
+	List<DelivererOrderDTO> getAllPickedUpOrders(UUID delivererId);
+	
 	void setOrderToReady(UUID orderId);
 
 	List<ReadyOrderDTO> getReadyOrdersForObject(UUID objectId);

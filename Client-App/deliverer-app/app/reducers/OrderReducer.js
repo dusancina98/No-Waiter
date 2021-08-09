@@ -36,6 +36,22 @@ export const orderReducer = (state, action) => {
 				acceptedOrders: [],
 			};
 
+		case orderConstants.SET_PICKED_UP_ORDERS_REQUEST:
+			return {
+				...state,
+				pickedUpOrders: [],
+			};
+		case orderConstants.SET_PICKED_UP_ORDERS_SUCCESS:
+			return {
+				...state,
+				pickedUpOrders: action.orders,
+			};
+		case orderConstants.SET_PICKED_UP_ORDERS_FAILURE:
+			return {
+				...state,
+				pickedUpOrders: [],
+			};
+
 		case orderConstants.ACCEPT_ORDER_REQUEST:
 			return {
 				...state,

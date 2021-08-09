@@ -188,6 +188,18 @@ public class Api {
         }
     }
 	
+	@GetMapping("/delivering/deliverer")
+    @CrossOrigin
+    public ResponseEntity<?> getPickedUpOrdersForDeliverer(@RequestHeader("Authorization") String token) {
+		try {
+    		JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);			
+            return new ResponseEntity<>(orderService.getAllPickedUpOrders(jwtResponse.getId()), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
 	@PutMapping("/{orderId}/ready")
     @CrossOrigin
     public ResponseEntity<?> setOrderToReady(@PathVariable String orderId) {
