@@ -7,6 +7,7 @@ export const orderService = {
 	getAllConfirmedOrders,
 	getAllAcceptedOrders,
 	confirmOrder,
+	pickupOrder,
 };
 
 async function getAllAcceptedOrders(dispatch) {
@@ -91,5 +92,35 @@ async function confirmOrder(orderDTO, dispatch) {
 	}
 	function failure(error) {
 		return { type: orderConstants.ACCEPT_ORDER_FAILURE, error };
+	}
+}
+
+async function pickupOrder(orderId, dispatch) {
+	dispatch(request());
+
+	let header = await authHeader();
+
+	Axios.put(`${API_URL}/order-api/api/orders/${orderId}/delivering`, null, { validateStatus: () => true, headers: header })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(orderId));
+			} else if (res.status === 404) {
+				dispatch(failure("Order not found"));
+			} else {
+				dispatch(failure(res.data.message));
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+
+	function request() {
+		return { type: orderConstants.PICKUP_ORDER_REQUEST };
+	}
+	function success(orderId) {
+		return { type: orderConstants.PICKUP_ORDER_SUCCESS, orderId };
+	}
+	function failure(error) {
+		return { type: orderConstants.PICKUP_ORDER_FAILURE, errorMessage: error };
 	}
 }

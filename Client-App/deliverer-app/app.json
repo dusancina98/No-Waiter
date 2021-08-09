@@ -19,7 +19,11 @@
 			"infoPlist": {
 				"NSAppTransportSecurity": {
 					"NSAllowsArbitraryLoads": true
-				}
+				},
+				"NSCameraUsageDescription": "Using for QR scaning",
+				"NSPhotoLibraryAddUsageDescription": "Using for QR scaning",
+				"NSPhotoLibraryUsageDescription": "Using for QR scaning",
+				"NSMicrophoneUsageDescription": "Using for QR scaning"
 			}
 		},
 		"android": {

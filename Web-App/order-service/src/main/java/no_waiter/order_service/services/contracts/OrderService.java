@@ -3,6 +3,7 @@ package no_waiter.order_service.services.contracts;
 import java.util.List;
 import java.util.UUID;
 
+import javassist.NotFoundException;
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CompletedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
@@ -25,6 +26,8 @@ public interface OrderService {
 	void acceptOrder(AcceptOrderDTO acceptOrderDTO);
 
 	void acceptOrderDeliverer(AcceptOrderDTO acceptOrderDTO, UUID delivererId);
+	
+	void pickupOrderDeliverer(UUID orderId, UUID delivererId) throws NotFoundException;
 	
 	List<ConfirmedOrderDTO> getConfirmedOrdersForObject(UUID objectId);
 	

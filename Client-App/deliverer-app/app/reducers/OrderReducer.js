@@ -57,6 +57,32 @@ export const orderReducer = (state, action) => {
 					accepted: false,
 				},
 			};
+
+		case orderConstants.PICKUP_ORDER_REQUEST:
+			return {
+				...state,
+				orderDelivering: {
+					scannedQr: false,
+					showError: false,
+					errorMessage: "",
+				},
+			};
+		case orderConstants.PICKUP_ORDER_SUCCESS:
+			ordCpy = { ...state };
+			//let arOrders = state.pendingOrders.filter((order) => order.OrderId !== action.orderId);
+			ordCpy.orderDelivering.scannedQr = true;
+			ordCpy.orderDelivering.showError = false;
+			ordCpy.orderDelivering.errorMessage = "";
+			return ordCpy;
+		case orderConstants.PICKUP_ORDER_FAILURE:
+			return {
+				...state,
+				orderDelivering: {
+					scannedQr: false,
+					showError: true,
+					errorMessage: action.errorMessage,
+				},
+			};
 		default:
 			return state;
 	}

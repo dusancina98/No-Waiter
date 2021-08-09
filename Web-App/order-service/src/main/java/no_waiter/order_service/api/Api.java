@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import feign.FeignException;
+import javassist.NotFoundException;
 import no_waiter.order_service.intercomm.AuthClient;
 import no_waiter.order_service.intercomm.ObjectClient;
 import no_waiter.order_service.intercomm.ProductClient;
@@ -198,6 +199,22 @@ public class Api {
         } catch (NoSuchElementException e) {
         	e.printStackTrace();
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
+	@PutMapping("/{orderId}/delivering")
+    @CrossOrigin
+    public ResponseEntity<?> setOrderToDelivering(@RequestHeader("Authorization") String token, @PathVariable String orderId) {
+        try {
+    		JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+        	orderService.pickupOrderDeliverer(UUID.fromString(orderId), jwtResponse.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NotFoundException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

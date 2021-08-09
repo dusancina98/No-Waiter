@@ -11,6 +11,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javassist.NotFoundException;
 import no_waiter.order_service.entities.Address;
 import no_waiter.order_service.entities.Order;
 import no_waiter.order_service.entities.OrderEvent;
@@ -186,6 +187,22 @@ public class OrderServiceImpl implements OrderService{
 		
 		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED_DELIVERY, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId(), delivererId);
 		orderEventRepository.save(newOrderEvent);		
+	}
+	
+
+	@Override
+	public void pickupOrderDeliverer(UUID orderId, UUID delivererId) throws NotFoundException {
+		OrderEvent orderEvent = orderEventRepository.getLastConfirmedDeliveryOrderEventForOrder(orderId, delivererId);
+		
+		System.out.println("Order id " + orderId);
+		System.out.println("Deliverer id " + delivererId);
+
+		if (orderEvent == null) {
+			throw new NotFoundException("Order not found");
+		}
+		
+		OrderEvent newOrderEvent = new OrderEvent(orderEvent.getOrder(), OrderStatus.DELIVERING, new Date(), orderEvent.getOrder().getEstimatedTime(), orderEvent.getOrder().getObjectId(), delivererId);
+		orderEventRepository.save(newOrderEvent);	
 	}
 
 	@Override
@@ -467,6 +484,7 @@ public class OrderServiceImpl implements OrderService{
 		confirmedOrderEvents.forEach((orderEvent) -> acceptedOrderDTO.add(mapOrderToDelivererOrderDTO(orderEvent, objectDetails)));
 		return acceptedOrderDTO;
 	}
+
 
 	
 	//@Override

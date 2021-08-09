@@ -5,8 +5,6 @@ import { orderService } from "../services/OrderService";
 import moment from "moment";
 import { orderListStyles } from "../styles/styles";
 import { API_URL } from "../constants/ApiUrl";
-import { authHeader } from "../helpers/auth-header";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function OrdersScreen({ navigation }) {
 	const [isFetching, setIsFetching] = useState(false);
