@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.aop.AopInvocationException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -68,7 +69,7 @@ public class OrderServiceImpl implements OrderService{
 		Order order = OrderMapper.MapOrderRequestDTOToOrder(requestDTO, products, objectId);
 		orderRepository.save(order);
 		
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), objectId, null);
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), objectId, null, 0);
 		orderEventRepository.save(newOrderEvent);
 		
 		return order.getId();
@@ -82,15 +83,20 @@ public class OrderServiceImpl implements OrderService{
 		
 		int ordinalNumber=  calculateOrderOrdinalNumberFromObject(objectId);
 
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), objectId, null);
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), objectId, null, ordinalNumber);
 		orderEventRepository.save(newOrderEvent);
 		
 		return order.getId();
 	}
 	
 	private int calculateOrderOrdinalNumberFromObject(UUID objectId) {
-		// TODO Auto-generated method stub
-		return 1;
+		int ordinalNumber = 1;
+		try {
+			ordinalNumber = orderEventRepository.getMaxOrdinalNumberForObject(objectId);
+		}catch(AopInvocationException e) {
+			return ordinalNumber;
+		}
+		return ++ordinalNumber;
 	}
 	
 	
@@ -168,20 +174,6 @@ public class OrderServiceImpl implements OrderService{
 		return false;
 	}
 	
-	private OrderEvent getLatestOrderEventFromOrderId(UUID orderId) {
-		List<OrderEvent> orderEvents= orderEventRepository.getOrderEventsByOrderId(orderId);
-		
-		Collections.sort(orderEvents, new Comparator<OrderEvent>() {
-			  public int compare(OrderEvent o1, OrderEvent o2) {
-			      return o2.getCreatedTime().compareTo(o1.getCreatedTime());
-			  }});
-	
-		if(orderEvents.size()!=0) {
-			return orderEvents.get(0);
-		}
-		
-		return null;
-	}
 
 	private UnConfirmedOrderDTO mapOrderToUnConfirmedOrderDTO(OrderEvent orderEvent,Date date) {
 		Order order = orderEvent.getOrder();
@@ -210,8 +202,8 @@ public class OrderServiceImpl implements OrderService{
 	public void rejectOrder(UUID orderId, UUID objectId) {
 		Order order = orderRepository.findById(orderId).get();
 		
-		
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.REJECTED, new Date(), order.getEstimatedTime(), objectId, null);
+		OrderEvent latest = orderEventRepository.getLastOrderEventForOrder(orderId);
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.REJECTED, new Date(), order.getEstimatedTime(), objectId, null,latest.getOrdinalNumber());
 		orderEventRepository.save(newOrderEvent);
 	}
 
@@ -222,7 +214,8 @@ public class OrderServiceImpl implements OrderService{
 		order.setEstimatedTime(acceptOrderDTO.EstimatedTime);
 		orderRepository.save(order);
 		
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId(), null);
+		OrderEvent latest = orderEventRepository.getLastOrderEventForOrder(acceptOrderDTO.OrderId);
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId(), null, latest.getOrdinalNumber());
 		orderEventRepository.save(newOrderEvent);
 	}
 	
@@ -234,7 +227,8 @@ public class OrderServiceImpl implements OrderService{
 		order.setEstimatedTime(acceptOrderDTO.EstimatedTime);
 		orderRepository.save(order);
 		
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED_DELIVERY, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId(), delivererId);
+		OrderEvent latest = orderEventRepository.getLastOrderEventForOrder(acceptOrderDTO.OrderId);
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED_DELIVERY, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId(), delivererId,latest.getOrdinalNumber());
 		orderEventRepository.save(newOrderEvent);		
 	}
 	
@@ -247,7 +241,7 @@ public class OrderServiceImpl implements OrderService{
 			throw new NotFoundException("Order not found");
 		}
 		
-		OrderEvent newOrderEvent = new OrderEvent(orderEvent.getOrder(), OrderStatus.DELIVERING, new Date(), orderEvent.getOrder().getEstimatedTime(), orderEvent.getOrder().getObjectId(), delivererId);
+		OrderEvent newOrderEvent = new OrderEvent(orderEvent.getOrder(), OrderStatus.DELIVERING, new Date(), orderEvent.getOrder().getEstimatedTime(), orderEvent.getOrder().getObjectId(), delivererId, orderEvent.getOrdinalNumber());
 		orderEventRepository.save(newOrderEvent);	
 	}
 
@@ -264,7 +258,7 @@ public class OrderServiceImpl implements OrderService{
 			throw new NotFoundException("Order not found");
 		}
 		
-		OrderEvent newOrderEvent = new OrderEvent(latest.getOrder(), OrderStatus.CANCELED, new Date(), latest.getOrder().getEstimatedTime(), latest.getOrder().getObjectId(), delivererId);
+		OrderEvent newOrderEvent = new OrderEvent(latest.getOrder(), OrderStatus.CANCELED, new Date(), latest.getOrder().getEstimatedTime(), latest.getOrder().getObjectId(), delivererId, latest.getOrdinalNumber());
 		orderEventRepository.save(newOrderEvent);			
 	}
 	
@@ -281,7 +275,7 @@ public class OrderServiceImpl implements OrderService{
 			throw new NotFoundException("Order not found");
 		}
 		
-		OrderEvent newOrderEvent = new OrderEvent(latest.getOrder(), OrderStatus.DISMISSED, new Date(), latest.getOrder().getEstimatedTime(), latest.getOrder().getObjectId(), delivererId);
+		OrderEvent newOrderEvent = new OrderEvent(latest.getOrder(), OrderStatus.DISMISSED, new Date(), latest.getOrder().getEstimatedTime(), latest.getOrder().getObjectId(), delivererId, latest.getOrdinalNumber());
 		orderEventRepository.save(newOrderEvent);			
 	}
 	
@@ -291,7 +285,7 @@ public class OrderServiceImpl implements OrderService{
 		Order order = orderRepository.findById(orderId).get();
 	
 		OrderEvent latest = orderEventRepository.getLastOrderEventForOrder(orderId);
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.READY, new Date(), order.getEstimatedTime(), order.getObjectId(), latest.getDelivererId());
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.READY, new Date(), order.getEstimatedTime(), order.getObjectId(), latest.getDelivererId(),latest.getOrdinalNumber());
 		orderEventRepository.save(newOrderEvent);
 	}
 
@@ -337,7 +331,8 @@ public class OrderServiceImpl implements OrderService{
 	public void setOnRouteOrder(UUID orderId) {
 		Order order = orderRepository.findById(orderId).get();
 		
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.DELIVERING, new Date(), order.getEstimatedTime(), order.getObjectId(), null);
+		OrderEvent latest = orderEventRepository.getLastOrderEventForOrder(orderId);
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.DELIVERING, new Date(), order.getEstimatedTime(), order.getObjectId(), null, latest.getOrdinalNumber());
 		orderEventRepository.save(newOrderEvent);
 	}
 
@@ -378,7 +373,8 @@ public class OrderServiceImpl implements OrderService{
 	public void setOrderToComplete(UUID orderId) {
 		Order order = orderRepository.findById(orderId).get();
 		
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.COMPLETED, new Date(), order.getEstimatedTime(), order.getObjectId(), null);
+		OrderEvent latest = orderEventRepository.getLastOrderEventForOrder(orderId);
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.COMPLETED, new Date(), order.getEstimatedTime(), order.getObjectId(), null, latest.getOrdinalNumber());
 		orderEventRepository.save(newOrderEvent);	
 	}
 
@@ -617,7 +613,8 @@ public class OrderServiceImpl implements OrderService{
 	public byte[] generateReportPDF(String orderId) throws DocumentException, Exception {
 		Order order = orderRepository.findById(UUID.fromString(orderId)).get();
 		
-		OrderReportPDFGenerator pdfGenerator = new OrderReportPDFGenerator(order);
+		OrderEvent latestEvent = orderEventRepository.getLastOrderEventForOrder(UUID.fromString(orderId));
+		OrderReportPDFGenerator pdfGenerator = new OrderReportPDFGenerator(order,latestEvent.getOrdinalNumber());
 
 		return pdfGenerator.generatePDF();
 	}

@@ -38,11 +38,14 @@ public class OrderEvent {
     @Column(name = "delivererId", nullable = true)
 	private UUID delivererId;
 
+    @Column(name = "ordinalNumber")
+	private int ordinalNumber;
+    
 	public OrderEvent() {
 		super();
 	}
 
-	public OrderEvent(UUID id, Order order, OrderStatus orderStatus, Date createdTime, int estimatedTime, UUID objectId, UUID delivererId) {
+	public OrderEvent(UUID id, Order order, OrderStatus orderStatus, Date createdTime, int estimatedTime, UUID objectId, UUID delivererId, int ordinalNumber) {
 		super();
 		this.id = id;
 		this.order = order;
@@ -51,10 +54,11 @@ public class OrderEvent {
 		this.estimatedTime = estimatedTime;
 		this.objectId = objectId;
 		this.delivererId = delivererId;
+		this.ordinalNumber= ordinalNumber;
 	}
 
-	public OrderEvent(Order order, OrderStatus orderStatus, Date timeStamp, int estimatedTime, UUID objectId, UUID delivererId) {
-		this(UUID.randomUUID(), order, orderStatus, timeStamp, estimatedTime, objectId, delivererId);
+	public OrderEvent(Order order, OrderStatus orderStatus, Date timeStamp, int estimatedTime, UUID objectId, UUID delivererId,int ordinalNumber) {
+		this(UUID.randomUUID(), order, orderStatus, timeStamp, estimatedTime, objectId, delivererId, ordinalNumber);
 	}
 
 	public Order getOrder() {
@@ -109,4 +113,13 @@ public class OrderEvent {
 	public void setDelivererId(UUID delivererId) {
 		this.delivererId = delivererId;
 	}
+
+	public int getOrdinalNumber() {
+		return ordinalNumber;
+	}
+
+	public void setOrdinalNumber(int ordinalNumber) {
+		this.ordinalNumber = ordinalNumber;
+	}
 }
+

@@ -1,14 +1,11 @@
 package no_waiter.order_service.services.implementation.util;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -38,9 +35,12 @@ public class OrderReportPDFGenerator {
             Font.BOLD);
     private Font normalnBold = new Font(Font.FontFamily.TIMES_ROMAN, 12,
             Font.BOLD);
+    
+    private int ordinalNumber;
 	
-	public OrderReportPDFGenerator(Order order) {
+	public OrderReportPDFGenerator(Order order, int ordinalNumber) {
 		this.order = order;
+		this.ordinalNumber= ordinalNumber;
 	}
 	
 	public byte[] generatePDF() throws Exception, DocumentException {
@@ -60,7 +60,7 @@ public class OrderReportPDFGenerator {
         Paragraph paragraph1 = new Paragraph("Your number: ", normalnBold);
 		paragraph1.setAlignment(Element.ALIGN_CENTER);
 		document.add(paragraph1);
-		Paragraph paragraph2 = new Paragraph("13", redFontMax);
+		Paragraph paragraph2 = new Paragraph(""+ordinalNumber, redFontMax);
 		paragraph2.setAlignment(Element.ALIGN_CENTER);
 		document.add(paragraph2);
 
