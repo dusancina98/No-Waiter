@@ -21,6 +21,12 @@ const UserContextProvider = (props) => {
 			showError: false,
 			errorMessage: "",
 		},
+		userAddresses: [],
+		addAddress: {
+			showError: false,
+			errorMessage: "",
+			success: false,
+		},
 	});
 
 	return <UserContext.Provider value={{ userState, dispatch }}>{props.children}</UserContext.Provider>;

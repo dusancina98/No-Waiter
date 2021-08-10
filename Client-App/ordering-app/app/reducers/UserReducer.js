@@ -95,6 +95,62 @@ export const userReducer = (state, action) => {
 			userCpy.profileEdit.errorMessage = action.error;
 
 			return userCpy;
+
+		case userConstants.SET_USER_ADDRESSES_REQUEST:
+			return {
+				...state,
+				userAddresses: [],
+			};
+
+		case userConstants.SET_USER_ADDRESSES_SUCCESS:
+			return {
+				...state,
+				userAddresses: action.addresses,
+			};
+		case userConstants.SET_USER_ADDRESSES_FAILURE:
+			return {
+				...state,
+				userAddresses: [],
+			};
+
+		case userConstants.ADD_USER_ADDRESS_REQUEST:
+			userCpy = { ...state };
+			userCpy.addAddress.success = false;
+			userCpy.addAddress.showError = false;
+			userCpy.addAddress.errorMessage = "";
+
+			return userCpy;
+
+		case userConstants.ADD_USER_ADDRESS_SUCCESS:
+			userCpy = { ...state };
+			userCpy.addAddress.success = true;
+			userCpy.addAddress.showError = false;
+			userCpy.addAddress.errorMessage = "";
+
+			if (userCpy.userAddresses.find((address) => address.Id === action.address.Id) === undefined) {
+				userCpy.userAddresses.push(action.address);
+			}
+
+			return userCpy;
+		case userConstants.ADD_USER_ADDRESS_FAILURE:
+			userCpy = { ...state };
+			userCpy.addAddress.success = false;
+			userCpy.addAddress.showError = true;
+			userCpy.addAddress.errorMessage = action.error;
+
+			return userCpy;
+
+		case userConstants.REMOVE_USER_ADDRESS_REQUEST:
+			return state;
+
+		case userConstants.REMOVE_USER_ADDRESS_SUCCESS:
+			userCpy = { ...state };
+			userCpy.userAddresses = state.userAddresses.filter((address) => address.Id !== action.addressId);
+
+			return userCpy;
+		case userConstants.REMOVE_USER_ADDRESS_FAILURE:
+			return state;
+
 		default:
 			return state;
 	}

@@ -49,4 +49,21 @@ public class Customer extends User {
 	public void setAddresses(List<Address> addresses) {
 		this.addresses = addresses;
 	}	
+	
+	public void addAddress(Address address) {
+		if (this.addresses == null) {
+			this.addresses = new ArrayList<Address>();
+		}
+		
+		this.addresses.add(address);
+	}
+	
+	public void removeAddress(UUID addressId) {
+		if (this.addresses == null) {
+			return;
+		}
+		
+		this.addresses.removeIf(e -> e.getId().equals(addressId));
+
+	}
 }

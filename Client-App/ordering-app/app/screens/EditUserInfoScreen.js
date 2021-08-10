@@ -4,7 +4,6 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { UserContext } from "../contexts/UserContext";
 import { userService } from "../services/UserService";
 import { loginStyles, profileEditStyles, welcomeStyles } from "../styles/styles";
-import { CommonActions } from "@react-navigation/native";
 
 const EditUserInfoScreen = ({ navigation }) => {
 	const { userState, dispatch } = useContext(UserContext);

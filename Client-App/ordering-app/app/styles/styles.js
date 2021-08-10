@@ -312,3 +312,30 @@ export const profileEditStyles = StyleSheet.create({
 		textAlign: "center",
 	},
 });
+
+export const userAddressesStyle = StyleSheet.create({
+	containerWrapper: {
+		flex: 1,
+		width: "100%",
+		backgroundColor: "white",
+		paddingHorizontal: 10,
+		paddingVertical: 10,
+		marginTop: 1,
+	},
+	addressInfo: {
+		alignItems: "center",
+		flexDirection: "row",
+	},
+	footerButton: {
+		width: "100%",
+		paddingVertical: 10,
+		backgroundColor: "white",
+	},
+	footerButtonText: {
+		fontWeight: "bold",
+		fontSize: 16,
+		color: "#b99849",
+		textAlign: "center",
+		paddingVertical: 10,
+	},
+});

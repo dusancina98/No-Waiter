@@ -66,8 +66,8 @@ function UserInfoScreen({ navigation }) {
 					</View>
 				</TouchableWithoutFeedback>
 				<View>
-					<TouchableOpacity style={userInfoStyle.button} activeOpacity={0.5} onPress={() => navigation.navigate("Picked Up Orders")}>
-						<Text style={userInfoStyle.buttonText}> Delivering orders </Text>
+					<TouchableOpacity style={userInfoStyle.button} activeOpacity={0.5} onPress={() => navigation.navigate("My Addresses")}>
+						<Text style={userInfoStyle.buttonText}> My addresses </Text>
 					</TouchableOpacity>
 					<TouchableOpacity style={userInfoStyle.button} activeOpacity={0.5} onPress={() => navigation.navigate("Accepted Orders")}>
 						<Text style={userInfoStyle.buttonText}> Accepted orders </Text>

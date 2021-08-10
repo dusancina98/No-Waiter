@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import NoWaiter.UserService.entities.Address;
 import NoWaiter.UserService.entities.Customer;
 import NoWaiter.UserService.entities.Deliverer;
 import NoWaiter.UserService.entities.DelivererRequest;
@@ -14,6 +15,7 @@ import NoWaiter.UserService.services.contracts.dto.CustomerDTO;
 import NoWaiter.UserService.services.contracts.dto.DelivererDTO;
 import NoWaiter.UserService.services.contracts.dto.DelivererRequestDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
+import NoWaiter.UserService.services.contracts.dto.NameDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
 import NoWaiter.UserService.services.contracts.exceptions.ClassFieldValidationException;
@@ -113,4 +115,16 @@ public class UserMapper {
     	
     	return new Customer(customerDto.Email, "", customerDto.Name, customerDto.Surname, customerDto.PhoneNumber, customerDto.Address);
     }
+	
+	public static Iterable<IdentifiableDTO<NameDTO>> MapAddressListToIdentifiableNameDTO(List<Address> addresses) {
+		  List<IdentifiableDTO<NameDTO>> retVal = new ArrayList<>();
+		  addresses.forEach((address) -> retVal.add(MapAddressToIdentifiableNameDTO(address)));
+	      return retVal;
+	}
+	
+	public static IdentifiableDTO<NameDTO> MapAddressToIdentifiableNameDTO(Address address){
+		if (address == null) throw new IllegalArgumentException();
+
+		return new IdentifiableDTO<NameDTO>(address.getId(), new NameDTO(address.getName()));
+	}
 }

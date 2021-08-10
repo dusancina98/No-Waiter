@@ -35,6 +35,7 @@ import NoWaiter.UserService.services.contracts.dto.DelivererRequestDTO;
 import NoWaiter.UserService.services.contracts.dto.EditCustomerDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.JwtParseResponseDTO;
+import NoWaiter.UserService.services.contracts.dto.NameDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.RejectDelivererDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestEmailDTO;
@@ -174,6 +175,43 @@ public class Api {
         }
     }
     
+    
+    @GetMapping("/customer/addresses")
+    @CrossOrigin
+    public ResponseEntity<?> getLoggedCustomerAddresses(@RequestHeader("Authorization") String token) {
+        try {
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+            return new ResponseEntity<>(userService.getLoggedCustomerAddresses(jwtResponse.getId()), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PostMapping("/customer/address")
+    @CrossOrigin
+    public ResponseEntity<?> addLoggedCustomerAddresses(@RequestHeader("Authorization") String token, @RequestBody NameDTO addressDTO) {
+        try {
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+            return new ResponseEntity<>(userService.addCustomerAddress(jwtResponse.getId(), addressDTO), HttpStatus.CREATED);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @DeleteMapping("/customer/address/{addressId}")
+    @CrossOrigin
+    public ResponseEntity<?> removeLoggedCustomerAddresses(@RequestHeader("Authorization") String token, @PathVariable UUID addressId) {
+        try {
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+        	userService.deleteCustomerAddress(jwtResponse.getId(), addressId);
+            return new ResponseEntity<>( HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     
     @GetMapping("/customer/info")
     @CrossOrigin

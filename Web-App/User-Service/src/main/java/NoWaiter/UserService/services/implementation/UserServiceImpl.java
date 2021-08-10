@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import NoWaiter.UserService.entities.AccountActivationToken;
+import NoWaiter.UserService.entities.Address;
 import NoWaiter.UserService.entities.Authority;
 import NoWaiter.UserService.entities.Customer;
 import NoWaiter.UserService.entities.ObjectAdmin;
@@ -35,6 +36,7 @@ import NoWaiter.UserService.services.contracts.dto.CustomerDTO;
 import NoWaiter.UserService.services.contracts.dto.CustomerProfileDTO;
 import NoWaiter.UserService.services.contracts.dto.EditCustomerDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
+import NoWaiter.UserService.services.contracts.dto.NameDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestEmailDTO;
 import NoWaiter.UserService.services.contracts.dto.ResetPasswordDTO;
@@ -348,6 +350,30 @@ public class UserServiceImpl implements UserService {
 		customer.setPhoneNumber(customerDTO.PhoneNumber);
 		
 		customerRepository.save(customer);
+	}
+
+	@Override
+	public Iterable<IdentifiableDTO<NameDTO>> getLoggedCustomerAddresses(UUID customerId) {
+		Customer customer = customerRepository.findById(customerId).get();
+		return UserMapper.MapAddressListToIdentifiableNameDTO(customer.getAddresses());
+	}
+
+	@Override
+	public void deleteCustomerAddress(UUID customerId, UUID addressId) {
+		Customer customer = customerRepository.findById(customerId).get();
+		customer.removeAddress(addressId);
+		customerRepository.save(customer);
+		
+	}
+
+	@Override
+	public UUID addCustomerAddress(UUID customerId, NameDTO addressDTO) {
+		Customer customer = customerRepository.findById(customerId).get();
+		Address address = new Address(addressDTO.Name);
+		customer.addAddress(address);
+		customerRepository.save(customer);
+
+		return address.getId();
 	}
 	
 	
