@@ -10,6 +10,17 @@ const UserContextProvider = (props) => {
 			errorMessage: "",
 			successfullySent: false,
 		},
+		profileEdit: {
+			user: {
+				Email: "",
+				Name: "",
+				Surname: "",
+				PhoneNumber: "",
+			},
+			editSuccess: false,
+			showError: false,
+			errorMessage: "",
+		},
 	});
 
 	return <UserContext.Provider value={{ userState, dispatch }}>{props.children}</UserContext.Provider>;

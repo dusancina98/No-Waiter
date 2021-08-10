@@ -12,6 +12,7 @@ import RegistrationScreen from "./app/screens/RegistrationScreen";
 import UserContextProvider from "./app/contexts/UserContext";
 import ResetPasswordScreen from "./app/screens/ResetPasswordScreen";
 import Tabs from "./app/navigation/Tabs";
+import EditUserInfoScreen from "./app/screens/EditUserInfoScreen";
 
 const Stack = createStackNavigator();
 
@@ -43,6 +44,7 @@ export default function App() {
 							<Stack.Screen name="Home" component={Tabs} />
 							<Stack.Screen name="Login" component={LoginScreen} />
 							<Stack.Screen name="Registration" component={RegistrationScreen} />
+							<Stack.Screen name="Edit Profile" component={EditUserInfoScreen} />
 							<Stack.Screen name="Reset Password" component={ResetPasswordScreen} />
 							<Stack.Screen name="Activate User" component={UserActivateScreen} />
 							<Stack.Screen name="Welcome" component={WelcomeScreen} />

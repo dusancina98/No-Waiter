@@ -26,6 +26,17 @@ export function setAuthInLocalStorage(data) {
 	}
 }
 
+export function setNameAndSurname(name, surname) {
+	try {
+		AsyncStorage.multiSet([
+			["name", name],
+			["surname", surname],
+		]);
+	} catch (error) {
+		console.log("LALA", error);
+	}
+}
+
 export async function hasAnyRole() {
 	validateAccessToken();
 	let rolesAsync, roles;

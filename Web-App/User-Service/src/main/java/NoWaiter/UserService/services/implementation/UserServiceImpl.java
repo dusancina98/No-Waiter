@@ -32,6 +32,8 @@ import NoWaiter.UserService.repository.WaiterRepository;
 import NoWaiter.UserService.services.contracts.UserService;
 import NoWaiter.UserService.services.contracts.dto.ChangeFirstPasswordDTO;
 import NoWaiter.UserService.services.contracts.dto.CustomerDTO;
+import NoWaiter.UserService.services.contracts.dto.CustomerProfileDTO;
+import NoWaiter.UserService.services.contracts.dto.EditCustomerDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestEmailDTO;
@@ -330,6 +332,22 @@ public class UserServiceImpl implements UserService {
         customerRepository.save(customer);
         createActivationLink(customer.getId());
         return customer.getId();
+	}
+
+	@Override
+	public CustomerProfileDTO getLoggedCustomer(UUID customerId) {
+		Customer customer = customerRepository.findById(customerId).get();
+		return new CustomerProfileDTO(customer.getEmail(), customer.getName(), customer.getSurname(), customer.getPhoneNumber());
+	}
+
+	@Override
+	public void updateCustomer(EditCustomerDTO customerDTO, UUID customerId) {
+		Customer customer = customerRepository.findById(customerId).get();
+		customer.setName(customerDTO.Name);
+		customer.setSurname(customerDTO.Surname);
+		customer.setPhoneNumber(customerDTO.PhoneNumber);
+		
+		customerRepository.save(customer);
 	}
 	
 	

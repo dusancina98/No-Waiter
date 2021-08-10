@@ -32,6 +32,7 @@ import NoWaiter.UserService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.ChangeFirstPasswordDTO;
 import NoWaiter.UserService.services.contracts.dto.CustomerDTO;
 import NoWaiter.UserService.services.contracts.dto.DelivererRequestDTO;
+import NoWaiter.UserService.services.contracts.dto.EditCustomerDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.JwtParseResponseDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
@@ -154,6 +155,32 @@ public class Api {
                 return new ResponseEntity<>("Invalid object admin id: " + adminId, HttpStatus.NOT_FOUND);
         	
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PutMapping("/customer")
+    @CrossOrigin
+    public ResponseEntity<?> editCustomer(@RequestHeader("Authorization") String token, @RequestBody EditCustomerDTO customerDTO) {
+        try {
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+        	userService.updateCustomer(customerDTO, jwtResponse.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    
+    @GetMapping("/customer/info")
+    @CrossOrigin
+    public ResponseEntity<?> getLoggedCustomerInfo(@RequestHeader("Authorization") String token) {
+        try {
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+            return new ResponseEntity<>(userService.getLoggedCustomer(jwtResponse.getId()), HttpStatus.OK);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
