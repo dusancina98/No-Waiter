@@ -18,17 +18,20 @@ import org.springframework.stereotype.Service;
 
 import NoWaiter.UserService.entities.AccountActivationToken;
 import NoWaiter.UserService.entities.Authority;
+import NoWaiter.UserService.entities.Customer;
 import NoWaiter.UserService.entities.ObjectAdmin;
 import NoWaiter.UserService.entities.ResetPasswordToken;
 import NoWaiter.UserService.entities.User;
 import NoWaiter.UserService.entities.Waiter;
 import NoWaiter.UserService.repository.AccountActivationTokenRepository;
+import NoWaiter.UserService.repository.CustomerRepository;
 import NoWaiter.UserService.repository.ObjectAdminRepository;
 import NoWaiter.UserService.repository.ResetPasswordTokenRepository;
 import NoWaiter.UserService.repository.UserRepository;
 import NoWaiter.UserService.repository.WaiterRepository;
 import NoWaiter.UserService.services.contracts.UserService;
 import NoWaiter.UserService.services.contracts.dto.ChangeFirstPasswordDTO;
+import NoWaiter.UserService.services.contracts.dto.CustomerDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestEmailDTO;
@@ -56,6 +59,9 @@ public class UserServiceImpl implements UserService {
     
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private CustomerRepository customerRepository;
     
     @Autowired
     private AccountActivationTokenRepository accountActivationTokenRepository;
@@ -315,6 +321,15 @@ public class UserServiceImpl implements UserService {
 			objectAdmin.delete();
 			objectAdminRepository.save(objectAdmin);
 		}
+	}
+
+	@Override
+	public UUID createCustomer(CustomerDTO entity) throws ClassFieldValidationException, Exception {
+	    Customer customer = UserMapper.MapCustomerDTOToCustomer(entity);
+	    customer.addAuthority(new Authority(UUID.fromString("f98f5538-4d52-4e3e-bae3-598e523a6111"), "ROLE_CUSTOMER"));
+        customerRepository.save(customer);
+        createActivationLink(customer.getId());
+        return customer.getId();
 	}
 	
 	

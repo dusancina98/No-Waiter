@@ -36,7 +36,7 @@ function UserActivateScreen({ navigation }) {
 				)}
 				<View>
 					{authState.userActivate.showError && <Text style={loginStyles.errorMessage}>{authState.userActivate.errorMessage}</Text>}
-					{authState.userActivate.showSuccessMessage && <Text style={{ color: "green", fontSize: 18, alignSelf: "center", marginTop: 10 }}> Activation mail was sent successfully.</Text>}
+					{authState.userActivate.showSuccessMessage && <Text style={{ color: "white", fontSize: 18, alignSelf: "center", marginTop: 10 }}> Activation mail was sent successfully.</Text>}
 
 					{!authState.userActivate.showSuccessMessage && (
 						<TouchableOpacity style={activateAccountStyles.button} activeOpacity={0.5} onPress={handleSendActivation}>

@@ -88,7 +88,7 @@ function login(loginRequest, dispatch) {
 	dispatch(request());
 
 	if (validateLoginRequest(loginRequest, dispatch)) {
-		Axios.post(`${API_URL}/auth-api/api/auth/login/deliverer`, loginRequest, { validateStatus: () => true })
+		Axios.post(`${API_URL}/auth-api/api/auth/login/customer`, loginRequest, { validateStatus: () => true })
 			.then((res) => {
 				console.log(res.data);
 				if (res.status === 200) {

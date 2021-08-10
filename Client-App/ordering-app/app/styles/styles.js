@@ -65,6 +65,7 @@ export const loginStyles = StyleSheet.create({
 		alignSelf: "flex-start",
 		marginLeft: 20,
 		marginRight: 20,
+		marginTop: 100,
 		width: "100%",
 	},
 	textForm: {
@@ -110,6 +111,7 @@ export const activateAccountStyles = StyleSheet.create({
 		flex: 1,
 	},
 	button: {
+		alignSelf: "center",
 		width: "90%",
 		marginTop: 40,
 		paddingTop: 15,
@@ -128,6 +130,64 @@ export const activateAccountStyles = StyleSheet.create({
 		fontFamily: "roboto-regular",
 		fontWeight: "400",
 		textAlign: "center",
+	},
+	errorMessage: {
+		color: "red",
+		fontSize: 15,
+		marginLeft: 20,
+		marginRight: 20,
+		marginTop: 10,
+		textAlign: "center",
+	},
+});
+
+export const registrationStyles = StyleSheet.create({
+	containerWrapper: {
+		flex: 1,
+	},
+	logoContainer: {
+		alignItems: "center",
+	},
+	logoText: {
+		color: "white",
+		fontSize: 45,
+		fontFamily: "roboto-light",
+		fontWeight: "bold",
+	},
+	registrationForm: {
+		alignSelf: "flex-start",
+		marginLeft: 20,
+		marginRight: 20,
+		marginTop: 20,
+		width: "100%",
+	},
+	textForm: {
+		color: "white",
+		fontSize: 20,
+		fontFamily: "roboto-regular",
+		fontWeight: "400",
+	},
+	textInput: {
+		paddingHorizontal: 10,
+		fontSize: 18,
+		height: 50,
+		marginTop: 5,
+		borderWidth: 1,
+		borderRadius: 15,
+		width: "90%",
+		backgroundColor: "white",
+	},
+	button: {
+		width: "50%",
+		marginTop: 30,
+		paddingTop: 15,
+		paddingBottom: 15,
+		marginLeft: 30,
+		marginRight: 30,
+		backgroundColor: "#b99849",
+		borderRadius: 10,
+		borderWidth: 1,
+		borderColor: "#b99849",
 	},
 	errorMessage: {
 		color: "red",

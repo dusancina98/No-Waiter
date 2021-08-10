@@ -8,6 +8,8 @@ import AppLoading from "expo-app-loading";
 import LoginScreen from "./app/screens/LoginScreen";
 import UserActivateScreen from "./app/screens/UserActivateScreen";
 import AuthContextProvider from "./app/contexts/AuthContext";
+import RegistrationScreen from "./app/screens/RegistrationScreen";
+import UserContextProvider from "./app/contexts/UserContext";
 
 const Stack = createStackNavigator();
 
@@ -27,20 +29,23 @@ export default function App() {
 
 	if (fontsLoaded) {
 		return (
-			<AuthContextProvider>
-				<NavigationContainer>
-					<Stack.Navigator
-						screenOptions={{
-							headerShown: false,
-						}}
-						initialRouteName={"Welcome"}
-					>
-						<Stack.Screen name="Login" component={LoginScreen} />
-						<Stack.Screen name="Activate User" component={UserActivateScreen} />
-						<Stack.Screen name="Welcome" component={WelcomeScreen} />
-					</Stack.Navigator>
-				</NavigationContainer>
-			</AuthContextProvider>
+			<UserContextProvider>
+				<AuthContextProvider>
+					<NavigationContainer>
+						<Stack.Navigator
+							screenOptions={{
+								headerShown: false,
+							}}
+							initialRouteName={"Welcome"}
+						>
+							<Stack.Screen name="Login" component={LoginScreen} />
+							<Stack.Screen name="Registration" component={RegistrationScreen} />
+							<Stack.Screen name="Activate User" component={UserActivateScreen} />
+							<Stack.Screen name="Welcome" component={WelcomeScreen} />
+						</Stack.Navigator>
+					</NavigationContainer>
+				</AuthContextProvider>
+			</UserContextProvider>
 		);
 	} else {
 		return <AppLoading startAsync={getFonts} onFinish={() => setFontsLoaded(true)} onError={(err) => console.log(err)} />;

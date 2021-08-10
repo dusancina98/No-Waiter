@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ImageBackground, View, Text, TouchableOpacity, StatusBar, TextInput, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { ImageBackground, View, Text, TouchableOpacity, StatusBar, TextInput, TouchableWithoutFeedback, Keyboard, Image } from "react-native";
+import { authConstants } from "../constants/AuthConstants";
 import { AuthContext } from "../contexts/AuthContext";
+import { authService } from "../services/AuthService";
 import { loginStyles, welcomeStyles } from "../styles/styles";
 
 function LoginScreen({ navigation }) {
@@ -42,6 +44,7 @@ function LoginScreen({ navigation }) {
 				<StatusBar barStyle="light-content" />
 				<ImageBackground style={welcomeStyles.background} source={require("../assets/background.jpg")}>
 					<View style={welcomeStyles.logoContainer}>
+						<Image style={{ width: 170, height: 170 }} source={require("../assets/logo.png")} />
 						<Text style={welcomeStyles.logoText}>Login</Text>
 					</View>
 					<View style={loginStyles.loginForm}>
@@ -64,7 +67,7 @@ function LoginScreen({ navigation }) {
 							<Text style={{ color: "white", fontSize: 15, marginLeft: 5 }}> Reset password </Text>
 						</TouchableOpacity>
 					</View>
-					{/* {authState.userLogin.showError && <Text style={loginStyles.errorMessage}>{authState.userLogin.errorMessage}</Text>} */}
+					{authState.userLogin.showError && <Text style={loginStyles.errorMessage}>{authState.userLogin.errorMessage}</Text>}
 					<TouchableOpacity style={loginStyles.loginButton} activeOpacity={0.5} onPress={handleLogin}>
 						<Text style={welcomeStyles.loginText}> Login </Text>
 					</TouchableOpacity>

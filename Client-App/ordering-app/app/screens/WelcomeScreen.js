@@ -14,7 +14,7 @@ function WelcomeScreen({ navigation }) {
 				<TouchableOpacity style={welcomeStyles.loginButton} activeOpacity={0.5} onPress={() => navigation.navigate("Login")}>
 					<Text style={welcomeStyles.loginText}> Login </Text>
 				</TouchableOpacity>
-				<TouchableOpacity style={welcomeStyles.registerButton} activeOpacity={0.5} onPress={() => navigation.navigate("Employment request")}>
+				<TouchableOpacity style={welcomeStyles.registerButton} activeOpacity={0.5} onPress={() => navigation.navigate("Registration")}>
 					<Text style={welcomeStyles.registerText}> Register </Text>
 				</TouchableOpacity>
 			</ImageBackground>
