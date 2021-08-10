@@ -8,7 +8,10 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
+
+import com.itextpdf.text.DocumentException;
 
 import no_waiter.order_service.entities.Address;
 import no_waiter.order_service.entities.Order;
@@ -43,6 +46,7 @@ import no_waiter.order_service.services.contracts.dto.SideDishResponseDTO;
 import no_waiter.order_service.services.contracts.dto.TableResponseDTO;
 import no_waiter.order_service.services.contracts.dto.UnConfirmedOrderDTO;
 import no_waiter.order_service.services.implementation.util.OrderMapper;
+import no_waiter.order_service.services.implementation.util.OrderReportPDFGenerator;
 
 @Service
 public class OrderServiceImpl implements OrderService{
@@ -69,7 +73,27 @@ public class OrderServiceImpl implements OrderService{
 		
 		return order.getId();
 	}
+	
+	@Override
+	public UUID createOrderForInfoPult(OrderRequestDTO requestDTO, ProductValidationResponseDTO resp,
+			UUID objectId) throws Exception {
+		Order order = OrderMapper.MapOrderRequestDTOToOrder(requestDTO, resp, objectId);
+		orderRepository.save(order);
+		
+		int ordinalNumber=  calculateOrderOrdinalNumberFromObject(objectId);
 
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), objectId, null);
+		orderEventRepository.save(newOrderEvent);
+		
+		return order.getId();
+	}
+	
+	private int calculateOrderOrdinalNumberFromObject(UUID objectId) {
+		// TODO Auto-generated method stub
+		return 1;
+	}
+	
+	
 	@Override
 	public List<UnConfirmedOrderDTO> getUnconfirmedOrdersForObject(UUID objectId) {
 		List<UnConfirmedOrderDTO> unConfirmedOrderDTO = new ArrayList<UnConfirmedOrderDTO>();
@@ -143,6 +167,21 @@ public class OrderServiceImpl implements OrderService{
 		
 		return false;
 	}
+	
+	private OrderEvent getLatestOrderEventFromOrderId(UUID orderId) {
+		List<OrderEvent> orderEvents= orderEventRepository.getOrderEventsByOrderId(orderId);
+		
+		Collections.sort(orderEvents, new Comparator<OrderEvent>() {
+			  public int compare(OrderEvent o1, OrderEvent o2) {
+			      return o2.getCreatedTime().compareTo(o1.getCreatedTime());
+			  }});
+	
+		if(orderEvents.size()!=0) {
+			return orderEvents.get(0);
+		}
+		
+		return null;
+	}
 
 	private UnConfirmedOrderDTO mapOrderToUnConfirmedOrderDTO(OrderEvent orderEvent,Date date) {
 		Order order = orderEvent.getOrder();
@@ -170,6 +209,7 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public void rejectOrder(UUID orderId, UUID objectId) {
 		Order order = orderRepository.findById(orderId).get();
+		
 		
 		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.REJECTED, new Date(), order.getEstimatedTime(), objectId, null);
 		orderEventRepository.save(newOrderEvent);
@@ -508,5 +548,15 @@ public class OrderServiceImpl implements OrderService{
 		confirmedOrderEvents.forEach((orderEvent) -> acceptedOrderDTO.add(mapOrderToDelivererOrderDTO(orderEvent, objectDetails)));
 		return acceptedOrderDTO;
 	}
+
+	@Override
+	public byte[] generateReportPDF(String orderId) throws DocumentException, Exception {
+		Order order = orderRepository.findById(UUID.fromString(orderId)).get();
+		
+		OrderReportPDFGenerator pdfGenerator = new OrderReportPDFGenerator(order);
+
+		return pdfGenerator.generatePDF();
+	}
+
 
 }
