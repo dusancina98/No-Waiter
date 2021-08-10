@@ -14,6 +14,8 @@ import EmploymentRequestScreen from "./app/screens/EmploymentRequestScreen";
 import AcceptedOrdersScreen from "./app/screens/AcceptedOrdersScreen";
 import UserActivateScreen from "./app/screens/UserActivateScreen";
 import ResetPasswordScreen from "./app/screens/ResetPasswordScreen";
+import PickedUpOrdersScreen from "./app/screens/PickedUpOrdersScreen";
+import DismissOrdersScreen from "./app/screens/DismissOrdersScreen";
 
 const Stack = createStackNavigator();
 
@@ -48,6 +50,8 @@ export default function App() {
 							<Stack.Screen name="Employment request" component={EmploymentRequestScreen} options={{ headerShown: true, headerBackTitle: false }} />
 							<Stack.Screen name="Order Confirm" component={OrderConfirmScreen} options={{ headerShown: true, headerBackTitle: false }} />
 							<Stack.Screen name="Accepted Orders" component={AcceptedOrdersScreen} options={{ headerShown: true, headerBackTitle: false }} />
+							<Stack.Screen name="Picked Up Orders" component={PickedUpOrdersScreen} options={{ headerShown: true, headerBackTitle: false }} />
+							<Stack.Screen name="Dismiss Order" component={DismissOrdersScreen} />
 							<Stack.Screen name="Activate User" component={UserActivateScreen} />
 							<Stack.Screen name="Reset Password" component={ResetPasswordScreen} />
 						</Stack.Navigator>

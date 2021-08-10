@@ -6,30 +6,20 @@ import moment from "moment";
 import { orderListStyles } from "../styles/styles";
 import { API_URL } from "../constants/ApiUrl";
 
-function OrdersScreen({ navigation }) {
+const PickedUpOrdersScreen = () => {
 	const [isFetching, setIsFetching] = useState(false);
 	const { orderState, dispatch } = useContext(OrderContext);
 
 	useEffect(() => {
-		orderService.getAllConfirmedOrders(dispatch);
+		orderService.getAllPickedUpOrders(dispatch);
 	}, []);
 
 	useEffect(() => {
-		console.log("Usao", isFetching);
 		if (isFetching === true) {
-			orderService.getAllConfirmedOrders(dispatch);
+			orderService.getAllPickedUpOrders(dispatch);
 			setIsFetching(false);
 		}
 	}, [isFetching]);
-
-	// AsyncStorage.getAllKeys((err, keys) => {
-	// 	AsyncStorage.multiGet(keys, (error, stores) => {
-	// 		stores.map((result, i, store) => {
-	// 			console.log({ [store[i][0]]: store[i][1] });
-	// 			return true;
-	// 		});
-	// 	});
-	// });
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
@@ -38,9 +28,9 @@ function OrdersScreen({ navigation }) {
 				refreshing={isFetching}
 				onRefresh={() => setIsFetching(true)}
 				keyExtractor={(item) => item.OrderId}
-				data={orderState.pendingOrders}
+				data={orderState.pickedUpOrders}
 				renderItem={({ item }) => (
-					<TouchableOpacity onPress={() => navigation.navigate("Order Confirm", item)}>
+					<TouchableOpacity>
 						<View style={orderListStyles.containerWrapper}>
 							<View style={orderListStyles.objectInfoContainer}>
 								<Text style={{ fontWeight: "bold", fontSize: 22 }}>{item.DeliveryAddress}</Text>
@@ -67,6 +57,6 @@ function OrdersScreen({ navigation }) {
 			/>
 		</SafeAreaView>
 	);
-}
+};
 
-export default OrdersScreen;
+export default PickedUpOrdersScreen;

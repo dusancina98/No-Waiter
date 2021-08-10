@@ -7,8 +7,24 @@ const OrderContextProvider = (props) => {
 	const [orderState, dispatch] = useReducer(orderReducer, {
 		pendingOrders: [],
 		acceptedOrders: [],
+		pickedUpOrders: [],
 		orderAccept: {
 			accepted: false,
+		},
+		orderDelivering: {
+			scannedQr: false,
+			showError: false,
+			errorMessage: "",
+		},
+		orderDismiss: {
+			scannedQr: false,
+			showError: false,
+			errorMessage: "",
+		},
+		orderCancel: {
+			success: false,
+			showError: false,
+			errorMessage: "",
 		},
 	});
 

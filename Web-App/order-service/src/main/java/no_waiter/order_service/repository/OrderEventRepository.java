@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import no_waiter.order_service.entities.OrderEvent;
+import no_waiter.order_service.entities.OrderStatus;
 
 public interface OrderEventRepository extends PagingAndSortingRepository<OrderEvent, UUID> {
 	
@@ -17,20 +18,52 @@ public interface OrderEventRepository extends PagingAndSortingRepository<OrderEv
 	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.order.id = ?1")
 	List<OrderEvent> getOrderEventsByOrderId(UUID orderId);
 	
-	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.orderStatus = 'CONFIRMED' and oe.createdTime >= ?1 and oe.order.orderType = 'DELIVERY'"
-				 + " AND oe.order.id NOT IN (SELECT oe.order.id FROM OrderEvent oe WHERE oe.orderStatus = 'CONFIRMED_DELIVERY' and oe.createdTime >= ?1)")
-	List<OrderEvent> getConfirmedOrderEventsForDelivery(Date timeStamp);
-	
-	@Query(value = "SELECT distinct(oe.objectId) FROM OrderEvent oe WHERE oe.orderStatus = 'CONFIRMED' and oe.createdTime >= ?1 and oe.order.orderType = 'DELIVERY'"
-				+ " AND oe.order.id NOT IN (SELECT oe.order.id FROM OrderEvent oe WHERE oe.orderStatus = 'CONFIRMED_DELIVERY' and oe.createdTime >= ?1)")
-	List<UUID> getDistinctObjectIdsForDelivery(Date timeStamp);
-	
-	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.orderStatus = 'CONFIRMED_DELIVERY' and oe.delivererId = ?1 and oe.order.orderType = 'DELIVERY'"
-			 + "AND oe.order.id NOT IN (SELECT oe.order.id FROM OrderEvent oe WHERE oe.orderStatus = 'DELIVERING')")
-	List<OrderEvent> getAcceptedOrderEventsForDeliveryByDeliverer(UUID delivererId);
-	
-	@Query(value = "SELECT distinct(oe.objectId) FROM OrderEvent oe WHERE oe.orderStatus = 'CONFIRMED_DELIVERY' and oe.delivererId = ?1 and oe.order.orderType = 'DELIVERY'"
-			 + "AND oe.order.id NOT IN (SELECT oe.order.id FROM OrderEvent oe WHERE oe.orderStatus = 'DELIVERING')")
-	List<UUID> getDistinctObjectIdsForAcceptedDelivery(UUID delivererId);
+	//Latest status
+	//@Query("SELECT oee FROM OrderEvent oee WHERE oee.order.id = oe.order.id and oe.createdTime = (SELECT max(oeee.createdTime) FROM OrderEvent oeee WHERE oeee.order.id = oee.order.id)")
 
+	// ID: 1 TIME: 1000 STATUS: UNC
+	// ID: 1 TIME: 1001 STATUS: CON
+	// ID: 2 TIME: 1002 STATUS: UNC
+	// ID: 2 TIME: 1003 STATUS: CON
+	
+	
+	//
+	@Query(value = "SELECT oee FROM OrderEvent oee WHERE oee.order.id = ?1 AND" + 
+			" oee.createdTime = (SELECT MAX(oeee.createdTime) FROM OrderEvent oeee WHERE oeee.order.id = oee.order.id)")
+	OrderEvent getLastOrderEventForOrder(UUID orderId);
+		
+	@Query(value = "SELECT oee FROM OrderEvent oee WHERE " + 
+			" oee.createdTime = (SELECT MAX(oeee.createdTime) FROM OrderEvent oeee WHERE oeee.order.id = oee.order.id) AND oee.orderStatus IN (?1) AND oee.order.orderType = 'DELIVERY'")
+	List<OrderEvent> getOrderEventsForDelivery(List<OrderStatus> orderStatus);
+
+	@Query(value = "SELECT distinct(oee.objectId) FROM OrderEvent oee WHERE " + 
+			" oee.createdTime = (SELECT MAX(oeee.createdTime) FROM OrderEvent oeee WHERE oeee.order.id = oee.order.id) AND oee.orderStatus IN (?1) AND oee.order.orderType = 'DELIVERY'")
+	List<UUID> getDistinctObjectIdsForOrderDelivery(List<OrderStatus> orderStatus);
+	
+	
+	@Query(value = "SELECT oee FROM OrderEvent oee WHERE " + 
+			" oee.createdTime = (SELECT MAX(oeee.createdTime) FROM OrderEvent oeee WHERE oeee.order.id = oee.order.id) AND oee.orderStatus IN (?1) AND oee.order.orderType = 'DELIVERY' AND oee.delivererId = ?2")
+	List<OrderEvent> getOrderEventsForDeliveryByDeliverer(List<OrderStatus> orderStatus, UUID delivererId);
+
+	@Query(value = "SELECT distinct(oee.objectId) FROM OrderEvent oee WHERE " + 
+			" oee.createdTime = (SELECT MAX(oeee.createdTime) FROM OrderEvent oeee WHERE oeee.order.id = oee.order.id) AND oee.orderStatus IN (?1) AND oee.order.orderType = 'DELIVERY' AND oee.delivererId = ?2")
+	List<UUID> getDistinctObjectIdsForOrderDeliveryByDeliverer(List<OrderStatus> orderStatus, UUID delivererId);
+	
+
+
+	
+	
+	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.order.id = ?1 and (oe.orderStatus = 'DELIVERING' or oe.orderStatus = 'CONFIRMED_DELIVERY')"
+				+ " and oe.delivererId = ?2 and oe.order.orderType = 'DELIVERY'"
+				+ " AND oe.order.id NOT IN (SELECT oee.order.id FROM OrderEvent oee WHERE oee.order.id = ?1 AND " 
+			 	+ " oee.createdTime = (SELECT MAX(oeee.createdTime) FROM OrderEvent oeee WHERE oeee.order.id = oee.order.id) AND"
+			 	+ " oee.orderStatus IN ('COMPLETED', 'CANCELED') AND oee.order.orderType = 'DELIVERY')")
+	OrderEvent getNotFinishedOrderForDeliver(UUID orderId, UUID delivererId);
+	
+	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.order.id = ?1 and oe.orderStatus = 'READY' and oe.delivererId = ?2 and oe.order.orderType = 'DELIVERY'")
+	OrderEvent getLastConfirmedDeliveryOrderEventForOrder(UUID orderId, UUID delivererId);
+	
+	
 }
+
+

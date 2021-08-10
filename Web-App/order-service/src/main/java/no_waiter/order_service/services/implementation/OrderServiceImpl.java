@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.itextpdf.text.DocumentException;
-
+import javassist.NotFoundException;
 import no_waiter.order_service.entities.Address;
 import no_waiter.order_service.entities.Order;
 import no_waiter.order_service.entities.OrderEvent;
@@ -237,12 +237,61 @@ public class OrderServiceImpl implements OrderService{
 		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED_DELIVERY, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId(), delivererId);
 		orderEventRepository.save(newOrderEvent);		
 	}
+	
 
+	@Override
+	public void pickupOrderDeliverer(UUID orderId, UUID delivererId) throws NotFoundException {
+		OrderEvent orderEvent = orderEventRepository.getLastConfirmedDeliveryOrderEventForOrder(orderId, delivererId);
+
+		if (orderEvent == null) {
+			throw new NotFoundException("Order not found");
+		}
+		
+		OrderEvent newOrderEvent = new OrderEvent(orderEvent.getOrder(), OrderStatus.DELIVERING, new Date(), orderEvent.getOrder().getEstimatedTime(), orderEvent.getOrder().getObjectId(), delivererId);
+		orderEventRepository.save(newOrderEvent);	
+	}
+
+
+	@Override
+	public void cancelOrderDeliverer(UUID orderId, UUID delivererId) throws NotFoundException {
+		
+		OrderEvent latest = orderEventRepository.getLastOrderEventForOrder(orderId);
+		if (latest == null) {
+			throw new NotFoundException("Order not found");
+		}
+		
+		if (!latest.getDelivererId().equals(delivererId) || (!latest.getOrderStatus().equals(OrderStatus.CONFIRMED_DELIVERY) && !latest.getOrderStatus().equals(OrderStatus.READY))) {
+			throw new NotFoundException("Order not found");
+		}
+		
+		OrderEvent newOrderEvent = new OrderEvent(latest.getOrder(), OrderStatus.CANCELED, new Date(), latest.getOrder().getEstimatedTime(), latest.getOrder().getObjectId(), delivererId);
+		orderEventRepository.save(newOrderEvent);			
+	}
+	
+	
+	@Override
+	public void dismissOrderDeliverer(UUID orderId, UUID delivererId) throws NotFoundException {
+		
+		OrderEvent latest = orderEventRepository.getLastOrderEventForOrder(orderId);
+		if (latest == null) {
+			throw new NotFoundException("Order not found");
+		}
+		
+		if (!latest.getDelivererId().equals(delivererId) || !latest.getOrderStatus().equals(OrderStatus.DELIVERING)) {
+			throw new NotFoundException("Order not found");
+		}
+		
+		OrderEvent newOrderEvent = new OrderEvent(latest.getOrder(), OrderStatus.DISMISSED, new Date(), latest.getOrder().getEstimatedTime(), latest.getOrder().getObjectId(), delivererId);
+		orderEventRepository.save(newOrderEvent);			
+	}
+	
+	
 	@Override
 	public void setOrderToReady(UUID orderId) {
 		Order order = orderRepository.findById(orderId).get();
-				
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.READY, new Date(), order.getEstimatedTime(), order.getObjectId(), null);
+	
+		OrderEvent latest = orderEventRepository.getLastOrderEventForOrder(orderId);
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.READY, new Date(), order.getEstimatedTime(), order.getObjectId(), latest.getDelivererId());
 		orderEventRepository.save(newOrderEvent);
 	}
 
@@ -508,13 +557,19 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public List<DelivererOrderDTO> getAllConfirmedOrders() {
 		List<DelivererOrderDTO> confirmedOrderDTO = new ArrayList<DelivererOrderDTO>();
+	
 		
-		Long setTime = (long) (5*60*3600*1000);
-		Date newDate = new Date();
-		newDate.setTime(newDate.getTime() - setTime);
-		
-		List<OrderEvent> confirmedOrderEvents =  orderEventRepository.getConfirmedOrderEventsForDelivery(newDate);
-		List<UUID> objectIds = orderEventRepository.getDistinctObjectIdsForDelivery(newDate);
+		List<OrderStatus> statuses = new ArrayList<OrderStatus>() {
+			private static final long serialVersionUID = 1L;
+
+			{
+                add(OrderStatus.CANCELED);
+                add(OrderStatus.CONFIRMED);
+                add(OrderStatus.READY);
+            };
+		};
+		List<OrderEvent> confirmedOrderEvents =  orderEventRepository.getOrderEventsForDelivery(statuses);
+		List<UUID> objectIds = orderEventRepository.getDistinctObjectIdsForOrderDelivery(statuses);
 		List<ObjectDetailsDTO> objectDetails = objectClient.getObjectDetailsByObjectIds(objectIds);
 		
 		confirmedOrderEvents.forEach((orderEvent) -> confirmedOrderDTO.add(mapOrderToDelivererOrderDTO(orderEvent, objectDetails)));
@@ -541,8 +596,17 @@ public class OrderServiceImpl implements OrderService{
 	public List<DelivererOrderDTO> getAllAcceptedOrders(UUID delivererId) {
 		List<DelivererOrderDTO> acceptedOrderDTO = new ArrayList<DelivererOrderDTO>();
 		
-		List<OrderEvent> confirmedOrderEvents =  orderEventRepository.getAcceptedOrderEventsForDeliveryByDeliverer(delivererId);
-		List<UUID> objectIds = orderEventRepository.getDistinctObjectIdsForAcceptedDelivery(delivererId);
+		
+		List<OrderStatus> statuses = new ArrayList<OrderStatus>() {
+			private static final long serialVersionUID = 1L;
+
+			{
+                add(OrderStatus.CONFIRMED_DELIVERY);
+                add(OrderStatus.READY);
+            };
+		};
+		List<OrderEvent> confirmedOrderEvents =  orderEventRepository.getOrderEventsForDeliveryByDeliverer(statuses, delivererId);
+		List<UUID> objectIds = orderEventRepository.getDistinctObjectIdsForOrderDeliveryByDeliverer(statuses, delivererId);
 		List<ObjectDetailsDTO> objectDetails = objectClient.getObjectDetailsByObjectIds(objectIds);
 
 		confirmedOrderEvents.forEach((orderEvent) -> acceptedOrderDTO.add(mapOrderToDelivererOrderDTO(orderEvent, objectDetails)));
@@ -559,4 +623,22 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 
+	@Override
+	public List<DelivererOrderDTO> getAllPickedUpOrders(UUID delivererId) {
+		List<DelivererOrderDTO> acceptedOrderDTO = new ArrayList<DelivererOrderDTO>();
+		
+		List<OrderStatus> statuses = new ArrayList<OrderStatus>() {
+			private static final long serialVersionUID = 1L;
+
+			{
+                add(OrderStatus.DELIVERING);
+            };
+		};
+		List<OrderEvent> confirmedOrderEvents =  orderEventRepository.getOrderEventsForDeliveryByDeliverer(statuses, delivererId);
+		List<UUID> objectIds = orderEventRepository.getDistinctObjectIdsForOrderDeliveryByDeliverer(statuses, delivererId);
+		List<ObjectDetailsDTO> objectDetails = objectClient.getObjectDetailsByObjectIds(objectIds);
+
+		confirmedOrderEvents.forEach((orderEvent) -> acceptedOrderDTO.add(mapOrderToDelivererOrderDTO(orderEvent, objectDetails)));
+		return acceptedOrderDTO;
+	}
 }

@@ -8,6 +8,7 @@ import icons from "../constants/Icons";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import OrdersScreen from "../screens/OrdersScreen";
 import UserInfoScreen from "../screens/UserInfoScreen";
+import ScanQrScreen from "../screens/ScanQrScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -155,8 +156,8 @@ const Tabs = () => {
 			/>
 
 			<Tab.Screen
-				name="Scan"
-				component={WelcomeScreen}
+				name="Scan QR"
+				component={ScanQrScreen}
 				options={{
 					headerShown: false,
 					tabBarIcon: () => (
