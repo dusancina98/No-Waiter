@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.web.multipart.MultipartFile;
 
 import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
+import NoWaiter.ObjectService.services.contracts.dto.CustomerObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDetailsDTO;
@@ -45,4 +46,6 @@ public interface ObjectService {
 	void updateWorkTime(UpdateWorkTimeDTO updateWorkTimeDTO);
 
 	int getTableNumberByTableIdForResturant(UUID objectId, UUID tableId);
+
+	Iterable<IdentifiableDTO<CustomerObjectDTO>> getObjectsForCustomers();
 }

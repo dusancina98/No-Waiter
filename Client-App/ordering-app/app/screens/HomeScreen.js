@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { FlatList, StatusBar, View, Text, Image, SafeAreaView, TouchableHighlight } from "react-native";
+import { FlatList, StatusBar, View, Text, Image, SafeAreaView, TouchableHighlight, TouchableOpacity, Alert } from "react-native";
 import { ObjectContext } from "../contexts/ObjectContext";
 import { objectService } from "../services/ObjectService";
 import { objectsPageStyles } from "../styles/styles";
@@ -10,7 +10,6 @@ function HomeScreen({ navigation }) {
 	const [isFetching, setIsFetching] = useState(false);
 
 	const handleEnterObject = (objectId) =>{
-		
 	}
 
 	useEffect(() => {
@@ -26,6 +25,7 @@ function HomeScreen({ navigation }) {
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
+			<StatusBar barStyle="dark-content" />
 			<FlatList
 				vertical
 				showsVerticalScrollIndicator={false}
@@ -35,13 +35,13 @@ function HomeScreen({ navigation }) {
 				keyExtractor={(item) => item.Id}
 				data={objectState.objects}
 				renderItem={({ item }) => (
-					<TouchableHighlight underlayColor='rgba(73,182,77,0.9)' onPress={() => handleEnterObject(item.Id)}>
+					<TouchableOpacity underlayColor='rgba(73,182,77,0.9)' onPress={() => handleEnterObject(item.Id)}>
       					<View style={objectsPageStyles.container}>
         					<Image style={objectsPageStyles.photo} source={{ uri: `${API_URL}${item.EntityDTO.ImagePath.substring(1, item.EntityDTO.ImagePath.length)}` }}/>
-        					<Text style={objectsPageStyles.title}>Brkina kolibica i tri praseta</Text>
-        					<Text style={objectsPageStyles.category}>Bulevar despota Stefana 7a, stan 15</Text>
+        					<Text style={objectsPageStyles.title}>{item.EntityDTO.Name}</Text>
+        					<Text style={objectsPageStyles.category}>{item.EntityDTO.Address}</Text>
       					</View>
-    				</TouchableHighlight>
+    				</TouchableOpacity>
 				)}
 			/>
 		</SafeAreaView>
