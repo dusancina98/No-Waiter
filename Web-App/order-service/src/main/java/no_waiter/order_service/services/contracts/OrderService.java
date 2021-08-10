@@ -1,8 +1,9 @@
 package no_waiter.order_service.services.contracts;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
-
+import com.itextpdf.text.DocumentException;
 import javassist.NotFoundException;
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CompletedOrderDTO;
@@ -56,4 +57,8 @@ public interface OrderService {
 	OrderDetailsDTO getOrderDetails(UUID orderId);
 
 	void updateOrder(OrderDetailsDTO orderDetailsDTO);
+
+	UUID createOrderForInfoPult(OrderRequestDTO requestDTO, ProductValidationResponseDTO resp, UUID objectId) throws IOException, Exception;
+
+	byte[] generateReportPDF(String orderId) throws DocumentException, Exception;
 }

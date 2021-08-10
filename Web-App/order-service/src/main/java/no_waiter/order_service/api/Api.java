@@ -1,11 +1,13 @@
 package no_waiter.order_service.api;
 
+
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.http.HttpHeaders;
+
 
 import feign.FeignException;
 import javassist.NotFoundException;
@@ -64,12 +69,13 @@ public class Api {
 			JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
 			UUID objectId;
 			if(hasRole(jwtResponse.getAuthorities(), "ROLE_SELF_ORDER_PULT")) {
-				 objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());
-			} else {
+				objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());
+				return new ResponseEntity<>(orderService.createOrderForInfoPult(requestDTO, resp, objectId), HttpStatus.CREATED);
+			}else {
 				objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());
+				return new ResponseEntity<>(orderService.createOrder(requestDTO, resp, objectId), HttpStatus.CREATED);
 			}
 			
-			return new ResponseEntity<>(orderService.createOrder(requestDTO, resp, objectId), HttpStatus.CREATED);
 		} catch (FeignException e) {
         	if(e.status() == HttpStatus.NOT_FOUND.value())
                 return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);
@@ -82,6 +88,21 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 	}  
+	
+	@GetMapping("/pdf/{orderId}")
+	public ResponseEntity<byte[]> getOrderReportPDF(@PathVariable String orderId) throws Exception {
+		try {
+			byte[] contents= orderService.generateReportPDF(orderId);
+
+			HttpHeaders headers = new HttpHeaders();
+		    headers.setContentType(MediaType.parseMediaType("application/pdf"));
+		    headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+		    ResponseEntity<byte[]> response = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+		    return response;
+		}catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
 	@GetMapping("/unconfirmed")
     @CrossOrigin
