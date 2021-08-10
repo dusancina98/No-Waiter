@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import NoWaiter.UserService.entities.Customer;
 import NoWaiter.UserService.entities.Deliverer;
 import NoWaiter.UserService.entities.DelivererRequest;
 import NoWaiter.UserService.entities.DelivererStatus;
 import NoWaiter.UserService.entities.ObjectAdmin;
 import NoWaiter.UserService.entities.Waiter;
+import NoWaiter.UserService.services.contracts.dto.CustomerDTO;
 import NoWaiter.UserService.services.contracts.dto.DelivererDTO;
 import NoWaiter.UserService.services.contracts.dto.DelivererRequestDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
@@ -106,5 +108,9 @@ public class UserMapper {
         return new IdentifiableDTO<DelivererDTO>(deliverer.getId(),new DelivererDTO(deliverer.getEmail(), deliverer.getName(), deliverer.getSurname(), deliverer.getPhoneNumber(), deliverer.getDelivererStatus()));
 	}
     
-   
+	public static Customer MapCustomerDTOToCustomer(CustomerDTO customerDto) throws ClassFieldValidationException {
+    	if (customerDto == null) throw new IllegalArgumentException();
+    	
+    	return new Customer(customerDto.Email, "", customerDto.Name, customerDto.Surname, customerDto.PhoneNumber, customerDto.Address);
+    }
 }

@@ -6,6 +6,7 @@ import java.util.UUID;
 import NoWaiter.UserService.entities.AccountActivationToken;
 import NoWaiter.UserService.entities.ResetPasswordToken;
 import NoWaiter.UserService.services.contracts.dto.ChangeFirstPasswordDTO;
+import NoWaiter.UserService.services.contracts.dto.CustomerDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestEmailDTO;
@@ -25,6 +26,8 @@ import NoWaiter.UserService.services.contracts.exceptions.TokenNotFoundException
 public interface UserService {
 
     UUID createObjectAdmin(ObjectAdminDTO entity) throws Exception;
+    
+    UUID createCustomer(CustomerDTO entity)  throws ClassFieldValidationException, Exception;
 
     void updateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity) throws ClassFieldValidationException;
 
