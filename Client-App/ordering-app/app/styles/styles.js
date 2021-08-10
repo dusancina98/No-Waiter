@@ -198,3 +198,144 @@ export const registrationStyles = StyleSheet.create({
 		textAlign: "center",
 	},
 });
+
+export const userInfoStyle = StyleSheet.create({
+	containerWrapper: {
+		flex: 1,
+		paddingHorizontal: 10,
+		marginTop: 20,
+	},
+	userDetailsContainer: {
+		height: 70,
+		borderRadius: 10,
+		backgroundColor: "lightgray",
+		flexDirection: "row",
+		alignSelf: "center",
+		paddingHorizontal: 20,
+	},
+	userImageContainer: {
+		flex: 1,
+		alignSelf: "center",
+	},
+	userInfo: {
+		marginLeft: 15,
+		alignSelf: "center",
+		fontSize: 25,
+		flex: 4,
+	},
+	button: {
+		width: "100%",
+		marginTop: 20,
+		paddingTop: 15,
+		paddingBottom: 15,
+		marginLeft: 30,
+		marginRight: 30,
+		backgroundColor: "white",
+		borderRadius: 10,
+		borderWidth: 1,
+		alignSelf: "center",
+		borderColor: "black",
+	},
+	buttonText: {
+		color: "black",
+		fontSize: 20,
+		fontFamily: "roboto-regular",
+		fontWeight: "400",
+		textAlign: "center",
+	},
+});
+
+export const profileEditStyles = StyleSheet.create({
+	containerWrapper: {
+		flex: 1,
+	},
+	logoContainer: {
+		alignItems: "center",
+	},
+	logoText: {
+		color: "black",
+		fontSize: 35,
+		fontFamily: "roboto-light",
+		fontWeight: "bold",
+		marginTop: 20,
+	},
+	form: {
+		alignSelf: "flex-start",
+		marginLeft: 20,
+		marginRight: 20,
+		width: "100%",
+	},
+	textForm: {
+		color: "black",
+		fontSize: 20,
+		fontFamily: "roboto-regular",
+		fontWeight: "400",
+	},
+	textInputUneditable: {
+		paddingHorizontal: 10,
+		fontSize: 18,
+		height: 50,
+		marginTop: 5,
+		borderWidth: 1,
+		borderRadius: 15,
+		width: "90%",
+		backgroundColor: "lightgray",
+	},
+	textInput: {
+		paddingHorizontal: 10,
+		fontSize: 18,
+		height: 50,
+		marginTop: 5,
+		borderWidth: 1,
+		borderRadius: 15,
+		width: "90%",
+		backgroundColor: "white",
+	},
+	button: {
+		width: "50%",
+		marginTop: 30,
+		paddingTop: 15,
+		paddingBottom: 15,
+		marginLeft: 30,
+		marginRight: 30,
+		backgroundColor: "#b99849",
+		borderRadius: 10,
+		borderWidth: 1,
+		borderColor: "#b99849",
+	},
+	errorMessage: {
+		color: "red",
+		fontSize: 15,
+		marginLeft: 20,
+		marginRight: 20,
+		marginTop: 10,
+		textAlign: "center",
+	},
+});
+
+export const userAddressesStyle = StyleSheet.create({
+	containerWrapper: {
+		flex: 1,
+		width: "100%",
+		backgroundColor: "white",
+		paddingHorizontal: 10,
+		paddingVertical: 10,
+		marginTop: 1,
+	},
+	addressInfo: {
+		alignItems: "center",
+		flexDirection: "row",
+	},
+	footerButton: {
+		width: "100%",
+		paddingVertical: 10,
+		backgroundColor: "white",
+	},
+	footerButtonText: {
+		fontWeight: "bold",
+		fontSize: 16,
+		color: "#b99849",
+		textAlign: "center",
+		paddingVertical: 10,
+	},
+});

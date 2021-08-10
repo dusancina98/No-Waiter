@@ -7,7 +7,10 @@ import NoWaiter.UserService.entities.AccountActivationToken;
 import NoWaiter.UserService.entities.ResetPasswordToken;
 import NoWaiter.UserService.services.contracts.dto.ChangeFirstPasswordDTO;
 import NoWaiter.UserService.services.contracts.dto.CustomerDTO;
+import NoWaiter.UserService.services.contracts.dto.CustomerProfileDTO;
+import NoWaiter.UserService.services.contracts.dto.EditCustomerDTO;
 import NoWaiter.UserService.services.contracts.dto.IdentifiableDTO;
+import NoWaiter.UserService.services.contracts.dto.NameDTO;
 import NoWaiter.UserService.services.contracts.dto.ObjectAdminDTO;
 import NoWaiter.UserService.services.contracts.dto.RequestEmailDTO;
 import NoWaiter.UserService.services.contracts.dto.ResetPasswordDTO;
@@ -29,6 +32,16 @@ public interface UserService {
     
     UUID createCustomer(CustomerDTO entity)  throws ClassFieldValidationException, Exception;
 
+    CustomerProfileDTO getLoggedCustomer(UUID customerId);
+    
+    Iterable<IdentifiableDTO<NameDTO>> getLoggedCustomerAddresses(UUID customerId);
+
+    void deleteCustomerAddress(UUID customerId, UUID addressId);
+
+    UUID addCustomerAddress(UUID customerId, NameDTO addressDTO);
+    
+    void updateCustomer(EditCustomerDTO customerDTO, UUID customerId);
+    
     void updateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity) throws ClassFieldValidationException;
 
     void deleteObjectAdmin(UUID objectAdminId);
