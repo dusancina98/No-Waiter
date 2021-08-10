@@ -11,6 +11,7 @@ import AuthContextProvider from "./app/contexts/AuthContext";
 import RegistrationScreen from "./app/screens/RegistrationScreen";
 import UserContextProvider from "./app/contexts/UserContext";
 import ResetPasswordScreen from "./app/screens/ResetPasswordScreen";
+import Tabs from "./app/navigation/Tabs";
 
 const Stack = createStackNavigator();
 
@@ -37,8 +38,9 @@ export default function App() {
 							screenOptions={{
 								headerShown: false,
 							}}
-							initialRouteName={"Welcome"}
+							initialRouteName={token === true ? "Home" : "Welcome"}
 						>
+							<Stack.Screen name="Home" component={Tabs} />
 							<Stack.Screen name="Login" component={LoginScreen} />
 							<Stack.Screen name="Registration" component={RegistrationScreen} />
 							<Stack.Screen name="Reset Password" component={ResetPasswordScreen} />

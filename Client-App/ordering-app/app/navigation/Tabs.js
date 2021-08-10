@@ -5,10 +5,7 @@ import Svg, { Path } from "react-native-svg";
 import { isIphoneX } from "react-native-iphone-x-helper";
 
 import icons from "../constants/Icons";
-import WelcomeScreen from "../screens/WelcomeScreen";
-import OrdersScreen from "../screens/OrdersScreen";
-import UserInfoScreen from "../screens/UserInfoScreen";
-import ScanQrScreen from "../screens/ScanQrScreen";
+import HomeScreen from "../screens/HomeScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -136,8 +133,8 @@ const Tabs = () => {
 			tabBar={(props) => <CustomTabBar props={props} />}
 		>
 			<Tab.Screen
-				name="Orders"
-				component={OrdersScreen}
+				name="Objects"
+				component={HomeScreen}
 				options={{
 					headerShown: true,
 					tabBarIcon: ({ focused }) => (
@@ -157,7 +154,7 @@ const Tabs = () => {
 
 			<Tab.Screen
 				name="Scan QR"
-				component={ScanQrScreen}
+				component={HomeScreen}
 				options={{
 					headerShown: false,
 					tabBarIcon: () => (
@@ -177,7 +174,7 @@ const Tabs = () => {
 
 			<Tab.Screen
 				name="User Info"
-				component={UserInfoScreen}
+				component={HomeScreen}
 				options={{
 					headerShown: true,
 					tabBarIcon: ({ focused }) => (
