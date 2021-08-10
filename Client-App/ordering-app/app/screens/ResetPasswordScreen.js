@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { ImageBackground, View, Text, TouchableOpacity, StatusBar, TextInput, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { ImageBackground, View, Text, TouchableOpacity, StatusBar, TextInput, TouchableWithoutFeedback, Keyboard, Image } from "react-native";
 import { AuthContext } from "../contexts/AuthContext";
 import { authService } from "../services/AuthService";
 import { loginStyles, welcomeStyles } from "../styles/styles";
@@ -32,7 +32,7 @@ function ResetPasswordScreen({ navigation }) {
 					</View>
 					{authState.resetPassword.showError && <Text style={loginStyles.errorMessage}>{authState.resetPassword.errorMessage}</Text>}
 					{authState.resetPassword.showSuccessMessage && (
-						<Text style={{ color: "white", fontSize: 18, textAlign: "center", marginTop: 45 }}>
+						<Text style={{ color: "white", fontSize: 18, textAlign: "center", marginTop: 20, paddingHorizontal: 20 }}>
 							We sent an email to <Text style={{ fontWeight: "bold" }}>{authState.resetPassword.emailAddress}</Text> with a link to get back into your account.
 						</Text>
 					)}

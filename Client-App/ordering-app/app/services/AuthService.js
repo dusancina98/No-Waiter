@@ -90,7 +90,7 @@ function login(loginRequest, dispatch) {
 	if (validateLoginRequest(loginRequest, dispatch)) {
 		Axios.post(`${API_URL}/auth-api/api/auth/login/customer`, loginRequest, { validateStatus: () => true })
 			.then((res) => {
-				console.log(res.data);
+				console.log(res.status);
 				if (res.status === 200) {
 					setAuthInLocalStorage(res.data);
 					dispatch(success(res.data));
