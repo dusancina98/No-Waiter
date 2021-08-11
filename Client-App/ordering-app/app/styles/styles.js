@@ -267,16 +267,95 @@ export const objectScreenStyles = StyleSheet.create({
 	},
 	infoObjectContainer: {
 	  flex: 1,
-	  margin: 25,
-	  marginTop: 10,
-	  justifyContent: 'center',
-	  alignItems: 'center'
+	  marginTop: 5,
+	  marginLeft: 25,
+	  marginRight: 25,
+	  justifyContent: 'space-between' ,
+	  alignItems: 'flex-start',
+	  flexDirection: 'row'
 	},
 	infoObjectName: {
 	  fontSize: 28,
 	  margin: 10,
 	  fontWeight: 'bold',
 	  color: 'black',
-	  textAlign: 'center'
-	}
+	},
+	infoObjectFavoriteIcon: {
+		fontSize: 28,
+		margin: 10,
+		fontWeight: 'bold',
+		color: 'black',
+	},
+	moreInformationButtonContainer: {
+		
+		marginRight: 35,
+		flexDirection: 'row',
+		alignSelf: 'flex-end',
+		marginBottom: 15,
+	},
+	customerWorkTimeInfoContainer:{
+		marginTop: 5,
+		marginLeft: 35,
+		marginBottom:5,
+		marginRight: 35,
+		flexDirection: 'row',
+	},
+	customerFeedbackInfoContainer:{
+		marginLeft: 35,
+
+		flexDirection: 'row',
+	},
+	logoImage: {
+		width: 20,
+		height: 20,
+	},
+});
+
+export const productItemStyles = StyleSheet.create({
+    itemContainer: {
+      backgroundColor: 'white',
+      marginLeft:15,
+      marginRight:15,
+      marginTop:5,
+      borderWidth: 0,
+      borderRadius: 15,
+    },
+    itemSubContainer: {
+      flexDirection: 'row',
+      paddingVertical: 10,
+    },
+    image: {
+      height: 100,
+      width: 100,
+      marginRight:10,
+    },
+    content: {
+      flex: 1,
+      paddingLeft: 15,
+      justifyContent: 'space-between',
+    },
+    itemName: {
+      fontSize: 17,
+      color: '#617ae1',
+    },
+    itemIngredient: {
+      fontSize: 16,
+      color: '#5F5F5F',
+    },
+    itemDescription: {
+      fontSize: 12,
+      color: '#a4a4a4',
+    },
+    priceContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    price: {
+      fontSize: 17,
+      color: '#617ae1',
+      textAlign: 'right',
+    },
+
+
   });
