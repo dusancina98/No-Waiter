@@ -40,6 +40,10 @@ public interface UserService {
 
     UUID addCustomerAddress(UUID customerId, NameDTO addressDTO);
     
+    void addObjectToCustomerFavourites(UUID customerId, UUID objectId);
+    
+    void removeObjectFromCustomerFavourites(UUID customerId, UUID objectId);
+    
     void updateCustomer(EditCustomerDTO customerDTO, UUID customerId);
     
     void updateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity) throws ClassFieldValidationException;

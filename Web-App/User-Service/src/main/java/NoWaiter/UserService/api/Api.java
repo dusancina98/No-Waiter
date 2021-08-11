@@ -200,6 +200,46 @@ public class Api {
         }
     }
     
+    @PutMapping("/customer/objects/favourite/{objectId}")
+    @CrossOrigin
+    public ResponseEntity<?> addObjectToFavourites(@RequestHeader("Authorization") String token, @PathVariable UUID objectId) {
+        try {
+        	objectClient.checkObject(objectId);
+
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+        	userService.addObjectToCustomerFavourites(jwtResponse.getId(), objectId);
+            return new ResponseEntity<>( HttpStatus.OK);
+        } catch (FeignException e) {
+        	if(e.status() == HttpStatus.NOT_FOUND.value())
+        		return new ResponseEntity<>("Invalid object id: " + objectId, HttpStatus.NOT_FOUND);
+    	
+        	return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @DeleteMapping("/customer/objects/favourite/{objectId}")
+    @CrossOrigin
+    public ResponseEntity<?> removeObjectFromCustomerFavourites(@RequestHeader("Authorization") String token, @PathVariable UUID objectId) {
+        try {
+        	objectClient.checkObject(objectId);
+
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+        	userService.removeObjectFromCustomerFavourites(jwtResponse.getId(), objectId);
+            return new ResponseEntity<>( HttpStatus.OK);
+        } catch (FeignException e) {
+        	if(e.status() == HttpStatus.NOT_FOUND.value())
+        		return new ResponseEntity<>("Invalid object id: " + objectId, HttpStatus.NOT_FOUND);
+    	
+        	return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
     @DeleteMapping("/customer/address/{addressId}")
     @CrossOrigin
     public ResponseEntity<?> removeLoggedCustomerAddresses(@RequestHeader("Authorization") String token, @PathVariable UUID addressId) {
