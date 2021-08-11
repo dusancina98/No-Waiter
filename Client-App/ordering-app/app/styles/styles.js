@@ -245,3 +245,38 @@ export const objectsPageStyles = StyleSheet.create({
 		marginBottom: 5
 	  }
 });
+
+const { width: viewportWidth } = Dimensions.get('window');
+
+
+export const objectScreenStyles = StyleSheet.create({
+	container: {
+	  backgroundColor: 'white',
+	  flex: 1
+	},  
+	image: {
+	  ...StyleSheet.absoluteFillObject,
+	  width: '100%',
+	  height: 250
+	},
+	imageContainer: {
+	  flex: 1,
+	  justifyContent: 'center',
+	  width: viewportWidth,
+	  height: 250
+	},
+	infoObjectContainer: {
+	  flex: 1,
+	  margin: 25,
+	  marginTop: 10,
+	  justifyContent: 'center',
+	  alignItems: 'center'
+	},
+	infoObjectName: {
+	  fontSize: 28,
+	  margin: 10,
+	  fontWeight: 'bold',
+	  color: 'black',
+	  textAlign: 'center'
+	}
+  });

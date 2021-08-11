@@ -13,6 +13,7 @@ import UserContextProvider from "./app/contexts/UserContext";
 import ResetPasswordScreen from "./app/screens/ResetPasswordScreen";
 import Tabs from "./app/navigation/Tabs";
 import ObjectContextProvider from "./app/contexts/ObjectContext";
+import ObjectScreen from "./app/screens/ObjectScreen";
 
 const Stack = createStackNavigator();
 
@@ -48,6 +49,7 @@ export default function App() {
 								<Stack.Screen name="Reset Password" component={ResetPasswordScreen} />
 								<Stack.Screen name="Activate User" component={UserActivateScreen} />
 								<Stack.Screen name="Welcome" component={WelcomeScreen} />
+								<Stack.Screen name="Object" component={ObjectScreen} options={{ headerShown: true }}/>
 							</Stack.Navigator>
 						</NavigationContainer>
 					</ObjectContextProvider>

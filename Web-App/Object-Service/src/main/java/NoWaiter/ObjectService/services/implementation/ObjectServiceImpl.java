@@ -239,4 +239,10 @@ public class ObjectServiceImpl implements ObjectService {
 	public Iterable<IdentifiableDTO<CustomerObjectDTO>> getObjectsForCustomers() {
 		return ObjectMapper.MapObjectCollectionToIdentifiableCustomerObjectDTOCollection(objectRepository.getAllAvailableObjects());
 	}
+
+	@Override
+	public java.lang.Object getObjectDetailsForCustomer(UUID fromString) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -4,12 +4,14 @@ import { ObjectContext } from "../contexts/ObjectContext";
 import { objectService } from "../services/ObjectService";
 import { objectsPageStyles } from "../styles/styles";
 import { API_URL } from "../constants/ApiUrl";
+import { objectConstants } from "../constants/ObjectConstants";
 
 function HomeScreen({ navigation }) {
 	const { objectState, dispatch } = useContext(ObjectContext);
 	const [isFetching, setIsFetching] = useState(false);
 
 	const handleEnterObject = (objectId) =>{
+		navigation.navigate("Object", objectId);
 	}
 
 	useEffect(() => {
@@ -24,7 +26,7 @@ function HomeScreen({ navigation }) {
 	}, [isFetching]);
 
 	return (
-		<SafeAreaView style={{ flex: 1 }}>
+		<SafeAreaView style={{ flex: 1}}>
 			<StatusBar barStyle="dark-content" />
 			<FlatList
 				vertical

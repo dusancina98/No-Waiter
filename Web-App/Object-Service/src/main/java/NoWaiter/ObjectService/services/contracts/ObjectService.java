@@ -48,4 +48,6 @@ public interface ObjectService {
 	int getTableNumberByTableIdForResturant(UUID objectId, UUID tableId);
 
 	Iterable<IdentifiableDTO<CustomerObjectDTO>> getObjectsForCustomers();
+
+	Object getObjectDetailsForCustomer(UUID fromString);
 }

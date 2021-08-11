@@ -34,10 +34,10 @@ function findAllObjects(dispatch) {
 	}
 }
 
-function getObjectDetails(dispatch) {
+function getObjectDetails(objectId, dispatch) {
 	dispatch(request());
 
-	Axios.get(`${API_URL}/object-api/api/objects/customers`, { validateStatus: () => true })
+	Axios.get(`${API_URL}/object-api/api/objects/customers/${objectId}`, { validateStatus: () => true })
 		.then((res) => {
 			console.log(res.data);
 			if (res.status === 200) {
@@ -51,13 +51,13 @@ function getObjectDetails(dispatch) {
 		});	
 
 	function request() {
-		return { type: objectConstants.FIND_ALL_OBJECTS_REQUEST };
+		return { type: objectConstants.GET_OBJECT_DETAILS_REQUEST };
 	}
-	function success(objects) {
-		return { type: objectConstants.FIND_ALL_OBJECTS_SUCCESS, objects };
+	function success(object) {
+		return { type: objectConstants.GET_OBJECT_DETAILS_SUCCESS, object };
 	}
 	function failure(error) {
-		return { type: objectConstants.FIND_ALL_OBJECTS_FAILURE, error };
+		return { type: objectConstants.GET_OBJECT_DETAILS_FAILURE, error };
 	}
 }
 
