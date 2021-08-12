@@ -216,6 +216,19 @@ public class Api {
         }
     }
     
+    @GetMapping("/customer/objects/favourite")
+    @CrossOrigin
+    public ResponseEntity<?> findAllCustomerFavouriteObjectIds(@RequestHeader("Authorization") String token) {
+        try {
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+        	
+            return new ResponseEntity<>(userService.findAllCustomerFavouriteObjectIds(jwtResponse.getId()), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
     @PutMapping("/customer/objects/favourite/{objectId}")
     @CrossOrigin
     public ResponseEntity<?> addObjectToFavourites(@RequestHeader("Authorization") String token, @PathVariable UUID objectId) {

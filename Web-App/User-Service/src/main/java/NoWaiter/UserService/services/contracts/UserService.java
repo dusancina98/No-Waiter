@@ -1,6 +1,7 @@
 package NoWaiter.UserService.services.contracts;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.UUID;
 
 import NoWaiter.UserService.entities.AccountActivationToken;
@@ -27,6 +28,8 @@ import NoWaiter.UserService.services.contracts.exceptions.ResetPasswordTokenExpi
 import NoWaiter.UserService.services.contracts.exceptions.TokenNotFoundException;
 
 public interface UserService {
+	
+    List<UUID> findAllCustomerFavouriteObjectIds(UUID customerID);
 	
     UUID createObjectAdmin(ObjectAdminDTO entity) throws Exception;
     

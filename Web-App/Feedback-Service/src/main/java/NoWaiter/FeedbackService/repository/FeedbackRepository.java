@@ -18,7 +18,7 @@ public interface FeedbackRepository extends PagingAndSortingRepository<Feedback,
 
 	@Query(value = "SELECT new NoWaiter.FeedbackService.services.contracts.dto.ObjectFeedbackDTO(f.feedbackId.entityId, AVG(f.grade)) "
 				 + "FROM Feedback f "
-				 + "WHERE f.feedbackId.entityId IN ?1"
+				 + "WHERE f.feedbackId.entityId IN (?1)"
 				 + "GROUP BY f.feedbackId.entityId")
 	List<ObjectFeedbackDTO> findObjectFeedbacks(List<UUID> ids);
 }

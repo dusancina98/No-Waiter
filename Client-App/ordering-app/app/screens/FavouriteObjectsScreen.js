@@ -6,7 +6,7 @@ import { objectsPageStyles } from "../styles/styles";
 import { API_URL } from "../constants/ApiUrl";
 import { objectConstants } from "../constants/ObjectConstants";
 
-const FavouriteObjectsScreen = () => {
+const FavouriteObjectsScreen = ({ navigation }) => {
 	const { objectState, dispatch } = useContext(ObjectContext);
 	const [isFetching, setIsFetching] = useState(false);
 
@@ -15,12 +15,12 @@ const FavouriteObjectsScreen = () => {
 	};
 
 	useEffect(() => {
-		objectService.findAllObjects(dispatch);
+		objectService.findFavouriteObjects(dispatch);
 	}, []);
 
 	useEffect(() => {
 		if (isFetching === true) {
-			objectService.findAllObjects(dispatch);
+			objectService.findFavouriteObjects(dispatch);
 			setIsFetching(false);
 		}
 	}, [isFetching]);
@@ -35,7 +35,7 @@ const FavouriteObjectsScreen = () => {
 				refreshing={isFetching}
 				onRefresh={() => setIsFetching(true)}
 				keyExtractor={(item) => item.Id}
-				data={objectState.objects}
+				data={objectState.favouriteObjects}
 				renderItem={({ item }) => (
 					<TouchableOpacity underlayColor="rgba(73,182,77,0.9)" onPress={() => handleEnterObject(item.Id)}>
 						<View style={objectsPageStyles.container}>

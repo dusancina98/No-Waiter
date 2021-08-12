@@ -17,6 +17,16 @@ public class CustomerObjectDTO {
 		Favorite= false;
 		Opened= false;
 	}
+
+	public CustomerObjectDTO(String name, String address, String imagePath, Double rating, boolean favorite) {
+		super();
+		Name = name;
+		Address = address;
+		ImagePath = imagePath;
+		Rating= rating;
+		Favorite= favorite;
+		Opened= false;
+	}
 	
 	public CustomerObjectDTO(String name, String address, String imagePath, Double rating, boolean favorite, boolean opened) {
 		super();

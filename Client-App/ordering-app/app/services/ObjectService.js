@@ -1,13 +1,44 @@
 import Axios from "axios";
 import { API_URL } from "../constants/ApiUrl";
 import { objectConstants } from "../constants/ObjectConstants";
+import { authHeader } from "../helpers/auth-header";
 
 export const objectService = {
 	findAllObjects,
+	findFavouriteObjects,
 	getObjectDetails,
 	getObjectCategories,
 	getObjectProducts,
 };
+
+async function findFavouriteObjects(dispatch) {
+	dispatch(request());
+
+	let header = await authHeader();
+
+	Axios.get(`${API_URL}/object-api/api/objects/customers/favourites`, { validateStatus: () => true, headers: header })
+		.then((res) => {
+			console.log(res.data);
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else {
+				dispatch(failure("We have some problem"));
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+
+	function request() {
+		return { type: objectConstants.FIND_FAVOURITE_OBJECTS_REQUEST };
+	}
+	function success(objects) {
+		return { type: objectConstants.FIND_FAVOURITE_OBJECTS_SUCCESS, objects };
+	}
+	function failure(error) {
+		return { type: objectConstants.FIND_FAVOURITE_OBJECTS_FAILURE, error };
+	}
+}
 
 function findAllObjects(dispatch) {
 	dispatch(request());
@@ -23,7 +54,7 @@ function findAllObjects(dispatch) {
 		})
 		.catch((err) => {
 			console.error(err);
-		});	
+		});
 
 	function request() {
 		return { type: objectConstants.FIND_ALL_OBJECTS_REQUEST };
@@ -50,7 +81,7 @@ function getObjectDetails(objectId, dispatch) {
 		})
 		.catch((err) => {
 			console.error(err);
-		});	
+		});
 
 	function request() {
 		return { type: objectConstants.GET_OBJECT_DETAILS_REQUEST };
@@ -77,7 +108,7 @@ function getObjectCategories(objectId, dispatch) {
 		})
 		.catch((err) => {
 			console.error(err);
-		});	
+		});
 
 	function request() {
 		return { type: objectConstants.GET_OBJECT_CATEGORIES_REQUEST };
@@ -104,7 +135,7 @@ function getObjectProducts(objectId, dispatch) {
 		})
 		.catch((err) => {
 			console.error(err);
-		});	
+		});
 
 	function request() {
 		return { type: objectConstants.GET_OBJECT_PRODUCTS_REQUEST };
@@ -116,4 +147,3 @@ function getObjectProducts(objectId, dispatch) {
 		return { type: objectConstants.GET_OBJECT_PRODUCTS_FAILURE, error };
 	}
 }
-

@@ -389,4 +389,10 @@ public class UserServiceImpl implements UserService {
 		customer.removeObjectFromFavourites(objectId);
 		customerRepository.save(customer);
 	}
+
+	@Override
+	public List<UUID> findAllCustomerFavouriteObjectIds(UUID customerId) {
+		Customer customer = customerRepository.findById(customerId).get();
+		return customer.getFavouriteObjects();
+	}
 }

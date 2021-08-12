@@ -21,6 +21,7 @@ import NoWaiter.ObjectService.entities.Table;
 import NoWaiter.ObjectService.entities.WeekDay;
 import NoWaiter.ObjectService.entities.WorkDay;
 import NoWaiter.ObjectService.entities.WorkTime;
+import NoWaiter.ObjectService.intercomm.FeedbackClient;
 import NoWaiter.ObjectService.repository.ObjectAdminRepository;
 import NoWaiter.ObjectService.repository.ObjectRepository;
 import NoWaiter.ObjectService.repository.WorkTimeRepository;
@@ -30,6 +31,7 @@ import NoWaiter.ObjectService.services.contracts.dto.CustomerObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDetailsDTO;
+import NoWaiter.ObjectService.services.contracts.dto.ObjectFeedbackDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectWithStatusDTO;
 import NoWaiter.ObjectService.services.contracts.dto.UpdateWorkTimeDTO;
 import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeException;
@@ -41,6 +43,9 @@ public class ObjectServiceImpl implements ObjectService {
 
     @Autowired
     private ObjectRepository objectRepository;
+    
+    @Autowired
+    private FeedbackClient feedbackClient;
     
     @Autowired
     private ObjectAdminRepository objectAdminRepository;
@@ -250,5 +255,12 @@ public class ObjectServiceImpl implements ObjectService {
 				new IdentifiableDTO<CustomerObjectDTO>(object.getId(), new CustomerObjectDTO(object.getName(),object.getAddress().getAddress(),object.getImagePath(), 9.8, true, object.getWorkTime().isWorkingNow()));
 		
 		return identifiableDTO;
+	}
+
+	@Override
+	public Iterable<IdentifiableDTO<CustomerObjectDTO>> getFavouriteObjectsForCustomers(List<UUID> objectIds) {
+		List<ObjectFeedbackDTO> objectFeedbacksDTO = feedbackClient.getObjectsFeedbacks(objectIds);
+		Iterable<Object> favourites = objectRepository.getAllAvailableObjectsFromFavourites(objectIds);
+		return ObjectMapper.MapObjectCollectionToIdentifiableCustomerObjectDTOWithGradeCollection(favourites, objectFeedbacksDTO);
 	}
 }
