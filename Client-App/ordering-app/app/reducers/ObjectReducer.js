@@ -52,6 +52,7 @@ export const objectReducer = (state, action) => {
 			return objCpy;
 		case objectConstants.GET_OBJECT_DETAILS_SUCCESS:
 			objCpy = { ...state };
+			console.log(action.object);
 			objCpy.objectDetails.object = action.object;
 
 			return objCpy;
@@ -108,6 +109,27 @@ export const objectReducer = (state, action) => {
 			objCpy.objectDetails.products = [];
 
 			return objCpy;
+
+		case objectConstants.ADD_OBJECT_TO_FAVOURITES_FAILURE:
+			return state;
+		case objectConstants.ADD_OBJECT_TO_FAVOURITES_SUCCESS:
+			objCpy = { ...state };
+			objCpy.objectDetails.object.EntityDTO.Favorite = true;
+
+			return objCpy;
+		case objectConstants.ADD_OBJECT_TO_FAVOURITES_FAILURE:
+			return state;
+
+		case objectConstants.REMOVE_OBJECT_FROM_FAVOURITES_REQUEST:
+			return state;
+		case objectConstants.REMOVE_OBJECT_FROM_FAVOURITES_SUCCESS:
+			objCpy = { ...state };
+			objCpy.favouriteObjects = state.favouriteObjects.filter((obj) => obj.Id !== action.objectId);
+			objCpy.objectDetails.object.EntityDTO.Favorite = false;
+
+			return objCpy;
+		case objectConstants.REMOVE_OBJECT_FROM_FAVOURITES_FAILURE:
+			return state;
 		default:
 			return state;
 	}

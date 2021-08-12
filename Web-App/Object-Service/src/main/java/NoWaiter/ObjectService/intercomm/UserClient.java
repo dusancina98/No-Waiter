@@ -28,4 +28,7 @@ public interface UserClient {
 	 
 	 @GetMapping("api/users/customer/objects/favourite")
 	 List<UUID> findAllCustomerFavouriteObjectIds(@RequestHeader("Authorization") String token);
+	 
+	 @GetMapping("api/users/customer/objects/{objectId}/is-favourite")
+	 boolean isObjectInFavourites(@RequestHeader("Authorization") String token, @PathVariable UUID objectId);
 }

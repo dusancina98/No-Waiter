@@ -72,7 +72,7 @@ public class Api {
         }
     }
 	
-	@GetMapping("/object/{objectId}")
+	@GetMapping("/object/{objectId}/grades")
     @CrossOrigin
     public ResponseEntity<?> getObjectFeedback(@PathVariable UUID objectId) {
         try {

@@ -29,6 +29,8 @@ import NoWaiter.UserService.services.contracts.exceptions.TokenNotFoundException
 
 public interface UserService {
 	
+    boolean isObjectInFavourites(UUID customerID, UUID objectId);
+	
     List<UUID> findAllCustomerFavouriteObjectIds(UUID customerID);
 	
     UUID createObjectAdmin(ObjectAdminDTO entity) throws Exception;

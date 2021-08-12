@@ -101,6 +101,6 @@ public class Customer extends User {
 		}
 		
 		this.favouriteObjects.removeIf(e -> e.equals(objectId));
-
+		
 	}
 }

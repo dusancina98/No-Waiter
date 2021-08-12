@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 import NoWaiter.FeedbackService.services.contracts.exceptions.ClassFieldValidationException;
 
@@ -16,11 +18,14 @@ public class Feedback {
 	  
 	  private Date date;
 	  
+	    @Enumerated(EnumType.STRING)
 	  private FeedbackType feedbackType;
 	  
 	  @EmbeddedId
 	  private FeedbackId feedbackId;
 
+	  public Feedback() {}
+	  
 	  public Feedback(int grade, FeedbackType feedbackType, UUID entityId, UUID initiatorId) throws ClassFieldValidationException {
 		super();
 		this.grade = grade;

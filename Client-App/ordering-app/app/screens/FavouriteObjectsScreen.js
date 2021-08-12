@@ -1,10 +1,9 @@
 import React, { useContext, useState, useEffect } from "react";
-import { FlatList, StatusBar, View, Text, Image, SafeAreaView, TouchableHighlight, TouchableOpacity, Alert } from "react-native";
+import { FlatList, StatusBar, View, Text, Image, SafeAreaView, TouchableOpacity } from "react-native";
 import { ObjectContext } from "../contexts/ObjectContext";
 import { objectService } from "../services/ObjectService";
 import { objectsPageStyles } from "../styles/styles";
 import { API_URL } from "../constants/ApiUrl";
-import { objectConstants } from "../constants/ObjectConstants";
 
 const FavouriteObjectsScreen = ({ navigation }) => {
 	const { objectState, dispatch } = useContext(ObjectContext);

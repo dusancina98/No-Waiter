@@ -27,8 +27,8 @@ public class FeedbackServiceImpl implements FeedbackService{
 
 	@Override
 	public ObjectFeedbackDTO findObjectFeedback(UUID objectId) {
-		double grade = feedbackRepository.findEntityAvgGrade(objectId);
-		return new ObjectFeedbackDTO(objectId, grade);
+		Double grade = feedbackRepository.findEntityAvgGrade(objectId);
+		return new ObjectFeedbackDTO(objectId, grade == null ? 0 : grade);
 	}
 
 	@Override

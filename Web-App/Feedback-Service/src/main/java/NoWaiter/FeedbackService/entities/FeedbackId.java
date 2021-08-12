@@ -38,5 +38,4 @@ public class FeedbackId implements Serializable{
 		this.initiatorId = initiatorId;
 	}
 	
-	
 }

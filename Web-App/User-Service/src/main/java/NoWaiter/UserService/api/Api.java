@@ -216,6 +216,19 @@ public class Api {
         }
     }
     
+    @GetMapping("/customer/objects/{objectId}/is-favourite")
+    @CrossOrigin
+    public ResponseEntity<?> isObjectInFavourites(@RequestHeader("Authorization") String token, @PathVariable UUID objectId) {
+        try {
+        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+        	
+            return new ResponseEntity<>(userService.isObjectInFavourites(jwtResponse.getId(), objectId), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
     @GetMapping("/customer/objects/favourite")
     @CrossOrigin
     public ResponseEntity<?> findAllCustomerFavouriteObjectIds(@RequestHeader("Authorization") String token) {
@@ -259,6 +272,7 @@ public class Api {
         	userService.removeObjectFromCustomerFavourites(jwtResponse.getId(), objectId);
             return new ResponseEntity<>( HttpStatus.OK);
         } catch (FeignException e) {
+        	e.printStackTrace();
         	if(e.status() == HttpStatus.NOT_FOUND.value())
         		return new ResponseEntity<>("Invalid object id: " + objectId, HttpStatus.NOT_FOUND);
     	

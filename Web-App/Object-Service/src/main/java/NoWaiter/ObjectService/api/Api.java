@@ -103,9 +103,9 @@ public class Api {
     
     @GetMapping("/customers/{objectId}")
 	@CrossOrigin
-	public ResponseEntity<?> getObjectForCustomers(@PathVariable String objectId) {
+	public ResponseEntity<?> getObjectForCustomers(@RequestHeader("Authorization") String token, @PathVariable String objectId) {
     	try {
-            return new ResponseEntity<>(objectService.getObjectDetailsForCustomer(UUID.fromString(objectId)), HttpStatus.OK);
+            return new ResponseEntity<>(objectService.getObjectDetailsForCustomer(UUID.fromString(objectId), token), HttpStatus.OK);
         } catch (NoSuchElementException e) {
         	e.printStackTrace();
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);

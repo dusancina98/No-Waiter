@@ -9,7 +9,67 @@ export const objectService = {
 	getObjectDetails,
 	getObjectCategories,
 	getObjectProducts,
+	addObjectToFavourites,
+	removeObjectFromFavourites,
 };
+
+async function addObjectToFavourites(objectId, dispatch) {
+	dispatch(request());
+
+	let header = await authHeader();
+
+	await Axios.put(`${API_URL}/user-api/api/users/customer/objects/favourite/${objectId}`, null, { validateStatus: () => true, headers: header })
+		.then((res) => {
+			console.log(res.data);
+			if (res.status === 200) {
+				dispatch(success(objectId));
+			} else {
+				dispatch(failure("We have some problem"));
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+
+	function request() {
+		return { type: objectConstants.ADD_OBJECT_TO_FAVOURITES_REQUEST };
+	}
+	function success(objectId) {
+		return { type: objectConstants.ADD_OBJECT_TO_FAVOURITES_SUCCESS, objectId };
+	}
+	function failure(error) {
+		return { type: objectConstants.ADD_OBJECT_TO_FAVOURITES_FAILURE, error };
+	}
+}
+
+async function removeObjectFromFavourites(objectId, dispatch) {
+	dispatch(request());
+
+	let header = await authHeader();
+
+	await Axios.delete(`${API_URL}/user-api/api/users/customer/objects/favourite/${objectId}`, { validateStatus: () => true, headers: header })
+		.then((res) => {
+			console.log(res.data);
+			if (res.status === 200) {
+				dispatch(success(objectId));
+			} else {
+				dispatch(failure("We have some problem"));
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+
+	function request() {
+		return { type: objectConstants.REMOVE_OBJECT_FROM_FAVOURITES_REQUEST };
+	}
+	function success(objectId) {
+		return { type: objectConstants.REMOVE_OBJECT_FROM_FAVOURITES_SUCCESS, objectId };
+	}
+	function failure(error) {
+		return { type: objectConstants.REMOVE_OBJECT_FROM_FAVOURITES_FAILURE, error };
+	}
+}
 
 async function findFavouriteObjects(dispatch) {
 	dispatch(request());
@@ -67,10 +127,12 @@ function findAllObjects(dispatch) {
 	}
 }
 
-function getObjectDetails(objectId, dispatch) {
+async function getObjectDetails(objectId, dispatch) {
 	dispatch(request());
 
-	Axios.get(`${API_URL}/object-api/api/objects/customers/${objectId}`, { validateStatus: () => true })
+	let header = await authHeader();
+
+	Axios.get(`${API_URL}/object-api/api/objects/customers/${objectId}`, { validateStatus: () => true, headers: header })
 		.then((res) => {
 			console.log(res.data);
 			if (res.status === 200) {

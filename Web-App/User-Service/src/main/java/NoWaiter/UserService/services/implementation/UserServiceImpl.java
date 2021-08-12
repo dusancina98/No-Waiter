@@ -395,4 +395,10 @@ public class UserServiceImpl implements UserService {
 		Customer customer = customerRepository.findById(customerId).get();
 		return customer.getFavouriteObjects();
 	}
+
+	@Override
+	public boolean isObjectInFavourites(UUID customerID, UUID objectId) {
+		Customer customer = customerRepository.findById(customerID).get();
+		return customer.getFavouriteObjects().contains(objectId);
+	}
 }

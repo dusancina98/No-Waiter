@@ -14,7 +14,7 @@ public interface FeedbackRepository extends PagingAndSortingRepository<Feedback,
 	@Query(value = "SELECT AVG(f.grade) "
 				 + "FROM Feedback f "
 				 + "WHERE f.feedbackId.entityId = ?1")
-	double findEntityAvgGrade(UUID id);
+	Double findEntityAvgGrade(UUID id);
 
 	@Query(value = "SELECT new NoWaiter.FeedbackService.services.contracts.dto.ObjectFeedbackDTO(f.feedbackId.entityId, AVG(f.grade)) "
 				 + "FROM Feedback f "
