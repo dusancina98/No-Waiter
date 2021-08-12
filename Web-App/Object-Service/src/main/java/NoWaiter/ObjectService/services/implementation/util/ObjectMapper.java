@@ -35,7 +35,7 @@ public class ObjectMapper {
                 object.getContact().getEmail(), object.getContact().getPhoneNumber(), object.getImagePath(), object.getAddress().getAddress(), MapWorkTimeToIdentifiableWorkTimeDTO(object.getWorkTime())));
     }
 
-	private static IdentifiableDTO<WorkTimeDTO> MapWorkTimeToIdentifiableWorkTimeDTO(WorkTime workTime) {
+	public static IdentifiableDTO<WorkTimeDTO> MapWorkTimeToIdentifiableWorkTimeDTO(WorkTime workTime) {
         if (workTime == null) throw new IllegalArgumentException();
 		
         return new IdentifiableDTO<WorkTimeDTO>(workTime.getId(), new WorkTimeDTO(MapWorkDaysMapToWorkDaysMapDTO(workTime.getWorkDays())));

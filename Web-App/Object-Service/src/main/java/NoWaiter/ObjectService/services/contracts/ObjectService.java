@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.ObjectService.services.contracts.dto.CustomerObjectDTO;
+import NoWaiter.ObjectService.services.contracts.dto.CustomerObjectDetailsDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDetailsDTO;
@@ -51,5 +52,5 @@ public interface ObjectService {
 
 	Iterable<IdentifiableDTO<CustomerObjectDTO>> getFavouriteObjectsForCustomers(List<UUID> objectIds);
 	
-	IdentifiableDTO<CustomerObjectDTO> getObjectDetailsForCustomer(UUID objectId, String token);
+	IdentifiableDTO<CustomerObjectDetailsDTO> getObjectDetailsForCustomer(UUID objectId, String token);
 }

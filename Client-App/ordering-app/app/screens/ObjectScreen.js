@@ -8,7 +8,7 @@ import MaterialTabs from "react-native-material-tabs";
 import icons from "../constants/Icons";
 import { objectConstants } from "../constants/ObjectConstants";
 
-function ObjectScreen({ route }) {
+function ObjectScreen({ route, navigation }) {
 	const { objectState, dispatch } = useContext(ObjectContext);
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [isFetching, setIsFetching] = useState(false);
@@ -28,8 +28,8 @@ function ObjectScreen({ route }) {
 	useEffect(() => {
 		if (isFetching === true) {
 			objectService.getObjectDetails(route.params, dispatch);
-		objectService.getObjectCategories(route.params, dispatch);
-		objectService.getObjectProducts(route.params, dispatch);
+			objectService.getObjectCategories(route.params, dispatch);
+			objectService.getObjectProducts(route.params, dispatch);
 			setIsFetching(false);
 		}
 	}, [isFetching]);
@@ -44,7 +44,7 @@ function ObjectScreen({ route }) {
 	};
 
 	const handleMoreInformationPress = () => {
-		Alert.alert("Simple Button pressed");
+		navigation.navigate("Object Details", objectState.objectDetails.object.Id);
 	};
 
 	const renderTabs= () =>(

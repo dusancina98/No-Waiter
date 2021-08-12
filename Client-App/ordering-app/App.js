@@ -18,6 +18,7 @@ import EditUserInfoScreen from "./app/screens/EditUserInfoScreen";
 import UserAddressesScreen from "./app/screens/UserAddressesScreen";
 import AddNewAddressScreen from "./app/screens/AddNewAddressScreen";
 import FavouriteObjectsScreen from "./app/screens/FavouriteObjectsScreen";
+import ObjectDetailsScreen from "./app/screens/ObjectDetailsScreen";
 
 const Stack = createStackNavigator();
 
@@ -57,6 +58,7 @@ export default function App() {
 								<Stack.Screen name="Welcome" component={WelcomeScreen} />
 								<Stack.Screen name="Favourite Places" component={FavouriteObjectsScreen} options={{ headerShown: true, headerBackTitle: false }} />
 								<Stack.Screen name="Object" component={ObjectScreen} options={{ headerShown: true }} />
+								<Stack.Screen name="Object Details" component={ObjectDetailsScreen} options={{headerShown:true}}/>
 							</Stack.Navigator>
 						</NavigationContainer>
 					</ObjectContextProvider>
