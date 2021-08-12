@@ -72,6 +72,22 @@ public class Api {
     @Autowired
     private AuthClient authClient;
     
+    @GetMapping("/deliverer/{delivererId}/check")
+    @CrossOrigin
+    public ResponseEntity<?> checkDeliverer(@PathVariable UUID delivererId){
+
+        try {
+        	delivererService.findById(delivererId);
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e){
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    
     @PutMapping("/objects")
     @CrossOrigin
     public ResponseEntity<?> updateObjects(@RequestBody UserClientObjectDTO userObjectDTO) {

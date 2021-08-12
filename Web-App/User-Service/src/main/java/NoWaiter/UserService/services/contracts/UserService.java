@@ -18,8 +18,8 @@ import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
 import NoWaiter.UserService.services.contracts.dto.UpdateWaiterDTO;
 import NoWaiter.UserService.services.contracts.dto.UserClientObjectDTO;
 import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
-import NoWaiter.UserService.services.contracts.exceptions.ClassFieldValidationException;
 import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsedException;
+import NoWaiter.UserService.services.contracts.exceptions.ClassFieldValidationException;
 import NoWaiter.UserService.services.contracts.exceptions.NonExistentUserEmailException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordIsNotStrongException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordsIsNotTheSameException;
@@ -27,7 +27,7 @@ import NoWaiter.UserService.services.contracts.exceptions.ResetPasswordTokenExpi
 import NoWaiter.UserService.services.contracts.exceptions.TokenNotFoundException;
 
 public interface UserService {
-
+	
     UUID createObjectAdmin(ObjectAdminDTO entity) throws Exception;
     
     UUID createCustomer(CustomerDTO entity)  throws ClassFieldValidationException, Exception;
