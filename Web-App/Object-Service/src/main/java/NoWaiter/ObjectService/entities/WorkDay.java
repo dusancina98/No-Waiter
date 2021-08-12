@@ -70,4 +70,17 @@ public class WorkDay {
 	public void setTimeTo(LocalTime timeTo) {
 		this.timeTo = timeTo;
 	}
+	
+	public boolean isWorkingNow() {
+		if(!working)
+			return working;
+		
+		LocalTime now = LocalTime.now();
+		
+		boolean isBetween = ( ! now.isBefore(timeTo)  
+                && 
+                now.isBefore(timeFrom));
+		
+		return isBetween;
+	}
 }

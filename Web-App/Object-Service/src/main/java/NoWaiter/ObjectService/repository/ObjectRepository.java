@@ -12,4 +12,7 @@ public interface ObjectRepository extends PagingAndSortingRepository<Object, UUI
 	
 	@Query(value = "SELECT o FROM Object o WHERE o.id IN ?1")
 	List<Object> findAllObjectByIds(List<UUID> ids);
+
+	@Query(value = "SELECT o FROM Object o WHERE o.active = 'true' and o.blocked ='false'")
+	Iterable<Object> getAllAvailableObjects();
 }

@@ -1,4 +1,14 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+// screen sizing
+const { width, height } = Dimensions.get('window');
+// orientation must fixed
+const SCREEN_WIDTH = width < height ? width : height;
+
+const recipeNumColums = 2;
+// item size
+const RECIPE_ITEM_HEIGHT = 150;
+const RECIPE_ITEM_MARGIN = 20;
 
 export const welcomeStyles = StyleSheet.create({
 	background: {
@@ -198,6 +208,157 @@ export const registrationStyles = StyleSheet.create({
 		textAlign: "center",
 	},
 });
+
+export const objectsPageStyles = StyleSheet.create({
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginLeft: RECIPE_ITEM_MARGIN,
+		marginTop: 20,
+		width: (SCREEN_WIDTH -  (recipeNumColums + 1) * RECIPE_ITEM_MARGIN) / recipeNumColums,
+		height: "100%",
+		borderColor: '#cccccc',
+		borderWidth: 0.5,
+		borderRadius: 15
+	  },
+	  photo: {
+		width: (SCREEN_WIDTH - (recipeNumColums + 1) * RECIPE_ITEM_MARGIN) / recipeNumColums,
+		height: RECIPE_ITEM_HEIGHT,
+		borderRadius: 15,
+		borderBottomLeftRadius: 0,
+		borderBottomRightRadius: 0
+	  },
+	  title: {
+		flex: 1,
+		fontSize: 17,
+		fontWeight: 'bold',
+		textAlign: 'center',
+		color: '#444444',
+		marginTop: 3,
+		marginRight: 5,
+		marginLeft: 5,
+	  },
+	  category: {
+		textAlign: 'center',
+		marginTop: 5,
+		marginBottom: 5
+	  }
+});
+
+const { width: viewportWidth } = Dimensions.get('window');
+
+
+export const objectScreenStyles = StyleSheet.create({
+	container: {
+	  backgroundColor: 'white',
+	  flex: 1
+	},  
+	image: {
+	  ...StyleSheet.absoluteFillObject,
+	  width: '100%',
+	  height: 250
+	},
+	imageContainer: {
+	  flex: 1,
+	  justifyContent: 'center',
+	  width: viewportWidth,
+	  height: 250
+	},
+	infoObjectContainer: {
+	  flex: 1,
+	  marginTop: 5,
+	  marginLeft: 25,
+	  marginRight: 25,
+	  justifyContent: 'space-between' ,
+	  alignItems: 'flex-start',
+	  flexDirection: 'row'
+	},
+	infoObjectName: {
+	  fontSize: 28,
+	  margin: 10,
+	  fontWeight: 'bold',
+	  color: 'black',
+	},
+	infoObjectFavoriteIcon: {
+		fontSize: 28,
+		margin: 10,
+		fontWeight: 'bold',
+		color: 'black',
+	},
+	moreInformationButtonContainer: {
+		
+		marginRight: 35,
+		flexDirection: 'row',
+		alignSelf: 'flex-end',
+		marginBottom: 15,
+	},
+	customerWorkTimeInfoContainer:{
+		marginTop: 5,
+		marginLeft: 35,
+		marginBottom:5,
+		marginRight: 35,
+		flexDirection: 'row',
+	},
+	customerFeedbackInfoContainer:{
+		marginLeft: 35,
+
+		flexDirection: 'row',
+	},
+	logoImage: {
+		width: 20,
+		height: 20,
+	},
+});
+
+export const productItemStyles = StyleSheet.create({
+    itemContainer: {
+      backgroundColor: 'white',
+      marginLeft:15,
+      marginRight:15,
+      marginTop:5,
+      borderWidth: 0,
+      borderRadius: 15,
+    },
+    itemSubContainer: {
+      flexDirection: 'row',
+      paddingVertical: 10,
+    },
+    image: {
+      height: 100,
+      width: 100,
+      marginRight:10,
+    },
+    content: {
+      flex: 1,
+      paddingLeft: 15,
+      justifyContent: 'space-between',
+    },
+    itemName: {
+      fontSize: 17,
+      color: '#617ae1',
+    },
+    itemIngredient: {
+      fontSize: 16,
+      color: '#5F5F5F',
+    },
+    itemDescription: {
+      fontSize: 12,
+      color: '#a4a4a4',
+    },
+    priceContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    price: {
+      fontSize: 17,
+      color: '#617ae1',
+      textAlign: 'right',
+    },
+
+
+  });
 
 export const userInfoStyle = StyleSheet.create({
 	containerWrapper: {

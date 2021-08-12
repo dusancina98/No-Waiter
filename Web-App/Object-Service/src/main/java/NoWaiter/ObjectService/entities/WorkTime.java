@@ -1,5 +1,8 @@
 package NoWaiter.ObjectService.entities;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -67,5 +70,15 @@ public class WorkTime {
 			workDayForUpdate.setTimeFrom(entry.getValue().TimeFrom);
 			workDayForUpdate.setTimeTo(entry.getValue().TimeTo);
 		}
+	}
+	
+	@SuppressWarnings("deprecation")
+	public boolean isWorkingNow() {
+        LocalDate localDate = LocalDate.of(new Date().getYear(),new Date().getMonth(),new Date().getDay());
+
+		DayOfWeek dayOfWeek = localDate.getDayOfWeek();
+		WorkDay workDay = workDays.get(WeekDay.valueOf(dayOfWeek.toString().toUpperCase()));
+		
+		return workDay.isWorkingNow();
 	}
 }
