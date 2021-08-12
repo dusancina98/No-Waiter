@@ -20,7 +20,6 @@ import NoWaiter.UserService.entities.AccountActivationToken;
 import NoWaiter.UserService.entities.Address;
 import NoWaiter.UserService.entities.Authority;
 import NoWaiter.UserService.entities.Customer;
-import NoWaiter.UserService.entities.Deliverer;
 import NoWaiter.UserService.entities.ObjectAdmin;
 import NoWaiter.UserService.entities.ResetPasswordToken;
 import NoWaiter.UserService.entities.User;

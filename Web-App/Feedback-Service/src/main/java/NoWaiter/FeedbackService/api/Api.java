@@ -1,9 +1,14 @@
 package NoWaiter.FeedbackService.api;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -56,6 +61,28 @@ public class Api {
         }
     }
 	
+	@PostMapping("/object/grades")
+    @CrossOrigin
+    public ResponseEntity<?> getObjectsFeedbacks(@RequestBody List<UUID> objectIds) {
+        try {
+        	return new ResponseEntity<>(feedbackService.findObjectFeedbacks(objectIds), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
+	@GetMapping("/object/{objectId}")
+    @CrossOrigin
+    public ResponseEntity<?> getObjectFeedback(@PathVariable UUID objectId) {
+        try {
+        	return new ResponseEntity<>(feedbackService.findObjectFeedback(objectId), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
 	@PostMapping("/deliverer")
     @CrossOrigin
     public ResponseEntity<?> createDelivererFeedback(@RequestHeader("Authorization") String token, @RequestBody CreateFeedbackDTO feedbackDTO) {
@@ -76,4 +103,6 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+	
+	
 }
