@@ -241,8 +241,14 @@ public class ObjectServiceImpl implements ObjectService {
 	}
 
 	@Override
-	public java.lang.Object getObjectDetailsForCustomer(UUID fromString) {
-		// TODO Auto-generated method stub
-		return null;
+	public IdentifiableDTO<CustomerObjectDTO> getObjectDetailsForCustomer(UUID fromString) {
+		return mapObjectToIdentifiableCustomerObjectDTO(objectRepository.findById(fromString).get());
+	}
+	
+	private IdentifiableDTO<CustomerObjectDTO> mapObjectToIdentifiableCustomerObjectDTO(Object object){
+		IdentifiableDTO<CustomerObjectDTO> identifiableDTO = 
+				new IdentifiableDTO<CustomerObjectDTO>(object.getId(), new CustomerObjectDTO(object.getName(),object.getAddress().getAddress(),object.getImagePath(), 9.8, true, object.getWorkTime().isWorkingNow()));
+		
+		return identifiableDTO;
 	}
 }

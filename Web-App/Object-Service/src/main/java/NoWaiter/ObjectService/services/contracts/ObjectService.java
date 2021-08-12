@@ -49,5 +49,5 @@ public interface ObjectService {
 
 	Iterable<IdentifiableDTO<CustomerObjectDTO>> getObjectsForCustomers();
 
-	Object getObjectDetailsForCustomer(UUID fromString);
+	IdentifiableDTO<CustomerObjectDTO> getObjectDetailsForCustomer(UUID objectId);
 }

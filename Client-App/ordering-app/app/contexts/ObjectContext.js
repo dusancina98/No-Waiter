@@ -7,9 +7,31 @@ const ObjectContextProvider = (props) => {
 	const [objectState, dispatch] = useReducer(objectReducer, {
 		objects : [],
 		objectDetails : {
-			object: [],
-			categories: [],
+			object: { 
+				EntityDTO:  {
+					Address: "",
+					Favorite: false,
+					ImagePath: "",
+					Name: "",
+					Opened: false,
+					Rating: 0,
+				},
+				Id: "",
+			  },
+			categories: ["All products"],
 			products: [],
+			showedProducts: [{ 
+				EntityDTO:  {
+					Address: "",
+					Favorite: false,
+					Image: "",
+					Name: "",
+					Opened: false,
+					Rating: 0,
+				},
+				Id: "",
+			  }],
+			selectedCategory: "All products",
 		}
 	});
 
