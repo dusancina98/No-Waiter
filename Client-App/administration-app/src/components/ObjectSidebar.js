@@ -51,9 +51,6 @@ const ObjectSidebar = () => {
 			<p>Petak - {objectState.objectInfo.object.EntityDTO.WorkTime.EntityDTO.WorkDays.FRIDAY.Working ? objectState.objectInfo.object.EntityDTO.WorkTime.EntityDTO.WorkDays.FRIDAY.TimeFrom + " - " +  objectState.objectInfo.object.EntityDTO.WorkTime.EntityDTO.WorkDays.FRIDAY.TimeTo : 'NERADAN' }</p>
 			<p>Subota - {objectState.objectInfo.object.EntityDTO.WorkTime.EntityDTO.WorkDays.SATURDAY.Working ? objectState.objectInfo.object.EntityDTO.WorkTime.EntityDTO.WorkDays.SATURDAY.TimeFrom + " - " +  objectState.objectInfo.object.EntityDTO.WorkTime.EntityDTO.WorkDays.SATURDAY.TimeTo : 'NERADAN' }</p>
 			<p>Nedelja - {objectState.objectInfo.object.EntityDTO.WorkTime.EntityDTO.WorkDays.SUNDAY.Working ? objectState.objectInfo.object.EntityDTO.WorkTime.EntityDTO.WorkDays.SUNDAY.TimeFrom + " - " +  objectState.objectInfo.object.EntityDTO.WorkTime.EntityDTO.WorkDays.SUNDAY.TimeTo : 'NERADAN' }</p>
-
-			
-			
 		</div>
 	);
 };

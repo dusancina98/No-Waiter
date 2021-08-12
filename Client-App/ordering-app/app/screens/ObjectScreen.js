@@ -1,35 +1,39 @@
 import React, { useContext, useState, useEffect } from "react";
 import { FlatList, LogBox, ScrollView, Button, StatusBar, View, Text, Image, SafeAreaView, TouchableOpacity, Alert } from "react-native";
 import { ObjectContext } from "../contexts/ObjectContext";
+import { ProductContext } from "../contexts/ProductContext"
 import { objectService } from "../services/ObjectService";
+import { productService } from "../services/ProductService";
 import { objectScreenStyles, productItemStyles } from "../styles/styles";
 import { API_URL } from "../constants/ApiUrl";
 import MaterialTabs from "react-native-material-tabs";
 import icons from "../constants/Icons";
 import { objectConstants } from "../constants/ObjectConstants";
+import { productConstants } from "../constants/ProductConstants";
 
 function ObjectScreen({ route, navigation }) {
 	const { objectState, dispatch } = useContext(ObjectContext);
+	const prdCtx = useContext(ProductContext);
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [isFetching, setIsFetching] = useState(false);
 
 	useEffect(() => {
 		objectService.getObjectDetails(route.params, dispatch);
-		objectService.getObjectCategories(route.params, dispatch);
-		objectService.getObjectProducts(route.params, dispatch);
+		productService.getObjectCategories(route.params, prdCtx.dispatch);
+		productService.getObjectProducts(route.params, prdCtx.dispatch);
 		LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 	}, []);
 
 	useEffect(() => {
-		dispatch({ type: objectConstants.FIND_PRODUCTS_BY_CATEGORY, selectedTab });
+		prdCtx.dispatch({ type: productConstants.FIND_PRODUCTS_BY_CATEGORY, selectedTab });
 		LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 	}, [selectedTab]);
 
 	useEffect(() => {
 		if (isFetching === true) {
 			objectService.getObjectDetails(route.params, dispatch);
-			objectService.getObjectCategories(route.params, dispatch);
-			objectService.getObjectProducts(route.params, dispatch);
+			productService.getObjectCategories(route.params, prdCtx.dispatch);
+			productService.getObjectProducts(route.params, prdCtx.dispatch);
 			setIsFetching(false);
 		}
 	}, [isFetching]);
@@ -49,7 +53,7 @@ function ObjectScreen({ route, navigation }) {
 
 	const renderTabs= () =>(
 		<MaterialTabs
-			items={objectState.objectDetails.categories}
+			items={prdCtx.productState.categories}
 			selectedIndex={selectedTab}
 			onChange={setSelectedTab}
 			barColor="#b99849"
@@ -124,7 +128,7 @@ function ObjectScreen({ route, navigation }) {
 					}}
 				/>
 
-				<Text style={objectScreenStyles.infoObjectName}>{objectState.objectDetails.selectedCategory}</Text>
+				<Text style={objectScreenStyles.infoObjectName}>{prdCtx.productState.selectedCategory}</Text>
 		</View>
 	);
 
@@ -138,7 +142,7 @@ function ObjectScreen({ route, navigation }) {
 					refreshing={isFetching}
 					onRefresh={() => setIsFetching(true)}
 					keyExtractor={(item) => item.Id}
-					data={objectState.objectDetails.showedProducts}
+					data={prdCtx.productState.showedProducts}
 					renderItem={renderProduct}
 					ListHeaderComponent={<View></View>}
             		ListFooterComponent={<View></View>}
