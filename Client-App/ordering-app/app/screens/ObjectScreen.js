@@ -145,6 +145,7 @@ function ObjectScreen({ route, navigation }) {
 				/>
 
 			</ScrollView>
+			<View style={{marginTop:15}}/>
 			{renderTabs()}
 		</SafeAreaView>
 		

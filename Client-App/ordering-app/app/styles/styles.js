@@ -500,3 +500,71 @@ export const userAddressesStyle = StyleSheet.create({
 		paddingVertical: 10,
 	},
 });
+
+export const objectDetailsStyles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: "white",
+		paddingVertical: 10,
+		marginTop: 1,
+	},
+	infoObjectName: {
+		margin:15,
+		fontSize: 42,
+		fontWeight: 'bold',
+		color: 'black',
+	},
+	addessTitle:{
+		marginLeft:15,
+		marginRight:15,
+		fontSize: 24,
+		fontWeight: 'bold',
+		color: 'black',
+	},
+	address: {
+		marginTop:3,
+		marginLeft:15,
+		fontSize: 16,
+		color: 'black',
+	},
+	workTimeTitle:{
+		marginLeft:15,
+		marginRight:15,
+		marginTop:20,
+		fontSize: 24,
+		fontWeight: 'bold',
+		color: 'black',
+	},
+	workDayContainer:{
+		marginLeft:15,
+		marginRight:15,
+		flexDirection: 'row',
+      	justifyContent: 'space-between',
+	},
+	workDay: {
+		flexDirection: 'row',
+		marginTop:3,
+		fontSize: 16,
+		color: 'black',
+	},
+	contactTitle:{
+		marginLeft:15,
+		marginRight:15,
+		marginTop:20,
+		fontSize: 24,
+		fontWeight: 'bold',
+		color: 'black',
+	},
+	contactContainer:{
+		marginLeft:15,
+		marginRight:15,
+		flexDirection: 'row',
+      	justifyContent: 'space-between',
+	},
+	contact:{
+		flexDirection: 'row',
+		marginTop:3,
+		fontSize: 16,
+		color: 'black',
+	}
+});
