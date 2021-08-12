@@ -26,4 +26,8 @@ public class Address {
     public String getName() {
         return name;
     }
+
+	public UUID getId() {
+		return id;
+	}
 }
