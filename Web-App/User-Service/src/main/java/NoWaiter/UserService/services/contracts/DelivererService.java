@@ -11,6 +11,8 @@ import NoWaiter.UserService.services.contracts.exceptions.ClassFieldValidationEx
 
 public interface DelivererService {
 
+	IdentifiableDTO<DelivererDTO> findById(UUID userId);
+	
 	UUID createDelivererRequest(DelivererRequestDTO delivererRequestDTO) throws ClassFieldValidationException;
 
 	void approveDelivererRequest(UUID requestId) throws ClassFieldValidationException, NoSuchAlgorithmException;

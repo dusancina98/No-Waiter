@@ -49,5 +49,7 @@ public interface ObjectService {
 
 	Iterable<IdentifiableDTO<CustomerObjectDTO>> getObjectsForCustomers();
 
-	IdentifiableDTO<CustomerObjectDTO> getObjectDetailsForCustomer(UUID objectId);
+	Iterable<IdentifiableDTO<CustomerObjectDTO>> getFavouriteObjectsForCustomers(List<UUID> objectIds);
+	
+	IdentifiableDTO<CustomerObjectDTO> getObjectDetailsForCustomer(UUID objectId, String token);
 }

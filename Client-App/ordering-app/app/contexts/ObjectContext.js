@@ -5,10 +5,11 @@ export const ObjectContext = createContext();
 
 const ObjectContextProvider = (props) => {
 	const [objectState, dispatch] = useReducer(objectReducer, {
-		objects : [],
-		objectDetails : {
-			object: { 
-				EntityDTO:  {
+		objects: [],
+		favouriteObjects: [],
+		objectDetails: {
+			object: {
+				EntityDTO: {
 					Address: "",
 					Favorite: false,
 					ImagePath: "",
@@ -17,22 +18,24 @@ const ObjectContextProvider = (props) => {
 					Rating: 0,
 				},
 				Id: "",
-			  },
+			},
 			categories: ["All products"],
 			products: [],
-			showedProducts: [{ 
-				EntityDTO:  {
-					Address: "",
-					Favorite: false,
-					Image: "",
-					Name: "",
-					Opened: false,
-					Rating: 0,
+			showedProducts: [
+				{
+					EntityDTO: {
+						Address: "",
+						Favorite: false,
+						Image: "",
+						Name: "",
+						Opened: false,
+						Rating: 0,
+					},
+					Id: "",
 				},
-				Id: "",
-			  }],
+			],
 			selectedCategory: "All products",
-		}
+		},
 	});
 
 	return <ObjectContext.Provider value={{ objectState, dispatch }}>{props.children}</ObjectContext.Provider>;

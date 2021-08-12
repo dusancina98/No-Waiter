@@ -9,6 +9,7 @@ import NoWaiter.ObjectService.entities.WorkTime;
 import NoWaiter.ObjectService.services.contracts.dto.CustomerObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
+import NoWaiter.ObjectService.services.contracts.dto.ObjectFeedbackDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectWithStatusDTO;
 import NoWaiter.ObjectService.services.contracts.dto.WorkDayDTO;
 import NoWaiter.ObjectService.services.contracts.dto.WorkTimeDTO;
@@ -102,5 +103,28 @@ public class ObjectMapper {
         objects.forEach((object) -> retVal.add(MapObjectToIdentifiableCustomerObjectDTO(object)));
 
         return retVal;
+    }
+    
+    public static Iterable<IdentifiableDTO<CustomerObjectDTO>> MapObjectCollectionToIdentifiableCustomerObjectDTOWithGradeCollection(Iterable<Object> objects, List<ObjectFeedbackDTO> feedbacks){
+        if (objects == null) throw new IllegalArgumentException();
+
+        List<IdentifiableDTO<CustomerObjectDTO>> retVal = new ArrayList<>();
+        objects.forEach((object) -> retVal.add(MapObjectToIdentifiableCustomerObjectDTOWithGrad(object, feedbacks)));
+
+        System.out.println("OBJ " + retVal.size());
+        return retVal;
+    }
+    
+    public static IdentifiableDTO<CustomerObjectDTO> MapObjectToIdentifiableCustomerObjectDTOWithGrad(Object object, List<ObjectFeedbackDTO> feedbacks){
+        if (object == null) throw new IllegalArgumentException();
+        
+        for (ObjectFeedbackDTO objectFeedbackDTO : feedbacks) {
+			if (objectFeedbackDTO.ObjectId.equals(object.getId())) {
+				return new IdentifiableDTO<CustomerObjectDTO>(object.getId(), new CustomerObjectDTO(object.getName(),object.getAddress().getAddress(),object.getImagePath(),
+																									objectFeedbackDTO.Grade, true));
+			}
+		}
+        return new IdentifiableDTO<CustomerObjectDTO>(object.getId(), new CustomerObjectDTO(object.getName(),object.getAddress().getAddress(),object.getImagePath(),
+				0.0, true));    
     }
 }

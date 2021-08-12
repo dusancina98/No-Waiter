@@ -375,6 +375,30 @@ public class UserServiceImpl implements UserService {
 
 		return address.getId();
 	}
-	
-	
+
+	@Override
+	public void addObjectToCustomerFavourites(UUID customerId, UUID objectId) {
+		Customer customer = customerRepository.findById(customerId).get();
+		customer.addObjectToFavourites(objectId);
+		customerRepository.save(customer);
+	}
+
+	@Override
+	public void removeObjectFromCustomerFavourites(UUID customerId, UUID objectId) {
+		Customer customer = customerRepository.findById(customerId).get();
+		customer.removeObjectFromFavourites(objectId);
+		customerRepository.save(customer);
+	}
+
+	@Override
+	public List<UUID> findAllCustomerFavouriteObjectIds(UUID customerId) {
+		Customer customer = customerRepository.findById(customerId).get();
+		return customer.getFavouriteObjects();
+	}
+
+	@Override
+	public boolean isObjectInFavourites(UUID customerID, UUID objectId) {
+		Customer customer = customerRepository.findById(customerID).get();
+		return customer.getFavouriteObjects().contains(objectId);
+	}
 }

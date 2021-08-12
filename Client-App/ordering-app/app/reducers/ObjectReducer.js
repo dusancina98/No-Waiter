@@ -8,22 +8,37 @@ export const objectReducer = (state, action) => {
 		case objectConstants.FIND_ALL_OBJECTS_REQUEST:
 			return {
 				...state,
-				objects:[],
+				objects: [],
 			};
 		case objectConstants.FIND_ALL_OBJECTS_SUCCESS:
 			return {
 				...state,
-				objects:action.objects,
+				objects: action.objects,
 			};
 		case objectConstants.FIND_ALL_OBJECTS_FAILURE:
 			return {
 				...state,
-				objects:[],
+				objects: [],
+			};
+		case objectConstants.FIND_FAVOURITE_OBJECTS_REQUEST:
+			return {
+				...state,
+				favouriteObjects: [],
+			};
+		case objectConstants.FIND_FAVOURITE_OBJECTS_SUCCESS:
+			return {
+				...state,
+				favouriteObjects: action.objects,
+			};
+		case objectConstants.FIND_FAVOURITE_OBJECTS_FAILURE:
+			return {
+				...state,
+				favouriteObjects: [],
 			};
 		case objectConstants.GET_OBJECT_DETAILS_REQUEST:
 			objCpy = { ...state };
-			objCpy.objectDetails.object =  { 
-				EntityDTO:  {
+			objCpy.objectDetails.object = {
+				EntityDTO: {
 					Address: "",
 					Favorite: false,
 					ImagePath: "",
@@ -32,11 +47,12 @@ export const objectReducer = (state, action) => {
 					Rating: 0,
 				},
 				Id: "",
-			  };
+			};
 
 			return objCpy;
 		case objectConstants.GET_OBJECT_DETAILS_SUCCESS:
 			objCpy = { ...state };
+			console.log(action.object);
 			objCpy.objectDetails.object = action.object;
 
 			return objCpy;
@@ -48,14 +64,14 @@ export const objectReducer = (state, action) => {
 
 		case objectConstants.GET_OBJECT_CATEGORIES_REQUEST:
 			objCpy = { ...state };
-			objCpy.objectDetails.categories =  ["All products"];
+			objCpy.objectDetails.categories = ["All products"];
 
 			return objCpy;
 		case objectConstants.GET_OBJECT_CATEGORIES_SUCCESS:
 			objCpy = { ...state };
 			objCpy.objectDetails.categories = ["All products"];
-			
-			for(var category in action.categories){
+
+			for (var category in action.categories) {
 				objCpy.objectDetails.categories.push(action.categories[category].EntityDTO.Name);
 			}
 
@@ -65,15 +81,14 @@ export const objectReducer = (state, action) => {
 			objCpy.objectDetails.categories = ["All products"];
 
 			return objCpy;
-		case objectConstants.FIND_PRODUCTS_BY_CATEGORY:{
+		case objectConstants.FIND_PRODUCTS_BY_CATEGORY: {
 			objCpy = { ...state };
-			objCpy.objectDetails.selectedCategory= objCpy.objectDetails.categories[action.selectedTab];
-			if("All products" === objCpy.objectDetails.selectedCategory){
-				objCpy.objectDetails.showedProducts=objCpy.objectDetails.products;
-			}else{
-				objCpy.objectDetails.showedProducts= objCpy.objectDetails.products.filter((product) => product.EntityDTO.ProductCategory.EntityDTO.Name === objCpy.objectDetails.selectedCategory);
+			objCpy.objectDetails.selectedCategory = objCpy.objectDetails.categories[action.selectedTab];
+			if ("All products" === objCpy.objectDetails.selectedCategory) {
+				objCpy.objectDetails.showedProducts = objCpy.objectDetails.products;
+			} else {
+				objCpy.objectDetails.showedProducts = objCpy.objectDetails.products.filter((product) => product.EntityDTO.ProductCategory.EntityDTO.Name === objCpy.objectDetails.selectedCategory);
 			}
-
 
 			return objCpy;
 		}
@@ -94,6 +109,27 @@ export const objectReducer = (state, action) => {
 			objCpy.objectDetails.products = [];
 
 			return objCpy;
+
+		case objectConstants.ADD_OBJECT_TO_FAVOURITES_FAILURE:
+			return state;
+		case objectConstants.ADD_OBJECT_TO_FAVOURITES_SUCCESS:
+			objCpy = { ...state };
+			objCpy.objectDetails.object.EntityDTO.Favorite = true;
+
+			return objCpy;
+		case objectConstants.ADD_OBJECT_TO_FAVOURITES_FAILURE:
+			return state;
+
+		case objectConstants.REMOVE_OBJECT_FROM_FAVOURITES_REQUEST:
+			return state;
+		case objectConstants.REMOVE_OBJECT_FROM_FAVOURITES_SUCCESS:
+			objCpy = { ...state };
+			objCpy.favouriteObjects = state.favouriteObjects.filter((obj) => obj.Id !== action.objectId);
+			objCpy.objectDetails.object.EntityDTO.Favorite = false;
+
+			return objCpy;
+		case objectConstants.REMOVE_OBJECT_FROM_FAVOURITES_FAILURE:
+			return state;
 		default:
 			return state;
 	}

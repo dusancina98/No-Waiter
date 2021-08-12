@@ -138,4 +138,10 @@ public class DelivererServiceImpl implements DelivererService{
 		delivererRepository.save(deliverer);
 	}
 
+	@Override
+	public IdentifiableDTO<DelivererDTO> findById(UUID userId) {
+		Deliverer deliverer = delivererRepository.findById(userId).get();
+		return UserMapper.MapDelivererToIdentifiableDelivererDto(deliverer);
+	}
+
 }

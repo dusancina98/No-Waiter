@@ -1,6 +1,7 @@
 package NoWaiter.UserService.services.contracts;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.UUID;
 
 import NoWaiter.UserService.entities.AccountActivationToken;
@@ -18,8 +19,8 @@ import NoWaiter.UserService.services.contracts.dto.UpdateObjectAdminRequestDTO;
 import NoWaiter.UserService.services.contracts.dto.UpdateWaiterDTO;
 import NoWaiter.UserService.services.contracts.dto.UserClientObjectDTO;
 import NoWaiter.UserService.services.contracts.dto.WaiterDTO;
-import NoWaiter.UserService.services.contracts.exceptions.ClassFieldValidationException;
 import NoWaiter.UserService.services.contracts.exceptions.ActivationLinkExpiredOrUsedException;
+import NoWaiter.UserService.services.contracts.exceptions.ClassFieldValidationException;
 import NoWaiter.UserService.services.contracts.exceptions.NonExistentUserEmailException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordIsNotStrongException;
 import NoWaiter.UserService.services.contracts.exceptions.PasswordsIsNotTheSameException;
@@ -27,7 +28,11 @@ import NoWaiter.UserService.services.contracts.exceptions.ResetPasswordTokenExpi
 import NoWaiter.UserService.services.contracts.exceptions.TokenNotFoundException;
 
 public interface UserService {
-
+	
+    boolean isObjectInFavourites(UUID customerID, UUID objectId);
+	
+    List<UUID> findAllCustomerFavouriteObjectIds(UUID customerID);
+	
     UUID createObjectAdmin(ObjectAdminDTO entity) throws Exception;
     
     UUID createCustomer(CustomerDTO entity)  throws ClassFieldValidationException, Exception;
@@ -39,6 +44,10 @@ public interface UserService {
     void deleteCustomerAddress(UUID customerId, UUID addressId);
 
     UUID addCustomerAddress(UUID customerId, NameDTO addressDTO);
+    
+    void addObjectToCustomerFavourites(UUID customerId, UUID objectId);
+    
+    void removeObjectFromCustomerFavourites(UUID customerId, UUID objectId);
     
     void updateCustomer(EditCustomerDTO customerDTO, UUID customerId);
     

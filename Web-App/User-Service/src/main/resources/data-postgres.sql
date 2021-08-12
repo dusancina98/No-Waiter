@@ -22,7 +22,6 @@ insert into users (id, email, name,password,surname,active,deleted) values ('739
 -- customers
 insert into users (id, email, name,password,surname,active,deleted) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0cc1','example4@example.com','Dusan','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Dusanic',true, false);
 
-
 insert into user_authority (user_id, authority_id) values ('22793162-52d3-11eb-ae93-0242ac130002', '7852aa5e-7040-4d99-8255-537a0b226c75');
 insert into user_authority (user_id, authority_id) values ('22793162-52d3-11eb-ae93-0242ac130111', '563e9925-cff6-42b7-99fa-6b1235f67655');
 insert into user_authority (user_id, authority_id) values ('22793162-52d3-11eb-ae93-0242ac130222', 'f98f5538-4d52-4e3e-bae3-598e523a6222');
@@ -41,6 +40,8 @@ insert into customer (id, phone_number) values ('739ebff1-a0a6-4c1d-b93f-23c5225
 insert into address (id, name) values ('123ebff1-a0a6-4c1d-b93f-23c5225c0cc1', 'Novosadskog sajma 2');
 insert into customer_addresses (customer_id, addresses_id) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0cc1', '123ebff1-a0a6-4c1d-b93f-23c5225c0cc1');
 
+-- favourite objects
+insert into favourite_objects (user_id, favourite_objects) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0cc1', '11193162-52d3-11eb-ae93-0242ac130111');
 
 --deliverer requests
 insert into deliverer_request (id, email, name, surname, phone_number, reference, request_status) values ('1334cf36-af66-4a38-8e59-475d33798341', 'requestexample@example.com', 'Pera' , 'Peric' ,'065324235','Najbolji deliverer', 'PENDING');
