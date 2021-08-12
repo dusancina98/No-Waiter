@@ -12,6 +12,8 @@ import RegistrationScreen from "./app/screens/RegistrationScreen";
 import UserContextProvider from "./app/contexts/UserContext";
 import ResetPasswordScreen from "./app/screens/ResetPasswordScreen";
 import Tabs from "./app/navigation/Tabs";
+import ObjectContextProvider from "./app/contexts/ObjectContext";
+import ObjectScreen from "./app/screens/ObjectScreen";
 import EditUserInfoScreen from "./app/screens/EditUserInfoScreen";
 import UserAddressesScreen from "./app/screens/UserAddressesScreen";
 import AddNewAddressScreen from "./app/screens/AddNewAddressScreen";
@@ -36,24 +38,26 @@ export default function App() {
 		return (
 			<UserContextProvider>
 				<AuthContextProvider>
-					<NavigationContainer>
-						<Stack.Navigator
-							screenOptions={{
-								headerShown: false,
-							}}
-							initialRouteName={token === true ? "Home" : "Welcome"}
-						>
-							<Stack.Screen name="Home" component={Tabs} />
-							<Stack.Screen name="Login" component={LoginScreen} />
-							<Stack.Screen name="Registration" component={RegistrationScreen} />
-							<Stack.Screen name="Edit Profile" component={EditUserInfoScreen} />
-							<Stack.Screen name="Reset Password" component={ResetPasswordScreen} />
-							<Stack.Screen name="Activate User" component={UserActivateScreen} />
-							<Stack.Screen name="My Addresses" component={UserAddressesScreen} options={{ headerShown: true, headerBackTitle: false }} />
-							<Stack.Screen name="Add New Address" component={AddNewAddressScreen} options={{ headerShown: true, headerBackTitle: false }} />
-							<Stack.Screen name="Welcome" component={WelcomeScreen} />
-						</Stack.Navigator>
-					</NavigationContainer>
+					<ObjectContextProvider>
+						<NavigationContainer>
+							<Stack.Navigator
+								screenOptions={{
+									headerShown: false,
+								}}
+								initialRouteName={token === true ? "Home" : "Welcome"}
+							>
+								<Stack.Screen name="Home" component={Tabs} />
+								<Stack.Screen name="Login" component={LoginScreen} />
+								<Stack.Screen name="Registration" component={RegistrationScreen} />
+								<Stack.Screen name="Reset Password" component={ResetPasswordScreen} />
+								<Stack.Screen name="Activate User" component={UserActivateScreen} />
+								<Stack.Screen name="My Addresses" component={UserAddressesScreen} options={{ headerShown: true, headerBackTitle: false }} />
+								<Stack.Screen name="Add New Address" component={AddNewAddressScreen} options={{ headerShown: true, headerBackTitle: false }} />
+								<Stack.Screen name="Welcome" component={WelcomeScreen} />
+								<Stack.Screen name="Object" component={ObjectScreen} options={{ headerShown: true }}/>
+							</Stack.Navigator>
+						</NavigationContainer>
+					</ObjectContextProvider>
 				</AuthContextProvider>
 			</UserContextProvider>
 		);

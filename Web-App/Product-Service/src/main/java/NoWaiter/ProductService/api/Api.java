@@ -157,6 +157,22 @@ public class Api {
         }
 	}
 	
+	@GetMapping("/{objectId}")
+	@CrossOrigin
+	public ResponseEntity<?> getAllProductsForCustomers(@PathVariable UUID objectId) {
+		try {
+			return new ResponseEntity<>(productService.findAllProducts(objectId), HttpStatus.OK);
+		} catch (FeignException e) {
+        	if(e.status() == HttpStatus.NOT_FOUND.value())
+                return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);
+        	
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+	}
+	
 	@DeleteMapping("/{productId}")
     @CrossOrigin
     public ResponseEntity<?> deleteProduct(@PathVariable UUID productId) {
@@ -285,7 +301,23 @@ public class Api {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-	}  
+	} 
+	
+	@GetMapping("/categories/{objectId}")
+	@CrossOrigin
+	public ResponseEntity<?> getProductCategoriesForObject(@PathVariable UUID objectId) {
+		try {
+			return new ResponseEntity<>(productService.findAllProductCategories(objectId), HttpStatus.OK);
+		} catch (FeignException e) {
+        	if(e.status() == HttpStatus.NOT_FOUND.value())
+                return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);
+        	
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+	}
 	
 	@GetMapping("/types")
 	@CrossOrigin
@@ -297,5 +329,4 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 	}  
-
 }

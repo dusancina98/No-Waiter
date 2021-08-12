@@ -6,6 +6,7 @@ import NoWaiter.ObjectService.entities.Object;
 import NoWaiter.ObjectService.entities.WeekDay;
 import NoWaiter.ObjectService.entities.WorkDay;
 import NoWaiter.ObjectService.entities.WorkTime;
+import NoWaiter.ObjectService.services.contracts.dto.CustomerObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectWithStatusDTO;
@@ -38,6 +39,12 @@ public class ObjectMapper {
 		
         return new IdentifiableDTO<WorkTimeDTO>(workTime.getId(), new WorkTimeDTO(MapWorkDaysMapToWorkDaysMapDTO(workTime.getWorkDays())));
 	}
+	
+	public static IdentifiableDTO<CustomerObjectDTO> MapObjectToIdentifiableCustomerObjectDTO(Object object){
+        if (object == null) throw new IllegalArgumentException();
+        
+        return new IdentifiableDTO<CustomerObjectDTO>(object.getId(), new CustomerObjectDTO(object.getName(),object.getAddress().getAddress(),object.getImagePath()));
+    }
 
 	
 	private static Map<WeekDay, WorkDayDTO> MapWorkDaysMapToWorkDaysMapDTO(Map<WeekDay, WorkDay> workDays) {
@@ -83,6 +90,16 @@ public class ObjectMapper {
 
         List<IdentifiableDTO<ObjectWithStatusDTO>> retVal = new ArrayList<>();
         objects.forEach((object) -> retVal.add(MapObjectToIdentifiableObjectWithStatusDTO(object)));
+
+        return retVal;
+    }
+    
+    
+    public static Iterable<IdentifiableDTO<CustomerObjectDTO>> MapObjectCollectionToIdentifiableCustomerObjectDTOCollection(Iterable<Object> objects){
+        if (objects == null) throw new IllegalArgumentException();
+
+        List<IdentifiableDTO<CustomerObjectDTO>> retVal = new ArrayList<>();
+        objects.forEach((object) -> retVal.add(MapObjectToIdentifiableCustomerObjectDTO(object)));
 
         return retVal;
     }

@@ -26,6 +26,7 @@ import NoWaiter.ObjectService.repository.ObjectRepository;
 import NoWaiter.ObjectService.repository.WorkTimeRepository;
 import NoWaiter.ObjectService.services.contracts.ObjectService;
 import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
+import NoWaiter.ObjectService.services.contracts.dto.CustomerObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDetailsDTO;
@@ -232,5 +233,22 @@ public class ObjectServiceImpl implements ObjectService {
 	
 	public ObjectDetailsDTO mapObjectToObjectDetailsDTO(Object object) {
 		return new ObjectDetailsDTO(object.getId(), object.getName(), object.getImagePath(), object.getAddress().getAddress());
+	}
+
+	@Override
+	public Iterable<IdentifiableDTO<CustomerObjectDTO>> getObjectsForCustomers() {
+		return ObjectMapper.MapObjectCollectionToIdentifiableCustomerObjectDTOCollection(objectRepository.getAllAvailableObjects());
+	}
+
+	@Override
+	public IdentifiableDTO<CustomerObjectDTO> getObjectDetailsForCustomer(UUID fromString) {
+		return mapObjectToIdentifiableCustomerObjectDTO(objectRepository.findById(fromString).get());
+	}
+	
+	private IdentifiableDTO<CustomerObjectDTO> mapObjectToIdentifiableCustomerObjectDTO(Object object){
+		IdentifiableDTO<CustomerObjectDTO> identifiableDTO = 
+				new IdentifiableDTO<CustomerObjectDTO>(object.getId(), new CustomerObjectDTO(object.getName(),object.getAddress().getAddress(),object.getImagePath(), 9.8, true, object.getWorkTime().isWorkingNow()));
+		
+		return identifiableDTO;
 	}
 }
