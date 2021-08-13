@@ -32,7 +32,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 	.antMatchers("/auth-api/api/auth/login").permitAll()
                 	
-                	.antMatchers(HttpMethod.POST ,"/order-api/api/orders").hasAnyRole("WAITER","SELF_ORDER_PULT")
+                	.antMatchers(HttpMethod.POST ,"/order-api/api/orders").hasAnyRole("WAITER","SELF_ORDER_PULT", "CUSTOMER")
                 	.antMatchers(HttpMethod.GET ,"/order-api/api/orders/confirmed/deliverer").hasRole("DELIVERER")
                 	.antMatchers(HttpMethod.GET ,"/order-api/api/orders/accepted/deliverer").hasRole("DELIVERER")
 

@@ -17,8 +17,8 @@ import no_waiter.order_service.services.contracts.dto.SideDishDTO;
 
 public class OrderMapper {
 
-	public static Order MapOrderRequestDTOToOrder(OrderRequestDTO requestDTO, ProductValidationResponseDTO products, UUID objectId) {
-		Order order = new Order(objectId, requestDTO.OrderType, requestDTO.TableId, new Address(requestDTO.Address), requestDTO.EstimatedTime);
+	public static Order MapOrderRequestDTOToOrder(OrderRequestDTO requestDTO, ProductValidationResponseDTO products, UUID objectId, UUID customerId) {
+		Order order = new Order(objectId, requestDTO.OrderType, requestDTO.TableId, new Address(requestDTO.Address), requestDTO.EstimatedTime, customerId);
 		List<OrderItem> items = new ArrayList<OrderItem>();
 		
 		for(ProductValidationDTO product : products.Products) {

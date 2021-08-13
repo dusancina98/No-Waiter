@@ -34,6 +34,7 @@ import no_waiter.order_service.services.contracts.dto.DelivererOrderDTO;
 import no_waiter.order_service.services.contracts.dto.NameDTO;
 import no_waiter.order_service.services.contracts.dto.ObjectDetailsDTO;
 import no_waiter.order_service.services.contracts.dto.OnRouteOrderDTO;
+import no_waiter.order_service.services.contracts.dto.OrderCustomerRequestDTO;
 import no_waiter.order_service.services.contracts.dto.OrderDetailsDTO;
 import no_waiter.order_service.services.contracts.dto.OrderItemDTO;
 import no_waiter.order_service.services.contracts.dto.OrderItemResponseDTO;
@@ -66,7 +67,7 @@ public class OrderServiceImpl implements OrderService{
 	
 	@Override
 	public UUID createOrder(OrderRequestDTO requestDTO, ProductValidationResponseDTO products, UUID objectId) {
-		Order order = OrderMapper.MapOrderRequestDTOToOrder(requestDTO, products, objectId);
+		Order order = OrderMapper.MapOrderRequestDTOToOrder(requestDTO, products, objectId, null);
 		orderRepository.save(order);
 		
 		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), objectId, null, 0);
@@ -75,10 +76,23 @@ public class OrderServiceImpl implements OrderService{
 		return order.getId();
 	}
 	
+
+	@Override
+	public UUID createOrderCustomer(OrderCustomerRequestDTO requestDTO, ProductValidationResponseDTO products,
+			UUID customerId) {
+		Order order = OrderMapper.MapOrderRequestDTOToOrder(requestDTO, products, requestDTO.ObjectId, customerId);
+		orderRepository.save(order);
+		
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), requestDTO.ObjectId, null, 0);
+		orderEventRepository.save(newOrderEvent);
+		
+		return order.getId();
+	}
+	
 	@Override
 	public UUID createOrderForInfoPult(OrderRequestDTO requestDTO, ProductValidationResponseDTO resp,
 			UUID objectId) throws Exception {
-		Order order = OrderMapper.MapOrderRequestDTOToOrder(requestDTO, resp, objectId);
+		Order order = OrderMapper.MapOrderRequestDTOToOrder(requestDTO, resp, objectId, null);
 		orderRepository.save(order);
 		
 		int ordinalNumber=  calculateOrderOrdinalNumberFromObject(objectId);
@@ -638,4 +652,5 @@ public class OrderServiceImpl implements OrderService{
 		confirmedOrderEvents.forEach((orderEvent) -> acceptedOrderDTO.add(mapOrderToDelivererOrderDTO(orderEvent, objectDetails)));
 		return acceptedOrderDTO;
 	}
+
 }

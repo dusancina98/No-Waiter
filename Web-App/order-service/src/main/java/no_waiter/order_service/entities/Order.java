@@ -35,6 +35,9 @@ public class Order {
     @Column(name = "table_id", nullable = true)
 	private UUID tableId;
     
+    @Column(name = "customer_id", nullable = true)
+	private UUID customerId;
+    
     @Embedded
     private Address address;
     
@@ -44,7 +47,7 @@ public class Order {
 
     public Order() {}
     
-	public Order(UUID id, UUID objectId, OrderType orderType, UUID tableId, Address address, int estimatedTime, Date createdTime) {
+	public Order(UUID id, UUID objectId, OrderType orderType, UUID tableId, Address address, int estimatedTime, Date createdTime, UUID customerId) {
 		super();
 		this.id = id;
 		this.objectId = objectId;
@@ -54,10 +57,11 @@ public class Order {
 		this.address = address;
 		this.estimatedTime = estimatedTime;
 		this.createdTime = createdTime;
+		this.customerId = customerId;
 	}
 	
-	public Order(UUID objectId, OrderType orderType, UUID tableId, Address address, int estimatedTime) {
-		this(UUID.randomUUID(), objectId, orderType, tableId, address, estimatedTime,new Date());
+	public Order(UUID objectId, OrderType orderType, UUID tableId, Address address, int estimatedTime, UUID customerId) {
+		this(UUID.randomUUID(), objectId, orderType, tableId, address, estimatedTime,new Date(), customerId);
 	}
 
 	public List<OrderItem> getItems() {
@@ -118,5 +122,13 @@ public class Order {
 
 	public void setCreatedTime(Date createdTime) {
 		this.createdTime = createdTime;
+	}
+
+	public UUID getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(UUID customerId) {
+		this.customerId = customerId;
 	}
 }

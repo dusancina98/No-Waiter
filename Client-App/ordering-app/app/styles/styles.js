@@ -1,7 +1,7 @@
 import { StyleSheet, Dimensions } from "react-native";
 
 // screen sizing
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 // orientation must fixed
 const SCREEN_WIDTH = width < height ? width : height;
 
@@ -212,98 +212,96 @@ export const registrationStyles = StyleSheet.create({
 export const objectsPageStyles = StyleSheet.create({
 	container: {
 		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
+		justifyContent: "center",
+		alignItems: "center",
 		marginLeft: RECIPE_ITEM_MARGIN,
 		marginTop: 20,
-		width: (SCREEN_WIDTH -  (recipeNumColums + 1) * RECIPE_ITEM_MARGIN) / recipeNumColums,
+		width: (SCREEN_WIDTH - (recipeNumColums + 1) * RECIPE_ITEM_MARGIN) / recipeNumColums,
 		height: "100%",
-		borderColor: '#cccccc',
+		borderColor: "#cccccc",
 		borderWidth: 0.5,
-		borderRadius: 15
-	  },
-	  photo: {
+		borderRadius: 15,
+	},
+	photo: {
 		width: (SCREEN_WIDTH - (recipeNumColums + 1) * RECIPE_ITEM_MARGIN) / recipeNumColums,
 		height: RECIPE_ITEM_HEIGHT,
 		borderRadius: 15,
 		borderBottomLeftRadius: 0,
-		borderBottomRightRadius: 0
-	  },
-	  title: {
+		borderBottomRightRadius: 0,
+	},
+	title: {
 		flex: 1,
 		fontSize: 17,
-		fontWeight: 'bold',
-		textAlign: 'center',
-		color: '#444444',
+		fontWeight: "bold",
+		textAlign: "center",
+		color: "#444444",
 		marginTop: 3,
 		marginRight: 5,
 		marginLeft: 5,
-	  },
-	  category: {
-		textAlign: 'center',
+	},
+	category: {
+		textAlign: "center",
 		marginTop: 5,
-		marginBottom: 5
-	  }
+		marginBottom: 5,
+	},
 });
 
-const { width: viewportWidth } = Dimensions.get('window');
-
+const { width: viewportWidth } = Dimensions.get("window");
 
 export const objectScreenStyles = StyleSheet.create({
 	container: {
-	  backgroundColor: 'white',
-	  flex: 1
-	},  
+		backgroundColor: "white",
+		flex: 1,
+	},
 	image: {
-	  ...StyleSheet.absoluteFillObject,
-	  width: '100%',
-	  height: 250
+		...StyleSheet.absoluteFillObject,
+		width: "100%",
+		height: 250,
 	},
 	imageContainer: {
-	  flex: 1,
-	  justifyContent: 'center',
-	  width: viewportWidth,
-	  height: 250
+		flex: 1,
+		justifyContent: "center",
+		width: viewportWidth,
+		height: 250,
 	},
 	infoObjectContainer: {
-	  flex: 1,
-	  marginTop: 5,
-	  marginLeft: 25,
-	  marginRight: 25,
-	  justifyContent: 'space-between' ,
-	  alignItems: 'flex-start',
-	  flexDirection: 'row'
+		flex: 1,
+		marginTop: 5,
+		marginLeft: 25,
+		marginRight: 25,
+		justifyContent: "space-between",
+		alignItems: "flex-start",
+		flexDirection: "row",
 	},
 	infoObjectName: {
-	  fontSize: 28,
-	  margin: 10,
-	  fontWeight: 'bold',
-	  color: 'black',
+		fontSize: 28,
+		margin: 10,
+		fontWeight: "bold",
+		color: "black",
 	},
 	infoObjectFavoriteIcon: {
 		fontSize: 28,
 		margin: 10,
-		fontWeight: 'bold',
-		color: 'black',
+		fontWeight: "bold",
+		color: "black",
 	},
 	moreInformationButtonContainer: {
-		
 		marginRight: 35,
-		flexDirection: 'row',
-		alignSelf: 'flex-end',
+		flexDirection: "row",
+		alignSelf: "flex-end",
 		marginBottom: 15,
 	},
-	customerWorkTimeInfoContainer:{
+	customerWorkTimeInfoContainer: {
 		marginTop: 5,
 		marginLeft: 35,
-		marginBottom:5,
+		marginBottom: 5,
 		marginRight: 35,
-		flexDirection: 'row',
+		flexDirection: "row",
 	},
-	customerFeedbackInfoContainer:{
+	customerFeedbackInfoContainer: {
 		marginLeft: 35,
 
-		flexDirection: 'row',
+		flexDirection: "row",
 	},
 	logoImage: {
 		width: 20,
@@ -312,53 +310,51 @@ export const objectScreenStyles = StyleSheet.create({
 });
 
 export const productItemStyles = StyleSheet.create({
-    itemContainer: {
-      backgroundColor: 'white',
-      marginLeft:15,
-      marginRight:15,
-      marginTop:5,
-      borderWidth: 0,
-      borderRadius: 15,
-    },
-    itemSubContainer: {
-      flexDirection: 'row',
-      paddingVertical: 10,
-    },
-    image: {
-      height: 100,
-      width: 100,
-      marginRight:10,
-    },
-    content: {
-      flex: 1,
-      paddingLeft: 15,
-      justifyContent: 'space-between',
-    },
-    itemName: {
-      fontSize: 17,
-      color: '#617ae1',
-    },
-    itemIngredient: {
-      fontSize: 16,
-      color: '#5F5F5F',
-    },
-    itemDescription: {
-      fontSize: 12,
-      color: '#a4a4a4',
-    },
-    priceContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    price: {
-      fontSize: 17,
-      color: '#617ae1',
-      textAlign: 'right',
-    },
-
-
-  });
+	itemContainer: {
+		backgroundColor: "white",
+		marginLeft: 15,
+		marginRight: 15,
+		marginTop: 5,
+		borderWidth: 0,
+		borderRadius: 15,
+	},
+	itemSubContainer: {
+		flexDirection: "row",
+		paddingVertical: 10,
+	},
+	image: {
+		height: 100,
+		width: 100,
+		marginRight: 10,
+	},
+	content: {
+		flex: 1,
+		paddingLeft: 15,
+		justifyContent: "space-between",
+	},
+	itemName: {
+		fontSize: 17,
+		color: "#617ae1",
+	},
+	itemIngredient: {
+		fontSize: 16,
+		color: "#5F5F5F",
+	},
+	itemDescription: {
+		fontSize: 12,
+		color: "#a4a4a4",
+	},
+	priceContainer: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+	},
+	price: {
+		fontSize: 17,
+		color: "#617ae1",
+		textAlign: "right",
+	},
+});
 
 export const userInfoStyle = StyleSheet.create({
 	containerWrapper: {
@@ -483,6 +479,14 @@ export const userAddressesStyle = StyleSheet.create({
 		paddingVertical: 10,
 		marginTop: 1,
 	},
+	containerWrapperGray: {
+		flex: 1,
+		width: "100%",
+		backgroundColor: "lightgray",
+		paddingHorizontal: 10,
+		paddingVertical: 10,
+		marginTop: 1,
+	},
 	addressInfo: {
 		alignItems: "center",
 		flexDirection: "row",
@@ -509,64 +513,64 @@ export const objectDetailsStyles = StyleSheet.create({
 		marginTop: 1,
 	},
 	infoObjectName: {
-		margin:15,
+		margin: 15,
 		fontSize: 42,
-		fontWeight: 'bold',
-		color: 'black',
+		fontWeight: "bold",
+		color: "black",
 	},
-	addessTitle:{
-		marginLeft:15,
-		marginRight:15,
+	addessTitle: {
+		marginLeft: 15,
+		marginRight: 15,
 		fontSize: 24,
-		fontWeight: 'bold',
-		color: 'black',
+		fontWeight: "bold",
+		color: "black",
 	},
 	address: {
-		marginTop:3,
-		marginLeft:15,
+		marginTop: 3,
+		marginLeft: 15,
 		fontSize: 16,
-		color: 'black',
+		color: "black",
 	},
-	workTimeTitle:{
-		marginLeft:15,
-		marginRight:15,
-		marginTop:20,
+	workTimeTitle: {
+		marginLeft: 15,
+		marginRight: 15,
+		marginTop: 20,
 		fontSize: 24,
-		fontWeight: 'bold',
-		color: 'black',
+		fontWeight: "bold",
+		color: "black",
 	},
-	workDayContainer:{
-		marginLeft:15,
-		marginRight:15,
-		flexDirection: 'row',
-      	justifyContent: 'space-between',
+	workDayContainer: {
+		marginLeft: 15,
+		marginRight: 15,
+		flexDirection: "row",
+		justifyContent: "space-between",
 	},
 	workDay: {
-		flexDirection: 'row',
-		marginTop:3,
+		flexDirection: "row",
+		marginTop: 3,
 		fontSize: 16,
-		color: 'black',
+		color: "black",
 	},
-	contactTitle:{
-		marginLeft:15,
-		marginRight:15,
-		marginTop:20,
+	contactTitle: {
+		marginLeft: 15,
+		marginRight: 15,
+		marginTop: 20,
 		fontSize: 24,
-		fontWeight: 'bold',
-		color: 'black',
+		fontWeight: "bold",
+		color: "black",
 	},
-	contactContainer:{
-		marginLeft:15,
-		marginRight:15,
-		flexDirection: 'row',
-      	justifyContent: 'space-between',
+	contactContainer: {
+		marginLeft: 15,
+		marginRight: 15,
+		flexDirection: "row",
+		justifyContent: "space-between",
 	},
-	contact:{
-		flexDirection: 'row',
-		marginTop:3,
+	contact: {
+		flexDirection: "row",
+		marginTop: 3,
 		fontSize: 16,
-		color: 'black',
-	}
+		color: "black",
+	},
 });
 
 export const productDetailsStyles = StyleSheet.create({
@@ -574,89 +578,89 @@ export const productDetailsStyles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "white",
 		paddingVertical: 10,
-		height:'100%',
+		height: "100%",
 		marginTop: 1,
 	},
-	productName:{
-		marginLeft:15,
-		marginRight:15,
-		marginTop:10,
+	productName: {
+		marginLeft: 15,
+		marginRight: 15,
+		marginTop: 10,
 		fontSize: 24,
-		fontWeight: 'bold',
-		color: 'black',
+		fontWeight: "bold",
+		color: "black",
 	},
-	descriptionContainer:{
-		marginLeft:15,
-		marginRight:15,
-		marginTop:10,
-		flexWrap: 'wrap',
-		flexDirection: 'row',
+	descriptionContainer: {
+		marginLeft: 15,
+		marginRight: 15,
+		marginTop: 10,
+		flexWrap: "wrap",
+		flexDirection: "row",
 	},
 	descriptionTitle: {
-		flexDirection: 'row',
-		marginTop:3,
+		flexDirection: "row",
+		marginTop: 3,
 		fontSize: 16,
-		fontWeight: 'bold',
-		color: 'black',
+		fontWeight: "bold",
+		color: "black",
 	},
-	descriptionContent:{
-		flexDirection: 'row',
-		marginTop:3,
-		marginRight:15,
+	descriptionContent: {
+		flexDirection: "row",
+		marginTop: 3,
+		marginRight: 15,
 		fontSize: 16,
-		color: '#5F5F5F',
-		flexWrap: 'wrap'
+		color: "#5F5F5F",
+		flexWrap: "wrap",
 	},
-	ingredientContainer:{
-		flexWrap: 'wrap',
-		marginLeft:15,
-		marginRight:15,
-		marginTop:10,
-		flexWrap: 'wrap',
-		flexDirection: 'row',
+	ingredientContainer: {
+		flexWrap: "wrap",
+		marginLeft: 15,
+		marginRight: 15,
+		marginTop: 10,
+		flexWrap: "wrap",
+		flexDirection: "row",
 	},
 	ingredientTitle: {
-		flexDirection: 'row',
-		marginTop:3,
+		flexDirection: "row",
+		marginTop: 3,
 		fontSize: 16,
-		fontWeight: 'bold',
-		color: 'black',
+		fontWeight: "bold",
+		color: "black",
 	},
-	ingredientContent:{
-		flexWrap: 'wrap',
-		marginLeft:1,
-		marginTop:3,
-		fontSize: 16,
-	},
-	ingredientDataContent:{
-		flexWrap: 'wrap',
-		marginLeft:1,
+	ingredientContent: {
+		flexWrap: "wrap",
+		marginLeft: 1,
+		marginTop: 3,
 		fontSize: 16,
 	},
-	quantityButtonContainer:{
+	ingredientDataContent: {
+		flexWrap: "wrap",
+		marginLeft: 1,
+		fontSize: 16,
+	},
+	quantityButtonContainer: {
 		alignItems: "center",
-		marginTop:50,
+		marginTop: 50,
 	},
-	enterQuantityText:{
-		marginBottom:8,
+	enterQuantityText: {
+		marginBottom: 8,
 		fontSize: 16,
-		color: '#5F5F5F',
+		color: "#5F5F5F",
 	},
-	selectSideDishesContainer:{
+	selectSideDishesContainer: {
 		alignItems: "center",
-		marginTop:50,
-		marginLeft:15,
-		marginRight:15,
+		marginTop: 50,
+		marginLeft: 15,
+		marginRight: 15,
 	},
-	noteContainer:{
-		marginTop:50,
-		marginLeft:15,
-		marginRight:15,
+	noteContainer: {
+		marginTop: 50,
+		marginLeft: 15,
+		marginRight: 15,
 	},
-	textNote:{
+	textNote: {
 		alignItems: "flex-start",
 		fontSize: 16,
-		color: '#5F5F5F',
+		color: "#5F5F5F",
 	},
 	noteInput: {
 		paddingHorizontal: 10,
@@ -665,17 +669,78 @@ export const productDetailsStyles = StyleSheet.create({
 		height: 60,
 		marginTop: 5,
 		borderWidth: 1,
-		borderRadius:10,
-		borderColor:'lightgray',
+		borderRadius: 10,
+		borderColor: "lightgray",
 		width: "100%",
 		backgroundColor: "white",
-		textAlignVertical: "top"
+		textAlignVertical: "top",
 	},
-	buttonContainer:{
-		marginTop:50,
-		marginLeft:15,
-		marginRight:15,
-		marginBottom:15,
+	buttonContainer: {
+		marginTop: 50,
+		marginLeft: 15,
+		marginRight: 15,
+		marginBottom: 15,
 		alignItems: "flex-end",
+	},
+});
+
+export const shoppingCartPreviewStyle = StyleSheet.create({
+	container: {
+		backgroundColor: "white",
+		height: 50,
+		flexDirection: "row",
+		borderTopColor: "#b99849",
+		borderTopWidth: 1,
+	},
+	itemsCount: {
+		marginLeft: 5,
+		alignSelf: "center",
+		flex: 2,
+		color: "#b99849",
+	},
+	itemsPrice: {
+		alignSelf: "center",
+		textAlign: "center",
+		flex: 3,
+		color: "#b99849",
+		fontSize: 18,
+	},
+	checkoutButton: {
+		flex: 2,
+		backgroundColor: "#b99849",
+		alignSelf: "center",
+		alignContent: "center",
+		borderRadius: 10,
+		paddingVertical: 5,
+		marginRight: 5,
+		borderWidth: 1,
+		borderColor: "white",
+	},
+	checkoutButtonText: {
+		color: "white",
+		fontSize: 20,
+		fontFamily: "roboto-regular",
+		fontWeight: "400",
+		textAlign: "center",
+	},
+});
+
+export const checkoutStyle = StyleSheet.create({
+	container: {
+		backgroundColor: "white",
+		height: 50,
+		width: "95%",
+		flexDirection: "row",
+		alignItems: "center",
+		alignSelf: "center",
+		borderWidth: 1,
+		borderRadius: 10,
+		borderColor: "lightgray",
+		marginBottom: 10,
+	},
+	orderPriceContainer: {
+		backgroundColor: "white",
+		height: 50,
+		flexDirection: "row",
 	},
 });
