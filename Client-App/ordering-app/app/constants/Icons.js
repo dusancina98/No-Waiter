@@ -24,12 +24,14 @@ export const star = require("../assets/icons/star.png");
 export const sushi = require("../assets/icons/sushi.png");
 export const user = require("../assets/icons/user.png");
 export const qr = require("../assets/icons/qr.png");
-export const watch = require("../assets/icons/watch.jpg")
+export const watch = require("../assets/icons/watch.jpg");
 export const house = require("../assets/icons/house.jpg");
 export const remove = require("../assets/icons/delete.png");
+export const check = require("../assets/icons/checkmark.jpg");
 
 export default {
 	back,
+	check,
 	remove,
 	car,
 	cutlery,
