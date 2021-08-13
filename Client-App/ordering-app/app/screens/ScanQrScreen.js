@@ -4,9 +4,10 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import { OrderContext } from "../contexts/OrderContext";
 import { qrScannerStyles } from "../styles/styles";
 import { useIsFocused } from "@react-navigation/native";
-import { orderConstants } from "../constants/OrderConstants";
-import { orderService } from "../services/OrderService";
 import { UserContext } from "../contexts/UserContext";
+import BcryptReactNative from 'bcrypt-react-native';
+import { orderConstants } from "../constants/OrderConstants";
+
 
 const ScanQrScreen = ({ navigation }) => {
 	const { dispatch } = useContext(OrderContext);
@@ -26,12 +27,16 @@ const ScanQrScreen = ({ navigation }) => {
 
 	const handleBarCodeScanned = ({ type, data }) => {
 		setScanned(true);
-        //mozda odraditi validate qr code
-		const valuesArray = JSON.parse(data);
-		console.log(valuesArray)
+		try{
+			const valuesArray = JSON.parse(data);
+			console.log(valuesArray)
+			navigation.navigate("Object", valuesArray.ObjectId);
 
-        navigation.navigate("Object", valuesArray.ObjectId);
-        dispatch({type: OrderContext.SET_QR_CODE_SCANNED_DATA, valuesArray})
+			dispatch({type: orderConstants.SET_QR_CODE_SCANNED_DATA, valuesArray})
+		}catch(error){
+			//hendlati error
+			console.log(error)
+		}
 	};
 
 	useEffect(() => {

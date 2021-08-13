@@ -103,8 +103,9 @@ public class Api {
 
 			return new ResponseEntity<>(orderService.createOrderCustomer(requestDTO, resp, jwtResponse.getId()), HttpStatus.CREATED);
 		} catch (FeignException e) {
-        	if(e.status() == HttpStatus.NOT_FOUND.value())
-                return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);
+        	if(e.status() == HttpStatus.NOT_FOUND.value()) {
+        		System.out.println("USAO OVDE");
+                return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);}
         	else if(e.status() == HttpStatus.BAD_REQUEST.value())
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 

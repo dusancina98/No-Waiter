@@ -73,9 +73,9 @@ export const orderReducer = (state, action) => {
 			ordCpy = { ...state };
 
 			ordCpy.qrCodeData.scanned = true;
-			ordCpy.qrCodeData.tableId=action.TableId;
-			ordCpy.qrCodeData.objectId=action.ObjectId;
-			ordCpy.qrCodeData.key=action.Key;
+			ordCpy.qrCodeData.tableId=action.valuesArray.TableId;
+			ordCpy.qrCodeData.objectId=action.valuesArray.ObjectId;
+			ordCpy.qrCodeData.key=action.valuesArray.Key;
 
 			return ordCpy;
 		default:

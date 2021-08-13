@@ -3,6 +3,7 @@ package NoWaiter.ObjectService.services.implementation.util;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,9 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Hex;
 import org.json.JSONObject;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import com.google.common.hash.Hashing;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -81,17 +84,24 @@ public class QrCodeGenerator {
 	}
 	
 	private String generateVerificationKey(String str) throws Exception {
-		int iterations = 10000;
+		/*int iterations = 10000;
 		int keyLength = 512;
 			
 		char[] strChars = str.toCharArray();
 		byte[] saltBytes = "ASD".getBytes();
 		
-		SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+		SecretKeyFactory skf = SecretKeyFactory.getInstance("SHA256");
 		PBEKeySpec spec = new PBEKeySpec(strChars, saltBytes, iterations, keyLength);
 		SecretKey key = skf.generateSecret(spec);
 		byte[] hashedBytes = key.getEncoded( );
 			
-		return Hex.encodeHexString(hashedBytes);
+		return Hex.encodeHexString(hashedBytes);*/
+		
+		String strong_salt = BCrypt.gensalt(10);
+
+		String hash = BCrypt.hashpw(str,strong_salt);
+		
+		return hash;
+		
 	}
 }
