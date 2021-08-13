@@ -7,6 +7,7 @@ import { isIphoneX } from "react-native-iphone-x-helper";
 import icons from "../constants/Icons";
 import HomeScreen from "../screens/HomeScreen";
 import UserInfoScreen from "../screens/UserInfoScreen";
+import ScanQrScreen from "../screens/ScanQrScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -155,7 +156,7 @@ const Tabs = () => {
 
 			<Tab.Screen
 				name="Scan QR"
-				component={HomeScreen}
+				component={ScanQrScreen}
 				options={{
 					headerShown: false,
 					tabBarIcon: () => (

@@ -7,8 +7,12 @@ import java.nio.file.FileSystems;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import javax.imageio.ImageIO;
 
+import org.apache.commons.codec.binary.Hex;
 import org.json.JSONObject;
 
 import com.google.zxing.BarcodeFormat;
@@ -35,7 +39,7 @@ public class QrCodeGenerator {
 		Map<String, String> qrCodeDataMap = Map.of(
 		"ObjectId", objectId,
 		"TableId", tableId,
-		"Key", "123" 
+		"Key", generateVerificationKey("OBJECT")
 		// see next section for ´generateVerificationKey´ method
 		);
 
@@ -75,5 +79,19 @@ public class QrCodeGenerator {
 		FileSystems.getDefault().getPath(filePath)
 			);
 	}
-
+	
+	private String generateVerificationKey(String str) throws Exception {
+		int iterations = 10000;
+		int keyLength = 512;
+			
+		char[] strChars = str.toCharArray();
+		byte[] saltBytes = "ASD".getBytes();
+		
+		SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+		PBEKeySpec spec = new PBEKeySpec(strChars, saltBytes, iterations, keyLength);
+		SecretKey key = skf.generateSecret(spec);
+		byte[] hashedBytes = key.getEncoded( );
+			
+		return Hex.encodeHexString(hashedBytes);
+	}
 }

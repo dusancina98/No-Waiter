@@ -744,3 +744,31 @@ export const checkoutStyle = StyleSheet.create({
 		flexDirection: "row",
 	},
 });
+
+export const qrScannerStyles = StyleSheet.create({
+	containerWrapper: {
+		flex: 1,
+		flexDirection: "column",
+		justifyContent: "center",
+	},
+	button: {
+		width: "50%",
+		marginTop: 420,
+		paddingTop: 15,
+		paddingBottom: 15,
+		marginLeft: 30,
+		marginRight: 30,
+		backgroundColor: "transparent",
+		borderRadius: 10,
+		borderWidth: 1,
+		alignSelf: "center",
+		borderColor: "white",
+	},
+	buttonText: {
+		color: "white",
+		fontSize: 20,
+		fontFamily: "roboto-regular",
+		fontWeight: "400",
+		textAlign: "center",
+	},
+});
