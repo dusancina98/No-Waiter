@@ -20,6 +20,7 @@ import AddNewAddressScreen from "./app/screens/AddNewAddressScreen";
 import FavouriteObjectsScreen from "./app/screens/FavouriteObjectsScreen";
 import ObjectDetailsScreen from "./app/screens/ObjectDetailsScreen";
 import ProductContextProvider from "./app/contexts/ProductContext";
+import ProductDetailsScreen from "./app/screens/ProductDetailsScreen";
 
 const Stack = createStackNavigator();
 
@@ -61,6 +62,7 @@ export default function App() {
 									<Stack.Screen name="Favourite Places" component={FavouriteObjectsScreen} options={{ headerShown: true, headerBackTitle: false }} />
 									<Stack.Screen name="Object" component={ObjectScreen} options={{ headerShown: true }} />
 									<Stack.Screen name="Object Details" component={ObjectDetailsScreen} options={{headerShown:true}}/>
+									<Stack.Screen name="Product Details" component={ProductDetailsScreen} options={{headerShown:true}}/>
 								</Stack.Navigator>
 							</NavigationContainer>
 						</ProductContextProvider>

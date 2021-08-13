@@ -64,8 +64,12 @@ function ObjectScreen({ route, navigation }) {
 		/>
 	)
 
+	const handlePressProduct = (item) =>{
+		navigation.navigate("Product Details", item);
+	}
+
 	const renderProduct = ({ item }) => (
-			<TouchableOpacity style={productItemStyles.itemContainer}>
+			<TouchableOpacity onPress={() => handlePressProduct(item)} style={productItemStyles.itemContainer}>
 				<View style={productItemStyles.itemSubContainer}>
 					<View style={productItemStyles.content}>
 						<Text style={productItemStyles.itemName}>{item.EntityDTO.Name}</Text>

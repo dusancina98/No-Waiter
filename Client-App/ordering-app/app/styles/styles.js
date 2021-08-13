@@ -568,3 +568,114 @@ export const objectDetailsStyles = StyleSheet.create({
 		color: 'black',
 	}
 });
+
+export const productDetailsStyles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: "white",
+		paddingVertical: 10,
+		height:'100%',
+		marginTop: 1,
+	},
+	productName:{
+		marginLeft:15,
+		marginRight:15,
+		marginTop:10,
+		fontSize: 24,
+		fontWeight: 'bold',
+		color: 'black',
+	},
+	descriptionContainer:{
+		marginLeft:15,
+		marginRight:15,
+		marginTop:10,
+		flexWrap: 'wrap',
+		flexDirection: 'row',
+	},
+	descriptionTitle: {
+		flexDirection: 'row',
+		marginTop:3,
+		fontSize: 16,
+		fontWeight: 'bold',
+		color: 'black',
+	},
+	descriptionContent:{
+		flexDirection: 'row',
+		marginTop:3,
+		marginRight:15,
+		fontSize: 16,
+		color: '#5F5F5F',
+		flexWrap: 'wrap'
+	},
+	ingredientContainer:{
+		flexWrap: 'wrap',
+		marginLeft:15,
+		marginRight:15,
+		marginTop:10,
+		flexWrap: 'wrap',
+		flexDirection: 'row',
+	},
+	ingredientTitle: {
+		flexDirection: 'row',
+		marginTop:3,
+		fontSize: 16,
+		fontWeight: 'bold',
+		color: 'black',
+	},
+	ingredientContent:{
+		flexWrap: 'wrap',
+		marginLeft:1,
+		marginTop:3,
+		fontSize: 16,
+	},
+	ingredientDataContent:{
+		flexWrap: 'wrap',
+		marginLeft:1,
+		fontSize: 16,
+	},
+	quantityButtonContainer:{
+		alignItems: "center",
+		marginTop:50,
+	},
+	enterQuantityText:{
+		marginBottom:8,
+		fontSize: 16,
+		color: '#5F5F5F',
+	},
+	selectSideDishesContainer:{
+		alignItems: "center",
+		marginTop:50,
+		marginLeft:15,
+		marginRight:15,
+	},
+	noteContainer:{
+		marginTop:50,
+		marginLeft:15,
+		marginRight:15,
+	},
+	textNote:{
+		alignItems: "flex-start",
+		fontSize: 16,
+		color: '#5F5F5F',
+	},
+	noteInput: {
+		paddingHorizontal: 10,
+		paddingVertical: 10,
+		fontSize: 14,
+		height: 60,
+		marginTop: 5,
+		borderWidth: 1,
+		borderRadius:10,
+		borderColor:'lightgray',
+		width: "100%",
+		backgroundColor: "white",
+		textAlignVertical: "top"
+	},
+	buttonContainer:{
+		marginTop:50,
+		marginLeft:15,
+		marginRight:15,
+		marginBottom:15,
+		alignItems: "flex-end",
+	},
+});
