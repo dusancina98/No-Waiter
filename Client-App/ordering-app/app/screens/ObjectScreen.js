@@ -1,30 +1,43 @@
 import React, { useContext, useState, useEffect } from "react";
-import { FlatList, Dimensions, ScrollView, Button, StatusBar, View, Text, Image, SafeAreaView, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { FlatList, LogBox, ScrollView, Button, StatusBar, View, Text, Image, SafeAreaView, TouchableOpacity, Alert } from "react-native";
 import { ObjectContext } from "../contexts/ObjectContext";
+import { ProductContext } from "../contexts/ProductContext"
 import { objectService } from "../services/ObjectService";
+import { productService } from "../services/ProductService";
 import { objectScreenStyles, productItemStyles } from "../styles/styles";
 import { API_URL } from "../constants/ApiUrl";
 import MaterialTabs from "react-native-material-tabs";
 import icons from "../constants/Icons";
 import { objectConstants } from "../constants/ObjectConstants";
+import { productConstants } from "../constants/ProductConstants";
 
-function ObjectScreen({ route }) {
+function ObjectScreen({ route, navigation }) {
 	const { objectState, dispatch } = useContext(ObjectContext);
+	const prdCtx = useContext(ProductContext);
 	const [selectedTab, setSelectedTab] = useState(0);
+	const [isFetching, setIsFetching] = useState(false);
 
 	useEffect(() => {
 		objectService.getObjectDetails(route.params, dispatch);
-		objectService.getObjectCategories(route.params, dispatch);
-		objectService.getObjectProducts(route.params, dispatch);
+		productService.getObjectCategories(route.params, prdCtx.dispatch);
+		productService.getObjectProducts(route.params, prdCtx.dispatch);
+		LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 	}, []);
 
 	useEffect(() => {
-		dispatch({ type: objectConstants.FIND_PRODUCTS_BY_CATEGORY, selectedTab });
+		prdCtx.dispatch({ type: productConstants.FIND_PRODUCTS_BY_CATEGORY, selectedTab });
+		LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 	}, [selectedTab]);
 
-	const handleSelect = () => {
-		Alert.alert("test");
-	};
+	useEffect(() => {
+		if (isFetching === true) {
+			objectService.getObjectDetails(route.params, dispatch);
+			productService.getObjectCategories(route.params, prdCtx.dispatch);
+			productService.getObjectProducts(route.params, prdCtx.dispatch);
+			setIsFetching(false);
+		}
+	}, [isFetching]);
+
 
 	const handleClickOnFavourite = () => {
 		if (objectState.objectDetails.object.EntityDTO.Favorite === false) {
@@ -35,17 +48,28 @@ function ObjectScreen({ route }) {
 	};
 
 	const handleMoreInformationPress = () => {
-		Alert.alert("Simple Button pressed");
+		navigation.navigate("Object Details", objectState.objectDetails.object.Id);
 	};
 
-	const onChangeItem = () => {
-		Alert.alert("Simple Button pressed");
-	};
+	const renderTabs= () =>(
+		<MaterialTabs
+			items={prdCtx.productState.categories}
+			selectedIndex={selectedTab}
+			onChange={setSelectedTab}
+			barColor="#b99849"
+			indicatorColor="#fffe94"
+			activeTextColor="white"
+			scrollable={true}
+			uppercase={true}
+		/>
+	)
+
+	const handlePressProduct = (item) =>{
+		navigation.navigate("Product Details", item);
+	}
 
 	const renderProduct = ({ item }) => (
-		console.log(item),
-		(
-			<TouchableOpacity style={productItemStyles.itemContainer}>
+			<TouchableOpacity onPress={() => handlePressProduct(item)} style={productItemStyles.itemContainer}>
 				<View style={productItemStyles.itemSubContainer}>
 					<View style={productItemStyles.content}>
 						<Text style={productItemStyles.itemName}>{item.EntityDTO.Name}</Text>
@@ -62,14 +86,11 @@ function ObjectScreen({ route }) {
 				</View>
 				<View />
 			</TouchableOpacity>
-		)
 	);
-
-	return (
-		<SafeAreaView style={{ flex: 1, justifyContent: "space-between" }}>
-			<StatusBar barStyle="dark-content" />
-			<ScrollView>
-				<View style={objectScreenStyles.imageContainer}>
+	
+	const renderHeader = () => (
+		<View>
+			<View style={objectScreenStyles.imageContainer}>
 					<Image
 						style={objectScreenStyles.image}
 						source={{ uri: `${API_URL}${objectState.objectDetails.object.EntityDTO.ImagePath.substring(1, objectState.objectDetails.object.EntityDTO.ImagePath.length)}` }}
@@ -111,48 +132,31 @@ function ObjectScreen({ route }) {
 					}}
 				/>
 
-				<Text style={objectScreenStyles.infoObjectName}>{objectState.objectDetails.selectedCategory}</Text>
+				<Text style={objectScreenStyles.infoObjectName}>{prdCtx.productState.selectedCategory}</Text>
+		</View>
+	);
 
-				<MaterialTabs
-					items={objectState.objectDetails.categories}
-					selectedIndex={selectedTab}
-					onChange={setSelectedTab}
-					barColor="#b99849"
-					indicatorColor="#fffe94"
-					activeTextColor="white"
-					scrollable={true}
-					uppercase={true}
-				/>
-
+	return (
+		<SafeAreaView style={{ flex: 1, justifyContent: "space-between" }}>
+			<ScrollView>
+				{renderHeader()}
 				<FlatList
-					refreshing={false}
 					vertical
 					showsVerticalScrollIndicator={false}
+					refreshing={isFetching}
 					onRefresh={() => setIsFetching(true)}
 					keyExtractor={(item) => item.Id}
-					data={objectState.objectDetails.showedProducts}
-					renderItem={({ item }) => (
-						<TouchableOpacity style={productItemStyles.itemContainer}>
-							<View style={productItemStyles.itemSubContainer}>
-								<View style={productItemStyles.content}>
-									<Text style={productItemStyles.itemName}>{item.EntityDTO.Name}</Text>
-									<View>
-										<Text style={productItemStyles.itemIngredient} numberOfLines={2}>
-											{item.EntityDTO.Description}
-										</Text>
-									</View>
-									<View style={productItemStyles.priceContainer}>
-										<Text style={productItemStyles.price}>{item.EntityDTO.Price}</Text>
-									</View>
-								</View>
-								<Image source={{ uri: `${API_URL}${item.EntityDTO.Image.substring(1, item.EntityDTO.Image.length)}` }} style={productItemStyles.image} />
-							</View>
-							<View />
-						</TouchableOpacity>
-					)}
+					data={prdCtx.productState.showedProducts}
+					renderItem={renderProduct}
+					ListHeaderComponent={<View></View>}
+            		ListFooterComponent={<View></View>}
 				/>
+
 			</ScrollView>
+			<View style={{marginTop:15}}/>
+			{renderTabs()}
 		</SafeAreaView>
+		
 	);
 }
 

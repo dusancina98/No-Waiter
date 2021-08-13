@@ -161,7 +161,7 @@ public class Api {
 	@CrossOrigin
 	public ResponseEntity<?> getAllProductsForCustomers(@PathVariable UUID objectId) {
 		try {
-			return new ResponseEntity<>(productService.findAllProducts(objectId), HttpStatus.OK);
+			return new ResponseEntity<>(productService.findAllProductsForCustomer(objectId), HttpStatus.OK);
 		} catch (FeignException e) {
         	if(e.status() == HttpStatus.NOT_FOUND.value())
                 return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);

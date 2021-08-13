@@ -29,6 +29,7 @@ import NoWaiter.ObjectService.repository.WorkTimeRepository;
 import NoWaiter.ObjectService.services.contracts.ObjectService;
 import NoWaiter.ObjectService.services.contracts.dto.AddAdminDTO;
 import NoWaiter.ObjectService.services.contracts.dto.CustomerObjectDTO;
+import NoWaiter.ObjectService.services.contracts.dto.CustomerObjectDetailsDTO;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDetailsDTO;
@@ -250,18 +251,19 @@ public class ObjectServiceImpl implements ObjectService {
 	}
 
 	@Override
-	public IdentifiableDTO<CustomerObjectDTO> getObjectDetailsForCustomer(UUID objectId, String token) {
+	public IdentifiableDTO<CustomerObjectDetailsDTO> getObjectDetailsForCustomer(UUID objectId, String token) {
 		boolean isFavourite = userClient.isObjectInFavourites(token, objectId);
 		ObjectFeedbackDTO feedbackDTO = feedbackClient.getObjectFeedback(objectId);
 		return mapObjectToIdentifiableCustomerObjectDTO(objectRepository.findById(objectId).get(), feedbackDTO.Grade, isFavourite);
 	}
 	
-	private IdentifiableDTO<CustomerObjectDTO> mapObjectToIdentifiableCustomerObjectDTO(Object object, double grade, boolean isFavourite){
-		IdentifiableDTO<CustomerObjectDTO> identifiableDTO = 
-				new IdentifiableDTO<CustomerObjectDTO>(object.getId(), new CustomerObjectDTO(object.getName(),object.getAddress().getAddress(),object.getImagePath(), grade, isFavourite, object.getWorkTime().isWorkingNow()));
+	private IdentifiableDTO<CustomerObjectDetailsDTO> mapObjectToIdentifiableCustomerObjectDTO(Object object, double grade, boolean isFavourite){
+		IdentifiableDTO<CustomerObjectDetailsDTO> identifiableDTO = 
+				new IdentifiableDTO<CustomerObjectDetailsDTO>(object.getId(), new CustomerObjectDetailsDTO(object.getName(),object.getAddress().getAddress(),object.getImagePath(), grade, isFavourite, object.getWorkTime().isWorkingNow(), object.getContact().getPhoneNumber(),object.getContact().getEmail(), ObjectMapper.MapWorkTimeToIdentifiableWorkTimeDTO(object.getWorkTime())));
 		
 		return identifiableDTO;
 	}
+
 
 	@Override
 	public Iterable<IdentifiableDTO<CustomerObjectDTO>> getFavouriteObjectsForCustomers(List<UUID> objectIds) {

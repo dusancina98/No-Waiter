@@ -26,6 +26,7 @@ import NoWaiter.ProductService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ProductService.services.contracts.dto.NameDTO;
 import NoWaiter.ProductService.services.contracts.dto.OrderItemDTO;
 import NoWaiter.ProductService.services.contracts.dto.OrderItemsDTO;
+import NoWaiter.ProductService.services.contracts.dto.ProductCustomerDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductRequestDTO;
 import NoWaiter.ProductService.services.contracts.dto.ProductUpdateRequestDTO;
@@ -206,5 +207,10 @@ public class ProductServiceImpl implements ProductService {
 		productCategory.delete();
 		
 		productCategoryRepository.save(productCategory);
+	}
+
+	@Override
+	public Iterable<IdentifiableDTO<ProductCustomerDTO>> findAllProductsForCustomer(UUID objectId) {
+		return ProductMapper.MapProductCategoryCollectionToProductCustomerDTOCollection(productCategoryRepository.findAllByObjectId(objectId));
 	}
 }

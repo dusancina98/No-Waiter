@@ -76,10 +76,10 @@ public class WorkDay {
 			return working;
 		
 		LocalTime now = LocalTime.now();
-		
-		boolean isBetween = ( ! now.isBefore(timeTo)  
+
+		boolean isBetween = ( ! now.isBefore(timeFrom)  
                 && 
-                now.isBefore(timeFrom));
+                now.isBefore(timeTo));
 		
 		return isBetween;
 	}

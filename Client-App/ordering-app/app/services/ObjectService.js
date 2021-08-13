@@ -132,7 +132,7 @@ async function getObjectDetails(objectId, dispatch) {
 
 	let header = await authHeader();
 
-	Axios.get(`${API_URL}/object-api/api/objects/customers/${objectId}`, { validateStatus: () => true, headers: header })
+	await Axios.get(`${API_URL}/object-api/api/objects/customers/${objectId}`, { validateStatus: () => true, headers: header })
 		.then((res) => {
 			console.log(res.data);
 			if (res.status === 200) {
@@ -156,10 +156,10 @@ async function getObjectDetails(objectId, dispatch) {
 	}
 }
 
-function getObjectCategories(objectId, dispatch) {
+async function getObjectCategories(objectId, dispatch) {
 	dispatch(request());
 
-	Axios.get(`${API_URL}/product-api/api/products/categories/${objectId}`, { validateStatus: () => true })
+	await Axios.get(`${API_URL}/product-api/api/products/categories/${objectId}`, { validateStatus: () => true })
 		.then((res) => {
 			console.log(res.data);
 			if (res.status === 200) {
@@ -183,10 +183,10 @@ function getObjectCategories(objectId, dispatch) {
 	}
 }
 
-function getObjectProducts(objectId, dispatch) {
+async function getObjectProducts(objectId, dispatch) {
 	dispatch(request());
 
-	Axios.get(`${API_URL}/product-api/api/products/${objectId}`, { validateStatus: () => true })
+	await Axios.get(`${API_URL}/product-api/api/products/${objectId}`, { validateStatus: () => true })
 		.then((res) => {
 			console.log(res.data);
 			if (res.status === 200) {

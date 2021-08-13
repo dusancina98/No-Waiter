@@ -18,6 +18,9 @@ import EditUserInfoScreen from "./app/screens/EditUserInfoScreen";
 import UserAddressesScreen from "./app/screens/UserAddressesScreen";
 import AddNewAddressScreen from "./app/screens/AddNewAddressScreen";
 import FavouriteObjectsScreen from "./app/screens/FavouriteObjectsScreen";
+import ObjectDetailsScreen from "./app/screens/ObjectDetailsScreen";
+import ProductContextProvider from "./app/contexts/ProductContext";
+import ProductDetailsScreen from "./app/screens/ProductDetailsScreen";
 
 const Stack = createStackNavigator();
 
@@ -40,25 +43,29 @@ export default function App() {
 			<UserContextProvider>
 				<AuthContextProvider>
 					<ObjectContextProvider>
-						<NavigationContainer>
-							<Stack.Navigator
-								screenOptions={{
-									headerShown: false,
-								}}
-								initialRouteName={token === true ? "Home" : "Welcome"}
-							>
-								<Stack.Screen name="Home" component={Tabs} />
-								<Stack.Screen name="Login" component={LoginScreen} />
-								<Stack.Screen name="Registration" component={RegistrationScreen} />
-								<Stack.Screen name="Reset Password" component={ResetPasswordScreen} />
-								<Stack.Screen name="Activate User" component={UserActivateScreen} />
-								<Stack.Screen name="My Addresses" component={UserAddressesScreen} options={{ headerShown: true, headerBackTitle: false }} />
-								<Stack.Screen name="Add New Address" component={AddNewAddressScreen} options={{ headerShown: true, headerBackTitle: false }} />
-								<Stack.Screen name="Welcome" component={WelcomeScreen} />
-								<Stack.Screen name="Favourite Places" component={FavouriteObjectsScreen} options={{ headerShown: true, headerBackTitle: false }} />
-								<Stack.Screen name="Object" component={ObjectScreen} options={{ headerShown: true }} />
-							</Stack.Navigator>
-						</NavigationContainer>
+						<ProductContextProvider>
+							<NavigationContainer>
+								<Stack.Navigator
+									screenOptions={{
+										headerShown: false,
+									}}
+									initialRouteName={token === true ? "Home" : "Welcome"}
+								>
+									<Stack.Screen name="Home" component={Tabs} />
+									<Stack.Screen name="Login" component={LoginScreen} />
+									<Stack.Screen name="Registration" component={RegistrationScreen} />
+									<Stack.Screen name="Reset Password" component={ResetPasswordScreen} />
+									<Stack.Screen name="Activate User" component={UserActivateScreen} />
+									<Stack.Screen name="My Addresses" component={UserAddressesScreen} options={{ headerShown: true, headerBackTitle: false }} />
+									<Stack.Screen name="Add New Address" component={AddNewAddressScreen} options={{ headerShown: true, headerBackTitle: false }} />
+									<Stack.Screen name="Welcome" component={WelcomeScreen} />
+									<Stack.Screen name="Favourite Places" component={FavouriteObjectsScreen} options={{ headerShown: true, headerBackTitle: false }} />
+									<Stack.Screen name="Object" component={ObjectScreen} options={{ headerShown: true }} />
+									<Stack.Screen name="Object Details" component={ObjectDetailsScreen} options={{headerShown:true}}/>
+									<Stack.Screen name="Product Details" component={ProductDetailsScreen} options={{headerShown:true}}/>
+								</Stack.Navigator>
+							</NavigationContainer>
+						</ProductContextProvider>
 					</ObjectContextProvider>
 				</AuthContextProvider>
 			</UserContextProvider>
