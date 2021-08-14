@@ -3,21 +3,16 @@ package NoWaiter.ObjectService.services.implementation.util;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
+
 import javax.imageio.ImageIO;
 
-import org.apache.commons.codec.binary.Hex;
 import org.json.JSONObject;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
-import com.google.common.hash.Hashing;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;

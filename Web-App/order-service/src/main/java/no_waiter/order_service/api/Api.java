@@ -116,6 +116,20 @@ public class Api {
         }
 	}  
 	
+	@GetMapping("/customer/history")
+    @CrossOrigin
+    public ResponseEntity<?> getCustomerOrderHistory(@RequestHeader("Authorization") String token) {
+
+    	try {
+    		JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+
+            return new ResponseEntity<>(orderService.getCustomerOrderHistory(jwtResponse.getId()), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
 	@GetMapping("/pdf/{orderId}")
 	public ResponseEntity<byte[]> getOrderReportPDF(@PathVariable String orderId) throws Exception {
 		try {

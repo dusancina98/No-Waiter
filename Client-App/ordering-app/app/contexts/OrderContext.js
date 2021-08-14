@@ -25,6 +25,11 @@ const OrderContextProvider = (props) => {
 			objectId: "",
 			key: "",
 		},
+		orderHistory:{
+			orders:[],
+			showError:false,
+			errorMessage:'',
+		}
 	});
 
 	return <OrderContext.Provider value={{ orderState, dispatch }}>{props.children}</OrderContext.Provider>;

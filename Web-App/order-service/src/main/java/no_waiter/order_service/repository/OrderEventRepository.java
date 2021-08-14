@@ -67,7 +67,8 @@ public interface OrderEventRepository extends PagingAndSortingRepository<OrderEv
 			+ "AND oe.order.id not in (SELECT oee.order.id FROM OrderEvent oee WHERE oee.objectId = ?1 AND oee.orderStatus = 'COMPLETED')")
 	int getMaxOrdinalNumberForObject(UUID objectId);
 	
-	
+	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.customerId = ?1 and oe.orderStatus = 'COMPLETED' ORDER BY oe.createdTime DESC")
+	List<OrderEvent> findAllCompletedOrderEventsForCustomer(UUID id);
 }
 
 

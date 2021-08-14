@@ -86,6 +86,19 @@ public class Api {
         }
     }
     
+    @GetMapping("/objectName/{objectId}")
+	@CrossOrigin
+	public ResponseEntity<?> getObjectName(@PathVariable UUID objectId) {
+    	try {
+            return new ResponseEntity<>(objectService.getObjectName(objectId), HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
     @GetMapping("/customers/favourites")
 	@CrossOrigin
 	public ResponseEntity<?> getFavouriteObjectsForCustomers(@RequestHeader("Authorization") String token) {

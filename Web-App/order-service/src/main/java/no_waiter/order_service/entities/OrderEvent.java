@@ -37,6 +37,9 @@ public class OrderEvent {
     
     @Column(name = "delivererId", nullable = true)
 	private UUID delivererId;
+    
+    @Column(name = "customerId", nullable = true)
+   	private UUID customerId;
 
     @Column(name = "ordinalNumber")
 	private int ordinalNumber;
@@ -45,7 +48,7 @@ public class OrderEvent {
 		super();
 	}
 
-	public OrderEvent(UUID id, Order order, OrderStatus orderStatus, Date createdTime, int estimatedTime, UUID objectId, UUID delivererId, int ordinalNumber) {
+	public OrderEvent(UUID id, Order order, OrderStatus orderStatus, Date createdTime, int estimatedTime, UUID objectId, UUID delivererId, int ordinalNumber, UUID customerId) {
 		super();
 		this.id = id;
 		this.order = order;
@@ -55,10 +58,11 @@ public class OrderEvent {
 		this.objectId = objectId;
 		this.delivererId = delivererId;
 		this.ordinalNumber= ordinalNumber;
+		this.customerId= customerId;
 	}
 
-	public OrderEvent(Order order, OrderStatus orderStatus, Date timeStamp, int estimatedTime, UUID objectId, UUID delivererId,int ordinalNumber) {
-		this(UUID.randomUUID(), order, orderStatus, timeStamp, estimatedTime, objectId, delivererId, ordinalNumber);
+	public OrderEvent(Order order, OrderStatus orderStatus, Date timeStamp, int estimatedTime, UUID objectId, UUID delivererId,int ordinalNumber, UUID customerId) {
+		this(UUID.randomUUID(), order, orderStatus, timeStamp, estimatedTime, objectId, delivererId, ordinalNumber,customerId);
 	}
 
 	public Order getOrder() {
@@ -121,5 +125,14 @@ public class OrderEvent {
 	public void setOrdinalNumber(int ordinalNumber) {
 		this.ordinalNumber = ordinalNumber;
 	}
+
+	public UUID getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(UUID customerId) {
+		this.customerId = customerId;
+	}
+
 }
 

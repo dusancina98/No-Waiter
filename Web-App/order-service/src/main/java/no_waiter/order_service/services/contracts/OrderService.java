@@ -12,6 +12,7 @@ import no_waiter.order_service.services.contracts.dto.DelivererOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OnRouteOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OrderCustomerRequestDTO;
 import no_waiter.order_service.services.contracts.dto.OrderDetailsDTO;
+import no_waiter.order_service.services.contracts.dto.OrderHistoryDTO;
 import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
 import no_waiter.order_service.services.contracts.dto.ProductValidationResponseDTO;
 import no_waiter.order_service.services.contracts.dto.ReadyOrderDTO;
@@ -64,4 +65,6 @@ public interface OrderService {
 	UUID createOrderForInfoPult(OrderRequestDTO requestDTO, ProductValidationResponseDTO resp, UUID objectId) throws IOException, Exception;
 
 	byte[] generateReportPDF(String orderId) throws DocumentException, Exception;
+
+	List<OrderHistoryDTO> getCustomerOrderHistory(UUID id);
 }
