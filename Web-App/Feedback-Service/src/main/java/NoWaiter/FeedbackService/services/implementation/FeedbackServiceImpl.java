@@ -21,7 +21,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 	
 	@Override
 	public void createFeedback(UUID userId, CreateFeedbackDTO feedbackDTO) throws ClassFieldValidationException {
-		Feedback feedback = new Feedback(feedbackDTO.Grade, feedbackDTO.FeedbackType, feedbackDTO.EnitityId, userId);
+		Feedback feedback = new Feedback(feedbackDTO.Grade, feedbackDTO.FeedbackType, feedbackDTO.EntityId, userId);
 		feedbackRepository.save(feedback);
 	}
 

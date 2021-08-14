@@ -28,6 +28,16 @@ public interface OrderEventRepository extends PagingAndSortingRepository<OrderEv
 	
 	
 	//
+	@Query(value = "SELECT oee FROM OrderEvent oee WHERE " + 
+			" oee.createdTime = (SELECT MAX(oeee.createdTime) FROM OrderEvent oeee WHERE oeee.order.id = oee.order.id) AND oee.orderStatus IN (?1) AND oee.order.orderType = 'DELIVERY'"
+			+ "AND oee.order.id NOT IN (SELECT ord.order.id FROM OrderEvent ord WHERE ord.order.id = oee.order.id AND ord.orderStatus = 'CONFIRMED_DELIVERY')")
+	List<OrderEvent> getOrderEventsForDeliverer(List<OrderStatus> orderStatus);
+	
+	@Query(value = "SELECT distinct(oee.objectId) FROM OrderEvent oee WHERE " + 
+			" oee.createdTime = (SELECT MAX(oeee.createdTime) FROM OrderEvent oeee WHERE oeee.order.id = oee.order.id) AND oee.orderStatus IN (?1) AND oee.order.orderType = 'DELIVERY'"
+			+ "AND oee.order.id NOT IN (SELECT ord.order.id FROM OrderEvent ord WHERE ord.order.id = oee.order.id AND ord.orderStatus = 'CONFIRMED_DELIVERY')")
+	List<UUID> getDistinctObjectIdsForOrderDeliverer(List<OrderStatus> orderStatus);
+	
 	@Query(value = "SELECT oee FROM OrderEvent oee WHERE oee.order.id = ?1 AND" + 
 			" oee.createdTime = (SELECT MAX(oeee.createdTime) FROM OrderEvent oeee WHERE oeee.order.id = oee.order.id)")
 	OrderEvent getLastOrderEventForOrder(UUID orderId);

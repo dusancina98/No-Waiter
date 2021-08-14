@@ -799,7 +799,6 @@ export const orderHistoryStyles = StyleSheet.create({
 	},
 	infoStyle: {
 		marginLeft: 20,
-
 	},
 	objectName: {
 		fontSize: 22,
@@ -824,13 +823,13 @@ export const orderHistoryStyles = StyleSheet.create({
 		alignItems: "flex-end",
 		justifyContent: "flex-end",
 	},
-	emptyHistoryContainer:{
+	emptyHistoryContainer: {
 		flex: 1,
 		alignItems: "center",
 		justifyContent: "center",
 	},
-	emptyHistoryText:{
-		marginTop:50,
+	emptyHistoryText: {
+		marginTop: 50,
 		fontSize: 24,
 		flexWrap: "wrap",
 		color: "#a4a4a4",
@@ -842,8 +841,8 @@ export const orderHistoryDetailsStyles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "white",
 		paddingVertical: 10,
-		marginLeft:15,
-		marginRight:15,
+		marginLeft: 15,
+		marginRight: 15,
 		marginTop: 1,
 	},
 	restaurantContainer: {
@@ -862,7 +861,7 @@ export const orderHistoryDetailsStyles = StyleSheet.create({
 	orderInformationContainer: {
 		flexDirection: "row",
 	},
-	orderInformationText:{
+	orderInformationText: {
 		fontSize: 18,
 		flexWrap: "wrap",
 		color: "#a4a4a4",
@@ -896,14 +895,14 @@ export const orderHistoryDetailsStyles = StyleSheet.create({
 		fontSize: 17,
 		color: "#617ae1",
 	},
-	orderItemName:{
+	orderItemName: {
 		fontSize: 24,
 		fontWeight: "bold",
 		color: "black",
 	},
-	itemInformationText:{
+	itemInformationText: {
 		fontSize: 14,
-		color:"#a4a4a4"
+		color: "#a4a4a4",
 	},
 	itemIngredient: {
 		fontSize: 16,
@@ -923,20 +922,65 @@ export const orderHistoryDetailsStyles = StyleSheet.create({
 		color: "#617ae1",
 		textAlign: "right",
 	},
-	totalPriceContainer:{
+	totalPriceContainer: {
 		flexDirection: "row",
 		justifyContent: "flex-end",
-		marginRight:25,
+		marginRight: 25,
 	},
 	totalPrice: {
 		fontSize: 17,
 		color: "#617ae1",
 		textAlign: "right",
 	},
-	totalPriceText:{
+	totalPriceText: {
 		fontSize: 17,
 		color: "black",
 		textAlign: "right",
 		fontWeight: "bold",
-	}
+	},
+});
+
+export const giveFeedbackStyle = StyleSheet.create({
+	containerWrapper: {
+		flex: 1,
+		backgroundColor: "white",
+	},
+	headingContainer: {
+		alignItems: "center",
+		marginTop: 30,
+	},
+	logoContainer: {
+		alignItems: "center",
+	},
+	heading: {
+		color: "black",
+		fontSize: 40,
+		fontFamily: "roboto-light",
+		fontWeight: "bold",
+	},
+	gradesContainer: {
+		flex: 1,
+		flexDirection: "row",
+		alignSelf: "center",
+		marginTop: 20,
+	},
+	button: {
+		width: "50%",
+		alignSelf: "center",
+		paddingTop: 15,
+		paddingBottom: 15,
+		marginLeft: 30,
+		marginRight: 30,
+		backgroundColor: "transparent",
+		borderRadius: 10,
+		borderWidth: 1,
+		borderColor: "#b99849",
+	},
+	buttonText: {
+		color: "#b99849",
+		fontSize: 20,
+		fontFamily: "roboto-regular",
+		fontWeight: "400",
+		textAlign: "center",
+	},
 });

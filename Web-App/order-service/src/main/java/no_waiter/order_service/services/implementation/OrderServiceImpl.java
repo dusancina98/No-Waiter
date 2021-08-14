@@ -251,11 +251,16 @@ public class OrderServiceImpl implements OrderService{
 
 	@Override
 	public void pickupOrderDeliverer(UUID orderId, UUID delivererId) throws NotFoundException {
-		OrderEvent orderEvent = orderEventRepository.getLastConfirmedDeliveryOrderEventForOrder(orderId, delivererId);
+		OrderEvent orderEvent = orderEventRepository.getLastOrderEventForOrder(orderId);
 
 		if (orderEvent == null) {
 			throw new NotFoundException("Order not found");
 		}
+		
+		if ((!orderEvent.getOrderStatus().equals(OrderStatus.CONFIRMED_DELIVERY) && !orderEvent.getOrderStatus().equals(OrderStatus.READY)) || !orderEvent.getDelivererId().equals(delivererId)) {
+			throw new NotFoundException("Order not found");
+		}
+		
 		
 		OrderEvent newOrderEvent = new OrderEvent(orderEvent.getOrder(), OrderStatus.DELIVERING, new Date(), orderEvent.getOrder().getEstimatedTime(), orderEvent.getOrder().getObjectId(), delivererId, orderEvent.getOrdinalNumber(),orderEvent.getCustomerId());
 		orderEventRepository.save(newOrderEvent);	
@@ -264,7 +269,7 @@ public class OrderServiceImpl implements OrderService{
 
 
 	@Override
-	public void completeOrder(UUID orderId, UUID userId) throws NotFoundException {
+	public UUID completeOrder(UUID orderId, UUID userId) throws NotFoundException {
 		OrderEvent orderEvent = orderEventRepository.getLastOrderEventForOrder(orderId);
 		
 		if (!orderEvent.getOrderStatus().equals(OrderStatus.DELIVERING) || !orderEvent.getOrder().getCustomerId().equals(userId)) {
@@ -272,7 +277,8 @@ public class OrderServiceImpl implements OrderService{
 		}
 		
 		OrderEvent newOrderEvent = new OrderEvent(orderEvent.getOrder(), OrderStatus.COMPLETED, new Date(), orderEvent.getOrder().getEstimatedTime(), orderEvent.getOrder().getObjectId(), orderEvent.getDelivererId() , orderEvent.getOrdinalNumber(), userId);
-		orderEventRepository.save(newOrderEvent);	
+		orderEventRepository.save(newOrderEvent);
+		return orderEvent.getDelivererId();
 	}
 	
 
@@ -594,8 +600,8 @@ public class OrderServiceImpl implements OrderService{
                 add(OrderStatus.READY);
             };
 		};
-		List<OrderEvent> confirmedOrderEvents =  orderEventRepository.getOrderEventsForDelivery(statuses);
-		List<UUID> objectIds = orderEventRepository.getDistinctObjectIdsForOrderDelivery(statuses);
+		List<OrderEvent> confirmedOrderEvents =  orderEventRepository.getOrderEventsForDeliverer(statuses);
+		List<UUID> objectIds = orderEventRepository.getDistinctObjectIdsForOrderDeliverer(statuses);
 		List<ObjectDetailsDTO> objectDetails = objectClient.getObjectDetailsByObjectIds(objectIds);
 		
 		confirmedOrderEvents.forEach((orderEvent) -> confirmedOrderDTO.add(mapOrderToDelivererOrderDTO(orderEvent, objectDetails)));

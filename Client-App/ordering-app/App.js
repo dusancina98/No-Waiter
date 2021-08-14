@@ -27,6 +27,9 @@ import SelectDeliveryAddressScreen from "./app/screens/SelectDeliveryAddressScre
 import OrderHistoryScreen from "./app/screens/OrderHistoryScreen";
 import OrderHistoryDetailsScreen from "./app/screens/OrderHistoryDetailsScreen";
 import PendingOrdersScreen from "./app/screens/PendingOrdersScreen";
+import RateDelivererScreen from "./app/screens/RateDelivererScreen";
+import ReceiveOrderQrScreen from "./app/screens/ReceiveOrderQrScanScreen";
+import FeedbackContextProvider from "./app/contexts/FeedbackContext";
 
 const Stack = createStackNavigator();
 
@@ -46,42 +49,46 @@ export default function App() {
 
 	if (fontsLoaded) {
 		return (
-			<UserContextProvider>
-				<AuthContextProvider>
-					<ObjectContextProvider>
-						<OrderContextProvider>
-							<ProductContextProvider>
-								<NavigationContainer>
-									<Stack.Navigator
-										screenOptions={{
-											headerShown: false,
-										}}
-										initialRouteName={token === true ? "Home" : "Welcome"}
-									>
-										<Stack.Screen name="Home" component={Tabs} />
-										<Stack.Screen name="Login" component={LoginScreen} />
-										<Stack.Screen name="Registration" component={RegistrationScreen} />
-										<Stack.Screen name="Reset Password" component={ResetPasswordScreen} />
-										<Stack.Screen name="Activate User" component={UserActivateScreen} />
-										<Stack.Screen name="My Addresses" component={UserAddressesScreen} options={{ headerShown: true, headerBackTitle: false }} />
-										<Stack.Screen name="Add New Address" component={AddNewAddressScreen} options={{ headerShown: true, headerBackTitle: false }} />
-										<Stack.Screen name="Welcome" component={WelcomeScreen} />
-										<Stack.Screen name="Favourite Places" component={FavouriteObjectsScreen} options={{ headerShown: true, headerBackTitle: false }} />
-										<Stack.Screen name="Object" component={ObjectScreen} options={{ headerShown: true }} />
-										<Stack.Screen name="Delivery Address" component={SelectDeliveryAddressScreen} options={{ headerShown: true, headerBackTitle: false }} />
-										<Stack.Screen name="Checkout" component={CheckoutScreen} options={{ headerShown: true, headerBackTitle: false }} />
-										<Stack.Screen name="Object Details" component={ObjectDetailsScreen} options={{ headerShown: true }} />
-										<Stack.Screen name="Product Details" component={ProductDetailsScreen} options={{ headerShown: true }} />
-										<Stack.Screen name="Order History" component={OrderHistoryScreen} options={{ headerShown: true }} />
-										<Stack.Screen name="Order History Details" component={OrderHistoryDetailsScreen} options={{ headerShown: true }} />
-										<Stack.Screen name="Pending Orders" component={PendingOrdersScreen} options={{ headerShown: true }} />
-									</Stack.Navigator>
-								</NavigationContainer>
-							</ProductContextProvider>
-						</OrderContextProvider>
-					</ObjectContextProvider>
-				</AuthContextProvider>
-			</UserContextProvider>
+			<FeedbackContextProvider>
+				<UserContextProvider>
+					<AuthContextProvider>
+						<ObjectContextProvider>
+							<OrderContextProvider>
+								<ProductContextProvider>
+									<NavigationContainer>
+										<Stack.Navigator
+											screenOptions={{
+												headerShown: false,
+											}}
+											initialRouteName={token === true ? "Home" : "Welcome"}
+										>
+											<Stack.Screen name="Home" component={Tabs} />
+											<Stack.Screen name="Login" component={LoginScreen} />
+											<Stack.Screen name="Registration" component={RegistrationScreen} />
+											<Stack.Screen name="Reset Password" component={ResetPasswordScreen} />
+											<Stack.Screen name="Activate User" component={UserActivateScreen} />
+											<Stack.Screen name="My Addresses" component={UserAddressesScreen} options={{ headerShown: true, headerBackTitle: false }} />
+											<Stack.Screen name="Add New Address" component={AddNewAddressScreen} options={{ headerShown: true, headerBackTitle: false }} />
+											<Stack.Screen name="Welcome" component={WelcomeScreen} />
+											<Stack.Screen name="Favourite Places" component={FavouriteObjectsScreen} options={{ headerShown: true, headerBackTitle: false }} />
+											<Stack.Screen name="Object" component={ObjectScreen} options={{ headerShown: true }} />
+											<Stack.Screen name="Delivery Address" component={SelectDeliveryAddressScreen} options={{ headerShown: true, headerBackTitle: false }} />
+											<Stack.Screen name="Checkout" component={CheckoutScreen} options={{ headerShown: true, headerBackTitle: false }} />
+											<Stack.Screen name="Object Details" component={ObjectDetailsScreen} options={{ headerShown: true }} />
+											<Stack.Screen name="Product Details" component={ProductDetailsScreen} options={{ headerShown: true }} />
+											<Stack.Screen name="Order History" component={OrderHistoryScreen} options={{ headerShown: true }} />
+											<Stack.Screen name="Order History Details" component={OrderHistoryDetailsScreen} options={{ headerShown: true }} />
+											<Stack.Screen name="Pending Orders" component={PendingOrdersScreen} options={{ headerShown: true }} />
+											<Stack.Screen name="Rate Deliverer" component={RateDelivererScreen} options={{ headerShown: true, headerBackTitle: false }} />
+											<Stack.Screen name="Receive Order" component={ReceiveOrderQrScreen} />
+										</Stack.Navigator>
+									</NavigationContainer>
+								</ProductContextProvider>
+							</OrderContextProvider>
+						</ObjectContextProvider>
+					</AuthContextProvider>
+				</UserContextProvider>
+			</FeedbackContextProvider>
 		);
 	} else {
 		return <AppLoading startAsync={getFonts} onFinish={() => setFontsLoaded(true)} onError={(err) => console.log(err)} />;

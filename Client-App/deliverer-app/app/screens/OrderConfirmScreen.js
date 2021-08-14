@@ -41,7 +41,7 @@ function OrderConfirmScreen({ route }) {
 							<Text style={{ fontWeight: "bold" }}>To: </Text>
 							<Text style={{ marginLeft: 10 }}>{route.params.DeliveryAddress}</Text>
 						</Text>
-						<Text style={{ fontSize: 18 }}>{moment.utc(route.params.ExpiredTime).utc().endOf("minutes").fromNow()}</Text>
+						<Text style={{ fontSize: 18 }}>{moment.utc(route.params.EstimatedTime).local().startOf("second").fromNow()}</Text>
 						<Text style={{ fontSize: 18 }}>RSD {Number(route.params.Price).toFixed(2)}</Text>
 
 						<Text style={orderConfirmStyles.textForm}>Estimated delivery time (in minutes)</Text>

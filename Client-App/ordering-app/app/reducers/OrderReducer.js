@@ -73,12 +73,12 @@ export const orderReducer = (state, action) => {
 			ordCpy = { ...state };
 
 			ordCpy.qrCodeData.scanned = true;
-			ordCpy.qrCodeData.tableId=action.valuesArray.TableId;
-			ordCpy.qrCodeData.objectId=action.valuesArray.ObjectId;
-			ordCpy.qrCodeData.key=action.valuesArray.Key;
+			ordCpy.qrCodeData.tableId = action.valuesArray.TableId;
+			ordCpy.qrCodeData.objectId = action.valuesArray.ObjectId;
+			ordCpy.qrCodeData.key = action.valuesArray.Key;
 
 			return ordCpy;
-		case orderConstants.GET_ORDER_HISTORY_SUCCESS:{
+		case orderConstants.GET_ORDER_HISTORY_SUCCESS: {
 			ordCpy = { ...state };
 			ordCpy.orderHistory.orders = action.orders;
 			ordCpy.qrCodeData.showError = false;
@@ -87,7 +87,7 @@ export const orderReducer = (state, action) => {
 			return ordCpy;
 		}
 
-		case orderConstants.GET_ORDER_HISTORY_FAILURE:{
+		case orderConstants.GET_ORDER_HISTORY_FAILURE: {
 			ordCpy = { ...state };
 			ordCpy.orderHistory.orders = [];
 			ordCpy.qrCodeData.showError = true;
@@ -95,7 +95,7 @@ export const orderReducer = (state, action) => {
 
 			return ordCpy;
 		}
-		case orderConstants.GET_PENDING_ORDERS_SUCCESS:{
+		case orderConstants.GET_PENDING_ORDERS_SUCCESS: {
 			ordCpy = { ...state };
 			ordCpy.pendingOrders.orders = action.orders;
 			ordCpy.pendingOrders.showError = false;
@@ -104,7 +104,7 @@ export const orderReducer = (state, action) => {
 			return ordCpy;
 		}
 
-		case orderConstants.GET_PENDING_ORDERS_FAILURE:{
+		case orderConstants.GET_PENDING_ORDERS_FAILURE: {
 			ordCpy = { ...state };
 			ordCpy.pendingOrders.orders = [];
 			ordCpy.pendingOrders.showError = true;
@@ -112,6 +112,37 @@ export const orderReducer = (state, action) => {
 
 			return ordCpy;
 		}
+
+		case orderConstants.RECEIVE_ORDER_REQUEST:
+			return {
+				...state,
+				scanQRCode: {
+					scannedQr: false,
+					showError: false,
+					errorMessage: "",
+					delivererId: "",
+				},
+			};
+		case orderConstants.RECEIVE_ORDER_SUCCESS:
+			return {
+				...state,
+				scanQRCode: {
+					scannedQr: true,
+					showError: false,
+					errorMessage: "",
+					delivererId: action.delivererId,
+				},
+			};
+		case orderConstants.RECEIVE_ORDER_FAILURE:
+			return {
+				...state,
+				scanQRCode: {
+					scannedQr: false,
+					showError: true,
+					errorMessage: action.errorMessage,
+					delivererId: "",
+				},
+			};
 		default:
 			return state;
 	}

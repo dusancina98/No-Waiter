@@ -7,7 +7,39 @@ export const orderService = {
 	createOrder,
 	getOrderHistory,
 	getPendingOrders,
+	receiveOrder,
 };
+
+async function receiveOrder(orderId, dispatch) {
+	dispatch(request());
+
+	let header = await authHeader();
+
+	Axios.put(`${API_URL}/order-api/api/orders/${orderId}/completed/customer`, null, { validateStatus: () => true, headers: header })
+		.then((res) => {
+			console.log(res);
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else if (res.status === 404) {
+				dispatch(failure("Order not found"));
+			} else {
+				dispatch(failure(res.data.message));
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+
+	function request() {
+		return { type: orderConstants.RECEIVE_ORDER_REQUEST };
+	}
+	function success(delivererId) {
+		return { type: orderConstants.RECEIVE_ORDER_SUCCESS, delivererId };
+	}
+	function failure(error) {
+		return { type: orderConstants.RECEIVE_ORDER_FAILURE, errorMessage: error };
+	}
+}
 
 async function createOrder(orderDTO, dispatch) {
 	dispatch(request());
@@ -39,7 +71,6 @@ async function createOrder(orderDTO, dispatch) {
 }
 
 async function getOrderHistory(dispatch) {
-
 	let header = await authHeader();
 
 	await Axios.get(`${API_URL}/order-api/api/orders/customer/history`, { validateStatus: () => true, headers: header })
@@ -64,7 +95,6 @@ async function getOrderHistory(dispatch) {
 }
 
 async function getPendingOrders(dispatch) {
-
 	let header = await authHeader();
 
 	await Axios.get(`${API_URL}/order-api/api/orders/customer/pending`, { validateStatus: () => true, headers: header })
