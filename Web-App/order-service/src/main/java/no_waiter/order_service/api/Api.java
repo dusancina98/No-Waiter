@@ -293,6 +293,23 @@ public class Api {
         }
     }
 	
+	@PutMapping("/{orderId}/complete")
+    @CrossOrigin
+    public ResponseEntity<?> setOrderToComplete(@RequestHeader("Authorization") String token, @PathVariable String orderId) {
+        try {
+    		JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+        	orderService.completeOrder(UUID.fromString(orderId), jwtResponse.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NotFoundException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
+	
 	@PutMapping("/{orderId}/delivering")
     @CrossOrigin
     public ResponseEntity<?> setOrderToDelivering(@RequestHeader("Authorization") String token, @PathVariable String orderId) {

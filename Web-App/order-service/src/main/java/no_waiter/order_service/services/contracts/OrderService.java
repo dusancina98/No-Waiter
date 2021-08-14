@@ -25,6 +25,8 @@ public interface OrderService {
 	UUID createOrderCustomer(OrderCustomerRequestDTO requestDTO, ProductValidationResponseDTO products, UUID customerId);
 
 	List<UnConfirmedOrderDTO> getUnconfirmedOrdersForObject(UUID objectId);
+	
+	void completeOrder(UUID orderId, UUID userId) throws NotFoundException;
 
 	void rejectOrder(UUID orderId, UUID objectId);
 

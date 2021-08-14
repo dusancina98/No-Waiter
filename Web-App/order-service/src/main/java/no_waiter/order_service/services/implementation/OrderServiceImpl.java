@@ -262,6 +262,20 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 
+
+	@Override
+	public void completeOrder(UUID orderId, UUID userId) throws NotFoundException {
+		OrderEvent orderEvent = orderEventRepository.getLastOrderEventForOrder(orderId);
+		
+		if (!orderEvent.getOrderStatus().equals(OrderStatus.DELIVERING) || !orderEvent.getOrder().getCustomerId().equals(userId)) {
+			throw new NotFoundException("Order not found");
+		}
+		
+		OrderEvent newOrderEvent = new OrderEvent(orderEvent.getOrder(), OrderStatus.COMPLETED, new Date(), orderEvent.getOrder().getEstimatedTime(), orderEvent.getOrder().getObjectId(), orderEvent.getDelivererId() , orderEvent.getOrdinalNumber(), userId);
+		orderEventRepository.save(newOrderEvent);	
+	}
+	
+
 	@Override
 	public void cancelOrderDeliverer(UUID orderId, UUID delivererId) throws NotFoundException {
 		
@@ -710,5 +724,6 @@ public class OrderServiceImpl implements OrderService{
 		
 		return retVal;
 	}
+
 
 }
