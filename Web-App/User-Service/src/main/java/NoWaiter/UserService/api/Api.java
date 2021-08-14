@@ -694,4 +694,31 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @GetMapping("/customers/penalties/{customerId}")
+    @CrossOrigin
+    public ResponseEntity<?> getPenaltiesForCustomer(@PathVariable UUID customerId){
+        try {
+            return new ResponseEntity<>(userService.getPenaltiesForCustomer(customerId), HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e){
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    @PutMapping("/customers/penalties/{customerId}/increment")
+    @CrossOrigin
+    public ResponseEntity<?> incrementCustomerPenalties(@PathVariable UUID customerId){
+        try {
+        	userService.incrementCustomerPenalties(customerId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e){
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
+    }
 }

@@ -401,4 +401,16 @@ public class UserServiceImpl implements UserService {
 		Customer customer = customerRepository.findById(customerID).get();
 		return customer.getFavouriteObjects().contains(objectId);
 	}
+
+	@Override
+	public int getPenaltiesForCustomer(UUID customerId) {
+		return customerRepository.findById(customerId).get().getPenalties();
+	}
+
+	@Override
+	public void incrementCustomerPenalties(UUID customerId) {
+		Customer customer = customerRepository.findById(customerId).get();
+		customer.incrementPenalties();
+		customerRepository.save(customer);
+	}
 }

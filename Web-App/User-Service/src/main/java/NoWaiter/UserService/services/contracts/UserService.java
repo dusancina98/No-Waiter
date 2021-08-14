@@ -89,4 +89,8 @@ public interface UserService {
 
 	void deleteObjectWorkers(UUID objectId);
 
+	int getPenaltiesForCustomer(UUID customerId);
+
+	void incrementCustomerPenalties(UUID customerId);
+
 }

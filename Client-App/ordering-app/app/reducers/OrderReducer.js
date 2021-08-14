@@ -69,6 +69,16 @@ export const orderReducer = (state, action) => {
 			ordCpy.createOrder.successMessage = "";
 
 			return ordCpy;
+		case orderConstants.HIDE_CREATE_ORDER_MESSAGES:{
+			ordCpy = { ...state };
+
+			ordCpy.createOrder.showError = false;
+			ordCpy.createOrder.errorMessage = '';
+			ordCpy.createOrder.showSuccessMessage = false;
+			ordCpy.createOrder.successMessage = "";
+			
+			return ordCpy;
+		}
 		case orderConstants.SET_QR_CODE_SCANNED_DATA:
 			ordCpy = { ...state };
 

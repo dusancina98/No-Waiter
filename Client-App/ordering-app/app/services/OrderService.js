@@ -43,8 +43,6 @@ async function receiveOrder(orderId, dispatch) {
 }
 
 async function createOrder(orderDTO, dispatch) {
-	dispatch(request());
-
 	let header = await authHeader();
 
 	Axios.post(`${API_URL}/order-api/api/orders/customer`, orderDTO, { validateStatus: () => true, headers: header })
@@ -52,7 +50,9 @@ async function createOrder(orderDTO, dispatch) {
 			console.log(res);
 			if (res.status === 201) {
 				dispatch(success("Order successfully created"));
-			} else {
+			} else if(res.status===403){
+				dispatch(failure("Your account is blocked"));
+			}else {
 				dispatch(failure(res.data.message));
 			}
 		})

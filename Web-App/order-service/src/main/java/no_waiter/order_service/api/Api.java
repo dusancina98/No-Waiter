@@ -36,6 +36,7 @@ import no_waiter.order_service.services.contracts.dto.OrderDetailsDTO;
 import no_waiter.order_service.services.contracts.dto.OrderItemsDTO;
 import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
 import no_waiter.order_service.services.contracts.dto.ProductValidationResponseDTO;
+import no_waiter.order_service.services.contracts.exceptions.CustomerPenaltiesBlockedException;
 
 @RestController
 @RequestMapping(value = "api/orders")
@@ -82,7 +83,7 @@ public class Api {
                 return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);
         	else if(e.status() == HttpStatus.BAD_REQUEST.value())
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
+        	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
         	e.printStackTrace();
@@ -102,12 +103,16 @@ public class Api {
 			JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
 
 			return new ResponseEntity<>(orderService.createOrderCustomer(requestDTO, resp, jwtResponse.getId()), HttpStatus.CREATED);
-		} catch (FeignException e) {
+		}catch (CustomerPenaltiesBlockedException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+		}
+		catch (FeignException e) {
         	if(e.status() == HttpStatus.NOT_FOUND.value()) {
         		System.out.println("USAO OVDE");
                 return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);}
         	else if(e.status() == HttpStatus.BAD_REQUEST.value())
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        	e.printStackTrace();
 
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
