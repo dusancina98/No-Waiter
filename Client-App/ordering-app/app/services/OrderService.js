@@ -6,6 +6,7 @@ import { authHeader } from "../helpers/auth-header";
 export const orderService = {
 	createOrder,
 	getOrderHistory,
+	getPendingOrders,
 };
 
 async function createOrder(orderDTO, dispatch) {
@@ -59,5 +60,30 @@ async function getOrderHistory(dispatch) {
 	}
 	function failure(error) {
 		return { type: orderConstants.GET_ORDER_HISTORY_FAILURE, error };
+	}
+}
+
+async function getPendingOrders(dispatch) {
+
+	let header = await authHeader();
+
+	await Axios.get(`${API_URL}/order-api/api/orders/customer/pending`, { validateStatus: () => true, headers: header })
+		.then((res) => {
+			console.log(res.data);
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else {
+				dispatch(failure("We have some problem"));
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+
+	function success(orders) {
+		return { type: orderConstants.GET_PENDING_ORDERS_SUCCESS, orders };
+	}
+	function failure(error) {
+		return { type: orderConstants.GET_PENDING_ORDERS_FAILURE, error };
 	}
 }

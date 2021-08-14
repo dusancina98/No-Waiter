@@ -30,6 +30,7 @@ import no_waiter.order_service.services.contracts.OrderService;
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CompletedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
+import no_waiter.order_service.services.contracts.dto.CustomerOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CustomerOrderItemDTO;
 import no_waiter.order_service.services.contracts.dto.DelivererOrderDTO;
 import no_waiter.order_service.services.contracts.dto.NameDTO;
@@ -37,7 +38,6 @@ import no_waiter.order_service.services.contracts.dto.ObjectDetailsDTO;
 import no_waiter.order_service.services.contracts.dto.OnRouteOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OrderCustomerRequestDTO;
 import no_waiter.order_service.services.contracts.dto.OrderDetailsDTO;
-import no_waiter.order_service.services.contracts.dto.OrderHistoryDTO;
 import no_waiter.order_service.services.contracts.dto.OrderItemDTO;
 import no_waiter.order_service.services.contracts.dto.OrderItemResponseDTO;
 import no_waiter.order_service.services.contracts.dto.OrderItemsDTO;
@@ -657,13 +657,13 @@ public class OrderServiceImpl implements OrderService{
 
 
 	@Override
-	public List<OrderHistoryDTO> getCustomerOrderHistory(UUID id) {
-		List<OrderHistoryDTO> retVal = new ArrayList<OrderHistoryDTO>();
+	public List<CustomerOrderDTO> getCustomerOrderHistory(UUID id) {
+		List<CustomerOrderDTO> retVal = new ArrayList<CustomerOrderDTO>();
 		List<OrderEvent> customerOrders = orderEventRepository.findAllCompletedOrderEventsForCustomer(id);
 	
 		for(OrderEvent orderEvent : customerOrders) {
 			List<CustomerOrderItemDTO> items = mapOrderToCustomerOrderItemDTO(orderEvent.getOrder());
-			retVal.add(new OrderHistoryDTO(orderEvent.getOrder().getId(),objectClient.getObjectNameByObjectId(orderEvent.getObjectId()), orderEvent.getOrder().getOrderType(), orderEvent.getOrder().getAddress().getAddress(), orderEvent.getCreatedTime(),getPriceForOrder(orderEvent.getOrder()),items));
+			retVal.add(new CustomerOrderDTO(orderEvent.getOrder().getId(),objectClient.getObjectNameByObjectId(orderEvent.getObjectId()), orderEvent.getOrder().getOrderType(), orderEvent.getOrder().getAddress().getAddress(), orderEvent.getCreatedTime(),getPriceForOrder(orderEvent.getOrder()),items,orderEvent.getOrderStatus()));
 		}
 		
 		return retVal;
@@ -690,6 +690,22 @@ public class OrderServiceImpl implements OrderService{
 			
 			if(++index != sideDishes.size()) 
 				retVal +=",";
+		}
+		
+		return retVal;
+	}
+
+
+	@Override
+	public List<CustomerOrderDTO> getCustomerPendingOrders(UUID id) {
+		List<CustomerOrderDTO> retVal = new ArrayList<CustomerOrderDTO>();
+		
+		List<UUID> customerOrderIds = orderEventRepository.findAllUnCompletedOrderEventsForCustomer(id);
+		
+		for(UUID orderId : customerOrderIds) {
+			OrderEvent orderEvent=  orderEventRepository.getLastOrderEventForOrder(orderId);
+			List<CustomerOrderItemDTO> items = mapOrderToCustomerOrderItemDTO(orderEvent.getOrder());
+			retVal.add(new CustomerOrderDTO(orderEvent.getOrder().getId(),objectClient.getObjectNameByObjectId(orderEvent.getObjectId()), orderEvent.getOrder().getOrderType(), orderEvent.getOrder().getAddress().getAddress(), orderEvent.getCreatedTime(),getPriceForOrder(orderEvent.getOrder()),items,orderEvent.getOrderStatus()));
 		}
 		
 		return retVal;

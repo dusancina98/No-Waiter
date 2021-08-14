@@ -95,6 +95,23 @@ export const orderReducer = (state, action) => {
 
 			return ordCpy;
 		}
+		case orderConstants.GET_PENDING_ORDERS_SUCCESS:{
+			ordCpy = { ...state };
+			ordCpy.pendingOrders.orders = action.orders;
+			ordCpy.pendingOrders.showError = false;
+			ordCpy.pendingOrders.errorMessage = "";
+
+			return ordCpy;
+		}
+
+		case orderConstants.GET_PENDING_ORDERS_FAILURE:{
+			ordCpy = { ...state };
+			ordCpy.pendingOrders.orders = [];
+			ordCpy.pendingOrders.showError = true;
+			ordCpy.pendingOrders.errorMessage = action.error;
+
+			return ordCpy;
+		}
 		default:
 			return state;
 	}

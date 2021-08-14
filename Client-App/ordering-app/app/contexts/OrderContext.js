@@ -29,6 +29,11 @@ const OrderContextProvider = (props) => {
 			orders:[],
 			showError:false,
 			errorMessage:'',
+		},
+		pendingOrders:{
+			orders:[],
+			showError:false,
+			errorMessage:'',
 		}
 	});
 

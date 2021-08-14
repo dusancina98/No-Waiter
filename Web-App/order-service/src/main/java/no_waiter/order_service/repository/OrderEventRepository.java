@@ -69,6 +69,10 @@ public interface OrderEventRepository extends PagingAndSortingRepository<OrderEv
 	
 	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.customerId = ?1 and oe.orderStatus = 'COMPLETED' ORDER BY oe.createdTime DESC")
 	List<OrderEvent> findAllCompletedOrderEventsForCustomer(UUID id);
+
+	@Query(value = "SELECT distinct(oe.order.id) FROM OrderEvent oe WHERE oe.customerId = ?1 "
+			+ "AND oe.order.id not in (SELECT oee.order.id FROM OrderEvent oee WHERE oee.orderStatus = 'COMPLETED')")
+	List<UUID> findAllUnCompletedOrderEventsForCustomer(UUID id);
 }
 
 

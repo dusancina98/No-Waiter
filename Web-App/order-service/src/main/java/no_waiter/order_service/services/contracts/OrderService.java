@@ -8,11 +8,11 @@ import javassist.NotFoundException;
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CompletedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
+import no_waiter.order_service.services.contracts.dto.CustomerOrderDTO;
 import no_waiter.order_service.services.contracts.dto.DelivererOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OnRouteOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OrderCustomerRequestDTO;
 import no_waiter.order_service.services.contracts.dto.OrderDetailsDTO;
-import no_waiter.order_service.services.contracts.dto.OrderHistoryDTO;
 import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
 import no_waiter.order_service.services.contracts.dto.ProductValidationResponseDTO;
 import no_waiter.order_service.services.contracts.dto.ReadyOrderDTO;
@@ -66,5 +66,7 @@ public interface OrderService {
 
 	byte[] generateReportPDF(String orderId) throws DocumentException, Exception;
 
-	List<OrderHistoryDTO> getCustomerOrderHistory(UUID id);
+	List<CustomerOrderDTO> getCustomerOrderHistory(UUID id);
+
+	List<CustomerOrderDTO> getCustomerPendingOrders(UUID id);
 }
