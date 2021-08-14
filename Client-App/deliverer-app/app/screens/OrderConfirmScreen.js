@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
 import { Image, SafeAreaView, View, Text, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from "react-native";
 import { API_URL } from "../constants/ApiUrl";
-import { orderConfirmStyles } from "../styles/styles";
+import { loginStyles, orderConfirmStyles, welcomeStyles } from "../styles/styles";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { OrderContext } from "../contexts/OrderContext";
 import { orderService } from "../services/OrderService";
@@ -41,7 +41,7 @@ function OrderConfirmScreen({ route }) {
 							<Text style={{ fontWeight: "bold" }}>To: </Text>
 							<Text style={{ marginLeft: 10 }}>{route.params.DeliveryAddress}</Text>
 						</Text>
-						<Text style={{ fontSize: 18 }}>{moment.utc(route.params.ExpiredTime).utc().endOf("minutes").fromNow()}</Text>
+						<Text style={{ fontSize: 18 }}>{moment.utc(route.params.EstimatedTime).local().startOf("second").fromNow()}</Text>
 						<Text style={{ fontSize: 18 }}>RSD {Number(route.params.Price).toFixed(2)}</Text>
 
 						<Text style={orderConfirmStyles.textForm}>Estimated delivery time (in minutes)</Text>
@@ -53,7 +53,6 @@ function OrderConfirmScreen({ route }) {
 							onChangeText={(val) => setEstimatedTime(val)}
 						></TextInput>
 						{orderState.orderAccept.accepted && <Text style={{ color: "green", fontSize: 18, alignSelf: "center", marginTop: 10 }}>Order accepted successfully</Text>}
-
 						<TouchableOpacity style={orderConfirmStyles.buttonConfirm} activeOpacity={0.5} onPress={handleConfirm}>
 							<Text style={orderConfirmStyles.buttonText}> Confirm </Text>
 						</TouchableOpacity>

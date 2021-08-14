@@ -20,21 +20,27 @@ const OrderContextProvider = (props) => {
 			successMessage: "",
 		},
 		qrCodeData: {
-			scanned:false,
+			scanned: false,
 			tableId: "",
 			objectId: "",
 			key: "",
 		},
-		orderHistory:{
-			orders:[],
-			showError:false,
-			errorMessage:'',
+		orderHistory: {
+			orders: [],
+			showError: false,
+			errorMessage: "",
 		},
-		pendingOrders:{
-			orders:[],
-			showError:false,
-			errorMessage:'',
-		}
+		pendingOrders: {
+			orders: [],
+			showError: false,
+			errorMessage: "",
+		},
+		scanQRCode: {
+			scannedQr: false,
+			showError: false,
+			errorMessage: "",
+			delivererId: "",
+		},
 	});
 
 	return <OrderContext.Provider value={{ orderState, dispatch }}>{props.children}</OrderContext.Provider>;

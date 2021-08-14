@@ -7,14 +7,15 @@ export const welcomeStyles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	logoContainer: {
+		alignItems: "center",
 		position: "absolute",
 		top: 80,
 	},
 	logoText: {
 		color: "white",
-		fontSize: 35,
+		fontSize: 45,
 		fontFamily: "roboto-light",
-		fontWeight: "200",
+		fontWeight: "bold",
 	},
 	registerButton: {
 		width: "90%",
@@ -30,15 +31,15 @@ export const welcomeStyles = StyleSheet.create({
 	},
 	loginButton: {
 		width: "90%",
-		marginTop: 10,
+		marginTop: 100,
 		paddingTop: 15,
 		paddingBottom: 15,
 		marginLeft: 30,
 		marginRight: 30,
-		backgroundColor: "white",
+		backgroundColor: "transparent",
 		borderRadius: 10,
 		borderWidth: 1,
-		borderColor: "black",
+		borderColor: "white",
 	},
 	registerText: {
 		color: "white",
@@ -48,7 +49,7 @@ export const welcomeStyles = StyleSheet.create({
 		textAlign: "center",
 	},
 	loginText: {
-		color: "black",
+		color: "white",
 		fontSize: 20,
 		fontFamily: "roboto-regular",
 		fontWeight: "400",
@@ -64,6 +65,7 @@ export const loginStyles = StyleSheet.create({
 		alignSelf: "flex-start",
 		marginLeft: 20,
 		marginRight: 20,
+		marginTop: 100,
 		width: "100%",
 	},
 	textForm: {
@@ -92,7 +94,7 @@ export const loginStyles = StyleSheet.create({
 		backgroundColor: "#b99849",
 		borderRadius: 10,
 		borderWidth: 1,
-		borderColor: "black",
+		borderColor: "#b99849",
 	},
 	errorMessage: {
 		color: "red",
@@ -186,14 +188,14 @@ export const orderConfirmStyles = StyleSheet.create({
 		paddingBottom: 15,
 		marginLeft: 30,
 		marginRight: 30,
-		backgroundColor: "white",
+		backgroundColor: "#b99849",
 		borderRadius: 10,
 		borderWidth: 1,
 		alignSelf: "center",
-		borderColor: "black",
+		borderColor: "#b99849",
 	},
 	buttonText: {
-		color: "black",
+		color: "white",
 		fontSize: 20,
 		fontFamily: "roboto-regular",
 		fontWeight: "400",
@@ -202,18 +204,26 @@ export const orderConfirmStyles = StyleSheet.create({
 });
 
 export const employmentRequestStyle = StyleSheet.create({
+	containerWrapper: {
+		flex: 1,
+	},
 	logoContainer: {
-		marginTop: 20,
-		marginBottom: 30,
+		alignItems: "center",
+	},
+	formContainer: {
+		alignSelf: "flex-start",
+		marginLeft: 20,
+		marginRight: 20,
+		width: "100%",
 	},
 	logoText: {
-		color: "black",
+		color: "white",
 		fontSize: 35,
 		fontFamily: "roboto-light",
 		fontWeight: "200",
 	},
 	textForm: {
-		color: "black",
+		color: "white",
 		fontSize: 20,
 		fontFamily: "roboto-regular",
 		fontWeight: "400",
@@ -231,7 +241,7 @@ export const employmentRequestStyle = StyleSheet.create({
 	multilineTextInput: {
 		paddingHorizontal: 10,
 		fontSize: 18,
-		height: 120,
+		height: 100,
 		marginTop: 5,
 		borderWidth: 1,
 		borderRadius: 15,

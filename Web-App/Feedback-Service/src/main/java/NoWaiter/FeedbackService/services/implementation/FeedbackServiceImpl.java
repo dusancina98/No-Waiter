@@ -3,6 +3,8 @@ package NoWaiter.FeedbackService.services.implementation;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.ConstraintDeclarationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +23,11 @@ public class FeedbackServiceImpl implements FeedbackService{
 	
 	@Override
 	public void createFeedback(UUID userId, CreateFeedbackDTO feedbackDTO) throws ClassFieldValidationException {
-		Feedback feedback = new Feedback(feedbackDTO.Grade, feedbackDTO.FeedbackType, feedbackDTO.EnitityId, userId);
+		Feedback previous = feedbackRepository.findByInitiatorIdAndEntityId(userId, feedbackDTO.EntityId);
+		if (previous != null) {
+			throw new ConstraintDeclarationException("Feedback already created");
+		}
+		Feedback feedback = new Feedback(feedbackDTO.Grade, feedbackDTO.FeedbackType, feedbackDTO.EntityId, userId);
 		feedbackRepository.save(feedback);
 	}
 

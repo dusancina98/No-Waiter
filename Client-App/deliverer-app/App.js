@@ -47,7 +47,7 @@ export default function App() {
 							<Stack.Screen name="Home" component={Tabs} />
 							<Stack.Screen name="Welcome" component={WelcomeScreen} />
 							<Stack.Screen name="Login" component={LoginScreen} />
-							<Stack.Screen name="Employment request" component={EmploymentRequestScreen} options={{ headerShown: true, headerBackTitle: false }} />
+							<Stack.Screen name="Employment request" component={EmploymentRequestScreen} />
 							<Stack.Screen name="Order Confirm" component={OrderConfirmScreen} options={{ headerShown: true, headerBackTitle: false }} />
 							<Stack.Screen name="Accepted Orders" component={AcceptedOrdersScreen} options={{ headerShown: true, headerBackTitle: false }} />
 							<Stack.Screen name="Picked Up Orders" component={PickedUpOrdersScreen} options={{ headerShown: true, headerBackTitle: false }} />

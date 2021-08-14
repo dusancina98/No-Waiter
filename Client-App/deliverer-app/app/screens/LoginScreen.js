@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ImageBackground, View, Text, TouchableOpacity, StatusBar, TextInput, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { ImageBackground, View, Text, TouchableOpacity, StatusBar, TextInput, TouchableWithoutFeedback, Keyboard, Image } from "react-native";
 import { authConstants } from "../constants/AuthConstants";
 import { AuthContext } from "../contexts/AuthContext";
 import { authService } from "../services/AuthService";
@@ -43,8 +43,9 @@ function LoginScreen({ navigation }) {
 		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 			<View style={loginStyles.containerWrapper}>
 				<StatusBar barStyle="light-content" />
-				<ImageBackground style={welcomeStyles.background} source={require("../assets/waiter.jpg")}>
+				<ImageBackground style={welcomeStyles.background} source={require("../assets/background.jpg")}>
 					<View style={welcomeStyles.logoContainer}>
+						<Image style={{ width: 170, height: 170 }} source={require("../assets/logo.png")} />
 						<Text style={welcomeStyles.logoText}>Login</Text>
 					</View>
 					<View style={loginStyles.loginForm}>
@@ -54,7 +55,7 @@ function LoginScreen({ navigation }) {
 						<TextInput style={loginStyles.textInput} placeholder="Password" secureTextEntry={true} onChangeText={(val) => setPassword(val)}></TextInput>
 					</View>
 					<View style={{ flexDirection: "row" }}>
-						<Text style={{ marginTop: 10, fontSize: 15 }}>Forgot your password?</Text>
+						<Text style={{ marginTop: 10, fontSize: 15, color: "white" }}>Forgot your password?</Text>
 						<TouchableOpacity
 							style={{ marginTop: 10 }}
 							activeOpacity={0.5}
@@ -64,7 +65,7 @@ function LoginScreen({ navigation }) {
 								setEmail("");
 							}}
 						>
-							<Text style={{ color: "blue", fontSize: 15 }}> Reset password </Text>
+							<Text style={{ color: "white", fontSize: 15, marginLeft: 5 }}> Reset password </Text>
 						</TouchableOpacity>
 					</View>
 					{authState.userLogin.showError && <Text style={loginStyles.errorMessage}>{authState.userLogin.errorMessage}</Text>}

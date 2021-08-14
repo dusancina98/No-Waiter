@@ -4,12 +4,11 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import { OrderContext } from "../contexts/OrderContext";
 import { qrScannerStyles } from "../styles/styles";
 import { useIsFocused } from "@react-navigation/native";
-import { UserContext } from "../contexts/UserContext";
 import { orderConstants } from "../constants/OrderConstants";
+import { orderService } from "../services/OrderService";
 
-const ScanQrScreen = ({ navigation }) => {
-	const { dispatch } = useContext(OrderContext);
-	const userCtx = useContext(UserContext);
+const ReceiveOrderQrScreen = ({ navigation }) => {
+	const { orderState, dispatch } = useContext(OrderContext);
 
 	const isFocused = useIsFocused();
 
@@ -26,11 +25,7 @@ const ScanQrScreen = ({ navigation }) => {
 	const handleBarCodeScanned = ({ type, data }) => {
 		setScanned(true);
 		try {
-			const valuesArray = JSON.parse(data);
-			console.log(valuesArray);
-			navigation.navigate("Object", valuesArray.ObjectId);
-
-			dispatch({ type: orderConstants.SET_QR_CODE_SCANNED_DATA, valuesArray });
+			orderService.receiveOrder(data, dispatch);
 		} catch (error) {
 			//hendlati error
 			console.log(error);
@@ -38,18 +33,21 @@ const ScanQrScreen = ({ navigation }) => {
 	};
 
 	useEffect(() => {
-		if (userCtx.userState.scanQRCode.scannedQr === true) {
+		if (orderState.scanQRCode.scannedQr === true) {
 			Alert.alert("Success", "Order successfully scanned!", [{ text: "OK" }]);
-			//dispatch({ type: orderConstants.PICKUP_ORDER_REQUEST });
+			console.log(orderState.scanQRCode.delivererId);
+			let delivererId = orderState.scanQRCode.delivererId;
+			dispatch({ type: orderConstants.RECEIVE_ORDER_REQUEST });
+			navigation.navigate("Rate Deliverer", { Id: delivererId });
 		}
-	}, [userCtx.userState.scanQRCode.scannedQr]);
+	}, [orderState.scanQRCode.scannedQr]);
 
 	useEffect(() => {
-		if (userCtx.userState.scanQRCode.showError === true) {
-			Alert.alert("Error", "Error message", [{ text: "OK" }]);
-			//dispatch({ type: orderConstants.PICKUP_ORDER_REQUEST });
+		if (orderState.scanQRCode.showError === true) {
+			Alert.alert("Error", orderState.scanQRCode.errorMessage, [{ text: "OK" }]);
+			dispatch({ type: orderConstants.RECEIVE_ORDER_REQUEST });
 		}
-	}, [userCtx.userState.scanQRCode.showError]);
+	}, [orderState.scanQRCode.showError]);
 
 	if (hasPermission === null) {
 		return <Text>Requesting for camera permission</Text>;
@@ -70,4 +68,4 @@ const ScanQrScreen = ({ navigation }) => {
 	);
 };
 
-export default ScanQrScreen;
+export default ReceiveOrderQrScreen;

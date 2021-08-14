@@ -8,7 +8,7 @@ public class CreateFeedbackDTO {
 
 	public int Grade;
 
-	public UUID EnitityId;
+	public UUID EntityId;
 	
 	public FeedbackType FeedbackType;
 	
@@ -17,7 +17,7 @@ public class CreateFeedbackDTO {
 	public CreateFeedbackDTO(int grade, UUID enitityId, FeedbackType feedbackType) {
 		super();
 		Grade = grade;
-		EnitityId = enitityId;
+		EntityId = enitityId;
 		FeedbackType = feedbackType;
 	}
 }

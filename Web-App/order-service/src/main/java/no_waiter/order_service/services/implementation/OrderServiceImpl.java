@@ -30,6 +30,7 @@ import no_waiter.order_service.services.contracts.OrderService;
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CompletedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
+import no_waiter.order_service.services.contracts.dto.CustomerObjectIdOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CustomerOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CustomerOrderItemDTO;
 import no_waiter.order_service.services.contracts.dto.DelivererOrderDTO;
@@ -251,16 +252,37 @@ public class OrderServiceImpl implements OrderService{
 
 	@Override
 	public void pickupOrderDeliverer(UUID orderId, UUID delivererId) throws NotFoundException {
-		OrderEvent orderEvent = orderEventRepository.getLastConfirmedDeliveryOrderEventForOrder(orderId, delivererId);
-
-		if (orderEvent == null) {
+		OrderEvent orderEvent = orderEventRepository.getLastOrderEventForOrder(orderId);
+		OrderEvent readyevent = orderEventRepository.getOrderEventByStatusAndOrderId(orderId, OrderStatus.READY);
+		
+		if (orderEvent == null || readyevent == null) {
 			throw new NotFoundException("Order not found");
 		}
+		
+		if ((!orderEvent.getOrderStatus().equals(OrderStatus.CONFIRMED_DELIVERY) && !orderEvent.getOrderStatus().equals(OrderStatus.READY)) || !orderEvent.getDelivererId().equals(delivererId)) {
+			throw new NotFoundException("Order not found");
+		}
+		
 		
 		OrderEvent newOrderEvent = new OrderEvent(orderEvent.getOrder(), OrderStatus.DELIVERING, new Date(), orderEvent.getOrder().getEstimatedTime(), orderEvent.getOrder().getObjectId(), delivererId, orderEvent.getOrdinalNumber(),orderEvent.getCustomerId());
 		orderEventRepository.save(newOrderEvent);	
 	}
 
+
+
+	@Override
+	public UUID completeOrder(UUID orderId, UUID userId) throws NotFoundException {
+		OrderEvent orderEvent = orderEventRepository.getLastOrderEventForOrder(orderId);
+		
+		if (!orderEvent.getOrderStatus().equals(OrderStatus.DELIVERING) || !orderEvent.getOrder().getCustomerId().equals(userId)) {
+			throw new NotFoundException("Order not found");
+		}
+		
+		OrderEvent newOrderEvent = new OrderEvent(orderEvent.getOrder(), OrderStatus.COMPLETED, new Date(), orderEvent.getOrder().getEstimatedTime(), orderEvent.getOrder().getObjectId(), orderEvent.getDelivererId() , orderEvent.getOrdinalNumber(), userId);
+		orderEventRepository.save(newOrderEvent);
+		return orderEvent.getDelivererId();
+	}
+	
 
 	@Override
 	public void cancelOrderDeliverer(UUID orderId, UUID delivererId) throws NotFoundException {
@@ -580,8 +602,8 @@ public class OrderServiceImpl implements OrderService{
                 add(OrderStatus.READY);
             };
 		};
-		List<OrderEvent> confirmedOrderEvents =  orderEventRepository.getOrderEventsForDelivery(statuses);
-		List<UUID> objectIds = orderEventRepository.getDistinctObjectIdsForOrderDelivery(statuses);
+		List<OrderEvent> confirmedOrderEvents =  orderEventRepository.getOrderEventsForDeliverer(statuses);
+		List<UUID> objectIds = orderEventRepository.getDistinctObjectIdsForOrderDeliverer(statuses);
 		List<ObjectDetailsDTO> objectDetails = objectClient.getObjectDetailsByObjectIds(objectIds);
 		
 		confirmedOrderEvents.forEach((orderEvent) -> confirmedOrderDTO.add(mapOrderToDelivererOrderDTO(orderEvent, objectDetails)));
@@ -657,13 +679,13 @@ public class OrderServiceImpl implements OrderService{
 
 
 	@Override
-	public List<CustomerOrderDTO> getCustomerOrderHistory(UUID id) {
-		List<CustomerOrderDTO> retVal = new ArrayList<CustomerOrderDTO>();
+	public List<CustomerObjectIdOrderDTO> getCustomerOrderHistory(UUID id) {
+		List<CustomerObjectIdOrderDTO> retVal = new ArrayList<CustomerObjectIdOrderDTO>();
 		List<OrderEvent> customerOrders = orderEventRepository.findAllCompletedOrderEventsForCustomer(id);
 	
 		for(OrderEvent orderEvent : customerOrders) {
 			List<CustomerOrderItemDTO> items = mapOrderToCustomerOrderItemDTO(orderEvent.getOrder());
-			retVal.add(new CustomerOrderDTO(orderEvent.getOrder().getId(),objectClient.getObjectNameByObjectId(orderEvent.getObjectId()), orderEvent.getOrder().getOrderType(), orderEvent.getOrder().getAddress().getAddress(), orderEvent.getCreatedTime(),getPriceForOrder(orderEvent.getOrder()),items,orderEvent.getOrderStatus()));
+			retVal.add(new CustomerObjectIdOrderDTO(orderEvent.getOrder().getId(),objectClient.getObjectNameByObjectId(orderEvent.getObjectId()), orderEvent.getOrder().getOrderType(), orderEvent.getOrder().getAddress().getAddress(), orderEvent.getCreatedTime(),getPriceForOrder(orderEvent.getOrder()),items,orderEvent.getOrderStatus(), orderEvent.getObjectId()));
 		}
 		
 		return retVal;
@@ -710,5 +732,6 @@ public class OrderServiceImpl implements OrderService{
 		
 		return retVal;
 	}
+
 
 }

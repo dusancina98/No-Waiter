@@ -44,7 +44,7 @@ public class Api {
     @CrossOrigin
     public ResponseEntity<?> createObjectFeedback(@RequestHeader("Authorization") String token, @RequestBody CreateFeedbackDTO feedbackDTO) {
         try {
-        	objectClient.checkObject(feedbackDTO.EnitityId);
+        	objectClient.checkObject(feedbackDTO.EntityId);
         	feedbackDTO.FeedbackType = FeedbackType.OBJECT;
         	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
         	feedbackService.createFeedback(jwtResponse.getId(), feedbackDTO);
@@ -52,7 +52,7 @@ public class Api {
             return new ResponseEntity<>( HttpStatus.CREATED);
         } catch (FeignException e) {
         	if(e.status() == HttpStatus.NOT_FOUND.value())
-        		return new ResponseEntity<>("Invalid object id: " + feedbackDTO.EnitityId, HttpStatus.NOT_FOUND);
+        		return new ResponseEntity<>("Invalid object id: " + feedbackDTO.EntityId, HttpStatus.NOT_FOUND);
     	
         	return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }catch (Exception e) {
@@ -87,7 +87,7 @@ public class Api {
     @CrossOrigin
     public ResponseEntity<?> createDelivererFeedback(@RequestHeader("Authorization") String token, @RequestBody CreateFeedbackDTO feedbackDTO) {
         try {
-        	userClient.checkDeliverer(feedbackDTO.EnitityId);
+        	userClient.checkDeliverer(feedbackDTO.EntityId);
         	feedbackDTO.FeedbackType = FeedbackType.DELIVERER;
         	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
         	feedbackService.createFeedback(jwtResponse.getId(), feedbackDTO);
@@ -95,7 +95,7 @@ public class Api {
             return new ResponseEntity<>( HttpStatus.CREATED);
         } catch (FeignException e) {
         	if(e.status() == HttpStatus.NOT_FOUND.value())
-        		return new ResponseEntity<>("Invalid deliverer id: " + feedbackDTO.EnitityId, HttpStatus.NOT_FOUND);
+        		return new ResponseEntity<>("Invalid deliverer id: " + feedbackDTO.EntityId, HttpStatus.NOT_FOUND);
     	
         	return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }catch (Exception e) {
