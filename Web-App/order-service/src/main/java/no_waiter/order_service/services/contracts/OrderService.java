@@ -18,18 +18,20 @@ import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
 import no_waiter.order_service.services.contracts.dto.ProductValidationResponseDTO;
 import no_waiter.order_service.services.contracts.dto.ReadyOrderDTO;
 import no_waiter.order_service.services.contracts.dto.UnConfirmedOrderDTO;
+import no_waiter.order_service.services.contracts.exceptions.CustomerPenaltiesBlockedException;
+import no_waiter.order_service.services.contracts.exceptions.RejectOrderException;
 
 public interface OrderService {
 
 	UUID createOrder(OrderRequestDTO requestDTO, ProductValidationResponseDTO products, UUID objectId);
 	
-	UUID createOrderCustomer(OrderCustomerRequestDTO requestDTO, ProductValidationResponseDTO products, UUID customerId);
+	UUID createOrderCustomer(OrderCustomerRequestDTO requestDTO, ProductValidationResponseDTO products, UUID customerId) throws CustomerPenaltiesBlockedException;
 
 	List<UnConfirmedOrderDTO> getUnconfirmedOrdersForObject(UUID objectId);
 	
 	UUID completeOrder(UUID orderId, UUID userId) throws NotFoundException;
 
-	void rejectOrder(UUID orderId, UUID objectId);
+	void rejectOrder(UUID orderId) throws RejectOrderException;
 
 	void acceptOrder(AcceptOrderDTO acceptOrderDTO);
 

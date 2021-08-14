@@ -24,6 +24,7 @@ import no_waiter.order_service.entities.Product;
 import no_waiter.order_service.entities.SideDish;
 import no_waiter.order_service.intercomm.ObjectClient;
 import no_waiter.order_service.intercomm.ProductClient;
+import no_waiter.order_service.intercomm.UserClient;
 import no_waiter.order_service.repository.OrderEventRepository;
 import no_waiter.order_service.repository.OrderRepository;
 import no_waiter.order_service.services.contracts.OrderService;
@@ -50,6 +51,8 @@ import no_waiter.order_service.services.contracts.dto.SideDishDTO;
 import no_waiter.order_service.services.contracts.dto.SideDishResponseDTO;
 import no_waiter.order_service.services.contracts.dto.TableResponseDTO;
 import no_waiter.order_service.services.contracts.dto.UnConfirmedOrderDTO;
+import no_waiter.order_service.services.contracts.exceptions.CustomerPenaltiesBlockedException;
+import no_waiter.order_service.services.contracts.exceptions.RejectOrderException;
 import no_waiter.order_service.services.implementation.util.OrderMapper;
 import no_waiter.order_service.services.implementation.util.OrderReportPDFGenerator;
 
@@ -68,21 +71,30 @@ public class OrderServiceImpl implements OrderService{
 	@Autowired
 	private ObjectClient objectClient;
 	
+	@Autowired
+	private UserClient userClient;
+	
 	@Override
 	public UUID createOrder(OrderRequestDTO requestDTO, ProductValidationResponseDTO products, UUID objectId) {
 		Order order = OrderMapper.MapOrderRequestDTOToOrder(requestDTO, products, objectId, null);
 		orderRepository.save(order);
 		
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), objectId, null, 0,null);
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED, new Date(), order.getEstimatedTime(), objectId, null, 0,null);
 		orderEventRepository.save(newOrderEvent);
-		
+	
 		return order.getId();
 	}
 	
 
 	@Override
 	public UUID createOrderCustomer(OrderCustomerRequestDTO requestDTO, ProductValidationResponseDTO products,
-			UUID customerId) {
+			UUID customerId) throws CustomerPenaltiesBlockedException {
+		int penalties = userClient.getPenaltiesForCustomer(customerId);
+		System.out.println("PENALTIES: " +penalties);
+		if(penalties>=3) {
+			throw new CustomerPenaltiesBlockedException("Customer is blocked because has 3 penalties");
+		}
+		
 		Order order = OrderMapper.MapOrderRequestDTOToOrder(requestDTO, products, requestDTO.ObjectId, customerId);
 		orderRepository.save(order);
 		
@@ -216,12 +228,25 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public void rejectOrder(UUID orderId, UUID objectId) {
+	public void rejectOrder(UUID orderId) throws RejectOrderException {
 		Order order = orderRepository.findById(orderId).get();
 		
 		OrderEvent latest = orderEventRepository.getLastOrderEventForOrder(orderId);
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.REJECTED, new Date(), order.getEstimatedTime(), objectId, null,latest.getOrdinalNumber(),latest.getCustomerId());
-		orderEventRepository.save(newOrderEvent);
+		
+		if(latest.getCustomerId() != null) {
+			if(latest.getOrderStatus() != OrderStatus.CANCELED && latest.getOrderStatus() != OrderStatus.DELIVERING && latest.getOrderStatus() != OrderStatus.COMPLETED) {
+				OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.REJECTED, new Date(), order.getEstimatedTime(), latest.getObjectId(), null,latest.getOrdinalNumber(),latest.getCustomerId());
+				orderEventRepository.save(newOrderEvent);
+				userClient.incrementCustomerPenalties(latest.getCustomerId());
+			}else {
+				throw new RejectOrderException("Not possible to reject order");
+			}
+		}else if(latest.getOrderStatus() != OrderStatus.CANCELED && latest.getOrderStatus() != OrderStatus.COMPLETED) {
+			OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.REJECTED, new Date(), order.getEstimatedTime(), latest.getObjectId(), null,latest.getOrdinalNumber(),latest.getCustomerId());
+			orderEventRepository.save(newOrderEvent);
+		}else {
+			throw new RejectOrderException("Not possible to reject order");
+		}
 	}
 
 	@Override
