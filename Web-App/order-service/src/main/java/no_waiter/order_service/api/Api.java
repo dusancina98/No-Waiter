@@ -318,7 +318,7 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (NotFoundException e) {
         	e.printStackTrace();
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Order not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -30,6 +30,7 @@ import no_waiter.order_service.services.contracts.OrderService;
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CompletedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
+import no_waiter.order_service.services.contracts.dto.CustomerObjectIdOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CustomerOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CustomerOrderItemDTO;
 import no_waiter.order_service.services.contracts.dto.DelivererOrderDTO;
@@ -252,8 +253,9 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public void pickupOrderDeliverer(UUID orderId, UUID delivererId) throws NotFoundException {
 		OrderEvent orderEvent = orderEventRepository.getLastOrderEventForOrder(orderId);
-
-		if (orderEvent == null) {
+		OrderEvent readyevent = orderEventRepository.getOrderEventByStatusAndOrderId(orderId, OrderStatus.READY);
+		
+		if (orderEvent == null || readyevent == null) {
 			throw new NotFoundException("Order not found");
 		}
 		
@@ -677,13 +679,13 @@ public class OrderServiceImpl implements OrderService{
 
 
 	@Override
-	public List<CustomerOrderDTO> getCustomerOrderHistory(UUID id) {
-		List<CustomerOrderDTO> retVal = new ArrayList<CustomerOrderDTO>();
+	public List<CustomerObjectIdOrderDTO> getCustomerOrderHistory(UUID id) {
+		List<CustomerObjectIdOrderDTO> retVal = new ArrayList<CustomerObjectIdOrderDTO>();
 		List<OrderEvent> customerOrders = orderEventRepository.findAllCompletedOrderEventsForCustomer(id);
 	
 		for(OrderEvent orderEvent : customerOrders) {
 			List<CustomerOrderItemDTO> items = mapOrderToCustomerOrderItemDTO(orderEvent.getOrder());
-			retVal.add(new CustomerOrderDTO(orderEvent.getOrder().getId(),objectClient.getObjectNameByObjectId(orderEvent.getObjectId()), orderEvent.getOrder().getOrderType(), orderEvent.getOrder().getAddress().getAddress(), orderEvent.getCreatedTime(),getPriceForOrder(orderEvent.getOrder()),items,orderEvent.getOrderStatus()));
+			retVal.add(new CustomerObjectIdOrderDTO(orderEvent.getOrder().getId(),objectClient.getObjectNameByObjectId(orderEvent.getObjectId()), orderEvent.getOrder().getOrderType(), orderEvent.getOrder().getAddress().getAddress(), orderEvent.getCreatedTime(),getPriceForOrder(orderEvent.getOrder()),items,orderEvent.getOrderStatus(), orderEvent.getObjectId()));
 		}
 		
 		return retVal;

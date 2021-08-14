@@ -135,6 +135,7 @@ async function pickupOrder(orderId, dispatch) {
 
 	Axios.put(`${API_URL}/order-api/api/orders/${orderId}/delivering`, null, { validateStatus: () => true, headers: header })
 		.then((res) => {
+			console.log(res.data);
 			if (res.status === 200) {
 				dispatch(success(orderId));
 			} else if (res.status === 404) {

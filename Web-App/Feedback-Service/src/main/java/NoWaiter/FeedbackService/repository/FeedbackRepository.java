@@ -21,4 +21,9 @@ public interface FeedbackRepository extends PagingAndSortingRepository<Feedback,
 				 + "WHERE f.feedbackId.entityId IN (?1)"
 				 + "GROUP BY f.feedbackId.entityId")
 	List<ObjectFeedbackDTO> findObjectFeedbacks(List<UUID> ids);
+	
+	@Query(value = "SELECT f "
+				 + "FROM Feedback f "
+				 + "WHERE f.feedbackId.entityId = ?2 AND f.feedbackId.initiatorId = ?1")
+	Feedback findByInitiatorIdAndEntityId(UUID initiatorId, UUID entityId);
 }

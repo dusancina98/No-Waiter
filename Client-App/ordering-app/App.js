@@ -30,6 +30,7 @@ import PendingOrdersScreen from "./app/screens/PendingOrdersScreen";
 import RateDelivererScreen from "./app/screens/RateDelivererScreen";
 import ReceiveOrderQrScreen from "./app/screens/ReceiveOrderQrScanScreen";
 import FeedbackContextProvider from "./app/contexts/FeedbackContext";
+import RateObjectScreen from "./app/screens/RateObjectScreen";
 
 const Stack = createStackNavigator();
 
@@ -80,6 +81,7 @@ export default function App() {
 											<Stack.Screen name="Order History Details" component={OrderHistoryDetailsScreen} options={{ headerShown: true }} />
 											<Stack.Screen name="Pending Orders" component={PendingOrdersScreen} options={{ headerShown: true }} />
 											<Stack.Screen name="Rate Deliverer" component={RateDelivererScreen} options={{ headerShown: true, headerBackTitle: false }} />
+											<Stack.Screen name="Rate Object" component={RateObjectScreen} options={{ headerShown: true, headerBackTitle: false }} />
 											<Stack.Screen name="Receive Order" component={ReceiveOrderQrScreen} />
 										</Stack.Navigator>
 									</NavigationContainer>

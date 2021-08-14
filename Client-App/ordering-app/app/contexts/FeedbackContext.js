@@ -10,6 +10,11 @@ const FeedbackContextProvider = (props) => {
 			errorMessage: "",
 			success: false,
 		},
+		rateObject: {
+			showError: false,
+			errorMessage: "",
+			success: false,
+		},
 	});
 
 	return <FeedbackContext.Provider value={{ feedbackState, dispatch }}>{props.children}</FeedbackContext.Provider>;

@@ -31,6 +31,33 @@ export const feedbackReducer = (state, action) => {
 					success: false,
 				},
 			};
+		case feedbackConstants.RATE_OBJECT_REQUEST:
+			return {
+				...state,
+				rateObject: {
+					showError: false,
+					errorMessage: "",
+					success: false,
+				},
+			};
+		case feedbackConstants.RATE_OBJECT_SUCCESS:
+			return {
+				...state,
+				rateObject: {
+					showError: false,
+					errorMessage: "",
+					success: true,
+				},
+			};
+		case feedbackConstants.RATE_OBJECT_FAILURE:
+			return {
+				...state,
+				rateObject: {
+					showError: true,
+					errorMessage: action.errorMessage,
+					success: false,
+				},
+			};
 		default:
 			return state;
 	}

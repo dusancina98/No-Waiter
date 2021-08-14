@@ -35,6 +35,7 @@ const ScanQrScreen = (props) => {
 
 	useEffect(() => {
 		if (orderState.orderDelivering.showError === true) {
+			console.log(orderState.orderDelivering.errorMessage);
 			Alert.alert("Error", orderState.orderDelivering.errorMessage, [{ text: "OK" }]);
 			dispatch({ type: orderConstants.PICKUP_ORDER_REQUEST });
 		}
