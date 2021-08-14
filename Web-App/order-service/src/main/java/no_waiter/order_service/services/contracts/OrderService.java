@@ -8,6 +8,7 @@ import javassist.NotFoundException;
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CompletedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
+import no_waiter.order_service.services.contracts.dto.CustomerOrderDTO;
 import no_waiter.order_service.services.contracts.dto.DelivererOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OnRouteOrderDTO;
 import no_waiter.order_service.services.contracts.dto.OrderCustomerRequestDTO;
@@ -64,4 +65,8 @@ public interface OrderService {
 	UUID createOrderForInfoPult(OrderRequestDTO requestDTO, ProductValidationResponseDTO resp, UUID objectId) throws IOException, Exception;
 
 	byte[] generateReportPDF(String orderId) throws DocumentException, Exception;
+
+	List<CustomerOrderDTO> getCustomerOrderHistory(UUID id);
+
+	List<CustomerOrderDTO> getCustomerPendingOrders(UUID id);
 }

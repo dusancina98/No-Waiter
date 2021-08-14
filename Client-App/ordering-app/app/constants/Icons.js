@@ -28,6 +28,8 @@ export const watch = require("../assets/icons/watch.jpg");
 export const house = require("../assets/icons/house.jpg");
 export const remove = require("../assets/icons/delete.png");
 export const check = require("../assets/icons/checkmark.jpg");
+export const delivery = require("../assets/icons/delivery.png");
+export const restaurantTable = require("../assets/icons/restaurant-table.png");
 
 export default {
 	back,
@@ -60,4 +62,6 @@ export default {
 	user,
 	qr,
 	watch,
+	delivery,
+	restaurantTable,
 };

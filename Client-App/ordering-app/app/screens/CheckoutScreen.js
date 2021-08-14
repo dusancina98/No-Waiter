@@ -32,14 +32,17 @@ const CheckoutScreen = ({ navigation }) => {
 
 	const handleSubmitOrder = () => {
 		//TODO: HANDLE TABLE
+
 		let order = {
 			Items: [],
-			OrderType: "DELIVERY",
+			OrderType: orderState.qrCodeData.scanned?"ORDER_INSIDE":"DELIVERY",
 			Address: orderState.createOrder.selectedAddress.EntityDTO.Name,
 			EstimatedTime: 5,
-			TableId: "",
+			TableId: orderState.qrCodeData.tableId,
 			ObjectId: objectState.objectDetails.object.Id,
 		};
+		console.log("TEST")
+		console.log(orderState.qrCodeData.tableId)
 
 		orderState.createOrder.items.forEach((item) => {
 			if (item.sideDishes.length === 0) {
@@ -126,6 +129,7 @@ const CheckoutScreen = ({ navigation }) => {
 					ListFooterComponent={<View></View>}
 				/>
 			</ScrollView>
+			{orderState.qrCodeData.scanned === true ? <View></View>:
 			<View style={{ height: 60, backgroundColor: DefaultTheme.colors.background }}>
 				<View style={checkoutStyle.container}>
 					<TouchableOpacity onPress={() => navigation.navigate("Delivery Address")} style={{ flex: 1 }}>
@@ -137,6 +141,7 @@ const CheckoutScreen = ({ navigation }) => {
 					</TouchableOpacity>
 				</View>
 			</View>
+			}
 
 			<View style={shoppingCartPreviewStyle.container}>
 				<Text style={shoppingCartPreviewStyle.itemsPrice}>Total: {Number(getOrderSum()).toFixed(2)} RSD</Text>

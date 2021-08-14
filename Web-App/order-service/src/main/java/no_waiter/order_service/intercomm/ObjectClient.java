@@ -22,4 +22,7 @@ public interface ObjectClient {
 
 	@PostMapping("api/objects/details")
 	List<ObjectDetailsDTO> getObjectDetailsByObjectIds(@RequestBody List<UUID> objectIds);
+	
+	@GetMapping("api/objects/objectName/{objectId}")
+	String getObjectNameByObjectId(@PathVariable UUID objectId);
 }

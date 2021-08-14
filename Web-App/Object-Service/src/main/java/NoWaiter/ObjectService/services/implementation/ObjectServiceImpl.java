@@ -271,4 +271,9 @@ public class ObjectServiceImpl implements ObjectService {
 		Iterable<Object> favourites = objectRepository.getAllAvailableObjectsFromFavourites(objectIds);
 		return ObjectMapper.MapObjectCollectionToIdentifiableCustomerObjectDTOCollection(favourites);
 	}
+
+	@Override
+	public String getObjectName(UUID objectId) {
+		return objectRepository.findById(objectId).get().getName();
+	}
 }

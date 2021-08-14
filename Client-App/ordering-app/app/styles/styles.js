@@ -744,3 +744,199 @@ export const checkoutStyle = StyleSheet.create({
 		flexDirection: "row",
 	},
 });
+
+export const qrScannerStyles = StyleSheet.create({
+	containerWrapper: {
+		flex: 1,
+		flexDirection: "column",
+		justifyContent: "center",
+	},
+	button: {
+		width: "50%",
+		marginTop: 420,
+		paddingTop: 15,
+		paddingBottom: 15,
+		marginLeft: 30,
+		marginRight: 30,
+		backgroundColor: "transparent",
+		borderRadius: 10,
+		borderWidth: 1,
+		alignSelf: "center",
+		borderColor: "white",
+	},
+	buttonText: {
+		color: "white",
+		fontSize: 20,
+		fontFamily: "roboto-regular",
+		fontWeight: "400",
+		textAlign: "center",
+	},
+});
+
+export const orderHistoryStyles = StyleSheet.create({
+	itemContainer: {
+		flex: 1,
+		backgroundColor: "white",
+		marginLeft: 15,
+		marginRight: 15,
+		marginTop: 5,
+		borderWidth: 0,
+		borderRadius: 15,
+	},
+	itemSubContainer: {
+		flexDirection: "row",
+		paddingVertical: 10,
+	},
+	image: {
+		width: 80,
+		height: 80,
+		tintColor: "black",
+	},
+	content: {
+		flexDirection: "row",
+		flex: 1,
+		paddingLeft: 15,
+	},
+	infoStyle: {
+		marginLeft: 20,
+
+	},
+	objectName: {
+		fontSize: 22,
+		color: "#5F5F5F",
+	},
+	address: {
+		fontSize: 16,
+		flexWrap: "wrap",
+		color: "#a4a4a4",
+	},
+	priceDateContainer: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+	},
+	price: {
+		fontSize: 17,
+		color: "#617ae1",
+	},
+	date: {
+		fontSize: 16,
+		color: "#a4a4a4",
+		alignItems: "flex-end",
+		justifyContent: "flex-end",
+	},
+	emptyHistoryContainer:{
+		flex: 1,
+		alignItems: "center",
+		justifyContent: "center",
+	},
+	emptyHistoryText:{
+		marginTop:50,
+		fontSize: 24,
+		flexWrap: "wrap",
+		color: "#a4a4a4",
+	},
+});
+
+export const orderHistoryDetailsStyles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: "white",
+		paddingVertical: 10,
+		marginLeft:15,
+		marginRight:15,
+		marginTop: 1,
+	},
+	restaurantContainer: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+	},
+	restaurantTitle: {
+		fontSize: 38,
+		fontWeight: "bold",
+		color: "black",
+	},
+	image: {
+		height: 55,
+		width: 55,
+	},
+	orderInformationContainer: {
+		flexDirection: "row",
+	},
+	orderInformationText:{
+		fontSize: 18,
+		flexWrap: "wrap",
+		color: "#a4a4a4",
+	},
+	orderItemsContainer: {
+		marginTop: 20,
+	},
+	itemContainer: {
+		backgroundColor: "white",
+		marginLeft: 15,
+		marginRight: 15,
+		marginTop: 5,
+		borderWidth: 0,
+		borderRadius: 15,
+	},
+	itemSubContainer: {
+		flexDirection: "row",
+		paddingVertical: 10,
+	},
+	imageProduct: {
+		height: 100,
+		width: 100,
+		marginRight: 10,
+	},
+	content: {
+		flex: 1,
+		paddingLeft: 15,
+		justifyContent: "space-between",
+	},
+	itemName: {
+		fontSize: 17,
+		color: "#617ae1",
+	},
+	orderItemName:{
+		fontSize: 24,
+		fontWeight: "bold",
+		color: "black",
+	},
+	itemInformationText:{
+		fontSize: 14,
+		color:"#a4a4a4"
+	},
+	itemIngredient: {
+		fontSize: 16,
+		color: "#5F5F5F",
+	},
+	itemDescription: {
+		fontSize: 12,
+		color: "#a4a4a4",
+	},
+	priceContainer: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+	},
+	price: {
+		fontSize: 17,
+		color: "#617ae1",
+		textAlign: "right",
+	},
+	totalPriceContainer:{
+		flexDirection: "row",
+		justifyContent: "flex-end",
+		marginRight:25,
+	},
+	totalPrice: {
+		fontSize: 17,
+		color: "#617ae1",
+		textAlign: "right",
+	},
+	totalPriceText:{
+		fontSize: 17,
+		color: "black",
+		textAlign: "right",
+		fontWeight: "bold",
+	}
+});

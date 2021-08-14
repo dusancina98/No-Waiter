@@ -27,6 +27,11 @@ const UserContextProvider = (props) => {
 			errorMessage: "",
 			success: false,
 		},
+		scanQRCode: {
+			scannedQr: false,
+			showError: false,
+			errorMessage: "",
+		}
 	});
 
 	return <UserContext.Provider value={{ userState, dispatch }}>{props.children}</UserContext.Provider>;

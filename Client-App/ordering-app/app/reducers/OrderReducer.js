@@ -69,6 +69,49 @@ export const orderReducer = (state, action) => {
 			ordCpy.createOrder.successMessage = "";
 
 			return ordCpy;
+		case orderConstants.SET_QR_CODE_SCANNED_DATA:
+			ordCpy = { ...state };
+
+			ordCpy.qrCodeData.scanned = true;
+			ordCpy.qrCodeData.tableId=action.valuesArray.TableId;
+			ordCpy.qrCodeData.objectId=action.valuesArray.ObjectId;
+			ordCpy.qrCodeData.key=action.valuesArray.Key;
+
+			return ordCpy;
+		case orderConstants.GET_ORDER_HISTORY_SUCCESS:{
+			ordCpy = { ...state };
+			ordCpy.orderHistory.orders = action.orders;
+			ordCpy.qrCodeData.showError = false;
+			ordCpy.qrCodeData.errorMessage = "";
+
+			return ordCpy;
+		}
+
+		case orderConstants.GET_ORDER_HISTORY_FAILURE:{
+			ordCpy = { ...state };
+			ordCpy.orderHistory.orders = [];
+			ordCpy.qrCodeData.showError = true;
+			ordCpy.qrCodeData.errorMessage = action.error;
+
+			return ordCpy;
+		}
+		case orderConstants.GET_PENDING_ORDERS_SUCCESS:{
+			ordCpy = { ...state };
+			ordCpy.pendingOrders.orders = action.orders;
+			ordCpy.pendingOrders.showError = false;
+			ordCpy.pendingOrders.errorMessage = "";
+
+			return ordCpy;
+		}
+
+		case orderConstants.GET_PENDING_ORDERS_FAILURE:{
+			ordCpy = { ...state };
+			ordCpy.pendingOrders.orders = [];
+			ordCpy.pendingOrders.showError = true;
+			ordCpy.pendingOrders.errorMessage = action.error;
+
+			return ordCpy;
+		}
 		default:
 			return state;
 	}

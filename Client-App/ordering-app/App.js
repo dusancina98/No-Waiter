@@ -24,6 +24,9 @@ import ProductDetailsScreen from "./app/screens/ProductDetailsScreen";
 import OrderContextProvider from "./app/contexts/OrderContext";
 import CheckoutScreen from "./app/screens/CheckoutScreen";
 import SelectDeliveryAddressScreen from "./app/screens/SelectDeliveryAddressScreen";
+import OrderHistoryScreen from "./app/screens/OrderHistoryScreen";
+import OrderHistoryDetailsScreen from "./app/screens/OrderHistoryDetailsScreen";
+import PendingOrdersScreen from "./app/screens/PendingOrdersScreen";
 
 const Stack = createStackNavigator();
 
@@ -69,6 +72,9 @@ export default function App() {
 										<Stack.Screen name="Checkout" component={CheckoutScreen} options={{ headerShown: true, headerBackTitle: false }} />
 										<Stack.Screen name="Object Details" component={ObjectDetailsScreen} options={{ headerShown: true }} />
 										<Stack.Screen name="Product Details" component={ProductDetailsScreen} options={{ headerShown: true }} />
+										<Stack.Screen name="Order History" component={OrderHistoryScreen} options={{ headerShown: true }} />
+										<Stack.Screen name="Order History Details" component={OrderHistoryDetailsScreen} options={{ headerShown: true }} />
+										<Stack.Screen name="Pending Orders" component={PendingOrdersScreen} options={{ headerShown: true }} />
 									</Stack.Navigator>
 								</NavigationContainer>
 							</ProductContextProvider>

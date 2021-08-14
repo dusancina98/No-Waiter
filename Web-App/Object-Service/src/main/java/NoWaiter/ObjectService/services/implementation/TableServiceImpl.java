@@ -14,6 +14,7 @@ import NoWaiter.ObjectService.repository.TableRepository;
 import NoWaiter.ObjectService.services.contracts.TableService;
 import NoWaiter.ObjectService.services.contracts.dto.IdentifiableDTO;
 import NoWaiter.ObjectService.services.contracts.dto.TableDTO;
+import NoWaiter.ObjectService.services.implementation.util.QrCodeGenerator;
 import NoWaiter.ObjectService.services.implementation.util.TableMapper;
 
 @Service
@@ -25,8 +26,9 @@ public class TableServiceImpl implements TableService{
 	@Autowired
 	private ObjectAdminRepository objectAdminRepository;
 	
+	
 	@Override
-	public IdentifiableDTO<TableDTO> createTable(UUID objectAdminId) {
+	public IdentifiableDTO<TableDTO> createTable(UUID objectAdminId) throws Exception {
 		
 		Object object = objectAdminRepository.findObjectByAdminId(objectAdminId);
 		int tableNumber = 0;
@@ -38,6 +40,13 @@ public class TableServiceImpl implements TableService{
 		TableDTO tableDTO = new TableDTO(tableNumber + 1);
 		Table table = TableMapper.MapTableDTOToTable(tableDTO, object);
 		tableRepository.save(table);
+		
+		try {
+			QrCodeGenerator generator = new QrCodeGenerator();
+			generator.generateQrCode(object.getId().toString(),table.getId().toString());
+		}catch(Exception e ) {
+			e.printStackTrace();
+		}
 		
 		return TableMapper.MapTableToIdentifiableTableDTO(table);
 	}

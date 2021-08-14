@@ -103,8 +103,9 @@ public class Api {
 
 			return new ResponseEntity<>(orderService.createOrderCustomer(requestDTO, resp, jwtResponse.getId()), HttpStatus.CREATED);
 		} catch (FeignException e) {
-        	if(e.status() == HttpStatus.NOT_FOUND.value())
-                return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);
+        	if(e.status() == HttpStatus.NOT_FOUND.value()) {
+        		System.out.println("USAO OVDE");
+                return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);}
         	else if(e.status() == HttpStatus.BAD_REQUEST.value())
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 
@@ -114,6 +115,34 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 	}  
+	
+	@GetMapping("/customer/history")
+    @CrossOrigin
+    public ResponseEntity<?> getCustomerOrderHistory(@RequestHeader("Authorization") String token) {
+
+    	try {
+    		JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+
+            return new ResponseEntity<>(orderService.getCustomerOrderHistory(jwtResponse.getId()), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
+	@GetMapping("/customer/pending")
+    @CrossOrigin
+    public ResponseEntity<?> getCustomerPendingOrders(@RequestHeader("Authorization") String token) {
+
+    	try {
+    		JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
+
+            return new ResponseEntity<>(orderService.getCustomerPendingOrders(jwtResponse.getId()), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 	
 	@GetMapping("/pdf/{orderId}")
 	public ResponseEntity<byte[]> getOrderReportPDF(@PathVariable String orderId) throws Exception {

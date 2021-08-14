@@ -30,6 +30,8 @@ import no_waiter.order_service.services.contracts.OrderService;
 import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.CompletedOrderDTO;
 import no_waiter.order_service.services.contracts.dto.ConfirmedOrderDTO;
+import no_waiter.order_service.services.contracts.dto.CustomerOrderDTO;
+import no_waiter.order_service.services.contracts.dto.CustomerOrderItemDTO;
 import no_waiter.order_service.services.contracts.dto.DelivererOrderDTO;
 import no_waiter.order_service.services.contracts.dto.NameDTO;
 import no_waiter.order_service.services.contracts.dto.ObjectDetailsDTO;
@@ -70,7 +72,7 @@ public class OrderServiceImpl implements OrderService{
 		Order order = OrderMapper.MapOrderRequestDTOToOrder(requestDTO, products, objectId, null);
 		orderRepository.save(order);
 		
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), objectId, null, 0);
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), objectId, null, 0,null);
 		orderEventRepository.save(newOrderEvent);
 		
 		return order.getId();
@@ -83,7 +85,7 @@ public class OrderServiceImpl implements OrderService{
 		Order order = OrderMapper.MapOrderRequestDTOToOrder(requestDTO, products, requestDTO.ObjectId, customerId);
 		orderRepository.save(order);
 		
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), requestDTO.ObjectId, null, 0);
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), requestDTO.ObjectId, null, 0,customerId);
 		orderEventRepository.save(newOrderEvent);
 		
 		return order.getId();
@@ -97,7 +99,7 @@ public class OrderServiceImpl implements OrderService{
 		
 		int ordinalNumber=  calculateOrderOrdinalNumberFromObject(objectId);
 
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), objectId, null, ordinalNumber);
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.UNCONFIRMED, new Date(), order.getEstimatedTime(), objectId, null, ordinalNumber, null);
 		orderEventRepository.save(newOrderEvent);
 		
 		return order.getId();
@@ -217,7 +219,7 @@ public class OrderServiceImpl implements OrderService{
 		Order order = orderRepository.findById(orderId).get();
 		
 		OrderEvent latest = orderEventRepository.getLastOrderEventForOrder(orderId);
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.REJECTED, new Date(), order.getEstimatedTime(), objectId, null,latest.getOrdinalNumber());
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.REJECTED, new Date(), order.getEstimatedTime(), objectId, null,latest.getOrdinalNumber(),latest.getCustomerId());
 		orderEventRepository.save(newOrderEvent);
 	}
 
@@ -229,7 +231,7 @@ public class OrderServiceImpl implements OrderService{
 		orderRepository.save(order);
 		
 		OrderEvent latest = orderEventRepository.getLastOrderEventForOrder(acceptOrderDTO.OrderId);
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId(), null, latest.getOrdinalNumber());
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId(), null, latest.getOrdinalNumber(),latest.getCustomerId());
 		orderEventRepository.save(newOrderEvent);
 	}
 	
@@ -242,7 +244,7 @@ public class OrderServiceImpl implements OrderService{
 		orderRepository.save(order);
 		
 		OrderEvent latest = orderEventRepository.getLastOrderEventForOrder(acceptOrderDTO.OrderId);
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED_DELIVERY, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId(), delivererId,latest.getOrdinalNumber());
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.CONFIRMED_DELIVERY, new Date(), acceptOrderDTO.EstimatedTime, order.getObjectId(), delivererId,latest.getOrdinalNumber(),latest.getCustomerId());
 		orderEventRepository.save(newOrderEvent);		
 	}
 	
@@ -255,7 +257,7 @@ public class OrderServiceImpl implements OrderService{
 			throw new NotFoundException("Order not found");
 		}
 		
-		OrderEvent newOrderEvent = new OrderEvent(orderEvent.getOrder(), OrderStatus.DELIVERING, new Date(), orderEvent.getOrder().getEstimatedTime(), orderEvent.getOrder().getObjectId(), delivererId, orderEvent.getOrdinalNumber());
+		OrderEvent newOrderEvent = new OrderEvent(orderEvent.getOrder(), OrderStatus.DELIVERING, new Date(), orderEvent.getOrder().getEstimatedTime(), orderEvent.getOrder().getObjectId(), delivererId, orderEvent.getOrdinalNumber(),orderEvent.getCustomerId());
 		orderEventRepository.save(newOrderEvent);	
 	}
 
@@ -272,7 +274,7 @@ public class OrderServiceImpl implements OrderService{
 			throw new NotFoundException("Order not found");
 		}
 		
-		OrderEvent newOrderEvent = new OrderEvent(latest.getOrder(), OrderStatus.CANCELED, new Date(), latest.getOrder().getEstimatedTime(), latest.getOrder().getObjectId(), delivererId, latest.getOrdinalNumber());
+		OrderEvent newOrderEvent = new OrderEvent(latest.getOrder(), OrderStatus.CANCELED, new Date(), latest.getOrder().getEstimatedTime(), latest.getOrder().getObjectId(), delivererId, latest.getOrdinalNumber(),latest.getCustomerId());
 		orderEventRepository.save(newOrderEvent);			
 	}
 	
@@ -289,7 +291,7 @@ public class OrderServiceImpl implements OrderService{
 			throw new NotFoundException("Order not found");
 		}
 		
-		OrderEvent newOrderEvent = new OrderEvent(latest.getOrder(), OrderStatus.DISMISSED, new Date(), latest.getOrder().getEstimatedTime(), latest.getOrder().getObjectId(), delivererId, latest.getOrdinalNumber());
+		OrderEvent newOrderEvent = new OrderEvent(latest.getOrder(), OrderStatus.DISMISSED, new Date(), latest.getOrder().getEstimatedTime(), latest.getOrder().getObjectId(), delivererId, latest.getOrdinalNumber(),latest.getCustomerId());
 		orderEventRepository.save(newOrderEvent);			
 	}
 	
@@ -299,7 +301,7 @@ public class OrderServiceImpl implements OrderService{
 		Order order = orderRepository.findById(orderId).get();
 	
 		OrderEvent latest = orderEventRepository.getLastOrderEventForOrder(orderId);
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.READY, new Date(), order.getEstimatedTime(), order.getObjectId(), latest.getDelivererId(),latest.getOrdinalNumber());
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.READY, new Date(), order.getEstimatedTime(), order.getObjectId(), latest.getDelivererId(),latest.getOrdinalNumber(),latest.getCustomerId());
 		orderEventRepository.save(newOrderEvent);
 	}
 
@@ -346,7 +348,7 @@ public class OrderServiceImpl implements OrderService{
 		Order order = orderRepository.findById(orderId).get();
 		
 		OrderEvent latest = orderEventRepository.getLastOrderEventForOrder(orderId);
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.DELIVERING, new Date(), order.getEstimatedTime(), order.getObjectId(), null, latest.getOrdinalNumber());
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.DELIVERING, new Date(), order.getEstimatedTime(), order.getObjectId(), null, latest.getOrdinalNumber(),latest.getCustomerId());
 		orderEventRepository.save(newOrderEvent);
 	}
 
@@ -388,7 +390,7 @@ public class OrderServiceImpl implements OrderService{
 		Order order = orderRepository.findById(orderId).get();
 		
 		OrderEvent latest = orderEventRepository.getLastOrderEventForOrder(orderId);
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.COMPLETED, new Date(), order.getEstimatedTime(), order.getObjectId(), null, latest.getOrdinalNumber());
+		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.COMPLETED, new Date(), order.getEstimatedTime(), order.getObjectId(), null, latest.getOrdinalNumber(),latest.getCustomerId());
 		orderEventRepository.save(newOrderEvent);	
 	}
 
@@ -651,6 +653,62 @@ public class OrderServiceImpl implements OrderService{
 
 		confirmedOrderEvents.forEach((orderEvent) -> acceptedOrderDTO.add(mapOrderToDelivererOrderDTO(orderEvent, objectDetails)));
 		return acceptedOrderDTO;
+	}
+
+
+	@Override
+	public List<CustomerOrderDTO> getCustomerOrderHistory(UUID id) {
+		List<CustomerOrderDTO> retVal = new ArrayList<CustomerOrderDTO>();
+		List<OrderEvent> customerOrders = orderEventRepository.findAllCompletedOrderEventsForCustomer(id);
+	
+		for(OrderEvent orderEvent : customerOrders) {
+			List<CustomerOrderItemDTO> items = mapOrderToCustomerOrderItemDTO(orderEvent.getOrder());
+			retVal.add(new CustomerOrderDTO(orderEvent.getOrder().getId(),objectClient.getObjectNameByObjectId(orderEvent.getObjectId()), orderEvent.getOrder().getOrderType(), orderEvent.getOrder().getAddress().getAddress(), orderEvent.getCreatedTime(),getPriceForOrder(orderEvent.getOrder()),items,orderEvent.getOrderStatus()));
+		}
+		
+		return retVal;
+	}
+
+
+	private List<CustomerOrderItemDTO> mapOrderToCustomerOrderItemDTO(Order order) {
+		List<CustomerOrderItemDTO> retVal = new ArrayList<CustomerOrderItemDTO>();
+
+		for(OrderItem orderItem : order.getItems()) {
+			retVal.add(new CustomerOrderItemDTO(orderItem.getProduct().getImagePath(), orderItem.getCount(), orderItem.getNote(), mapSideDishesToString(orderItem.getSideDishes()), orderItem.getProduct().getName(), getPriceForOrder(order)));
+		}
+		
+		return retVal;
+	}
+
+
+	private String mapSideDishesToString(List<SideDish> sideDishes) {
+		String retVal = "";
+		
+		int index=0;
+		for(SideDish sideDish : sideDishes) {
+			retVal += sideDish.getName();
+			
+			if(++index != sideDishes.size()) 
+				retVal +=",";
+		}
+		
+		return retVal;
+	}
+
+
+	@Override
+	public List<CustomerOrderDTO> getCustomerPendingOrders(UUID id) {
+		List<CustomerOrderDTO> retVal = new ArrayList<CustomerOrderDTO>();
+		
+		List<UUID> customerOrderIds = orderEventRepository.findAllUnCompletedOrderEventsForCustomer(id);
+		
+		for(UUID orderId : customerOrderIds) {
+			OrderEvent orderEvent=  orderEventRepository.getLastOrderEventForOrder(orderId);
+			List<CustomerOrderItemDTO> items = mapOrderToCustomerOrderItemDTO(orderEvent.getOrder());
+			retVal.add(new CustomerOrderDTO(orderEvent.getOrder().getId(),objectClient.getObjectNameByObjectId(orderEvent.getObjectId()), orderEvent.getOrder().getOrderType(), orderEvent.getOrder().getAddress().getAddress(), orderEvent.getCreatedTime(),getPriceForOrder(orderEvent.getOrder()),items,orderEvent.getOrderStatus()));
+		}
+		
+		return retVal;
 	}
 
 }
