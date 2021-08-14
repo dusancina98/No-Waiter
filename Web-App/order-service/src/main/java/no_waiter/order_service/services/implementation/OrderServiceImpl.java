@@ -50,6 +50,7 @@ import no_waiter.order_service.services.contracts.dto.SideDishDTO;
 import no_waiter.order_service.services.contracts.dto.SideDishResponseDTO;
 import no_waiter.order_service.services.contracts.dto.TableResponseDTO;
 import no_waiter.order_service.services.contracts.dto.UnConfirmedOrderDTO;
+import no_waiter.order_service.services.contracts.exceptions.RejectOrderException;
 import no_waiter.order_service.services.implementation.util.OrderMapper;
 import no_waiter.order_service.services.implementation.util.OrderReportPDFGenerator;
 
@@ -216,12 +217,22 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public void rejectOrder(UUID orderId, UUID objectId) {
+	public void rejectOrder(UUID orderId) throws RejectOrderException {
 		Order order = orderRepository.findById(orderId).get();
 		
 		OrderEvent latest = orderEventRepository.getLastOrderEventForOrder(orderId);
-		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.REJECTED, new Date(), order.getEstimatedTime(), objectId, null,latest.getOrdinalNumber(),latest.getCustomerId());
-		orderEventRepository.save(newOrderEvent);
+		
+		if(latest.getCustomerId() != null) {
+			if(latest.getOrderStatus() != OrderStatus.CANCELED && latest.getOrderStatus() != OrderStatus.DELIVERING && latest.getOrderStatus() != OrderStatus.COMPLETED) {
+				OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.REJECTED, new Date(), order.getEstimatedTime(), latest.getObjectId(), null,latest.getOrdinalNumber(),latest.getCustomerId());
+				orderEventRepository.save(newOrderEvent);
+			}
+		}else if(latest.getOrderStatus() != OrderStatus.CANCELED && latest.getOrderStatus() != OrderStatus.COMPLETED) {
+			OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.REJECTED, new Date(), order.getEstimatedTime(), latest.getObjectId(), null,latest.getOrdinalNumber(),latest.getCustomerId());
+			orderEventRepository.save(newOrderEvent);
+		}else {
+			throw new RejectOrderException("Not possible to reject order");
+		}
 	}
 
 	@Override

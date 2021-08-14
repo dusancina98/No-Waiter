@@ -24,7 +24,6 @@ public class CustomerOrderDTO {
     
 	public OrderStatus OrderStatus;
 
-
 	public CustomerOrderDTO(UUID id, String objectName, no_waiter.order_service.entities.OrderType orderType,
 			String address, Date createdDate, Double price, List<CustomerOrderItemDTO> orderItems, OrderStatus orderStatus) {
 		super();

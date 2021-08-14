@@ -143,6 +143,16 @@ export const orderReducer = (state, action) => {
 					delivererId: "",
 				},
 			};
+		case orderConstants.REJECT_ORDER_SUCCESS:
+			ordCpy = { ...state };
+
+			ordCpy.pendingOrders.orders = ordCpy.pendingOrders.orders.filter((item) => item.Id !== action.orderId);
+
+			return ordCpy;
+		case orderConstants.REJECT_ORDER_FAILURE:
+			ordCpy = { ...state };
+
+			return ordCpy;
 		default:
 			return state;
 	}

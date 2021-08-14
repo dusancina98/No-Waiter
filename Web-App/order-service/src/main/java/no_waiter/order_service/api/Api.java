@@ -175,13 +175,10 @@ public class Api {
 	
 	@PutMapping("/{orderId}/reject")
     @CrossOrigin
-    public ResponseEntity<?> rejectOrder(@RequestHeader("Authorization") String token,@PathVariable String orderId) {
+    public ResponseEntity<?> rejectOrder(@PathVariable String orderId) {
 
         try {
-        	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
-			UUID objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());
-			
-        	orderService.rejectOrder(UUID.fromString(orderId),objectId);
+        	orderService.rejectOrder(UUID.fromString(orderId));
             return new ResponseEntity<>(HttpStatus.OK);
 
         } catch (NoSuchElementException e) {

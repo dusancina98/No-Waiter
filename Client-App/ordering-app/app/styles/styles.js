@@ -792,6 +792,37 @@ export const orderHistoryStyles = StyleSheet.create({
 		height: 80,
 		tintColor: "black",
 	},
+	cicrleIconStyleUnconfirmed:{
+		width: 15,
+		height: 15,
+		tintColor: "orange",
+		marginTop:2, 
+	},
+	cicrleIconStyleConfirmed:{
+		width: 15,
+		height: 15,
+		tintColor: "#ADFF2F",
+		marginTop:2, 
+	},
+	cicrleIconStyleReady:{
+		width: 15,
+		height: 15,
+		tintColor: "lightgreen",
+		marginTop:2, 
+	},
+	cicrleIconStyleDelivering:{
+		width: 15,
+		height: 15,
+		tintColor: "#1E90FF",
+		marginTop:2, 
+	},
+	rejectIcon:{
+		width: 37,
+		height: 37,
+		tintColor: "black",
+		marginRight:5,
+		
+	},
 	content: {
 		flexDirection: "row",
 		flex: 1,

@@ -1,9 +1,9 @@
 import React, { useContext, useState, useEffect } from "react";
-import { FlatList, LogBox, ScrollView, View, Text, Image, SafeAreaView,TouchableOpacity } from "react-native";
+import { FlatList, LogBox, ScrollView, View, Text, Image, SafeAreaView, TouchableOpacity, Alert } from "react-native";
 import { OrderContext } from "../contexts/OrderContext";
 import { DefaultTheme } from "@react-navigation/native";
 import { orderService } from "../services/OrderService";
-import { orderHistoryStyles } from "../styles/styles";
+import { orderHistoryDetailsStyles, orderHistoryStyles } from "../styles/styles";
 import icons from "../constants/Icons";
 import Moment from 'moment';
 
@@ -24,33 +24,74 @@ function PendingOrdersScreen({navigation}) {
 		}
 	}, [isFetching]);
 
-	const handlePressOnOrder = (item) =>{
-		navigation.navigate("Order History Details", item);
+
+	const handleRejectOrder = (orderId) =>{
+		Alert.alert(
+			"Confirm reject",
+			"Are you sure to reject order?",
+			[
+			  {
+				text: "Yes",
+				onPress: () => orderService.rejectOrder(orderId,dispatch)
+			  },
+			  {
+				text: "No",
+			  },
+			]
+		)
 	}
 
 	const renderOrder = ({ item }) => (
-		<TouchableOpacity onPress={() => handlePressOnOrder(item)} style={orderHistoryStyles.itemContainer}>
+		<View style={orderHistoryStyles.itemContainer}>
 			<View style={orderHistoryStyles.itemSubContainer}>
 				<View style={orderHistoryStyles.content}>
-					<Image
-						source={item.OrderType==="DELIVERY" ? icons.delivery : icons.restaurantTable}
-						resizeMode="contain"
-						style={orderHistoryStyles.image}
+					<View>
+						<Image
+							source={item.OrderType==="DELIVERY" ? icons.delivery : icons.restaurantTable}
+							resizeMode="contain"
+							style={orderHistoryStyles.image}
 						/>
+						<View style = {{flexDirection:'row'}}>
+							<Image
+								source={icons.circle}
+								resizeMode="contain"
+								style={item.OrderStatus==="UNCONFIRMED"? orderHistoryStyles.cicrleIconStyleUnconfirmed: {...item.OrderStatus==="CONFIRMED" ? orderHistoryStyles.cicrleIconStyleConfirmed : {...item.OrderStatus==="READY" ? orderHistoryStyles.cicrleIconStyleReady: orderHistoryStyles.cicrleIconStyleDelivering} } }
+							/>
+							<Text style={{marginLeft:5, marginBottom:3}}>{item.OrderStatus}</Text>
+						</View>
+					</View>
 					<View style={orderHistoryStyles.infoStyle}>
-						<Text style={orderHistoryStyles.objectName}>{item.ObjectName}</Text>
+						<View style={{flexDirection:'row', justifyContent:'space-between'}}>
+							<Text style={orderHistoryStyles.objectName}>{item.ObjectName}</Text>
+	
+						</View>
+						<Text style={orderHistoryStyles.date}>
+						{Moment(item.CreatedDate).format('DD MMM yyyy HH:mm')}
+						</Text>
 						{item.OrderType==="DELIVERY" ? <Text style={orderHistoryStyles.address}>{item.Address}</Text> : <View></View>}
+						
+						
 						<Text style={orderHistoryStyles.price}>
 							{item.Price} RSD
 						</Text>
-						<Text style={orderHistoryStyles.date}>
-
-						{Moment(item.CreatedDate).format('DD MMM yyyy hh:mm')}
-						</Text>
 					</View>
+					
 				</View>
+				{item.OrderStatus != 'DELIVERING' ? 
+				<TouchableOpacity onPress={() => handleRejectOrder(item.Id)}>
+					<Image
+						source={icons.remove}
+						resizeMode="contain"
+						style={orderHistoryStyles.rejectIcon}
+					/>
+				</TouchableOpacity>
+				:
+				<View>
+				</View>
+
+			}
 			</View>
-		</TouchableOpacity>
+		</View>
 	);
 
 	return (

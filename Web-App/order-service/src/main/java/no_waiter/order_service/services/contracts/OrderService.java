@@ -18,6 +18,7 @@ import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
 import no_waiter.order_service.services.contracts.dto.ProductValidationResponseDTO;
 import no_waiter.order_service.services.contracts.dto.ReadyOrderDTO;
 import no_waiter.order_service.services.contracts.dto.UnConfirmedOrderDTO;
+import no_waiter.order_service.services.contracts.exceptions.RejectOrderException;
 
 public interface OrderService {
 
@@ -29,7 +30,7 @@ public interface OrderService {
 	
 	UUID completeOrder(UUID orderId, UUID userId) throws NotFoundException;
 
-	void rejectOrder(UUID orderId, UUID objectId);
+	void rejectOrder(UUID orderId) throws RejectOrderException;
 
 	void acceptOrder(AcceptOrderDTO acceptOrderDTO);
 

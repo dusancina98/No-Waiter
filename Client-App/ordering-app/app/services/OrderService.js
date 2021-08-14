@@ -8,6 +8,7 @@ export const orderService = {
 	getOrderHistory,
 	getPendingOrders,
 	receiveOrder,
+	rejectOrder,
 };
 
 async function receiveOrder(orderId, dispatch) {
@@ -115,5 +116,31 @@ async function getPendingOrders(dispatch) {
 	}
 	function failure(error) {
 		return { type: orderConstants.GET_PENDING_ORDERS_FAILURE, error };
+	}
+}
+
+async function rejectOrder(orderId,dispatch){
+	let header = await authHeader();
+
+	Axios.put(`${API_URL}/order-api/api/orders/${orderId}/reject`, null, { validateStatus: () => true, headers: header })
+		.then((res) => {
+			console.log(res);
+			if (res.status === 200) {
+				dispatch(success(orderId));
+			} else if (res.status === 404) {
+				dispatch(failure("Order not found"));
+			} else {
+				dispatch(failure(res.data.message));
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+
+	function success(orderId) {
+		return { type: orderConstants.REJECT_ORDER_SUCCESS, orderId };
+	}
+	function failure(error) {
+		return { type: orderConstants.REJECT_ORDER_FAILURE, errorMessage: error };
 	}
 }
