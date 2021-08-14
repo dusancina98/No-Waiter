@@ -31,6 +31,7 @@ export const check = require("../assets/icons/checkmark.jpg");
 export const delivery = require("../assets/icons/delivery.png");
 export const restaurantTable = require("../assets/icons/restaurant-table.png");
 export const circle = require("../assets/icons/circle.png");
+export const refreshPage = require("../assets/icons/refresh.jpg");
 
 export default {
 	back,
@@ -66,4 +67,5 @@ export default {
 	delivery,
 	restaurantTable,
 	circle,
+	refreshPage,
 };

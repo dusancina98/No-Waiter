@@ -1033,3 +1033,118 @@ export const giveFeedbackStyle = StyleSheet.create({
 		textAlign: "center",
 	},
 });
+
+export const pendingOrdersStyles = StyleSheet.create({
+	itemContainer: {
+		flex: 1,
+		backgroundColor: "white",
+		marginLeft: 15,
+		marginRight: 15,
+		marginTop: 5,
+		borderWidth: 0,
+		borderRadius: 15,
+	},
+	itemSubContainer: {
+		flexDirection: "row",
+		paddingVertical: 10,
+	},
+	image: {
+		width: 80,
+		height: 80,
+		tintColor: "black",
+	},
+	cicrleIconStyleUnconfirmed:{
+		width: 15,
+		height: 15,
+		tintColor: "orange",
+		marginTop:2, 
+	},
+	cicrleIconStyleConfirmed:{
+		width: 15,
+		height: 15,
+		tintColor: "#ADFF2F",
+		marginTop:2, 
+	},
+	cicrleIconStyleReady:{
+		width: 15,
+		height: 15,
+		tintColor: "lightgreen",
+		marginTop:2, 
+	},
+	cicrleIconStyleDelivering:{
+		width: 15,
+		height: 15,
+		tintColor: "#1E90FF",
+		marginTop:2, 
+	},
+	rejectIcon:{
+		width: 37,
+		height: 37,
+		tintColor: "black",
+		marginRight:5,
+		
+	},
+	content: {
+		flexDirection: "row",
+		flex: 1,
+		paddingLeft: 15,
+	},
+	infoStyle: {
+		marginLeft: 20,
+	},
+	objectName: {
+		fontSize: 22,
+		color: "#5F5F5F",
+	},
+	address: {
+		fontSize: 16,
+		flexWrap: "wrap",
+		color: "#a4a4a4",
+	},
+	priceDateContainer: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+	},
+	price: {
+		fontSize: 17,
+		color: "#617ae1",
+	},
+	date: {
+		fontSize: 16,
+		color: "#a4a4a4",
+		alignItems: "flex-end",
+		justifyContent: "flex-end",
+	},
+	emptyHistoryContainer: {
+		flex: 1,
+		alignItems: "center",
+		justifyContent: "center",
+	},
+	emptyHistoryText: {
+		marginTop: 50,
+		fontSize: 24,
+		flexWrap: "wrap",
+		color: "#a4a4a4",
+	},
+	errorContainer:{
+		flex: 1, 
+		alignItems: 'center',
+		justifyContent: 'center', 
+	},
+	errorMessage:{
+		fontSize: 18,
+		flexWrap: "wrap",
+		color: "#a4a4a4",
+	},
+	reloadPageMessage:{
+		fontSize: 18,
+		color: "#a4a4a4",
+		marginTop:50,
+	},
+	refreshPageImage:{
+		marginTop:10,
+		tintColor: "#a4a4a4",
+		height:60,
+		width:60,
+	}
+});

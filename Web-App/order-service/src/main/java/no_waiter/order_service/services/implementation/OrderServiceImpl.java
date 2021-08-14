@@ -226,6 +226,8 @@ public class OrderServiceImpl implements OrderService{
 			if(latest.getOrderStatus() != OrderStatus.CANCELED && latest.getOrderStatus() != OrderStatus.DELIVERING && latest.getOrderStatus() != OrderStatus.COMPLETED) {
 				OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.REJECTED, new Date(), order.getEstimatedTime(), latest.getObjectId(), null,latest.getOrdinalNumber(),latest.getCustomerId());
 				orderEventRepository.save(newOrderEvent);
+			}else {
+				throw new RejectOrderException("Not possible to reject order");
 			}
 		}else if(latest.getOrderStatus() != OrderStatus.CANCELED && latest.getOrderStatus() != OrderStatus.COMPLETED) {
 			OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.REJECTED, new Date(), order.getEstimatedTime(), latest.getObjectId(), null,latest.getOrdinalNumber(),latest.getCustomerId());

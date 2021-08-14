@@ -41,6 +41,14 @@ const OrderContextProvider = (props) => {
 			errorMessage: "",
 			delivererId: "",
 		},
+		rejectOrder: {
+			showSuccess:false,
+			showError:false,
+			errorMessage:'',
+		},
+		pagesError:{
+			pendingOrdersError: false,
+		}
 	});
 
 	return <OrderContext.Provider value={{ orderState, dispatch }}>{props.children}</OrderContext.Provider>;

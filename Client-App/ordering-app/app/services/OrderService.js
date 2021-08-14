@@ -103,6 +103,7 @@ async function getPendingOrders(dispatch) {
 			console.log(res.data);
 			if (res.status === 200) {
 				dispatch(success(res.data));
+				//dispatch(failure("We have some problem"));
 			} else {
 				dispatch(failure("We have some problem"));
 			}
