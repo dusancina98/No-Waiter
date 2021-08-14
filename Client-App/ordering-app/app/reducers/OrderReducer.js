@@ -87,6 +87,17 @@ export const orderReducer = (state, action) => {
 			return ordCpy;
 		}
 
+		case orderConstants.RESET_QR_CODE_DATA:{
+			ordCpy = { ...state };
+
+			ordCpy.qrCodeData.scanned = false;
+			ordCpy.qrCodeData.tableId = '';
+			ordCpy.qrCodeData.objectId = '';
+			ordCpy.qrCodeData.key = '';
+
+			return ordCpy;
+		}
+
 		case orderConstants.GET_ORDER_HISTORY_FAILURE: {
 			ordCpy = { ...state };
 			ordCpy.orderHistory.orders = [];
