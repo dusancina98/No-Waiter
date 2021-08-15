@@ -139,7 +139,7 @@ function updateObjectImage(image, dispatch) {
 async function findAll(dispatch) {
 	dispatch(request());
 
-	await Axios.get(`/object-api/api/objects`, { validateStatus: () => true })
+	await Axios.get(`/object-api/api/objects`, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {

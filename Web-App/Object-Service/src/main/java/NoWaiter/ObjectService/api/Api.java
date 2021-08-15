@@ -58,6 +58,7 @@ public class Api {
     @Autowired
 	private Environment env;
     
+    //TODO: ne znam gde se poziva ova metoda
     @GetMapping("/object-images/{imageName}")
 	@CrossOrigin
 	public ResponseEntity<?> getProductImage(@PathVariable String imageName) {
@@ -86,6 +87,7 @@ public class Api {
         }
     }
     
+    //koristi drugi ms
     @GetMapping("/objectName/{objectId}")
 	@CrossOrigin
 	public ResponseEntity<?> getObjectName(@PathVariable UUID objectId) {
@@ -104,8 +106,8 @@ public class Api {
 	public ResponseEntity<?> getFavouriteObjectsForCustomers(@RequestHeader("Authorization") String token) {
     	try {
     		List<UUID> favouriteIds = userClient.findAllCustomerFavouriteObjectIds(token);
-    		System.out.println(favouriteIds.size());
-            return new ResponseEntity<>(objectService.getFavouriteObjectsForCustomers(favouriteIds), HttpStatus.OK);
+
+    		return new ResponseEntity<>(objectService.getFavouriteObjectsForCustomers(favouriteIds), HttpStatus.OK);
         } catch (NoSuchElementException e) {
         	e.printStackTrace();
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
@@ -116,7 +118,7 @@ public class Api {
     
     @GetMapping("/customers/{objectId}")
 	@CrossOrigin
-	public ResponseEntity<?> getObjectForCustomers(@RequestHeader("Authorization") String token, @PathVariable String objectId) {
+	public ResponseEntity<?> getObjectDetailsForCustomer(@RequestHeader("Authorization") String token, @PathVariable String objectId) {
     	try {
             return new ResponseEntity<>(objectService.getObjectDetailsForCustomer(UUID.fromString(objectId), token), HttpStatus.OK);
         } catch (NoSuchElementException e) {
@@ -131,7 +133,6 @@ public class Api {
     @PostMapping
     @CrossOrigin
     public ResponseEntity<?> createObject(@RequestBody ObjectDTO objectDTO) {
-
         try {
             UUID objectId = objectService.create(objectDTO);
             return new ResponseEntity<>(objectId, HttpStatus.CREATED);
@@ -145,19 +146,19 @@ public class Api {
         }
     }
     
+    //TODO: ne znam gde se koristi metoda
     @PostMapping("/details")
     @CrossOrigin
     public ResponseEntity<?> getObjectDetailsByObjectIds(@RequestBody List<UUID> objectIds){
-
         try {
             return new ResponseEntity<>(objectService.findAllObjectDetailsById(objectIds), HttpStatus.OK);
-
         } catch (Exception e) {
 			e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     
+    //TODO: ne znam gde se koristi
     @GetMapping("/{objectId}")
     @CrossOrigin
     public ResponseEntity<?> findById(@PathVariable UUID objectId) {
@@ -188,6 +189,7 @@ public class Api {
         }
     }
     
+    //koristi se u ms
     @GetMapping("/table/{objectId}/{tableId}")
     @CrossOrigin	
     public ResponseEntity<?> getTableNumberByTableIdForResturant(@PathVariable UUID objectId,  @PathVariable UUID tableId) {
@@ -213,7 +215,7 @@ public class Api {
         }
     }
     
-    @GetMapping("/tables")
+    @GetMapping("/tables") 
     @CrossOrigin
     public ResponseEntity<?> findAllTables(@RequestHeader("Authorization") String token) {
         try {
@@ -464,20 +466,6 @@ public class Api {
         }
     }
     
-    @GetMapping("/worktime")
-    @CrossOrigin
-    public ResponseEntity<?> worktime() {
-    	try {
-    		objectService.worktime();
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (InvalidTimeRangeException e) {
-        	e.printStackTrace();
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e){
-            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
-        }
-    }
-    
     @PostMapping("/self-ordering-jwt")
     @CrossOrigin
     public ResponseEntity<?> generateSelfOrderingJWTToken(@RequestHeader("Authorization") String token) {
@@ -492,7 +480,7 @@ public class Api {
     
     @DeleteMapping("/{objectId}")
     @CrossOrigin
-    public ResponseEntity<?> updateObjectImage(@PathVariable String objectId) {
+    public ResponseEntity<?> deleteObject(@PathVariable String objectId) {
 
         try {
         	userClient.deleteObjectWorkers(UUID.fromString(objectId));

@@ -8,20 +8,18 @@ public class UserTokenStateDTO {
     private Long expiresIn;
     private String name;
     private String surname;
-    private String image;
     
     public UserTokenStateDTO() {
         this.accessToken = null;
         this.expiresIn = null;
     }
 
-    public UserTokenStateDTO(String accessToken, long expiresIn, List<String> roles, String name, String surname, String image) {
+    public UserTokenStateDTO(String accessToken, long expiresIn, List<String> roles, String name, String surname) {
         this.accessToken = accessToken;
         this.expiresIn = expiresIn;
         this.roles = roles;
         this.name= name;
         this.surname= surname;
-        this.image=image;
     }
 
     public String getAccessToken() {
@@ -62,13 +60,5 @@ public class UserTokenStateDTO {
 
 	public void setSurname(String surname) {
 		this.surname = surname;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
 	}
 }

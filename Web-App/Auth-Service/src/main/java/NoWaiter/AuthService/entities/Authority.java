@@ -14,18 +14,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name="AUTHORITY")
 public class Authority implements GrantedAuthority  {
-
 	private static final long serialVersionUID = 1L;
-
 
 	@Id
     @Column(name = "id")
 	private UUID id;
 
-
     @Column(name="name", unique=true)
     String name;
-
 
 	public Authority() {}
 	
@@ -34,7 +30,6 @@ public class Authority implements GrantedAuthority  {
 		this.id = id;
 		this.name = name;
 	}
-    
     
     public String getAuthority() {
         return name;

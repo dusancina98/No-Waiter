@@ -56,79 +56,50 @@ public class Api {
     @CrossOrigin
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
 			HttpServletResponse response) {
-		String jwt;
-		int expiresIn;
-		List<String> roles = new ArrayList<String>();
-		String name;
-		String surname;
-		String image = "URL";
-
 		try {
-			Authentication authentication = authenticationManager
-					.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
-							authenticationRequest.getPassword()));
+			UserTokenStateDTO userTokenStateDTO = authenticate(authenticationRequest);
 
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-			User user = (User) authentication.getPrincipal();
-			user.getUserAuthorities().forEach((a) -> roles.add(a.getName()));
-			name=user.getName();
-			surname= user.getSurname();
-			jwt = tokenUtils.generateToken(user.getUsername(), user.getId() ,roles); // username
-			expiresIn = tokenUtils.getExpiredIn();
+			if (!hasRole(userTokenStateDTO.getRoles(), "ROLE_SYSADMIN") && !hasRole(userTokenStateDTO.getRoles(), "ROLE_OBJADMIN") && !hasRole(userTokenStateDTO.getRoles(), "ROLE_WAITER"))
+				return new ResponseEntity<>("Unauthorized access", HttpStatus.BAD_REQUEST);
+			
+			response.addHeader(HEADER, HEADER_VALUE_PREFIX + " " + userTokenStateDTO.getAccessToken());
+			
+			return new ResponseEntity<UserTokenStateDTO>(userTokenStateDTO, HttpStatus.OK);
 		} catch (BadCredentialsException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} catch (DisabledException e) {
-			UUID id = userService.GetUserIdByEmail(authenticationRequest.getUsername());
+			UUID id = userService.getUserIdByEmail(authenticationRequest.getUsername());
 			return new ResponseEntity<>(id,HttpStatus.FORBIDDEN);
 		}catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-        response.addHeader(HEADER, HEADER_VALUE_PREFIX + " " + jwt);
 		
-		return new ResponseEntity<UserTokenStateDTO>(new UserTokenStateDTO(jwt, new Date().getTime() + expiresIn, roles, name,surname,image), HttpStatus.OK);
 	}
 	
 	@PostMapping("/login/deliverer")
     @CrossOrigin
 	public ResponseEntity<?> authenticateDeliverer(@RequestBody JwtAuthenticationRequest authenticationRequest,
 			HttpServletResponse response) {
-		String jwt;
-		int expiresIn;
-		List<String> roles = new ArrayList<String>();
-		String name;
-		String surname;
-		String image = "URL";
-
 		try {
-			Authentication authentication = authenticationManager
-					.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
-							authenticationRequest.getPassword()));
-
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-			User user = (User) authentication.getPrincipal();
-			user.getUserAuthorities().forEach((a) -> roles.add(a.getName()));
-			if (!hasRole(roles, ROLE_DELIVERER))
+			UserTokenStateDTO userTokenStateDTO = authenticate(authenticationRequest);
+			
+			if (!hasRole(userTokenStateDTO.getRoles(), ROLE_DELIVERER))
 				return new ResponseEntity<>("Unauthorized access", HttpStatus.BAD_REQUEST);
-
-			name=user.getName();
-			surname= user.getSurname();
-			jwt = tokenUtils.generateToken(user.getUsername(), user.getId() ,roles); // username
-			expiresIn = tokenUtils.getExpiredIn();
+			
+			response.addHeader(HEADER, HEADER_VALUE_PREFIX + " " + userTokenStateDTO.getAccessToken());
+			
+			return new ResponseEntity<UserTokenStateDTO>(userTokenStateDTO, HttpStatus.OK);
 		} catch (BadCredentialsException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} catch (DisabledException e) {
-			UUID id = userService.GetUserIdByEmail(authenticationRequest.getUsername());
+			UUID id = userService.getUserIdByEmail(authenticationRequest.getUsername());
 			return new ResponseEntity<>(id,HttpStatus.FORBIDDEN);
 		}catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-        response.addHeader(HEADER, HEADER_VALUE_PREFIX + " " + jwt);
-		
-		return new ResponseEntity<UserTokenStateDTO>(new UserTokenStateDTO(jwt, new Date().getTime() + expiresIn, roles, name,surname,image), HttpStatus.OK);
 	}
 	
 	
@@ -136,41 +107,42 @@ public class Api {
     @CrossOrigin
 	public ResponseEntity<?> authenticateCustomer(@RequestBody JwtAuthenticationRequest authenticationRequest,
 			HttpServletResponse response) {
-		String jwt;
-		int expiresIn;
-		List<String> roles = new ArrayList<String>();
-		String name;
-		String surname;
-		String image = "URL";
-
 		try {
-			Authentication authentication = authenticationManager
-					.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
-							authenticationRequest.getPassword()));
-
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-			User user = (User) authentication.getPrincipal();
-			user.getUserAuthorities().forEach((a) -> roles.add(a.getName()));
-			if (!hasRole(roles, ROLE_CUSTOMER))
+			UserTokenStateDTO userTokenStateDTO = authenticate(authenticationRequest);
+			
+			if (!hasRole(userTokenStateDTO.getRoles(), ROLE_CUSTOMER))
 				return new ResponseEntity<>("Unauthorized access", HttpStatus.BAD_REQUEST);
-
-			name=user.getName();
-			surname= user.getSurname();
-			jwt = tokenUtils.generateToken(user.getUsername(), user.getId() ,roles); // username
-			expiresIn = tokenUtils.getExpiredIn();
+			
+			response.addHeader(HEADER, HEADER_VALUE_PREFIX + " " + userTokenStateDTO.getAccessToken());
+			
+			return new ResponseEntity<UserTokenStateDTO>(userTokenStateDTO, HttpStatus.OK);
 		} catch (BadCredentialsException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} catch (DisabledException e) {
-			UUID id = userService.GetUserIdByEmail(authenticationRequest.getUsername());
+			UUID id = userService.getUserIdByEmail(authenticationRequest.getUsername());
 			return new ResponseEntity<>(id,HttpStatus.FORBIDDEN);
 		}catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	private UserTokenStateDTO authenticate(JwtAuthenticationRequest authenticationRequest) {
+		List<String> roles = new ArrayList<String>();
 		
-        response.addHeader(HEADER, HEADER_VALUE_PREFIX + " " + jwt);
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
+						authenticationRequest.getPassword()));
+
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		User user = (User) authentication.getPrincipal();
+		user.getUserAuthorities().forEach((a) -> roles.add(a.getName()));
+
+		String jwt = tokenUtils.generateToken(user.getUsername(), user.getId() ,roles); 
+		int expiresIn = tokenUtils.getExpiredIn();
 		
-		return new ResponseEntity<UserTokenStateDTO>(new UserTokenStateDTO(jwt, new Date().getTime() + expiresIn, roles, name,surname,image), HttpStatus.OK);
+		return new UserTokenStateDTO(jwt, new Date().getTime() + expiresIn, roles, user.getName(), user.getSurname());
+		
 	}
 	
 	private boolean hasRole(List<String> userRoles, String desiredRole) {
@@ -188,10 +160,8 @@ public class Api {
     	try {
             JwtParseResponseDTO jwtParseResponseDto = tokenUtils.parseJwt(requestDto.getToken());
             return new ResponseEntity<>(jwtParseResponseDto, HttpStatus.OK);
-
         } catch (Exception ex) {
             ex.printStackTrace();
-
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
 	}
@@ -216,10 +186,9 @@ public class Api {
             JwtParseResponseDTO jwtParseResponseDto = tokenUtils.parseJwt(tokenUtils.getToken(request));
     		List<String> roles = new ArrayList<String>();
     		roles.add("ROLE_SELF_ORDER_PULT");
-			String jwt = tokenUtils.generateSelfOrderingToken(jwtParseResponseDto.getId() ,roles); // username
+			String jwt = tokenUtils.generateSelfOrderingToken(jwtParseResponseDto.getId() ,roles); 
 
             return new ResponseEntity<>(jwt, HttpStatus.OK);
-
         } catch (Exception ex) {
             ex.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
