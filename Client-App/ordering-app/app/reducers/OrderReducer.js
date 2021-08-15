@@ -69,6 +69,16 @@ export const orderReducer = (state, action) => {
 			ordCpy.createOrder.successMessage = "";
 
 			return ordCpy;
+		case orderConstants.HIDE_CREATE_ORDER_MESSAGES:{
+			ordCpy = { ...state };
+
+			ordCpy.createOrder.showError = false;
+			ordCpy.createOrder.errorMessage = '';
+			ordCpy.createOrder.showSuccessMessage = false;
+			ordCpy.createOrder.successMessage = "";
+			
+			return ordCpy;
+		}
 		case orderConstants.SET_QR_CODE_SCANNED_DATA:
 			ordCpy = { ...state };
 
@@ -87,6 +97,17 @@ export const orderReducer = (state, action) => {
 			return ordCpy;
 		}
 
+		case orderConstants.RESET_QR_CODE_DATA:{
+			ordCpy = { ...state };
+
+			ordCpy.qrCodeData.scanned = false;
+			ordCpy.qrCodeData.tableId = '';
+			ordCpy.qrCodeData.objectId = '';
+			ordCpy.qrCodeData.key = '';
+
+			return ordCpy;
+		}
+
 		case orderConstants.GET_ORDER_HISTORY_FAILURE: {
 			ordCpy = { ...state };
 			ordCpy.orderHistory.orders = [];
@@ -97,19 +118,24 @@ export const orderReducer = (state, action) => {
 		}
 		case orderConstants.GET_PENDING_ORDERS_SUCCESS: {
 			ordCpy = { ...state };
+
 			ordCpy.pendingOrders.orders = action.orders;
 			ordCpy.pendingOrders.showError = false;
 			ordCpy.pendingOrders.errorMessage = "";
+			ordCpy.pagesError.pendingOrdersError=false;
 
 			return ordCpy;
 		}
 
 		case orderConstants.GET_PENDING_ORDERS_FAILURE: {
 			ordCpy = { ...state };
+
 			ordCpy.pendingOrders.orders = [];
 			ordCpy.pendingOrders.showError = true;
 			ordCpy.pendingOrders.errorMessage = action.error;
-
+			ordCpy.pendingOrders.errorMessage = action.error;
+			ordCpy.pagesError.pendingOrdersError=true;
+			
 			return ordCpy;
 		}
 
@@ -143,6 +169,32 @@ export const orderReducer = (state, action) => {
 					delivererId: "",
 				},
 			};
+		case orderConstants.REJECT_ORDER_SUCCESS:
+			ordCpy = { ...state };
+
+			ordCpy.pendingOrders.orders = ordCpy.pendingOrders.orders.filter((item) => item.Id !== action.orderId);
+			ordCpy.rejectOrder.showSuccess = true;
+			ordCpy.rejectOrder.showError = false;
+			ordCpy.rejectOrder.errorMessage = "";
+
+			return ordCpy;
+		case orderConstants.REJECT_ORDER_FAILURE:
+			ordCpy = { ...state };
+
+			ordCpy.rejectOrder.showSuccess = false;
+			ordCpy.rejectOrder.showError = true;
+			ordCpy.rejectOrder.errorMessage = action.errorMessage;
+
+			return ordCpy;
+		case orderConstants.REJECT_ORDER_REQUEST:{
+			ordCpy = { ...state };
+
+			ordCpy.rejectOrder.showSuccess = false;
+			ordCpy.rejectOrder.showError = false;
+			ordCpy.rejectOrder.errorMessage = action.errorMessage;
+
+			return ordCpy;
+		}
 		default:
 			return state;
 	}

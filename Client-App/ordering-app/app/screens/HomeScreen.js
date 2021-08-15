@@ -4,13 +4,19 @@ import { ObjectContext } from "../contexts/ObjectContext";
 import { objectService } from "../services/ObjectService";
 import { objectsPageStyles } from "../styles/styles";
 import { API_URL } from "../constants/ApiUrl";
+import { objectConstants } from "../constants/ObjectConstants";
+import { OrderContext } from "../contexts/OrderContext";
+import { orderConstants } from "../constants/OrderConstants";
 
 function HomeScreen({ navigation }) {
 	const { objectState, dispatch } = useContext(ObjectContext);
+	const ordCtx = useContext(OrderContext);
+
 	const [isFetching, setIsFetching] = useState(false);
 
 	const handleEnterObject = (objectId) =>{
 		navigation.navigate("Object", objectId);
+		ordCtx.dispatch({type: orderConstants.RESET_QR_CODE_DATA })
 	}
 
 	useEffect(() => {

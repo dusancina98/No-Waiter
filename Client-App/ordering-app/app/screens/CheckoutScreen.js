@@ -9,10 +9,12 @@ import Icons from "../constants/Icons";
 import { orderConstants } from "../constants/OrderConstants";
 import { orderService } from "../services/OrderService";
 import { ObjectContext } from "../contexts/ObjectContext";
+import { useToast } from "react-native-toast-notifications";
 
 const CheckoutScreen = ({ navigation }) => {
 	const { orderState, dispatch } = useContext(OrderContext);
 	const { objectState } = useContext(ObjectContext);
+	const toast = useToast();
 
 	const setProductCount = (id, count) => {
 		dispatch({ type: orderConstants.SET_PRODUCT_COUNT_TO_ORDER, id, count });
@@ -62,11 +64,23 @@ const CheckoutScreen = ({ navigation }) => {
 
 	useEffect(() => {
 		if (orderState.createOrder.showSuccessMessage === true) {
-			Alert.alert("Success", "Order successfully created", [{ text: "OK" }]);
+			toast.show("Successfuly created order", {
+				type:"success",
+			});
+			//TODO: mozda staviti da redirektuje na pending orders
 			navigation.goBack();
-			dispatch({ type: orderConstants.ORDER_CREATE_REQUEST });
+			dispatch({ type: orderConstants.HIDE_CREATE_ORDER_MESSAGES });
 		}
 	}, [orderState.createOrder.showSuccessMessage]);
+
+	useEffect(() => {
+		if (orderState.createOrder.showError === true) {
+			toast.show(orderState.createOrder.errorMessage, {
+				type:"danger",
+			});
+			dispatch({ type: orderConstants.HIDE_CREATE_ORDER_MESSAGES });
+		}
+	}, [orderState.createOrder.showError]);
 
 	const renderProduct = ({ item }) => (
 		<TouchableOpacity onPress={() => handlePressProduct(item)} style={productItemStyles.itemContainer}>

@@ -35,7 +35,7 @@ insert into object_admin (id, object_id, object_name, address) values ('22793162
 insert into waiter (id, object_id, address, phone_number) values ('22793162-52d3-11eb-ae93-0242ac130222', '11193162-52d3-11eb-ae93-0242ac130111', 'Novi Sad' , '123123123123');
 
 -- customers
-insert into customer (id, phone_number) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0cc1', '065324235');
+insert into customer (id, phone_number,penalties) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0cc1', '065324235', 0);
 -- customer addresses
 insert into address (id, name) values ('123ebff1-a0a6-4c1d-b93f-23c5225c0cc1', 'Novosadskog sajma 2');
 insert into customer_addresses (customer_id, addresses_id) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0cc1', '123ebff1-a0a6-4c1d-b93f-23c5225c0cc1');

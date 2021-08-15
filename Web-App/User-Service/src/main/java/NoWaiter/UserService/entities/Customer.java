@@ -27,6 +27,8 @@ public class Customer extends User {
 	@Column(name="favourite_objects")
 	private List<UUID> favouriteObjects;
 	
+	private int penalties;
+	
 	public Customer() {
 		super();
 	}
@@ -42,6 +44,7 @@ public class Customer extends User {
 		this.phoneNumber = phoneNumber;
 		this.addresses = addresses;
 		this.favouriteObjects = new ArrayList<UUID>();
+		this.penalties= 0;
 	}
 
 	public String getPhoneNumber() {
@@ -101,6 +104,17 @@ public class Customer extends User {
 		}
 		
 		this.favouriteObjects.removeIf(e -> e.equals(objectId));
-		
+	}
+
+	public int getPenalties() {
+		return penalties;
+	}
+
+	public void deletePenalties() {
+		this.penalties = 0;
+	}
+	
+	public void incrementPenalties() {
+		this.penalties++;
 	}
 }
