@@ -12,6 +12,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.ListItem;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
@@ -25,26 +26,35 @@ public class OrderReportPDFGenerator {
 	
 	private Order order;
 	
+	private byte[] qrCode;
+	
+	private String orderAddress;
+	
 	private Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
             Font.BOLD);
 	
 	private Font redFontMax = new Font(Font.FontFamily.TIMES_ROMAN, 56,
             Font.NORMAL, BaseColor.RED);
 	
-    private Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 10,
-            Font.BOLD);
+
     private Font normalnBold = new Font(Font.FontFamily.TIMES_ROMAN, 12,
             Font.BOLD);
     
     private int ordinalNumber;
+	
+	public OrderReportPDFGenerator(Order order, byte[] qrCode, String orderAddress) {
+		this.order = order;
+		this.orderAddress=orderAddress;
+		this.qrCode = qrCode;
+	}
 	
 	public OrderReportPDFGenerator(Order order, int ordinalNumber) {
 		this.order = order;
 		this.ordinalNumber= ordinalNumber;
 	}
 	
-	public byte[] generatePDF() throws Exception, DocumentException {
-		String fileName = String.valueOf("report_" + order.getId() +".pdf");
+	public byte[] generateInfoPultReport() throws Exception, DocumentException {
+        String fileName = ".//order-reports/info_pult_"+order.getId() +".pdf";
 
 		Document document = new Document(PageSize.A6);
 		@SuppressWarnings("unused")
@@ -72,6 +82,41 @@ public class OrderReportPDFGenerator {
 		return contents;
 	}
 	
+	public byte[] generateWaiterOrderReport() throws Exception, DocumentException {
+        String fileName = ".//order-reports/waiter_" + order.getId()+ ".pdf";
+
+		Document document = new Document(PageSize.A5);
+		@SuppressWarnings("unused")
+		PdfWriter pdfWriter = PdfWriter.getInstance(document,
+				new FileOutputStream(fileName));
+		document.open();
+		
+        addPageTitle(document);
+
+        addOrderItemsContent(document);
+        createTotalPrice(document);
+		
+		Image image= null;
+		try {
+			image= Image.getInstance(qrCode);
+			image.setAlignment((Element.ALIGN_CENTER));
+			image.scalePercent(15f);
+			image.scaleAbsoluteWidth(150f);
+			image.scaleAbsoluteHeight(150f);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		document.add(image);
+
+		document.close();
+
+		Path path = Paths.get(fileName);
+		byte[] contents = Files.readAllBytes(path);
+		
+		return contents;
+	}
+	
 	@SuppressWarnings("deprecation")
 	private void addPageTitle(Document document)
             throws DocumentException {
@@ -82,7 +127,10 @@ public class OrderReportPDFGenerator {
         preface.add(paragraph);        
         preface.add(new Paragraph(
                 "Order created: "  + new Date().toLocaleString(),
-                smallBold));
+                normalnBold));
+        preface.add(new Paragraph(
+                "Address: "  + orderAddress,
+                normalnBold));
         addEmptyLine(preface, 1);
         
         document.add(preface);

@@ -4,7 +4,6 @@ import { ObjectContext } from "../contexts/ObjectContext";
 import { objectService } from "../services/ObjectService";
 import { objectsPageStyles } from "../styles/styles";
 import { API_URL } from "../constants/ApiUrl";
-import { objectConstants } from "../constants/ObjectConstants";
 
 function HomeScreen({ navigation }) {
 	const { objectState, dispatch } = useContext(ObjectContext);

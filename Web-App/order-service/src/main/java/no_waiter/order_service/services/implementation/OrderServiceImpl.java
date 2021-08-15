@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.itextpdf.text.DocumentException;
+
 import javassist.NotFoundException;
 import no_waiter.order_service.entities.Address;
 import no_waiter.order_service.entities.Order;
@@ -52,6 +53,7 @@ import no_waiter.order_service.services.contracts.dto.TableResponseDTO;
 import no_waiter.order_service.services.contracts.dto.UnConfirmedOrderDTO;
 import no_waiter.order_service.services.implementation.util.OrderMapper;
 import no_waiter.order_service.services.implementation.util.OrderReportPDFGenerator;
+import no_waiter.order_service.services.implementation.util.QrCodeGenerator;
 
 @Service
 public class OrderServiceImpl implements OrderService{
@@ -366,12 +368,19 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public void setOnRouteOrder(UUID orderId) {
+	public byte[] setOnRouteOrder(UUID orderId) throws Exception {
 		Order order = orderRepository.findById(orderId).get();
 		
 		OrderEvent latest = orderEventRepository.getLastOrderEventForOrder(orderId);
 		OrderEvent newOrderEvent = new OrderEvent(order, OrderStatus.DELIVERING, new Date(), order.getEstimatedTime(), order.getObjectId(), null, latest.getOrdinalNumber(),latest.getCustomerId());
 		orderEventRepository.save(newOrderEvent);
+
+		QrCodeGenerator qrCodeGenerator = new QrCodeGenerator();
+		byte[] qrCode=  qrCodeGenerator.generateQrCode(order.getId().toString());
+		
+		OrderReportPDFGenerator pdfGenerator = new OrderReportPDFGenerator(order,qrCode, order.getAddress().getAddress());
+		
+		return pdfGenerator.generateWaiterOrderReport();
 	}
 
 	@Override
@@ -654,7 +663,7 @@ public class OrderServiceImpl implements OrderService{
 		OrderEvent latestEvent = orderEventRepository.getLastOrderEventForOrder(UUID.fromString(orderId));
 		OrderReportPDFGenerator pdfGenerator = new OrderReportPDFGenerator(order,latestEvent.getOrdinalNumber());
 
-		return pdfGenerator.generatePDF();
+		return pdfGenerator.generateInfoPultReport();
 	}
 
 

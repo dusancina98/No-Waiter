@@ -376,11 +376,14 @@ public class Api {
 	@PutMapping("/{orderId}/on-route")
     @CrossOrigin
     public ResponseEntity<?> setOnRouteOrder(@PathVariable String orderId) {
-
         try {
-        	orderService.setOnRouteOrder(UUID.fromString(orderId));
-            return new ResponseEntity<>(HttpStatus.OK);
+        	byte[] contents= orderService.setOnRouteOrder(UUID.fromString(orderId));
 
+			HttpHeaders headers = new HttpHeaders();
+		    headers.setContentType(MediaType.parseMediaType("application/pdf"));
+		    headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+		    ResponseEntity<byte[]> response = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+		    return response;
         } catch (NoSuchElementException e) {
         	e.printStackTrace();
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);

@@ -180,9 +180,11 @@ async function findAllReadyOrders(dispatch){
 }
 
 function setOnRouteOrder(orderId, dispatch, notifyManager) {
-	Axios.put(`/order-api/api/orders/${orderId}/on-route`, null, { validateStatus: () => true, headers: authHeader() })
+	const FileDownload = require("js-file-download");
+	Axios.put(`/order-api/api/orders/${orderId}/on-route`, null, { validateStatus: () => true, headers: authHeader(), responseType: "blob" })
 		.then((res) => {
 			if (res.status === 200) {
+				FileDownload(res.data, "report.pdf")
 				dispatch(success(orderId));
 				findAllOnRouteOrders(dispatch);
 			} else {

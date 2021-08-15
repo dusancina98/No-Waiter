@@ -1,4 +1,4 @@
-package NoWaiter.ObjectService.services.implementation.util;
+package no_waiter.order_service.services.implementation.util;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -7,11 +7,7 @@ import java.nio.file.FileSystems;
 import java.util.HashMap;
 import java.util.Map;
 
-
 import javax.imageio.ImageIO;
-
-import org.json.JSONObject;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -21,29 +17,19 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 public class QrCodeGenerator {
-	
 	public QrCodeGenerator() {
-		
-	}
+			
+		}
 	
 	@SuppressWarnings("unchecked")
-	public byte[] generateQrCode(String objectId, String tableId) throws Exception {
-		String filePath = ".//qr-codes/object_table_"+objectId+"-"+tableId+ ".png";
-
+	public byte[] generateQrCode(String orderId) throws Exception {
+		String filePath = ".//qr-codes/delivery_report_"+orderId+ ".png";
 		String charset = "UTF-8";
 		@SuppressWarnings("rawtypes")
 		Map hintMap = new HashMap();
 		hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-		System.out.println("TEST1");
-		Map<String, String> qrCodeDataMap = Map.of(
-		"ObjectId", objectId,
-		"TableId", tableId,
-		"Key", generateVerificationKey("OBJECT")
-		// see next section for ´generateVerificationKey´ method
-		);
 
-		String jsonString = new JSONObject(qrCodeDataMap).toString();
-		createQRCode(jsonString, filePath, charset, hintMap, 500, 500);
+		createQRCode(orderId, filePath, charset, hintMap, 500, 500);
 
 		BufferedImage image = ImageIO.read(new File(filePath));
 
@@ -79,25 +65,4 @@ public class QrCodeGenerator {
 			);
 	}
 	
-	private String generateVerificationKey(String str) throws Exception {
-		/*int iterations = 10000;
-		int keyLength = 512;
-			
-		char[] strChars = str.toCharArray();
-		byte[] saltBytes = "ASD".getBytes();
-		
-		SecretKeyFactory skf = SecretKeyFactory.getInstance("SHA256");
-		PBEKeySpec spec = new PBEKeySpec(strChars, saltBytes, iterations, keyLength);
-		SecretKey key = skf.generateSecret(spec);
-		byte[] hashedBytes = key.getEncoded( );
-			
-		return Hex.encodeHexString(hashedBytes);*/
-		
-		String strong_salt = BCrypt.gensalt(10);
-
-		String hash = BCrypt.hashpw(str,strong_salt);
-		
-		return hash;
-		
-	}
 }
