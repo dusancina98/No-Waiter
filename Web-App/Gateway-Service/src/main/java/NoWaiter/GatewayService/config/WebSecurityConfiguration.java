@@ -65,10 +65,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 	.antMatchers(HttpMethod.POST ,"/user-api/api/users/deliverers").hasRole("SYSADMIN")
                 	.antMatchers(HttpMethod.GET ,"/user-api/api/users/deliverers").hasRole("SYSADMIN")
                 	.antMatchers(HttpMethod.PUT ,"/user-api/api/users/deliverers/**").hasRole("SYSADMIN")
-                	.antMatchers(HttpMethod.DELETE ,"/user-api/api/users/deliverers/**").hasRole("SYSADMIN")
+                	.antMatchers(HttpMethod.DELETE ,"/user-api/api/users/deliverers/**").hasRole("SYSADMIN");
                     //.antMatchers("/auth-api/**").permitAll()
                     //.antMatchers("/object-api/**").permitAll()
                     //.antMatchers("/user-api/**").permitAll()
-                    .anyRequest().permitAll();
+                    //.anyRequest().permitAll();
     }
 }

@@ -12,8 +12,6 @@ import NoWaiter.AuthService.repository.UserRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-
-
 	@Autowired
 	private UserRepository userRepository;
 

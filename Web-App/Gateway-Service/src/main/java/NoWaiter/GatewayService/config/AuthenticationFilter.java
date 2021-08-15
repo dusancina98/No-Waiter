@@ -38,16 +38,11 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		String token = request.getHeader(HEADER);
-		System.out.println("TEST1");
         if (token != null) {
             token = token.replace(HEADER_VALUE_PREFIX + " ", "");
 
             try {
                 JwtParseResponseDTO responseDto = parseJwt(token);
-
-                for(String str : responseDto.getAuthorities()) {
-                	System.out.println("ROLAAAAAAA" + str);
-                }
                 
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                         responseDto.getUsername(),
