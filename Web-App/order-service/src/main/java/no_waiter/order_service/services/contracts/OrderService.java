@@ -55,7 +55,7 @@ public interface OrderService {
 
 	List<ReadyOrderDTO> getReadyOrdersForObject(UUID objectId);
 
-	void setOnRouteOrder(UUID orderId);
+	byte[] setOnRouteOrder(UUID orderId) throws Exception;
 
 	List<OnRouteOrderDTO> getOnRouteOrdersForObject(UUID objectId);
 

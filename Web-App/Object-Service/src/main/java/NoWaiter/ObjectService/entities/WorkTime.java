@@ -2,9 +2,6 @@ package NoWaiter.ObjectService.entities;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.TextStyle;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -74,7 +71,6 @@ public class WorkTime {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	public boolean isWorkingNow() {
         LocalDate localDate = LocalDate.now();
 
