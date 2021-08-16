@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.MailException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -406,5 +407,13 @@ public class UserServiceImpl implements UserService {
 		Customer customer = customerRepository.findById(customerId).get();
 		customer.incrementPenalties();
 		customerRepository.save(customer);
+	}
+	
+	@Scheduled(cron="0 0 0 1 1/1 *") //1st day every month @ 00:00
+	private void deleteCustomerPenalties() {		
+		for(Customer customer : customerRepository.getCustomersForDeletingPenalties()) {
+			customer.deletePenalties();
+			customerRepository.save(customer);
+		}
 	}
 }
