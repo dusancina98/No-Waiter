@@ -1,0 +1,24 @@
+services:
+    deliverer-app: # Name of the frontend service
+        container_name: deliverer-app
+        build: ./Client-App/deliverer-app # Specify the directory of the Dockerfile
+        ports:
+            - 19003:19000 # Specify port-forwarding
+            - 19004:19001
+            - 19005:19002
+            - 19007:19006
+        environment:
+            - REACT_NATIVE_PACKAGER_HOSTNAME=192.168.1.11
+            - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+
+    ordering-app: # Name of the frontend service
+        container_name: ordering-app
+        build: ./Client-App/ordering-app # Specify the directory of the Dockerfile
+        ports:
+            - 19000:19000 # Specify port-forwarding
+            - 19001:19001
+            - 19002:19002
+            - 19006:19006
+        environment:
+            - REACT_NATIVE_PACKAGER_HOSTNAME=192.168.1.11
+            - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0

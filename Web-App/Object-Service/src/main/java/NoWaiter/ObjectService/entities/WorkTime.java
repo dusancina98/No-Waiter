@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import javax.persistence.CollectionTable;
@@ -52,7 +53,7 @@ public class WorkTime {
 	}
 
 	public void Update(Map<WeekDay, WorkDayDTO> workDaysForUpdate) {
-		for (var entry : workDaysForUpdate.entrySet()) {
+		for (Entry<WeekDay, WorkDayDTO> entry : workDaysForUpdate.entrySet()) {
 			WorkDay workDayForUpdate = workDays.get(entry.getKey());
 			workDayForUpdate.setWorking(entry.getValue().Working);
 			workDayForUpdate.setTimeFrom(entry.getValue().TimeFrom);
