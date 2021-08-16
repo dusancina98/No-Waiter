@@ -1,7 +1,9 @@
 package NoWaiter.UserService.services.implementation;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -15,6 +17,7 @@ import NoWaiter.UserService.entities.Authority;
 import NoWaiter.UserService.entities.Deliverer;
 import NoWaiter.UserService.entities.DelivererRequest;
 import NoWaiter.UserService.entities.RequestStatus;
+import NoWaiter.UserService.intercomm.FeedbackClient;
 import NoWaiter.UserService.repository.AccountActivationTokenRepository;
 import NoWaiter.UserService.repository.DelivererRepository;
 import NoWaiter.UserService.repository.DelivererRequestRepository;
@@ -40,6 +43,9 @@ public class DelivererServiceImpl implements DelivererService{
 	
 	@Autowired
     private EmailServiceImpl emailService;
+	
+	@Autowired
+	private FeedbackClient feedbackClient;
 	
 	@Override
 	public UUID createDelivererRequest(DelivererRequestDTO delivererRequestDTO) throws ClassFieldValidationException {
@@ -107,7 +113,13 @@ public class DelivererServiceImpl implements DelivererService{
 
 	@Override
 	public Iterable<IdentifiableDTO<DelivererDTO>> getAllDeliverer() {
-		return UserMapper.MapDelivererCollectionToIdentifiableODelivererDTOCollection(delivererRepository.getAll());
+		List<IdentifiableDTO<DelivererDTO>> retVal = new ArrayList<IdentifiableDTO<DelivererDTO>>();
+		
+		for(Deliverer deliverer : delivererRepository.getAll()) {
+			retVal.add(UserMapper.MapDelivererToIdentifiableDelivererDto(deliverer,feedbackClient.getFeedbackGradeForDeliverer(deliverer.getId())));
+		}
+		
+		return retVal;
 	}
 
 	@Override
@@ -134,7 +146,7 @@ public class DelivererServiceImpl implements DelivererService{
 	@Override
 	public IdentifiableDTO<DelivererDTO> findById(UUID userId) {
 		Deliverer deliverer = delivererRepository.findById(userId).get();
-		return UserMapper.MapDelivererToIdentifiableDelivererDto(deliverer);
+		return UserMapper.MapDelivererToIdentifiableDelivererDto(deliverer, feedbackClient.getFeedbackGradeForDeliverer(deliverer.getId()));
 	}
 
 	@Override

@@ -29,6 +29,7 @@ const DelivererTable = () => {
 										<th>Name</th>
 										<th>Surname</th>
 										<th>Phone number</th>
+										<th>Average grade</th>
 										<th>Status</th>
 									</tr>
 								</thead>
