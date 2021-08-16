@@ -22,15 +22,6 @@ function OrdersScreen({ navigation }) {
 		}
 	}, [isFetching]);
 
-	// AsyncStorage.getAllKeys((err, keys) => {
-	// 	AsyncStorage.multiGet(keys, (error, stores) => {
-	// 		stores.map((result, i, store) => {
-	// 			console.log({ [store[i][0]]: store[i][1] });
-	// 			return true;
-	// 		});
-	// 	});
-	// });
-
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
 			<StatusBar barStyle="dark-content" />

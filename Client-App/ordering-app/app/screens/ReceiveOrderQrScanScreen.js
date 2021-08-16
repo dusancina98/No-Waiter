@@ -1,14 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { OrderContext } from "../contexts/OrderContext";
 import { qrScannerStyles } from "../styles/styles";
 import { useIsFocused } from "@react-navigation/native";
 import { orderConstants } from "../constants/OrderConstants";
 import { orderService } from "../services/OrderService";
+import { useToast } from "react-native-toast-notifications";
 
 const ReceiveOrderQrScreen = ({ navigation }) => {
 	const { orderState, dispatch } = useContext(OrderContext);
+	const toast = useToast();
 
 	const isFocused = useIsFocused();
 
@@ -34,7 +36,9 @@ const ReceiveOrderQrScreen = ({ navigation }) => {
 
 	useEffect(() => {
 		if (orderState.scanQRCode.scannedQr === true) {
-			Alert.alert("Success", "Order successfully scanned!", [{ text: "OK" }]);
+			toast.show("Order successfully scanned", {
+				type: "success",
+			});
 			console.log(orderState.scanQRCode.delivererId);
 			let delivererId = orderState.scanQRCode.delivererId;
 			dispatch({ type: orderConstants.RECEIVE_ORDER_REQUEST });
@@ -44,7 +48,9 @@ const ReceiveOrderQrScreen = ({ navigation }) => {
 
 	useEffect(() => {
 		if (orderState.scanQRCode.showError === true) {
-			Alert.alert("Error", orderState.scanQRCode.errorMessage, [{ text: "OK" }]);
+			toast.show(orderState.scanQRCode.errorMessage, {
+				type: "danger",
+			});
 			dispatch({ type: orderConstants.RECEIVE_ORDER_REQUEST });
 		}
 	}, [orderState.scanQRCode.showError]);

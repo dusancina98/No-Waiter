@@ -24,9 +24,11 @@ export const star = require("../assets/icons/star.png");
 export const sushi = require("../assets/icons/sushi.png");
 export const user = require("../assets/icons/user.png");
 export const qr = require("../assets/icons/qr.png");
+export const check = require("../assets/icons/checkmark.jpg");
 
 export default {
 	back,
+	check,
 	car,
 	cutlery,
 	donut,

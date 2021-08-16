@@ -11,7 +11,9 @@ export const productService = {
 async function getObjectCategories(objectId, dispatch) {
 	dispatch(request());
 
-	await Axios.get(`${API_URL}/product-api/api/products/categories/${objectId}`, { validateStatus: () => true })
+	let header = await authHeader();
+
+	await Axios.get(`${API_URL}/product-api/api/products/categories/${objectId}`, { validateStatus: () => true, headers: header })
 		.then((res) => {
 			console.log(res.data);
 			if (res.status === 200) {
@@ -38,7 +40,9 @@ async function getObjectCategories(objectId, dispatch) {
 async function getObjectProducts(objectId, dispatch) {
 	dispatch(request());
 
-	await Axios.get(`${API_URL}/product-api/api/products/${objectId}`, { validateStatus: () => true })
+	let header = await authHeader();
+
+	await Axios.get(`${API_URL}/product-api/api/products/${objectId}`, { validateStatus: () => true, headers: header })
 		.then((res) => {
 			console.log(res.data);
 			if (res.status === 200) {

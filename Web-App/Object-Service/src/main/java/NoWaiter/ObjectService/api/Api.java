@@ -36,7 +36,6 @@ import NoWaiter.ObjectService.services.contracts.dto.JwtParseResponseDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.UpdateWorkTimeDTO;
 import NoWaiter.ObjectService.services.contracts.dto.UserClientObjectDTO;
-import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeException;
 import feign.FeignException;
 
 @RestController
@@ -58,7 +57,7 @@ public class Api {
     @Autowired
 	private Environment env;
     
-    //TODO: ne znam gde se poziva ova metoda
+    //TODO: ne znam gde se poziva ova metoda -> ZA OBRADU SLIKA	
     @GetMapping("/object-images/{imageName}")
 	@CrossOrigin
 	public ResponseEntity<?> getProductImage(@PathVariable String imageName) {

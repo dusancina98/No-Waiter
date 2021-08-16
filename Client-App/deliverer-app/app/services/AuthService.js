@@ -95,7 +95,7 @@ function createEmploymentRequest(requestDTO, dispatch) {
 				if (res.status === 201) {
 					dispatch(success(res.data));
 				} else {
-					dispatch(failure(res.data));
+					dispatch(failure("Sorry, we have problem with sending employment request"));
 				}
 			})
 			.catch((err) => {

@@ -33,10 +33,23 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET ,"/order-api/api/orders/confirmed/deliverer").hasRole("DELIVERER")
                 .antMatchers(HttpMethod.GET ,"/order-api/api/orders/accepted/deliverer").hasRole("DELIVERER")
 
-                .antMatchers(HttpMethod.POST ,"/product-api/api/products/categories").hasRole("OBJADMIN")
-                .antMatchers(HttpMethod.GET ,"/product-api/api/products/categories").hasAnyRole("OBJADMIN", "WAITER","SELF_ORDER_PULT")
+                //product-service end-points
                 .antMatchers(HttpMethod.POST ,"/product-api/api/products").hasRole("OBJADMIN")
+                .antMatchers(HttpMethod.POST ,"/product-api/api/products/categories").hasRole("OBJADMIN")
+
                 .antMatchers(HttpMethod.PUT ,"/product-api/api/products").hasRole("OBJADMIN")
+                .antMatchers(HttpMethod.PUT ,"/product-api/api/products/*/image").hasRole("OBJADMIN")
+                
+                .antMatchers(HttpMethod.DELETE ,"/product-api/api/products/*").hasRole("OBJADMIN")
+                .antMatchers(HttpMethod.DELETE ,"/product-api/api/products/*/category").hasRole("OBJADMIN")
+
+                .antMatchers(HttpMethod.GET ,"/product-api/api/products/categories").hasAnyRole("OBJADMIN", "WAITER","SELF_ORDER_PULT")
+                .antMatchers(HttpMethod.GET ,"/product-api/api/products/categories/*").hasRole("CUSTOMER")
+                .antMatchers(HttpMethod.GET ,"/product-api/api/products/product-images/*").permitAll()
+                .antMatchers(HttpMethod.GET ,"/product-api/api/products").hasAnyRole("WAITER", "SELF_ORDER_PULT", "OBJADMIN")
+                .antMatchers(HttpMethod.GET ,"/product-api/api/products/types").hasAnyRole("OBJADMIN")
+                .antMatchers(HttpMethod.GET ,"/product-api/api/products/*").hasRole("CUSTOMER")
+
 
                 
                 .antMatchers(HttpMethod.POST ,"/object-api/api/objects").hasRole("SYSADMIN")

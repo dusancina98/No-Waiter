@@ -57,6 +57,11 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private Environment env;
 	
+    private static final String PATH_SEPARATOR = "/";
+    
+    private static final String DEFAULT_IMG_EXTENSION = ".jpg";
+
+	
 	@Override
 	public UUID createProductCategory(NameDTO categoryDTO, UUID objectId) throws InvalidProductCategoryNameException {
 		List<ProductCategory> existWithNameProductCategory = productCategoryRepository.findWithCategoryNameAndObject(categoryDTO.Name.toLowerCase(), objectId);
@@ -93,7 +98,7 @@ public class ProductServiceImpl implements ProductService {
 		if(productDTO.Image == null)
 			product.setImagePath("");
 		else
-			product.setImagePath(env.getProperty("abs-image-path") + "/" + product.getId().toString() + ".jpg");
+			product.setImagePath(env.getProperty("abs-image-path") + PATH_SEPARATOR + product.getId().toString() + DEFAULT_IMG_EXTENSION);
 		
 		productRepository.save(product);
 		saveImageAndGetPath(productDTO.Image, product.getId());
@@ -104,8 +109,8 @@ public class ProductServiceImpl implements ProductService {
 	private String saveImageAndGetPath(MultipartFile multipartFile, UUID productId) throws IOException {
 		
 		if(multipartFile != null) 
-			ImageUtil.saveFile(env.getProperty("rel-image-path"), productId.toString() + ".jpg", multipartFile);
-		return env.getProperty("abs-image-path") + "/" + productId.toString() + ".jpg";
+			ImageUtil.saveFile(env.getProperty("rel-image-path"), productId.toString() + DEFAULT_IMG_EXTENSION, multipartFile);
+		return env.getProperty("abs-image-path") + PATH_SEPARATOR + productId.toString() + DEFAULT_IMG_EXTENSION;
 	}
 		
 	private Product mapProductRequestDTOToProduct(ProductRequestDTO productDTO) {
@@ -131,7 +136,8 @@ public class ProductServiceImpl implements ProductService {
 
 		Product product = productRepository.findById(productId).get();
 		
-		if(!objectId.equals(product.getProductCategory().getObjectId())) throw new UnauthorizedRequestException("Object admin not authorized for this operation");
+		if(!objectId.equals(product.getProductCategory().getObjectId())) 
+			throw new UnauthorizedRequestException("Object admin not authorized for this operation");
 		
 		product.setImagePath(saveImageAndGetPath(multipartFile, productId));
 		productRepository.save(product);
@@ -142,7 +148,8 @@ public class ProductServiceImpl implements ProductService {
 		
 		Product product = productRepository.findById(productDTO.Id).get();
 		
-		if(!objectId.equals(product.getProductCategory().getObjectId())) throw new UnauthorizedRequestException("Object admin not authorized for this operation");
+		if(!objectId.equals(product.getProductCategory().getObjectId())) 
+			throw new UnauthorizedRequestException("Object admin not authorized for this operation");
 		
 		product.setName(productDTO.EntityDTO.Name);
 		
@@ -167,45 +174,51 @@ public class ProductServiceImpl implements ProductService {
 		List<ProductValidationDTO> products = new ArrayList<ProductValidationDTO>();
 		
 		for (OrderItemDTO item : items.Items) {
-			Product product = productRepository.findById(item.Id).get();
-			List<SideDishDTO> sideDishes = new ArrayList<SideDishDTO>();
-
-			for (UUID sideDishId : item.SideDishes) {
-				boolean found = false;
-				for (SideDish sideDish : product.getSideDishes()) {
-					if (sideDish.getId().equals(sideDishId)) {
-						found = true;
-						sideDishes.add(new SideDishDTO(sideDish.getId(), sideDish.getName()));
-						break;
-					}
-				}
-				if(!found) {
-					throw new InvalidOrderItemException();
-				} 
-			}
+			
+			Product product = productRepository.findById(item.Id).get();				
+			List<SideDishDTO> sideDishes = getSideDishesDTOIfValid(item.SideDishes, product.getSideDishes());
 			products.add(new ProductValidationDTO(product.getId(), product.getName(), product.getImagePath(), product.getPrice(), sideDishes));
 
 		}
 		
 		return new ProductValidationResponseDTO(products);
 	}
+	
+	private List<SideDishDTO> getSideDishesDTOIfValid(List<UUID> desiredSideDishIds, List<SideDish> availableSideDishes) throws InvalidOrderItemException {
+		List<SideDishDTO> sideDishes = new ArrayList<SideDishDTO>();
 
+		for (UUID sideDishId : desiredSideDishIds) {
+			SideDish sideDish = getSideDishIfExist(sideDishId, availableSideDishes);
+
+			if(sideDish == null) {
+				throw new InvalidOrderItemException();
+			} else {
+				sideDishes.add(new SideDishDTO(sideDish.getId(), sideDish.getName()));
+			}
+		}
+		return sideDishes;
+	}
+	
+	private SideDish getSideDishIfExist(UUID sideDishId, List<SideDish> sideDishes) {
+		for (SideDish sideDish : sideDishes) {
+			if (sideDish.getId().equals(sideDishId)) {
+				return sideDish;
+			}
+		}
+		return null;
+	}
+	
 	@Override
 	public void deleteProduct(UUID productId) {
 		Product product = productRepository.findById(productId).get();
-		
 		product.delete();
-		
 		productRepository.save(product);
 	}
 
 	@Override
 	public void deleteCategory(UUID categoryId) {
-		// TODO Auto-generated method stub
-		ProductCategory productCategory = productCategoryRepository.findById(categoryId).get();
-		
+		ProductCategory productCategory = productCategoryRepository.findById(categoryId).get();		
 		productCategory.delete();
-		
 		productCategoryRepository.save(productCategory);
 	}
 

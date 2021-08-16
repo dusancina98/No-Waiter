@@ -4,9 +4,11 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { UserContext } from "../contexts/UserContext";
 import { userService } from "../services/UserService";
 import { loginStyles, profileEditStyles, welcomeStyles } from "../styles/styles";
+import { useToast } from "react-native-toast-notifications";
 
 const EditUserInfoScreen = ({ navigation }) => {
 	const { userState, dispatch } = useContext(UserContext);
+	const toast = useToast();
 
 	const [name, setName] = useState("");
 	const [surname, setSurname] = useState("");
@@ -25,7 +27,10 @@ const EditUserInfoScreen = ({ navigation }) => {
 
 	useEffect(() => {
 		if (userState.profileEdit.editSuccess === true) {
-			Alert.alert("Success", "Profile information updated successfully", [{ text: "OK" }]);
+			toast.show("Profile information updated successfully", {
+				type: "success",
+			});
+			navigation.goBack();
 		}
 	}, [userState.profileEdit.editSuccess]);
 
