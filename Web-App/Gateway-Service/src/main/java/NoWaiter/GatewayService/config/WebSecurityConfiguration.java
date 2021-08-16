@@ -49,8 +49,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET ,"/product-api/api/products").hasAnyRole("WAITER", "SELF_ORDER_PULT", "OBJADMIN")
                 .antMatchers(HttpMethod.GET ,"/product-api/api/products/types").hasAnyRole("OBJADMIN")
                 .antMatchers(HttpMethod.GET ,"/product-api/api/products/*").hasRole("CUSTOMER")
-
-
                 
                 .antMatchers(HttpMethod.POST ,"/object-api/api/objects").hasRole("SYSADMIN")
                 .antMatchers(HttpMethod.POST ,"/object-api/api/objects/admin").hasRole("SYSADMIN")
@@ -67,6 +65,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE ,"/object-api/api/objects/**").hasRole("SYSADMIN")
                 .antMatchers(HttpMethod.DELETE ,"/object-api/api/objects/tables/**").hasRole("OBJADMIN")
 
+                .antMatchers(HttpMethod.PUT ,"/object-api/api/objects//object-images/**").permitAll()
                 .antMatchers(HttpMethod.PUT ,"/object-api/api/objects/image/**").hasRole("OBJADMIN")
                 .antMatchers(HttpMethod.PUT ,"/object-api/api/objects/worktime").hasRole("OBJADMIN")
                 .antMatchers(HttpMethod.PUT ,"/object-api/api/objects").hasAnyRole("SYSADMIN", "OBJADMIN")

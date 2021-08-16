@@ -57,7 +57,6 @@ public class Api {
     @Autowired
 	private Environment env;
     
-    //TODO: ne znam gde se poziva ova metoda -> ZA OBRADU SLIKA	
     @GetMapping("/object-images/{imageName}")
 	@CrossOrigin
 	public ResponseEntity<?> getProductImage(@PathVariable String imageName) {
@@ -156,7 +155,7 @@ public class Api {
         }
     }
     
-    //TODO: ne znam gde se koristi
+    /*
     @GetMapping("/{objectId}")
     @CrossOrigin
     public ResponseEntity<?> findById(@PathVariable UUID objectId) {
@@ -170,7 +169,7 @@ public class Api {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
+    }*/
     
     @GetMapping("/admin")
     @CrossOrigin

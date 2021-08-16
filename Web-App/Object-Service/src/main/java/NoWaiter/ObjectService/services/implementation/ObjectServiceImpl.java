@@ -86,7 +86,6 @@ public class ObjectServiceImpl implements ObjectService {
 
 	@Override
 	public void toggleObjectActivation(UUID id, boolean status) {
-		
 		Object object = objectRepository.findById(id).get();
 		
 		if (status == true) object.Activate();
@@ -97,7 +96,6 @@ public class ObjectServiceImpl implements ObjectService {
 
 	@Override
 	public void toggleObjectBlock(UUID id, boolean status) {
-		
 		Object object = objectRepository.findById(id).get();
 		
 		if (status == true) {
@@ -107,7 +105,6 @@ public class ObjectServiceImpl implements ObjectService {
 		else object.Unblock();
 		
 		objectRepository.save(object);
-		
 	}
 
 	@Override
@@ -138,7 +135,6 @@ public class ObjectServiceImpl implements ObjectService {
 
 	@Override
 	public void updateImage(MultipartFile multipartFile, UUID objectAdminId) throws IOException {
-
 		ObjectAdmin objectAdmin = objectAdminRepository.findById(objectAdminId).get();
 		Object object = objectRepository.findById(objectAdmin.getObject().getId()).get();
 		ImageUtil.saveFile(env.getProperty("rel-image-path"), object.getId().toString() + ".jpg", multipartFile);
@@ -209,7 +205,6 @@ public class ObjectServiceImpl implements ObjectService {
 		
 		return identifiableDTO;
 	}
-
 
 	@Override
 	public Iterable<IdentifiableDTO<CustomerObjectDTO>> getFavouriteObjectsForCustomers(List<UUID> objectIds) {
