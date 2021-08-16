@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from "react";
-import { ImageBackground, View, Text, TouchableOpacity, SafeAreaView, StatusBar } from "react-native";
+import { ImageBackground, View, Text, TouchableOpacity, StatusBar } from "react-native";
 import { AuthContext } from "../contexts/AuthContext";
 import { authService } from "../services/AuthService";
-import { activateAccountStyles, employmentRequestStyle, loginStyles, userInfoStyle, welcomeStyles } from "../styles/styles";
+import { activateAccountStyles, loginStyles, welcomeStyles } from "../styles/styles";
 
 function UserActivateScreen({ navigation }) {
 	const { authState, dispatch } = useContext(AuthContext);

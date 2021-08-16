@@ -113,17 +113,8 @@ export const orderListStyles = StyleSheet.create({
 		marginRight: 20,
 		height: 120,
 		borderRadius: 10,
-		borderColor: "gray",
-		borderWidth: 1,
 		paddingHorizontal: 10,
-		shadowColor: "grey",
-		shadowOffset: {
-			width: 0,
-			height: 10,
-		},
-		shadowOpacity: 0.45,
-		shadowRadius: 3.5,
-		elevation: 5,
+		backgroundColor: "white",
 		marginTop: 10,
 	},
 	objectInfoContainer: {

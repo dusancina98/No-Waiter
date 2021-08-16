@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from "react";
-import { ImageBackground, View, Text, TouchableOpacity, SafeAreaView } from "react-native";
+import { ImageBackground, View, Text, TouchableOpacity } from "react-native";
 import { AuthContext } from "../contexts/AuthContext";
 import { authService } from "../services/AuthService";
-import { employmentRequestStyle, loginStyles, userInfoStyle } from "../styles/styles";
+import { loginStyles, userInfoStyle } from "../styles/styles";
 
 function UserActivateScreen({ navigation }) {
 	const { authState, dispatch } = useContext(AuthContext);
@@ -20,15 +20,16 @@ function UserActivateScreen({ navigation }) {
 	}, []);
 
 	return (
-		<SafeAreaView style={{ flex: 1 }}>
-			<View style={userInfoStyle.containerWrapper}>
-				<View style={employmentRequestStyle.logoContainer}>
-					<Text style={{ color: "gray", fontSize: 35, fontFamily: "roboto-light", fontWeight: "200", alignSelf: "center" }}>Activate account</Text>
+		<View style={loginStyles.containerWrapper}>
+			<StatusBar barStyle="light-content" />
+			<ImageBackground style={welcomeStyles.background} source={require("../assets/background.jpg")}>
+				<View style={welcomeStyles.logoContainer}>
+					<Text style={welcomeStyles.logoText}>Activate account</Text>
 				</View>
 				{!authState.userActivate.showSuccessMessage && (
 					<View style={{ alignItems: "center" }}>
 						<Text style={{ textAlign: "center", fontSize: 15 }}>
-							Vas nalog nije aktiviran. Ukoliko zelite da aktiviranje naloga pritisnite na dugme ispod nakon cega ce Vam na email:{" "}
+							Vas nalog nije aktiviran. Ukoliko zelite da aktiviranje naloga pritisnite na dugme ispod nakon cega ce Vam na email:
 							<Text style={{ fontWeight: "bold" }}>{authState.userActivate.userEmail} </Text>stici aktivacioni link.
 						</Text>
 					</View>
@@ -48,8 +49,8 @@ function UserActivateScreen({ navigation }) {
 						</TouchableOpacity>
 					)}
 				</View>
-			</View>
-		</SafeAreaView>
+			</ImageBackground>
+		</View>
 	);
 }
 

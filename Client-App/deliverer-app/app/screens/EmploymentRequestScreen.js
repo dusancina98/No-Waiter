@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, StatusBar, TextInput, TouchableWithoutFeedback, Keyboard, SafeAreaView, DatePickerAndroid, ImageBackground, Image } from "react-native";
+import { View, Text, TouchableOpacity, StatusBar, TextInput, TouchableWithoutFeedback, Keyboard, ImageBackground, Image } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { authConstants } from "../constants/AuthConstants";
 import { AuthContext } from "../contexts/AuthContext";

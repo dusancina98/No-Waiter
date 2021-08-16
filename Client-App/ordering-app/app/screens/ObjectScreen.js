@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { FlatList, LogBox, ScrollView, Button, StatusBar, View, Text, Image, SafeAreaView, TouchableOpacity, Alert } from "react-native";
+import { FlatList, LogBox, ScrollView, Button, View, Text, Image, SafeAreaView, TouchableOpacity } from "react-native";
 import { ObjectContext } from "../contexts/ObjectContext";
 import { ProductContext } from "../contexts/ProductContext";
 import { objectService } from "../services/ObjectService";

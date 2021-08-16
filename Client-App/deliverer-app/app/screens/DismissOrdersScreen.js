@@ -1,15 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { OrderContext } from "../contexts/OrderContext";
 import { qrScannerStyles } from "../styles/styles";
 import { useIsFocused } from "@react-navigation/native";
 import { orderConstants } from "../constants/OrderConstants";
 import { orderService } from "../services/OrderService";
+import { useToast } from "react-native-toast-notifications";
 
 const DismissOrdersScreen = ({ navigation }) => {
 	const { orderState, dispatch } = useContext(OrderContext);
 	const isFocused = useIsFocused();
+	const toast = useToast();
 
 	const [hasPermission, setHasPermission] = useState(null);
 	const [scanned, setScanned] = useState(false);
@@ -28,7 +30,9 @@ const DismissOrdersScreen = ({ navigation }) => {
 
 	useEffect(() => {
 		if (orderState.orderDismiss.scannedQr === true) {
-			Alert.alert("Success", "Order successfully dismissed!", [{ text: "OK" }]);
+			toast.show("Order successfully dismissed", {
+				type: "success",
+			});
 			dispatch({ type: orderConstants.DISMISS_ORDER_REQUEST });
 			navigation.goBack();
 		}
@@ -36,7 +40,9 @@ const DismissOrdersScreen = ({ navigation }) => {
 
 	useEffect(() => {
 		if (orderState.orderDismiss.showError === true) {
-			Alert.alert("Error", orderState.orderDismiss.errorMessage, [{ text: "OK" }]);
+			toast.show(orderState.orderDismiss.errorMessage, {
+				type: "danger",
+			});
 			dispatch({ type: orderConstants.DISMISS_ORDER_REQUEST });
 		}
 	}, [orderState.orderDismiss.showError]);

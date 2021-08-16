@@ -22,8 +22,8 @@ function createProductCategory(categoryName, dispatch) {
 		.then((res) => {
 			if (res.status === 201) {
 				let category = { Id: res.data, EntityDTO: { Name: categoryName } };
-				dispatch(success(category, "Table successfully added"));
-			} else if(res.status === 400){
+				dispatch(success(category, "Product category successfully added"));
+			} else if (res.status === 400) {
 				dispatch(failure("Category with this name already exist"));
 			} else {
 				dispatch(failure(res.data.message));
@@ -279,7 +279,7 @@ function validateProduct(product, dispatch, type) {
 }
 
 function deleteProduct(productId, dispatch) {
-	Axios.delete(`/product-api/api/products/${productId}`,  { validateStatus: () => true, headers: authHeader() })
+	Axios.delete(`/product-api/api/products/${productId}`, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
@@ -302,12 +302,12 @@ function deleteProduct(productId, dispatch) {
 }
 
 function deleteCategory(categoryId, dispatch) {
-	Axios.delete(`/product-api/api/products/${categoryId}/category`,  { validateStatus: () => true, headers: authHeader() })
+	Axios.delete(`/product-api/api/products/${categoryId}/category`, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			console.log(res);
 			if (res.status === 200) {
 				dispatch(success("Category successfully deleted", categoryId));
-				dispatch({ type: productConstants.DISABLE_PRODUCTS_FILTER })
+				dispatch({ type: productConstants.DISABLE_PRODUCTS_FILTER });
 			} else {
 				dispatch(failure("Unable to delete category"));
 			}

@@ -1,10 +1,9 @@
 import React, { useContext, useState, useEffect } from "react";
-import { FlatList, StatusBar, View, Text, Image, SafeAreaView, TouchableHighlight, TouchableOpacity, Alert } from "react-native";
+import { FlatList, StatusBar, View, Text, Image, SafeAreaView, TouchableOpacity } from "react-native";
 import { ObjectContext } from "../contexts/ObjectContext";
 import { objectService } from "../services/ObjectService";
 import { objectsPageStyles } from "../styles/styles";
 import { API_URL } from "../constants/ApiUrl";
-import { objectConstants } from "../constants/ObjectConstants";
 import { OrderContext } from "../contexts/OrderContext";
 import { orderConstants } from "../constants/OrderConstants";
 
@@ -14,10 +13,10 @@ function HomeScreen({ navigation }) {
 
 	const [isFetching, setIsFetching] = useState(false);
 
-	const handleEnterObject = (objectId) =>{
+	const handleEnterObject = (objectId) => {
 		navigation.navigate("Object", objectId);
-		ordCtx.dispatch({type: orderConstants.RESET_QR_CODE_DATA })
-	}
+		ordCtx.dispatch({ type: orderConstants.RESET_QR_CODE_DATA });
+	};
 
 	useEffect(() => {
 		objectService.findAllObjects(dispatch);
@@ -31,7 +30,7 @@ function HomeScreen({ navigation }) {
 	}, [isFetching]);
 
 	return (
-		<SafeAreaView style={{ flex: 1}}>
+		<SafeAreaView style={{ flex: 1 }}>
 			<StatusBar barStyle="dark-content" />
 			<FlatList
 				vertical
@@ -42,13 +41,13 @@ function HomeScreen({ navigation }) {
 				keyExtractor={(item) => item.Id}
 				data={objectState.objects}
 				renderItem={({ item }) => (
-					<TouchableOpacity underlayColor='rgba(73,182,77,0.9)' onPress={() => handleEnterObject(item.Id)}>
-      					<View style={objectsPageStyles.container}>
-        					<Image style={objectsPageStyles.photo} source={{ uri: `${API_URL}${item.EntityDTO.ImagePath.substring(1, item.EntityDTO.ImagePath.length)}` }}/>
-        					<Text style={objectsPageStyles.title}>{item.EntityDTO.Name}</Text>
-        					<Text style={objectsPageStyles.category}>{item.EntityDTO.Address}</Text>
-      					</View>
-    				</TouchableOpacity>
+					<TouchableOpacity underlayColor="rgba(73,182,77,0.9)" onPress={() => handleEnterObject(item.Id)}>
+						<View style={objectsPageStyles.container}>
+							<Image style={objectsPageStyles.photo} source={{ uri: `${API_URL}${item.EntityDTO.ImagePath.substring(1, item.EntityDTO.ImagePath.length)}` }} />
+							<Text style={objectsPageStyles.title}>{item.EntityDTO.Name}</Text>
+							<Text style={objectsPageStyles.category}>{item.EntityDTO.Address}</Text>
+						</View>
+					</TouchableOpacity>
 				)}
 			/>
 		</SafeAreaView>

@@ -6,10 +6,12 @@ import moment from "moment";
 import { orderListStyles } from "../styles/styles";
 import { API_URL } from "../constants/ApiUrl";
 import { orderConstants } from "../constants/OrderConstants";
+import { useToast } from "react-native-toast-notifications";
 
 function AcceptedOrdersScreen({ navigation }) {
 	const [isFetching, setIsFetching] = useState(false);
 	const { orderState, dispatch } = useContext(OrderContext);
+	const toast = useToast();
 
 	const handleCancelOrder = (orderId) => {
 		orderService.cancelOrder(orderId, dispatch);
@@ -27,14 +29,18 @@ function AcceptedOrdersScreen({ navigation }) {
 
 	useEffect(() => {
 		if (orderState.orderCancel.success === true) {
-			Alert.alert("Success", "Order successfully canceled!", [{ text: "OK" }]);
+			toast.show("Order successfully canceled", {
+				type: "success",
+			});
 			dispatch({ type: orderConstants.CANCEL_ORDER_REQUEST });
 		}
 	}, [orderState.orderCancel.success]);
 
 	useEffect(() => {
 		if (orderState.orderCancel.showError === true) {
-			Alert.alert("Error", orderState.orderCancel.errorMessage, [{ text: "OK" }]);
+			toast.show(orderState.orderCancel.errorMessage, {
+				type: "danger",
+			});
 			dispatch({ type: orderConstants.CANCEL_ORDER_REQUEST });
 		}
 	}, [orderState.orderCancel.showError]);
