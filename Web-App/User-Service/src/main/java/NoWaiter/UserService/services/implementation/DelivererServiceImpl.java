@@ -144,4 +144,10 @@ public class DelivererServiceImpl implements DelivererService{
 		return UserMapper.MapDelivererToIdentifiableDelivererDto(deliverer);
 	}
 
+	@Override
+	public String getDelivererNameAndSurname(UUID delivererId) {
+		Deliverer deliverer = delivererRepository.findById(delivererId).get();
+		return deliverer.getName() + " " + deliverer.getSurname();
+	}
+
 }

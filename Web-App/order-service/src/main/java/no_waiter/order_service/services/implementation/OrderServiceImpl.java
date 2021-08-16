@@ -518,6 +518,14 @@ public class OrderServiceImpl implements OrderService{
 		return retVal;
 	}
 	
+	private String getDelivererName(UUID delivererId) {
+		if(delivererId != null) {
+			return userClient.getDelivererNameAndSurname(delivererId);
+		}else {
+			return "Not selected";
+		}
+	}
+	
 	private Object mapOrderToOrderDTOFromOrderStatus(OrderEvent orderEvent, OrderStatus orderStatus) {
 		int tableNumber=1;
 		if(orderEvent.getOrder().getOrderType().equals(OrderType.ORDER_INSIDE) && orderEvent.getOrder().getTableId() != null) {
@@ -530,11 +538,11 @@ public class OrderServiceImpl implements OrderService{
 	        case CONFIRMED:
 	    		return new ConfirmedOrderDTO(orderEvent.getOrder().getId(),new TableResponseDTO(orderEvent.getOrder().getTableId(), tableNumber),orderEvent.getOrder().getOrderType().toString(),orderEvent.getOrder().calculatePrice(),orderEvent.getCreatedTime(),calculateEstimatedDate(orderEvent.getCreatedTime(), orderEvent.getEstimatedTime()));
 	        case READY: 
-	        	return new ReadyOrderDTO(orderEvent.getOrder().getId(),new TableResponseDTO(orderEvent.getOrder().getTableId(),tableNumber),orderEvent.getOrder().getOrderType().toString(),orderEvent.getOrder().calculatePrice(),orderEvent.getCreatedTime(),calculateEstimatedDate(orderEvent.getCreatedTime(), orderEvent.getEstimatedTime()), "");
+	        	return new ReadyOrderDTO(orderEvent.getOrder().getId(),new TableResponseDTO(orderEvent.getOrder().getTableId(),tableNumber),orderEvent.getOrder().getOrderType().toString(),orderEvent.getOrder().calculatePrice(),orderEvent.getCreatedTime(),calculateEstimatedDate(orderEvent.getCreatedTime(), orderEvent.getEstimatedTime()), getDelivererName(orderEvent.getDelivererId()));
 	        case DELIVERING:
-	    		return new OnRouteOrderDTO(orderEvent.getOrder().getId(),orderEvent.getOrder().getOrderType().toString(),orderEvent.getOrder().calculatePrice(),orderEvent.getCreatedTime(),calculateEstimatedDate(orderEvent.getCreatedTime(), orderEvent.getEstimatedTime()), "Ime i Prezime");
+	    		return new OnRouteOrderDTO(orderEvent.getOrder().getId(),orderEvent.getOrder().getOrderType().toString(),orderEvent.getOrder().calculatePrice(),orderEvent.getCreatedTime(),calculateEstimatedDate(orderEvent.getCreatedTime(), orderEvent.getEstimatedTime()), getDelivererName(orderEvent.getDelivererId()));
 	        case COMPLETED:
-	    		return new CompletedOrderDTO(orderEvent.getOrder().getId(),new TableResponseDTO(orderEvent.getOrder().getTableId(),tableNumber),orderEvent.getOrder().getOrderType().toString(),orderEvent.getOrder().calculatePrice(),orderEvent.getCreatedTime(), "Ime i Prezime");
+	    		return new CompletedOrderDTO(orderEvent.getOrder().getId(),new TableResponseDTO(orderEvent.getOrder().getTableId(),tableNumber),orderEvent.getOrder().getOrderType().toString(),orderEvent.getOrder().calculatePrice(),orderEvent.getCreatedTime(), getDelivererName(orderEvent.getDelivererId()));
 
 	        default: return null;
 		}

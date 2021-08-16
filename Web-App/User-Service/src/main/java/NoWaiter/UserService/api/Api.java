@@ -721,4 +721,16 @@ public class Api {
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
     }
+    
+    @GetMapping("/deliverer/{delivererId}/name")
+    @CrossOrigin
+    public ResponseEntity<?> getDelivererNameAndSurname(@PathVariable UUID delivererId) {
+        try {
+            return new ResponseEntity<>(delivererService.getDelivererNameAndSurname(delivererId), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
