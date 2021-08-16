@@ -5,9 +5,11 @@ import { authConstants } from "../constants/AuthConstants";
 import { AuthContext } from "../contexts/AuthContext";
 import { authService } from "../services/AuthService";
 import { employmentRequestStyle, loginStyles, welcomeStyles } from "../styles/styles";
+import { useToast } from "react-native-toast-notifications";
 
 function EmploymentRequestScreen({ navigation }) {
 	const { authState, dispatch } = useContext(AuthContext);
+	const toast = useToast();
 
 	const [name, setName] = useState("");
 	const [surname, setSurname] = useState("");
@@ -26,6 +28,25 @@ function EmploymentRequestScreen({ navigation }) {
 
 		authService.createEmploymentRequest(requestDTO, dispatch);
 	};
+
+	useEffect(() => {
+		if (authState.employmentRequest.successfullySent === true) {
+			toast.show("Employment request sent seuccessfully", {
+				type: "success",
+			});
+			dispatch({ type: authConstants.CREATE_EMPLOYMENT_REQUEST_REQUEST });
+			navigation.goBack();
+		}
+	}, [authState.employmentRequest.successfullySent]);
+
+	useEffect(() => {
+		if (authState.employmentRequest.showError === true) {
+			toast.show(authState.employmentRequest.errorMessage, {
+				type: "danger",
+			});
+			dispatch({ type: authConstants.CREATE_EMPLOYMENT_REQUEST_REQUEST });
+		}
+	}, [authState.employmentRequest.showError]);
 
 	useEffect(() => {
 		dispatch({ type: authConstants.CREATE_EMPLOYMENT_REQUEST_REQUEST });
@@ -53,14 +74,6 @@ function EmploymentRequestScreen({ navigation }) {
 							<Text style={employmentRequestStyle.textForm}>Working experience</Text>
 							<TextInput multiline={true} style={employmentRequestStyle.multilineTextInput} placeholder="Working experience" onChangeText={(val) => setExperience(val)}></TextInput>
 						</View>
-						{authState.employmentRequest.showError && (
-							<Text style={loginStyles.errorMessage}>
-								{authState.employmentRequest.errorMessage.length > 130 ? authState.employmentRequest.errorMessage.substring(0, 130) + "..." : authState.employmentRequest.errorMessage}
-							</Text>
-						)}
-						{authState.employmentRequest.successfullySent && (
-							<Text style={{ color: "green", fontSize: 18, alignSelf: "center", marginTop: 10 }}>Employment request sent seuccessfully</Text>
-						)}
 						<TouchableOpacity style={loginStyles.loginButton} activeOpacity={0.5} onPress={handleSendRequest}>
 							<Text style={welcomeStyles.loginText}> Send request </Text>
 						</TouchableOpacity>

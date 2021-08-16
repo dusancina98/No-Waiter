@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { ImageBackground, View, Text, TouchableOpacity, StatusBar, TextInput, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { ImageBackground, View, Text, TouchableOpacity, StatusBar, TextInput, TouchableWithoutFeedback, Keyboard, Image } from "react-native";
 import { AuthContext } from "../contexts/AuthContext";
 import { authService } from "../services/AuthService";
 import { loginStyles, welcomeStyles } from "../styles/styles";
@@ -37,7 +37,6 @@ function ResetPasswordScreen({ navigation }) {
 						</Text>
 					)}
 
-					{authState.resetPassword.showError && <Text style={loginStyles.errorMessage}>{authState.resetPassword.errorMessage}</Text>}
 					{!authState.resetPassword.showSuccessMessage && (
 						<TouchableOpacity style={loginStyles.loginButton} activeOpacity={0.5} onPress={handleResetPassword}>
 							<Text style={welcomeStyles.loginText}> Send reset email </Text>
