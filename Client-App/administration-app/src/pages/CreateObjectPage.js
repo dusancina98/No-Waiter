@@ -1,7 +1,7 @@
 import React from "react";
-import CreateObjectForm from "../components/CreateObjectForm";
+import CreateObjectForm from "../components/admin-objects/CreateObjectForm";
 import ObjectContextProvider from "../contexts/ObjectContext";
-import HeaderAndSideBarWrapper from "../components/HeaderAndSideBarWrapper";
+import HeaderAndSideBarWrapper from "../components/page-addons/HeaderAndSideBarWrapper";
 
 const CreateObjectPage = () => {
 	return (

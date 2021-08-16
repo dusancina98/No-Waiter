@@ -1,6 +1,6 @@
 import React from "react";
-import DelivererTable from "../components/DelivererTable";
-import HeaderAndSideBarWrapper from "../components/HeaderAndSideBarWrapper";
+import DelivererTable from "../components/admin-deliverers/DelivererTable";
+import HeaderAndSideBarWrapper from "../components/page-addons/HeaderAndSideBarWrapper";
 import UserContextProvider from "../contexts/UserContext";
 
 const ListOfDelivererPage = () => {

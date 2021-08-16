@@ -26,7 +26,6 @@ public class Authority  {
 		this.name = name;
 	}
     
-    
     public String getAuthority() {
         return name;
     }

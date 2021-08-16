@@ -19,4 +19,7 @@ public interface UserClient {
 	 
 	 @PutMapping("api/users/customers/penalties/{customerId}/increment")
 	 void incrementCustomerPenalties(@PathVariable UUID customerId);
+	 
+	 @GetMapping("api/users/deliverer/{delivererId}/name")
+	 String getDelivererNameAndSurname(@PathVariable UUID delivererId);
 }

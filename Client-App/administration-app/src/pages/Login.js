@@ -1,5 +1,5 @@
 import React from 'react';
-import LoginForm from '../components/LoginForm';
+import LoginForm from '../components/authorizations/LoginForm';
 import UserContextProvider from "../contexts/UserContext";
 
 const LoginPage = () => {

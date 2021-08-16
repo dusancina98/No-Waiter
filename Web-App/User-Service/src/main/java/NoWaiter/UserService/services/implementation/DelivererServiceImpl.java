@@ -1,7 +1,9 @@
 package NoWaiter.UserService.services.implementation;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -15,6 +17,7 @@ import NoWaiter.UserService.entities.Authority;
 import NoWaiter.UserService.entities.Deliverer;
 import NoWaiter.UserService.entities.DelivererRequest;
 import NoWaiter.UserService.entities.RequestStatus;
+import NoWaiter.UserService.intercomm.FeedbackClient;
 import NoWaiter.UserService.repository.AccountActivationTokenRepository;
 import NoWaiter.UserService.repository.DelivererRepository;
 import NoWaiter.UserService.repository.DelivererRequestRepository;
@@ -41,6 +44,9 @@ public class DelivererServiceImpl implements DelivererService{
 	@Autowired
     private EmailServiceImpl emailService;
 	
+	@Autowired
+	private FeedbackClient feedbackClient;
+	
 	@Override
 	public UUID createDelivererRequest(DelivererRequestDTO delivererRequestDTO) throws ClassFieldValidationException {
 		DelivererRequest delivererRequest = UserMapper.MapDelivererRequestDTOToDelivererRequest(delivererRequestDTO);
@@ -56,15 +62,12 @@ public class DelivererServiceImpl implements DelivererService{
 		try {
 			emailService.sendDelivererAcceptedRequestEmailAsync(delivererRequest);
 		} catch (MailException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		createNewDeliverer(delivererRequest);
-		
 		
 		delivererRequestRepository.save(delivererRequest);
 	}
@@ -77,14 +80,12 @@ public class DelivererServiceImpl implements DelivererService{
 		accountActivationTokenRepository.save(accountActivation);
 		
 		delivererRepository.save(deliverer);
-		//DELIVERER bi trebao isto na first login da stavlja password
+		
 		try {
 			emailService.sendDelivererActivationLinkAsync(deliverer, accountActivation.getToken());
 		} catch (MailException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -102,10 +103,8 @@ public class DelivererServiceImpl implements DelivererService{
 		try {
 			emailService.sendDelivererRejectReasonEmailAsync(delivererRequest, rejectDelivererDTO.Reason);
 		} catch (MailException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -114,7 +113,13 @@ public class DelivererServiceImpl implements DelivererService{
 
 	@Override
 	public Iterable<IdentifiableDTO<DelivererDTO>> getAllDeliverer() {
-		return UserMapper.MapDelivererCollectionToIdentifiableODelivererDTOCollection(delivererRepository.getAll());
+		List<IdentifiableDTO<DelivererDTO>> retVal = new ArrayList<IdentifiableDTO<DelivererDTO>>();
+		
+		for(Deliverer deliverer : delivererRepository.getAll()) {
+			retVal.add(UserMapper.MapDelivererToIdentifiableDelivererDto(deliverer,feedbackClient.getFeedbackGradeForDeliverer(deliverer.getId())));
+		}
+		
+		return retVal;
 	}
 
 	@Override
@@ -141,7 +146,13 @@ public class DelivererServiceImpl implements DelivererService{
 	@Override
 	public IdentifiableDTO<DelivererDTO> findById(UUID userId) {
 		Deliverer deliverer = delivererRepository.findById(userId).get();
-		return UserMapper.MapDelivererToIdentifiableDelivererDto(deliverer);
+		return UserMapper.MapDelivererToIdentifiableDelivererDto(deliverer, feedbackClient.getFeedbackGradeForDeliverer(deliverer.getId()));
+	}
+
+	@Override
+	public String getDelivererNameAndSurname(UUID delivererId) {
+		Deliverer deliverer = delivererRepository.findById(delivererId).get();
+		return deliverer.getName() + " " + deliverer.getSurname();
 	}
 
 }

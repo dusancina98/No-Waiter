@@ -93,21 +93,11 @@ public class UserMapper {
 
         return new IdentifiableDTO<DelivererRequestDTO>(delivererRequest.getId(),new DelivererRequestDTO(delivererRequest.getEmail(), delivererRequest.getName(), delivererRequest.getSurname(), delivererRequest.getPhoneNumber(), delivererRequest.getReference()));
 	}
-
-	public static Iterable<IdentifiableDTO<DelivererDTO>> MapDelivererCollectionToIdentifiableODelivererDTOCollection(
-			List<Deliverer> deliverers) {
-		if (deliverers == null) throw new IllegalArgumentException();
-
-        List<IdentifiableDTO<DelivererDTO>> retVal = new ArrayList<>();
-        deliverers.forEach((deliverer) -> retVal.add(MapDelivererToIdentifiableDelivererDto(deliverer)));
-
-        return retVal;
-	}
 	
-	public static IdentifiableDTO<DelivererDTO> MapDelivererToIdentifiableDelivererDto(Deliverer deliverer) {
+	public static IdentifiableDTO<DelivererDTO> MapDelivererToIdentifiableDelivererDto(Deliverer deliverer, double grade) {
 		if (deliverer == null) throw new IllegalArgumentException();
 
-        return new IdentifiableDTO<DelivererDTO>(deliverer.getId(),new DelivererDTO(deliverer.getEmail(), deliverer.getName(), deliverer.getSurname(), deliverer.getPhoneNumber(), deliverer.getDelivererStatus()));
+        return new IdentifiableDTO<DelivererDTO>(deliverer.getId(),new DelivererDTO(deliverer.getEmail(), deliverer.getName(), deliverer.getSurname(), deliverer.getPhoneNumber(), deliverer.getDelivererStatus(),grade));
 	}
     
 	public static Customer MapCustomerDTOToCustomer(CustomerDTO customerDto) throws ClassFieldValidationException {

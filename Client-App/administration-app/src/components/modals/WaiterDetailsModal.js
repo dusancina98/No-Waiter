@@ -4,9 +4,9 @@ import { modalConstants } from "../../constants/ModalConstants";
 import { userConstants } from "../../constants/UserConstants";
 import { UserContext } from "../../contexts/UserContext";
 import { userService } from "../../services/UserService";
-import EditWaiterForm from "../EditWaiterForm";
-import FailureAlert from "../FailureAlert";
-import SuccessAlert from "../SuccessAlert";
+import EditWaiterForm from "../objectadmin-employees/EditWaiterForm";
+import FailureAlert from "../messages/FailureAlert";
+import SuccessAlert from "../messages/SuccessAlert";
 import WaiterDetailsModalButtons from "./WaiterDetailsModalButtons";
 
 const WaiterDetailsModal = () => {

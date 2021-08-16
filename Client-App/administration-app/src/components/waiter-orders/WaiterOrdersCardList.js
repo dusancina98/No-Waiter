@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import FailureAlert from "../FailureAlert";
+import FailureAlert from "../messages/FailureAlert";
 import { OrderContext } from "../../contexts/OrderContext";
 import { orderConstants } from "../../constants/OrderConstants";
 import ReadyOrdersCard from "../../components/waiter-orders/ReadyOrdersCard"

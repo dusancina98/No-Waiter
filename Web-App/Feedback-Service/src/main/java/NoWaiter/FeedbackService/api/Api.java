@@ -83,6 +83,17 @@ public class Api {
         }
     }
 	
+	@GetMapping("/deliverer/{delivererId}/grades")
+    @CrossOrigin
+    public ResponseEntity<?> getFeedbackGradeForDeliverer(@PathVariable UUID delivererId) {
+        try {
+        	return new ResponseEntity<>(feedbackService.getFeedbackGradeForDeliverer(delivererId), HttpStatus.OK);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
 	@PostMapping("/deliverer")
     @CrossOrigin
     public ResponseEntity<?> createDelivererFeedback(@RequestHeader("Authorization") String token, @RequestBody CreateFeedbackDTO feedbackDTO) {
@@ -103,6 +114,4 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-	
-	
 }

@@ -1,6 +1,6 @@
 import React from "react";
-import CreateObjectAdminForm from "../components/CreateObjectAdminForm";
-import HeaderAndSideBarWrapper from "../components/HeaderAndSideBarWrapper";
+import CreateObjectAdminForm from "../components/admin-objectadmins/CreateObjectAdminForm";
+import HeaderAndSideBarWrapper from "../components/page-addons/HeaderAndSideBarWrapper";
 import ObjectContextProvider from "../contexts/ObjectContext";
 import UserContextProvider from "../contexts/UserContext";
 

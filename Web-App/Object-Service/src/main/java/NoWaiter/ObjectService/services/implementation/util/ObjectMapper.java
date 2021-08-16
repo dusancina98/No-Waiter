@@ -78,10 +78,6 @@ public class ObjectMapper {
     public static IdentifiableDTO<ObjectWithStatusDTO> MapObjectToIdentifiableObjectWithStatusDTO(Object object){    	
         if (object == null) throw new IllegalArgumentException();
         
-        IdentifiableDTO<WorkTimeDTO> dto = MapWorkTimeToIdentifiableWorkTimeDTO(object.getWorkTime());
-        System.out.println("TEST1 " + dto.Id);
-
-        
         return new IdentifiableDTO<ObjectWithStatusDTO>(object.getId(), new ObjectWithStatusDTO(object.getName(),
                 object.getContact().getEmail(), object.getContact().getPhoneNumber(), object.getImagePath(), object.getAddress().getAddress(), MapWorkTimeToIdentifiableWorkTimeDTO(object.getWorkTime()), object.isActive(), object.isBlocked()));
     }
@@ -111,7 +107,6 @@ public class ObjectMapper {
         List<IdentifiableDTO<CustomerObjectDTO>> retVal = new ArrayList<>();
         objects.forEach((object) -> retVal.add(MapObjectToIdentifiableCustomerObjectDTOWithGrad(object, feedbacks)));
 
-        System.out.println("OBJ " + retVal.size());
         return retVal;
     }
     

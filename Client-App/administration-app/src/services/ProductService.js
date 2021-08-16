@@ -142,6 +142,7 @@ function createProduct(productDTO, dispatch) {
 					product.EntityDTO.Ingredients = ingredients;
 					product.EntityDTO.Image = productDTO.Image === "" ? "" : pathConstants.PRODUCT_IMAGES_PATH + res.data + ".jpg";
 					product.EntityDTO.SideDishes = sideDishes;
+					findAllProducts(dispatch)
 					dispatch(success(product, "Product successfully added"));
 				} else {
 					dispatch(failure(res.data.message));

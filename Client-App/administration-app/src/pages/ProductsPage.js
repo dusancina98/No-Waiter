@@ -1,8 +1,8 @@
 import React from "react";
-import HeaderAndSideBarWrapper from "../components/HeaderAndSideBarWrapper";
+import HeaderAndSideBarWrapper from "../components/page-addons/HeaderAndSideBarWrapper";
 import CreateProductCategoryModal from "../components/modals/CreateProductCategoryModal";
 import CreateProductModal from "../components/modals/CreateProductModal";
-import ProductMenu from "../components/ProductMenu";
+import ProductMenu from "../components/objectadmin-objectdetails/ProductMenu";
 import ProductContextProvider from "../contexts/ProductContext";
 
 const ProductsPage = () => {

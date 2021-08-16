@@ -1,7 +1,7 @@
 import React from "react";
-import HeaderAndSideBarWrapper from "../components/HeaderAndSideBarWrapper";
+import HeaderAndSideBarWrapper from "../components/page-addons/HeaderAndSideBarWrapper";
 import ObjectDetailsModal from "../components/modals/ObjectDetailsModal";
-import ObjectList from "../components/ObjectList";
+import ObjectList from "../components/admin-objects/ObjectList";
 import ObjectContextProvider from "../contexts/ObjectContext";
 
 const ListObjectPage = () => {

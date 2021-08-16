@@ -4,8 +4,8 @@ import { modalConstants } from "../../constants/ModalConstants";
 import { UserContext } from "../../contexts/UserContext";
 import { userService } from "../../services/UserService";
 import { userConstants } from "../../constants/UserConstants";
-import FailureAlert from "../FailureAlert";
-import SuccessAlert from "../SuccessAlert";
+import FailureAlert from "../messages/FailureAlert";
+import SuccessAlert from "../messages/SuccessAlert";
 import DelivererDetailsModalButtons from "./DelivererDetailsModalButtons";
 
 const DelivererDetailsModal = () => {

@@ -1,7 +1,7 @@
 import React from "react";
-import HeaderAndSideBarWrapper from "../components/HeaderAndSideBarWrapper";
-import ListTableHeader from "../components/ListTableHeader";
-import TableList from "../components/TableList";
+import HeaderAndSideBarWrapper from "../components/page-addons/HeaderAndSideBarWrapper";
+import ListTableHeader from "../components/objectadmin-tables/ListTableHeader";
+import TableList from "../components/objectadmin-tables/TableList";
 import TableContextProvider from "../contexts/TableContext";
 
 const ListTablesPage = () => {

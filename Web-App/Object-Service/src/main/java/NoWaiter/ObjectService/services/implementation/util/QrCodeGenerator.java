@@ -11,7 +11,6 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import org.json.JSONObject;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -34,12 +33,10 @@ public class QrCodeGenerator {
 		@SuppressWarnings("rawtypes")
 		Map hintMap = new HashMap();
 		hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-		System.out.println("TEST1");
+		
 		Map<String, String> qrCodeDataMap = Map.of(
 		"ObjectId", objectId,
-		"TableId", tableId,
-		"Key", generateVerificationKey("OBJECT")
-		// see next section for ´generateVerificationKey´ method
+		"TableId", tableId
 		);
 
 		String jsonString = new JSONObject(qrCodeDataMap).toString();
@@ -77,27 +74,5 @@ public class QrCodeGenerator {
 		filePath.substring(filePath.lastIndexOf('.') + 1),
 		FileSystems.getDefault().getPath(filePath)
 			);
-	}
-	
-	private String generateVerificationKey(String str) throws Exception {
-		/*int iterations = 10000;
-		int keyLength = 512;
-			
-		char[] strChars = str.toCharArray();
-		byte[] saltBytes = "ASD".getBytes();
-		
-		SecretKeyFactory skf = SecretKeyFactory.getInstance("SHA256");
-		PBEKeySpec spec = new PBEKeySpec(strChars, saltBytes, iterations, keyLength);
-		SecretKey key = skf.generateSecret(spec);
-		byte[] hashedBytes = key.getEncoded( );
-			
-		return Hex.encodeHexString(hashedBytes);*/
-		
-		String strong_salt = BCrypt.gensalt(10);
-
-		String hash = BCrypt.hashpw(str,strong_salt);
-		
-		return hash;
-		
 	}
 }

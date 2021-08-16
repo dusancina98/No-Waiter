@@ -26,7 +26,6 @@ public class TableServiceImpl implements TableService{
 	@Autowired
 	private ObjectAdminRepository objectAdminRepository;
 	
-	
 	@Override
 	public IdentifiableDTO<TableDTO> createTable(UUID objectAdminId) throws Exception {
 		

@@ -142,7 +142,6 @@ public class User{
 	public void setAuthorities(List<Authority> authorities) {
 		this.authorities = authorities;
 	}
-	
 
 	public void addAuthority(Authority authority) {
 		if(this.authorities == null)
