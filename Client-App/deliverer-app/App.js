@@ -16,6 +16,9 @@ import UserActivateScreen from "./app/screens/UserActivateScreen";
 import ResetPasswordScreen from "./app/screens/ResetPasswordScreen";
 import PickedUpOrdersScreen from "./app/screens/PickedUpOrdersScreen";
 import DismissOrdersScreen from "./app/screens/DismissOrdersScreen";
+import { ToastProvider } from "react-native-toast-notifications";
+import { Image } from "react-native";
+import Icons from "./app/constants/Icons";
 
 const Stack = createStackNavigator();
 
@@ -35,29 +38,41 @@ export default function App() {
 
 	if (fontsLoaded) {
 		return (
-			<AuthContextProvider>
-				<OrderContextProvider>
-					<NavigationContainer>
-						<Stack.Navigator
-							screenOptions={{
-								headerShown: false,
-							}}
-							initialRouteName={token === true ? "Home" : "Welcome"}
-						>
-							<Stack.Screen name="Home" component={Tabs} />
-							<Stack.Screen name="Welcome" component={WelcomeScreen} />
-							<Stack.Screen name="Login" component={LoginScreen} />
-							<Stack.Screen name="Employment request" component={EmploymentRequestScreen} />
-							<Stack.Screen name="Order Confirm" component={OrderConfirmScreen} options={{ headerShown: true, headerBackTitle: false }} />
-							<Stack.Screen name="Accepted Orders" component={AcceptedOrdersScreen} options={{ headerShown: true, headerBackTitle: false }} />
-							<Stack.Screen name="Picked Up Orders" component={PickedUpOrdersScreen} options={{ headerShown: true, headerBackTitle: false }} />
-							<Stack.Screen name="Dismiss Order" component={DismissOrdersScreen} />
-							<Stack.Screen name="Activate User" component={UserActivateScreen} />
-							<Stack.Screen name="Reset Password" component={ResetPasswordScreen} />
-						</Stack.Navigator>
-					</NavigationContainer>
-				</OrderContextProvider>
-			</AuthContextProvider>
+			<ToastProvider
+				placement="bottom"
+				duration={3000}
+				animationType="zoom-in"
+				animationDuration={250}
+				successColor="green"
+				dangerColor="red"
+				warningColor="orange"
+				normalColor="gray"
+				successIcon={<Image source={Icons.check} resizeMode="contain" style={{ width: 30, height: 30, tintColor: "white" }} />}
+			>
+				<AuthContextProvider>
+					<OrderContextProvider>
+						<NavigationContainer>
+							<Stack.Navigator
+								screenOptions={{
+									headerShown: false,
+								}}
+								initialRouteName={token === true ? "Home" : "Welcome"}
+							>
+								<Stack.Screen name="Home" component={Tabs} />
+								<Stack.Screen name="Welcome" component={WelcomeScreen} />
+								<Stack.Screen name="Login" component={LoginScreen} />
+								<Stack.Screen name="Employment request" component={EmploymentRequestScreen} />
+								<Stack.Screen name="Order Confirm" component={OrderConfirmScreen} options={{ headerShown: true, headerBackTitle: false }} />
+								<Stack.Screen name="Accepted Orders" component={AcceptedOrdersScreen} options={{ headerShown: true, headerBackTitle: false }} />
+								<Stack.Screen name="Picked Up Orders" component={PickedUpOrdersScreen} options={{ headerShown: true, headerBackTitle: false }} />
+								<Stack.Screen name="Dismiss Order" component={DismissOrdersScreen} />
+								<Stack.Screen name="Activate User" component={UserActivateScreen} />
+								<Stack.Screen name="Reset Password" component={ResetPasswordScreen} />
+							</Stack.Navigator>
+						</NavigationContainer>
+					</OrderContextProvider>
+				</AuthContextProvider>
+			</ToastProvider>
 		);
 	} else {
 		return <AppLoading startAsync={getFonts} onFinish={() => setFontsLoaded(true)} onError={(err) => console.log(err)} />;

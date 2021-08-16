@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
-import { ImageBackground, View, Text, TouchableOpacity, StatusBar, TextInput, TouchableWithoutFeedback, Keyboard } from "react-native";
-import { authConstants } from "../constants/AuthConstants";
+import React, { useContext, useState } from "react";
+import { ImageBackground, View, Text, TouchableOpacity, StatusBar, TextInput, TouchableWithoutFeedback, Keyboard, Image } from "react-native";
 import { AuthContext } from "../contexts/AuthContext";
 import { authService } from "../services/AuthService";
-import { loginStyles, userInfoStyle, welcomeStyles } from "../styles/styles";
+import { loginStyles, welcomeStyles } from "../styles/styles";
 
 function ResetPasswordScreen({ navigation }) {
 	const { authState, dispatch } = useContext(AuthContext);
@@ -22,8 +21,9 @@ function ResetPasswordScreen({ navigation }) {
 		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 			<View style={loginStyles.containerWrapper}>
 				<StatusBar barStyle="light-content" />
-				<ImageBackground style={welcomeStyles.background} source={require("../assets/waiter.jpg")}>
+				<ImageBackground style={welcomeStyles.background} source={require("../assets/background.jpg")}>
 					<View style={welcomeStyles.logoContainer}>
+						<Image style={{ width: 170, height: 170 }} source={require("../assets/logo.png")} />
 						<Text style={welcomeStyles.logoText}>Reset password</Text>
 					</View>
 					<View style={loginStyles.loginForm}>
@@ -32,12 +32,11 @@ function ResetPasswordScreen({ navigation }) {
 					</View>
 					{authState.resetPassword.showError && <Text style={loginStyles.errorMessage}>{authState.resetPassword.errorMessage}</Text>}
 					{authState.resetPassword.showSuccessMessage && (
-						<Text style={{ color: "black", fontSize: 18, textAlign: "center", marginTop: 45 }}>
+						<Text style={{ color: "white", fontSize: 18, textAlign: "center", marginTop: 20, paddingHorizontal: 20 }}>
 							We sent an email to <Text style={{ fontWeight: "bold" }}>{authState.resetPassword.emailAddress}</Text> with a link to get back into your account.
 						</Text>
 					)}
 
-					{authState.resetPassword.showError && <Text style={loginStyles.errorMessage}>{authState.resetPassword.errorMessage}</Text>}
 					{!authState.resetPassword.showSuccessMessage && (
 						<TouchableOpacity style={loginStyles.loginButton} activeOpacity={0.5} onPress={handleResetPassword}>
 							<Text style={welcomeStyles.loginText}> Send reset email </Text>

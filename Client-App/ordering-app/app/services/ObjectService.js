@@ -100,10 +100,12 @@ async function findFavouriteObjects(dispatch) {
 	}
 }
 
-function findAllObjects(dispatch) {
+async function findAllObjects(dispatch) {
 	dispatch(request());
 
-	Axios.get(`${API_URL}/object-api/api/objects/customers`, { validateStatus: () => true })
+	let header = await authHeader();
+
+	Axios.get(`${API_URL}/object-api/api/objects/customers`, { validateStatus: () => true, headers: header })
 		.then((res) => {
 			console.log(res.data);
 			if (res.status === 200) {

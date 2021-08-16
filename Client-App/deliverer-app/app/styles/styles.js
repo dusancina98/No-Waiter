@@ -113,17 +113,8 @@ export const orderListStyles = StyleSheet.create({
 		marginRight: 20,
 		height: 120,
 		borderRadius: 10,
-		borderColor: "gray",
-		borderWidth: 1,
 		paddingHorizontal: 10,
-		shadowColor: "grey",
-		shadowOffset: {
-			width: 0,
-			height: 10,
-		},
-		shadowOpacity: 0.45,
-		shadowRadius: 3.5,
-		elevation: 5,
+		backgroundColor: "white",
 		marginTop: 10,
 	},
 	objectInfoContainer: {
@@ -247,6 +238,41 @@ export const employmentRequestStyle = StyleSheet.create({
 		borderRadius: 15,
 		width: "90%",
 		backgroundColor: "white",
+	},
+});
+
+export const activateAccountStyles = StyleSheet.create({
+	containerWrapper: {
+		flex: 1,
+	},
+	button: {
+		alignSelf: "center",
+		width: "90%",
+		marginTop: 40,
+		paddingTop: 15,
+		paddingBottom: 15,
+		marginLeft: 30,
+		marginRight: 30,
+		backgroundColor: "transparent",
+		borderRadius: 10,
+		borderWidth: 1,
+		borderColor: "white",
+		paddingHorizontal: 10,
+	},
+	buttonText: {
+		color: "white",
+		fontSize: 20,
+		fontFamily: "roboto-regular",
+		fontWeight: "400",
+		textAlign: "center",
+	},
+	errorMessage: {
+		color: "red",
+		fontSize: 15,
+		marginLeft: 20,
+		marginRight: 20,
+		marginTop: 10,
+		textAlign: "center",
 	},
 });
 

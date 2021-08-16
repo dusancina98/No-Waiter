@@ -323,7 +323,7 @@ public class OrderServiceImpl implements OrderService{
 			throw new NotFoundException("Order not found");
 		}
 		
-		OrderEvent newOrderEvent = new OrderEvent(latest.getOrder(), OrderStatus.CANCELED, new Date(), latest.getOrder().getEstimatedTime(), latest.getOrder().getObjectId(), delivererId, latest.getOrdinalNumber(),latest.getCustomerId());
+		OrderEvent newOrderEvent = new OrderEvent(latest.getOrder(), OrderStatus.CANCELED, new Date(), latest.getOrder().getEstimatedTime(), latest.getOrder().getObjectId(), null, latest.getOrdinalNumber(),latest.getCustomerId());
 		orderEventRepository.save(newOrderEvent);			
 	}
 	

@@ -81,13 +81,17 @@ public class Api {
 	
 	@PostMapping
 	@CrossOrigin
-	public ResponseEntity<?> createProduct(@RequestHeader("Authorization") String token,@RequestParam(value = "Image", required = false) MultipartFile Image, @RequestParam("CategoryId") UUID CategoryId, @RequestParam("Name") String Name
-			, @RequestParam("Description") String Description, @RequestParam("Price") double Price, @RequestParam("MeasureUnit") String MeasureUnit,
-			@RequestParam("Amount") int Amount, @RequestParam("ProductTypeId") UUID ProductTypeId, @RequestParam("Ingredients") List<String> Ingredients, @RequestParam("SideDishes") List<String> SideDishes) {
+	public ResponseEntity<?> createProduct(@RequestHeader("Authorization") String token,@RequestParam(value = "Image", required = false) MultipartFile Image,
+										   @RequestParam("CategoryId") UUID CategoryId, @RequestParam("Name") String Name, @RequestParam("Description") String Description,
+										   @RequestParam("Price") double Price, @RequestParam("MeasureUnit") String MeasureUnit, @RequestParam("Amount") int Amount,
+										   @RequestParam("ProductTypeId") UUID ProductTypeId, @RequestParam("Ingredients") List<String> Ingredients,
+										   @RequestParam("SideDishes") List<String> SideDishes) {
 		try {
+			
 			ProductRequestDTO productDTO = new ProductRequestDTO(CategoryId, Name, Description, Price, MeasureUnit, Amount, ProductTypeId, Ingredients, SideDishes, Image);
 			JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
 			UUID objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());
+			
 			return new ResponseEntity<>(productService.createProduct(productDTO, objectId), HttpStatus.CREATED);
 		} catch (FeignException e) {
         	if(e.status() == HttpStatus.NOT_FOUND.value())
@@ -110,9 +114,11 @@ public class Api {
 	@CrossOrigin
 	public ResponseEntity<?> updateProduct(@RequestHeader("Authorization") String token, @RequestBody IdentifiableDTO<ProductUpdateRequestDTO> productDTO) {
 		try {
+			
 			JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
 			UUID objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());
 			productService.updateProduct(productDTO, objectId);
+			
 			return new ResponseEntity<>( HttpStatus.OK);
 		} catch (FeignException e) {
         	if(e.status() == HttpStatus.NOT_FOUND.value())
@@ -137,6 +143,7 @@ public class Api {
 		try {
 			JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
 			UUID objectId;
+			
 			if (hasRole(jwtResponse.getAuthorities(), "ROLE_OBJADMIN")) {
 				 objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());
 			}else if(hasRole(jwtResponse.getAuthorities(), "ROLE_SELF_ORDER_PULT")) {
@@ -144,7 +151,7 @@ public class Api {
 			}  else {
 				objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());
 			}
-			System.out.println(objectId);
+
 			return new ResponseEntity<>(productService.findAllProducts(objectId), HttpStatus.OK);
 		} catch (FeignException e) {
         	if(e.status() == HttpStatus.NOT_FOUND.value())
@@ -176,7 +183,6 @@ public class Api {
 	@DeleteMapping("/{productId}")
     @CrossOrigin
     public ResponseEntity<?> deleteProduct(@PathVariable UUID productId) {
-
         try {
         	productService.deleteProduct(productId);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -189,7 +195,6 @@ public class Api {
 	@DeleteMapping("/{categoryId}/category")
     @CrossOrigin
     public ResponseEntity<?> deleteCategory(@PathVariable UUID categoryId) {
-
         try {
         	productService.deleteCategory(categoryId);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -200,10 +205,7 @@ public class Api {
     }
 	
 	private boolean hasRole(List<String> authorities, String role) {
-		System.out.println(role);
-
 		for (String auth : authorities) {
-			System.out.println(auth);
 			if(auth.equals(role)) {
 				return true;
 			}
@@ -214,7 +216,6 @@ public class Api {
 	@PutMapping("/{productId}/image")
     @CrossOrigin
     public ResponseEntity<?> updateObjectImage(@RequestHeader("Authorization") String token, @RequestParam("image") MultipartFile multipartFile, @PathVariable UUID productId) {
-
         try {
         	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
 			UUID objectId = objectClient.getObjectIdByObjectAdminId(jwtResponse.getId());

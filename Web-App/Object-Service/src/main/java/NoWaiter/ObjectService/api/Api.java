@@ -57,7 +57,7 @@ public class Api {
     @Autowired
 	private Environment env;
     
-    //TODO: ne znam gde se poziva ova metoda
+    //TODO: ne znam gde se poziva ova metoda -> ZA OBRADU SLIKA	
     @GetMapping("/object-images/{imageName}")
 	@CrossOrigin
 	public ResponseEntity<?> getProductImage(@PathVariable String imageName) {

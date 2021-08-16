@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from "react";
-import { ImageBackground, View, Text, TouchableOpacity, SafeAreaView } from "react-native";
+import { ImageBackground, View, Text, TouchableOpacity, StatusBar } from "react-native";
 import { AuthContext } from "../contexts/AuthContext";
 import { authService } from "../services/AuthService";
-import { employmentRequestStyle, loginStyles, userInfoStyle } from "../styles/styles";
+import { activateAccountStyles, loginStyles, userInfoStyle, welcomeStyles } from "../styles/styles";
 
 function UserActivateScreen({ navigation }) {
 	const { authState, dispatch } = useContext(AuthContext);
@@ -20,14 +20,15 @@ function UserActivateScreen({ navigation }) {
 	}, []);
 
 	return (
-		<SafeAreaView style={{ flex: 1 }}>
-			<View style={userInfoStyle.containerWrapper}>
-				<View style={employmentRequestStyle.logoContainer}>
-					<Text style={{ color: "gray", fontSize: 35, fontFamily: "roboto-light", fontWeight: "200", alignSelf: "center" }}>Activate account</Text>
+		<View style={loginStyles.containerWrapper}>
+			<StatusBar barStyle="light-content" />
+			<ImageBackground style={welcomeStyles.background} source={require("../assets/background.jpg")}>
+				<View style={welcomeStyles.logoContainer}>
+					<Text style={welcomeStyles.logoText}>Activate account</Text>
 				</View>
 				{!authState.userActivate.showSuccessMessage && (
 					<View style={{ alignItems: "center" }}>
-						<Text style={{ textAlign: "center", fontSize: 15 }}>
+						<Text style={{ textAlign: "center", fontSize: 20, color: "white", paddingHorizontal: 20 }}>
 							Vas nalog nije aktiviran. Ukoliko zelite da aktiviranje naloga pritisnite na dugme ispod nakon cega ce Vam na email:{" "}
 							<Text style={{ fontWeight: "bold" }}>{authState.userActivate.userEmail} </Text>stici aktivacioni link.
 						</Text>
@@ -38,18 +39,18 @@ function UserActivateScreen({ navigation }) {
 					{authState.userActivate.showSuccessMessage && <Text style={{ color: "green", fontSize: 18, alignSelf: "center", marginTop: 10 }}> Activation mail was sent successfully.</Text>}
 
 					{!authState.userActivate.showSuccessMessage && (
-						<TouchableOpacity style={userInfoStyle.button} activeOpacity={0.5} onPress={handleSendActivation}>
-							<Text style={userInfoStyle.buttonText}> Send activation mail</Text>
+						<TouchableOpacity style={activateAccountStyles.button} activeOpacity={0.5} onPress={handleSendActivation}>
+							<Text style={activateAccountStyles.buttonText}> Send activation mail</Text>
 						</TouchableOpacity>
 					)}
 					{authState.userActivate.showSuccessMessage && (
-						<TouchableOpacity style={userInfoStyle.button} activeOpacity={0.5} onPress={() => navigation.navigate("Login")}>
-							<Text style={userInfoStyle.buttonText}> Back to login</Text>
+						<TouchableOpacity style={activateAccountStyles.button} activeOpacity={0.5} onPress={() => navigation.navigate("Login")}>
+							<Text style={activateAccountStyles.buttonText}> Back to login</Text>
 						</TouchableOpacity>
 					)}
 				</View>
-			</View>
-		</SafeAreaView>
+			</ImageBackground>
+		</View>
 	);
 }
 

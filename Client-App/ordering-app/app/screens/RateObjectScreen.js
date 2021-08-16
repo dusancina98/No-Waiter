@@ -5,9 +5,11 @@ import Icons from "../constants/Icons";
 import { FeedbackContext } from "../contexts/FeedbackContext";
 import { feedbackService } from "../services/FeedbackService";
 import { giveFeedbackStyle } from "../styles/styles";
+import { useToast } from "react-native-toast-notifications";
 
 const RateObjectScreen = ({ navigation, route }) => {
 	const { feedbackState, dispatch } = useContext(FeedbackContext);
+	const toast = useToast();
 
 	const handleFeedback = (grade) => {
 		console.log(route.params);
@@ -22,7 +24,9 @@ const RateObjectScreen = ({ navigation, route }) => {
 
 	useEffect(() => {
 		if (feedbackState.rateObject.success === true) {
-			Alert.alert("Success", "Feedback successfully sent!", [{ text: "OK" }]);
+			toast.show("Feedback successfully sent", {
+				type: "success",
+			});
 			dispatch({ type: feedbackConstants.RATE_OBJECT_REQUEST });
 			navigation.reset({ index: 0, routes: [{ name: "Home" }] });
 		}
@@ -30,7 +34,9 @@ const RateObjectScreen = ({ navigation, route }) => {
 
 	useEffect(() => {
 		if (feedbackState.rateObject.showError === true) {
-			Alert.alert("Error", feedbackState.rateObject.errorMessage, [{ text: "OK" }]);
+			toast.show(feedbackState.rateObject.errorMessage, {
+				type: "danger",
+			});
 			dispatch({ type: feedbackConstants.RATE_OBJECT_REQUEST });
 		}
 	}, [feedbackState.rateObject.showError]);
