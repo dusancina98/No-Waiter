@@ -19,18 +19,18 @@ const SideBar = () => {
 	return (
 		<nav className="sidebar sidebar-offcanvas" id="sidebar">
 			<div className="text-center sidebar-brand-wrapper d-flex align-items-center">
-				<Link className="sidebar-brand brand-logo" to="/">
-					<img src="assets/images/logo.svg" alt="logo" />
+				<Link className="img-fluid" to="/">
+					<img className="img-fluid" src="assets/images/logo.png" alt="logo" />
 				</Link>
-				<Link className="sidebar-brand brand-logo-mini pl-4 pt-3" to="/">
-					<img src="assets/images/logo-mini.svg" alt="logo" />
+				<Link className="sidebar-brand brand-logo-mini pl-1 pt-3" to="/">
+					<img src="assets/images/logo.png" alt="logo" />
 				</Link>
 			</div>
 			<ul className="nav">
 				<li className="nav-item nav-profile">
 					<a href="#/" className="nav-link">
 						<div className="nav-profile-image">
-							<img src="assets/images/faces/face1.jpg" alt="profile" />
+							<img src="assets/images/user.png" alt="profile" />
 							<span className="login-status online"></span>
 						</div>
 						<div className="nav-profile-text d-flex flex-column pr-3">

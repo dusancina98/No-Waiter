@@ -58,7 +58,7 @@ const Header = () => {
 				<ul className="navbar-nav navbar-nav-right ml-lg-auto">
 					<li className="nav-item nav-profile border-0">
 						<a className="nav-link " id="profileDropdown" href="/#" data-toggle="dropdown">
-							<img className="nav-profile-img mr-2" alt="" src="assets/images/faces/face1.jpg" />
+							<img className="nav-profile-img mr-2" style={{backgroundColor:'white'}} alt="" src="assets/images/user.png" />
 							<span className="profile-name">{userState.loggedUserInfo.name} {userState.loggedUserInfo.surname}</span>
 						</a>
 					</li>
