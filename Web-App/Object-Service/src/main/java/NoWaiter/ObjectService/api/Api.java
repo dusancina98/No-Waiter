@@ -36,7 +36,6 @@ import NoWaiter.ObjectService.services.contracts.dto.JwtParseResponseDTO;
 import NoWaiter.ObjectService.services.contracts.dto.ObjectDTO;
 import NoWaiter.ObjectService.services.contracts.dto.UpdateWorkTimeDTO;
 import NoWaiter.ObjectService.services.contracts.dto.UserClientObjectDTO;
-import NoWaiter.ObjectService.services.contracts.exceptions.InvalidTimeRangeException;
 import feign.FeignException;
 
 @RestController
@@ -86,8 +85,7 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
-    //koristi drugi ms
+
     @GetMapping("/objectName/{objectId}")
 	@CrossOrigin
 	public ResponseEntity<?> getObjectName(@PathVariable UUID objectId) {
@@ -146,7 +144,7 @@ public class Api {
         }
     }
     
-    //TODO: ne znam gde se koristi metoda
+    //TODO: koristi se u order servisu, getuje se post metodom
     @PostMapping("/details")
     @CrossOrigin
     public ResponseEntity<?> getObjectDetailsByObjectIds(@RequestBody List<UUID> objectIds){
@@ -189,7 +187,6 @@ public class Api {
         }
     }
     
-    //koristi se u ms
     @GetMapping("/table/{objectId}/{tableId}")
     @CrossOrigin	
     public ResponseEntity<?> getTableNumberByTableIdForResturant(@PathVariable UUID objectId,  @PathVariable UUID tableId) {
