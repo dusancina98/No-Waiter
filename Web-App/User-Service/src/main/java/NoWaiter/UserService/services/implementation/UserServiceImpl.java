@@ -118,10 +118,8 @@ public class UserServiceImpl implements UserService {
 		try {
 			emailService.sendActivationLinkAsync(user, accountActivation.getToken());
 		} catch (MailException | InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -199,7 +197,6 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void updateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity) throws ClassFieldValidationException {
-		
 		ObjectAdmin objectAdmin = objectAdminRepository.findById(entity.Id).get();
 		objectAdmin.setAddress(entity.EntityDTO.Address);
 		objectAdmin.setName(entity.EntityDTO.Name);
@@ -212,7 +209,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public void updateObjects(UserClientObjectDTO entity) {
-		
 		ArrayList<ObjectAdmin> objectAdmins = (ArrayList<ObjectAdmin>) objectAdminRepository.findByObjectId(entity.Id);
 		for (ObjectAdmin objectAdmin : objectAdmins) {
 			objectAdmin.setObjectName(entity.Name);
@@ -234,10 +230,8 @@ public class UserServiceImpl implements UserService {
 		try {
 			emailService.sendResetPasswordLinkAsync(user, newResetPasswordToken.getToken());
 		} catch (MailException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

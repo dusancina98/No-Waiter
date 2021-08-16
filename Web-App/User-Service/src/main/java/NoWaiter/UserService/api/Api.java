@@ -87,7 +87,6 @@ public class Api {
         }
     }
     
-    
     @PutMapping("/objects")
     @CrossOrigin
     public ResponseEntity<?> updateObjects(@RequestBody UserClientObjectDTO userObjectDTO) {
@@ -106,7 +105,6 @@ public class Api {
     @CrossOrigin
     public ResponseEntity<?> createRestaurantAdmin(@RequestBody ObjectAdminDTO objectAdminDTO) {
         try {
- 
             objectClient.checkObject(objectAdminDTO.ObjectId);
             UUID adminId = userService.createObjectAdmin(objectAdminDTO);
             objectClient.addAdminToObject(new AddAdminDTO(objectAdminDTO.ObjectId, adminId));
@@ -390,15 +388,6 @@ public class Api {
         }
     }
     
-    @GetMapping
-    @CrossOrigin
-    public ResponseEntity<?> test(@RequestHeader("Authorization") String token) {
-    	System.out.println(token);
-    	JwtParseResponseDTO parse = authClient.getLoggedUserInfo(token);
-    	System.out.println(parse.getUsername() + "\n\n" + parse.getId());
-    	return new ResponseEntity<>("USAO",HttpStatus.CREATED);
-    }
-    
     @GetMapping("/check-existence/{userId}")
     @CrossOrigin
     public ResponseEntity<?> checkUserExistence(@PathVariable UUID userId) {
@@ -440,7 +429,6 @@ public class Api {
 
             return new ResponseEntity<>(HttpStatus.PERMANENT_REDIRECT);
         } catch(ActivationLinkExpiredOrUsedException e) {
-        	//TODO 1: izmeniti u neku stranicu za token je istekao
             httpServletResponse.setHeader("Location", "http://localhost:3000/index.html#/404");
             httpServletResponse.setStatus(302);
             return new ResponseEntity<>(HttpStatus.PERMANENT_REDIRECT);
@@ -664,11 +652,9 @@ public class Api {
 	 @DeleteMapping("/object-workers/{objectId}")
 	 @CrossOrigin
 	    public ResponseEntity<?> deleteObjectWorkers(@PathVariable UUID objectId) {
-
 	        try {
 	        	userService.deleteObjectWorkers(objectId);
 	            return new ResponseEntity<>(HttpStatus.OK);
-
 	        } catch (NoSuchElementException e) {
 	        	e.printStackTrace();
 	            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);

@@ -56,15 +56,12 @@ public class DelivererServiceImpl implements DelivererService{
 		try {
 			emailService.sendDelivererAcceptedRequestEmailAsync(delivererRequest);
 		} catch (MailException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		createNewDeliverer(delivererRequest);
-		
 		
 		delivererRequestRepository.save(delivererRequest);
 	}
@@ -77,14 +74,12 @@ public class DelivererServiceImpl implements DelivererService{
 		accountActivationTokenRepository.save(accountActivation);
 		
 		delivererRepository.save(deliverer);
-		//DELIVERER bi trebao isto na first login da stavlja password
+		
 		try {
 			emailService.sendDelivererActivationLinkAsync(deliverer, accountActivation.getToken());
 		} catch (MailException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -102,10 +97,8 @@ public class DelivererServiceImpl implements DelivererService{
 		try {
 			emailService.sendDelivererRejectReasonEmailAsync(delivererRequest, rejectDelivererDTO.Reason);
 		} catch (MailException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

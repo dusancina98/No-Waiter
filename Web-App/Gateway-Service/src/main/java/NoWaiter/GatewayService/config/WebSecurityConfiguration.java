@@ -99,21 +99,40 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 //user-service end-points
                 .antMatchers(HttpMethod.POST ,"/user-api/api/users/object-admin").hasRole("SYSADMIN")
-                .antMatchers(HttpMethod.GET ,"/user-api/api/users/object-admin").hasRole("SYSADMIN")
-                .antMatchers(HttpMethod.PUT ,"/user-api/api/users/object-admin").hasRole("SYSADMIN")
-                .antMatchers(HttpMethod.DELETE ,"/user-api/api/users/object-admin/**").hasRole("SYSADMIN")
-
+                .antMatchers(HttpMethod.POST ,"/user-api/api/users/customer").permitAll()
+                .antMatchers(HttpMethod.POST ,"/user-api/api/users/customer/address").hasRole("CUSTOMER")
                 .antMatchers(HttpMethod.POST ,"/user-api/api/users/employee/waiter").hasRole("OBJADMIN")
+                .antMatchers(HttpMethod.POST ,"/user-api/api/users/activation-link-request").permitAll()
+                .antMatchers(HttpMethod.POST ,"/user-api/api/users/change-first-password").permitAll()
+                .antMatchers(HttpMethod.POST ,"/user-api/api/users/reset-password-link-request").permitAll()
+                .antMatchers(HttpMethod.POST ,"/user-api/api/users/reset-password").permitAll()
+                .antMatchers(HttpMethod.POST ,"/user-api/api/users/check-if-activation-token-valid").permitAll()
+                .antMatchers(HttpMethod.POST ,"/user-api/api/users/check-if-reset-password-token-valid").permitAll()
+                .antMatchers(HttpMethod.POST ,"/user-api/api/users/deliverer-request").permitAll()
+
+                .antMatchers(HttpMethod.GET ,"/user-api/api/users/object-admin").hasRole("SYSADMIN")
+                .antMatchers(HttpMethod.GET ,"/user-api/api/users/customer/addresses").hasRole("CUSTOMER")
+                .antMatchers(HttpMethod.GET ,"/user-api/api/users/customer/info").hasRole("CUSTOMER")
                 .antMatchers(HttpMethod.GET ,"/user-api/api/users/employee/waiter").hasRole("OBJADMIN")
-                	
+                .antMatchers(HttpMethod.GET ,"/user-api/api/users/check-existence/**").permitAll()
+                .antMatchers(HttpMethod.GET ,"/user-api/api/users/activate-user/token=**").permitAll()
                 .antMatchers(HttpMethod.GET ,"/user-api/api/users/deliverer-request").hasRole("SYSADMIN")
-                .antMatchers(HttpMethod.PUT ,"/user-api/api/users/deliverer-request/**").hasRole("SYSADMIN")
-                	
-                .antMatchers(HttpMethod.POST ,"/user-api/api/users/deliverers").hasRole("SYSADMIN")
                 .antMatchers(HttpMethod.GET ,"/user-api/api/users/deliverers").hasRole("SYSADMIN")
-                .antMatchers(HttpMethod.PUT ,"/user-api/api/users/deliverers/**").hasRole("SYSADMIN")
-                .antMatchers(HttpMethod.DELETE ,"/user-api/api/users/deliverers/**").hasRole("SYSADMIN");
-        
+
+                .antMatchers(HttpMethod.PUT ,"/user-api/api/users/object-admin").hasRole("SYSADMIN")
+                .antMatchers(HttpMethod.PUT ,"/user-api/api/users/customer").hasRole("CUSTOMER")
+                .antMatchers(HttpMethod.PUT ,"/user-api/api/users/customer/objects/favourite/**").hasRole("CUSTOMER")
+                .antMatchers(HttpMethod.PUT ,"/user-api/api/users/employee/waiter").hasRole("SYSADMIN")
+                .antMatchers(HttpMethod.PUT ,"/user-api/api/users/deliverer-request/approve/**").hasRole("SYSADMIN")
+                .antMatchers(HttpMethod.PUT ,"/user-api/api/users/deliverer-request/reject").hasRole("SYSADMIN")
+                .antMatchers(HttpMethod.PUT ,"/user-api/api/users/deliverers/**/activate").hasRole("SYSADMIN")
+                .antMatchers(HttpMethod.PUT ,"/user-api/api/users/deliverers/**/deactivate").hasRole("SYSADMIN")
+
+                .antMatchers(HttpMethod.DELETE ,"/user-api/api/users/object-admin/**").hasRole("SYSADMIN")
+                .antMatchers(HttpMethod.DELETE ,"/user-api/api/users/customer/objects/favourite/**").hasRole("CUSTOMER")
+                .antMatchers(HttpMethod.DELETE ,"/user-api/api/users/customer/address/**").hasRole("CUSTOMER")
+                .antMatchers(HttpMethod.DELETE ,"/user-api/api/users/deliverers/**").hasRole("SYSADMIN")
+                .antMatchers(HttpMethod.DELETE ,"/user-api/api/users/object-workers/**").hasRole("SYSADMIN");
         		//feedback-service end-points
         
                 //.anyRequest().permitAll();

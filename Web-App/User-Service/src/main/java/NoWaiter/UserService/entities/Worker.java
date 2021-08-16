@@ -11,9 +11,7 @@ import NoWaiter.UserService.services.contracts.exceptions.ClassFieldValidationEx
 public class Worker extends User{
 	@Column(nullable = false)
     private String phoneNumber;
-	
-	// TODO: worktime
-	
+		
 	public Worker() {
     }
 
