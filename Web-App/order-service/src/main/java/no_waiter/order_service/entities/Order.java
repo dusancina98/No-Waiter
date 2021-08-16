@@ -131,4 +131,14 @@ public class Order {
 	public void setCustomerId(UUID customerId) {
 		this.customerId = customerId;
 	}
+	
+	public double calculatePrice() {
+		Double price=0.0;
+		
+		for(OrderItem orderItem: this.items) {
+			price+= orderItem.getSingleItemPrice()*orderItem.getCount();
+		}
+		
+		return price;
+	}
 }
