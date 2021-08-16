@@ -132,9 +132,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE ,"/user-api/api/users/customer/objects/favourite/**").hasRole("CUSTOMER")
                 .antMatchers(HttpMethod.DELETE ,"/user-api/api/users/customer/address/**").hasRole("CUSTOMER")
                 .antMatchers(HttpMethod.DELETE ,"/user-api/api/users/deliverers/**").hasRole("SYSADMIN")
-                .antMatchers(HttpMethod.DELETE ,"/user-api/api/users/object-workers/**").hasRole("SYSADMIN");
+                .antMatchers(HttpMethod.DELETE ,"/user-api/api/users/object-workers/**").hasRole("SYSADMIN")
+        		
         		//feedback-service end-points
-        
-                //.anyRequest().permitAll();
+        		.antMatchers(HttpMethod.POST ,"/feedback-api/api/feedbacks").hasRole("CUSTOMER")
+        		.antMatchers(HttpMethod.POST ,"/feedback-api/api/deliverer").hasRole("CUSTOMER");
     }
 }
