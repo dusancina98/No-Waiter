@@ -78,7 +78,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 //object-service end-points
                 .antMatchers(HttpMethod.POST ,"/object-api/api/objects").hasRole("SYSADMIN")
                 .antMatchers(HttpMethod.POST ,"/object-api/api/objects/admin").hasRole("SYSADMIN")
-                .antMatchers(HttpMethod.POST ,"/object-api/api/objects/self-ordering-jwt").hasRole("SYSADMIN")
+                .antMatchers(HttpMethod.POST ,"/object-api/api/objects/self-ordering-jwt").hasRole("OBJADMIN")
                 .antMatchers(HttpMethod.POST ,"/object-api/api/objects/tables").hasRole("OBJADMIN")
                 
             	.antMatchers(HttpMethod.GET ,"/object-api/api/objects").hasAnyRole("SYSADMIN", "CUSTOMER")
@@ -88,8 +88,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET ,"/object-api/api/objects/tables").hasAnyRole("WAITER", "OBJADMIN")
 
                 .antMatchers(HttpMethod.DELETE ,"/object-api/api/objects/admin/**").hasRole("SYSADMIN")
-                .antMatchers(HttpMethod.DELETE ,"/object-api/api/objects/**").hasRole("SYSADMIN")
                 .antMatchers(HttpMethod.DELETE ,"/object-api/api/objects/tables/**").hasRole("OBJADMIN")
+                .antMatchers(HttpMethod.DELETE ,"/object-api/api/objects/**").hasRole("SYSADMIN")
 
                 .antMatchers(HttpMethod.PUT ,"/object-api/api/objects//object-images/**").permitAll()
                 .antMatchers(HttpMethod.PUT ,"/object-api/api/objects/image/**").hasRole("OBJADMIN")
@@ -122,7 +122,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT ,"/user-api/api/users/object-admin").hasRole("SYSADMIN")
                 .antMatchers(HttpMethod.PUT ,"/user-api/api/users/customer").hasRole("CUSTOMER")
                 .antMatchers(HttpMethod.PUT ,"/user-api/api/users/customer/objects/favourite/**").hasRole("CUSTOMER")
-                .antMatchers(HttpMethod.PUT ,"/user-api/api/users/employee/waiter").hasRole("SYSADMIN")
+                .antMatchers(HttpMethod.PUT ,"/user-api/api/users/employee/waiter").hasRole("OBJADMIN")
                 .antMatchers(HttpMethod.PUT ,"/user-api/api/users/deliverer-request/approve/**").hasRole("SYSADMIN")
                 .antMatchers(HttpMethod.PUT ,"/user-api/api/users/deliverer-request/reject").hasRole("SYSADMIN")
                 .antMatchers(HttpMethod.PUT ,"/user-api/api/users/deliverers/**/activate").hasRole("SYSADMIN")

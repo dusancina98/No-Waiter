@@ -4,7 +4,7 @@ import { modalConstants } from "../../../constants/ModalConstants";
 import { orderConstants } from "../../../constants/OrderConstants";
 import { OrderContext } from "../../../contexts/OrderContext";
 import { colorConstants } from "../../../constants/ColorConstants";
-import FailureAlert from "../../FailureAlert";
+import FailureAlert from "../../messages/FailureAlert";
 import { orderService } from "../../../services/OrderService";
 
 const AcceptUnConfirmedOrderModal = ({notifyManager}) => {

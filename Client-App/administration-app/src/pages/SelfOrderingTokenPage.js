@@ -1,6 +1,6 @@
 import React from "react";
-import HeaderAndSideBarWrapper from "../components/HeaderAndSideBarWrapper";
-import SelfOrderingTokenGenerator from "../components/SelfOrderingTokenGenerator";
+import HeaderAndSideBarWrapper from "../components/page-addons/HeaderAndSideBarWrapper";
+import SelfOrderingTokenGenerator from "../components/self-ordering-token/SelfOrderingTokenGenerator";
 import ObjectContextProvider from "../contexts/ObjectContext";
 
 const SelfOrderingTokenPage = () => {

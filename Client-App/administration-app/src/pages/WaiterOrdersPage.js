@@ -2,7 +2,7 @@ import React from "react";
 import WaiterOrdersCardList from "../components/waiter-orders/WaiterOrdersCardList";
 import OrderContextProvider from "../contexts/OrderContext"
 import Notiflix from "notiflix";
-import HeaderAndSideBarWrapper from "../components/HeaderAndSideBarWrapper";
+import HeaderAndSideBarWrapper from "../components/page-addons/HeaderAndSideBarWrapper";
 import TableContextProvider from "../contexts/TableContext";
 
 const WaiterOrdersPage = () => {

@@ -3,8 +3,8 @@ import { modalConstants } from "../../constants/ModalConstants";
 import { OrderContext } from "../../contexts/OrderContext";
 import { ProductContext } from "../../contexts/ProductContext";
 import { productService } from "../../services/ProductService";
-import ProductsTabs from "../ProductsTabs";
-import SelectedProductCategoryTitle from "../SelectedProductCategoryTitle";
+import ProductsTabs from "../objectadmin-objectdetails/ProductsTabs";
+import SelectedProductCategoryTitle from "../objectadmin-objectdetails/SelectedProductCategoryTitle";
 import CreateOrderProductItem from "./CreateOrderProductItem";
 
 const CreateOrderProductList = () => {

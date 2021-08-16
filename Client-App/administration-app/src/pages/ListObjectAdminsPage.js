@@ -1,7 +1,7 @@
 import React from "react";
-import HeaderAndSideBarWrapper from "../components/HeaderAndSideBarWrapper";
+import HeaderAndSideBarWrapper from "../components/page-addons/HeaderAndSideBarWrapper";
 import ObjectAdminDetailsModal from "../components/modals/ObjectAdminDetailsModal";
-import ObjectAdminTable from "../components/ObjectAdminTable";
+import ObjectAdminTable from "../components/admin-objectadmins/ObjectAdminTable";
 import UserContextProvider from "../contexts/UserContext";
 
 const ListObjectAdminsPage = () => {

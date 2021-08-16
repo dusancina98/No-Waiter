@@ -1,5 +1,5 @@
 import React from "react";
-import UserActivateRequest from "../components/UserActivateRequest";
+import UserActivateRequest from "../components/authorizations/UserActivateRequest";
 import UserContextProvider from "../contexts/UserContext";
 
 const UserActivateRequestPage = (props) => {

@@ -4,9 +4,9 @@ import { modalConstants } from "../../constants/ModalConstants";
 import { userConstants } from "../../constants/UserConstants";
 import { UserContext } from "../../contexts/UserContext";
 import { userService } from "../../services/UserService";
-import EditObjectAdminForm from "../EditObjectAdminForm";
-import FailureAlert from "../FailureAlert";
-import SuccessAlert from "../SuccessAlert";
+import EditObjectAdminForm from "../admin-objectadmins/EditObjectAdminForm";
+import FailureAlert from "../messages/FailureAlert";
+import SuccessAlert from "../messages/SuccessAlert";
 import ObjectAdminDetailsModalButtons from "./ObjectAdminDetailsModalButtons";
 
 const ObjectAdminDetailsModal = () => {

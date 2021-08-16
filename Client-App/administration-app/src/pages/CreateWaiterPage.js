@@ -1,6 +1,6 @@
 import React from "react";
-import CreateWaiterForm from "../components/CreateWaiterForm";
-import HeaderAndSideBarWrapper from "../components/HeaderAndSideBarWrapper";
+import CreateWaiterForm from "../components/objectadmin-employees/CreateWaiterForm";
+import HeaderAndSideBarWrapper from "../components/page-addons/HeaderAndSideBarWrapper";
 import UserContextProvider from "../contexts/UserContext";
 
 const CreateWaiterPage = () => {

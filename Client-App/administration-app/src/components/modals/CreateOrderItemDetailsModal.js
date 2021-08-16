@@ -6,7 +6,7 @@ import { orderConstants } from "../../constants/OrderConstants";
 import { OrderContext } from "../../contexts/OrderContext";
 import { v4 as uuidv4 } from "uuid";
 import { capitalizeFirstLetter } from "../../helpers/string-util";
-import MultiSelectListItems from "../MultiSelectListItems";
+import MultiSelectListItems from "../objectadmin-objectdetails/MultiSelectListItems";
 
 const CreateOrderItemDetailsModal = () => {
 	const { orderState, dispatch } = useContext(OrderContext);

@@ -1,6 +1,4 @@
-import Header from "../components/Header";
-import HeaderAndSideBarWrapper from "../components/HeaderAndSideBarWrapper";
-import SideBar from "../components/SideBar";
+import HeaderAndSideBarWrapper from "../components/page-addons/HeaderAndSideBarWrapper";
 import ObjectContextProvider from "../contexts/ObjectContext";
 import OrderContextProvider from "../contexts/OrderContext";
 

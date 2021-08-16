@@ -4,7 +4,7 @@ import { modalConstants } from "../../constants/ModalConstants";
 import { productConstants } from "../../constants/ProductConstants";
 import { ProductContext } from "../../contexts/ProductContext";
 import { productService } from "../../services/ProductService";
-import FailureAlert from "../FailureAlert";
+import FailureAlert from "../messages/FailureAlert";
 
 const CreateProductCategoryModal = () => {
 	const { productState, dispatch } = useContext(ProductContext);

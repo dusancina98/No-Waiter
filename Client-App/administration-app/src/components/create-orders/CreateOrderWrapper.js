@@ -6,8 +6,8 @@ import CreateOrderTableListSelect from "./CreateOrderTableListSelect";
 import { useContext, useState } from "react";
 import { OrderContext } from "../../contexts/OrderContext";
 import CreateOrderDeliveryInfo from "./CreateOrderDeliveryInfo";
-import SuccessAlert from "../SuccessAlert";
-import FailureAlert from "../FailureAlert";
+import SuccessAlert from "../messages/SuccessAlert";
+import FailureAlert from "../messages/FailureAlert";
 import { orderConstants } from "../../constants/OrderConstants";
 
 const CreateOrderWrapper = () => {

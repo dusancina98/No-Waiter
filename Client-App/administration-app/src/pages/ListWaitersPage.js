@@ -1,7 +1,7 @@
 import React from "react";
-import HeaderAndSideBarWrapper from "../components/HeaderAndSideBarWrapper";
+import HeaderAndSideBarWrapper from "../components/page-addons/HeaderAndSideBarWrapper";
 import WaiterDetailsModal from "../components/modals/WaiterDetailsModal";
-import WaiterTable from "../components/WaiterTable";
+import WaiterTable from "../components/objectadmin-employees/WaiterTable";
 import UserContextProvider from "../contexts/UserContext";
 
 const ListWaitersPage = () => {

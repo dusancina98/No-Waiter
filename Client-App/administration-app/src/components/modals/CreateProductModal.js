@@ -3,9 +3,9 @@ import { Button, Modal } from "react-bootstrap";
 import { modalConstants } from "../../constants/ModalConstants";
 import { productConstants } from "../../constants/ProductConstants";
 import { ProductContext } from "../../contexts/ProductContext";
-import CreateProductForm from "../CreateProductForm";
-import FailureAlert from "../FailureAlert";
-import IngredientsAndSideDishForm from "../IngredientsAndSideDishForm";
+import CreateProductForm from "../objectadmin-objectdetails/CreateProductForm";
+import FailureAlert from "../messages/FailureAlert";
+import IngredientsAndSideDishForm from "../objectadmin-objectdetails/IngredientsAndSideDishForm";
 
 const CreateProductModal = () => {
 	const { productState, dispatch } = useContext(ProductContext);
