@@ -143,7 +143,6 @@ public class Api {
         }
     }
     
-    //TODO: koristi se u order servisu, getuje se post metodom
     @PostMapping("/details")
     @CrossOrigin
     public ResponseEntity<?> getObjectDetailsByObjectIds(@RequestBody List<UUID> objectIds){
@@ -154,22 +153,6 @@ public class Api {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
-    /*
-    @GetMapping("/{objectId}")
-    @CrossOrigin
-    public ResponseEntity<?> findById(@PathVariable UUID objectId) {
-
-        try {
-            return new ResponseEntity<>(objectService.findById(objectId), HttpStatus.OK);
-
-        } catch (NoSuchElementException e) {
-        	e.printStackTrace();
-            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }*/
     
     @GetMapping("/admin")
     @CrossOrigin
@@ -289,7 +272,6 @@ public class Api {
 
         try {
             return new ResponseEntity<>(objectService.findAllForAdmin(), HttpStatus.OK);
-
         } catch (Exception e) {
         	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
