@@ -64,9 +64,12 @@ const ConfirmedOrderItem = ({ order, notifyManager }) => {
                             <div className="row">
                                 <b>Placed</b>: {moment.utc(order.CreatedTimeStamp).local().startOf('seconds').fromNow()}
                             </div>
-                            <div className="row">
-                                <b>Expired</b>: {moment.utc(order.EstimatedDate).local().startOf('seconds').fromNow()}
-                            </div>
+                            {order.OrderType === "ORDER_INSIDE" || order.OrderType==="TAKEOVER" ? 
+                            <div></div>:
+                                <div className="row">
+                                    <b>Expired</b>: {moment.utc(order.EstimatedDate).local().startOf('seconds').fromNow()}
+                                </div>
+                            }
                             {order.OrderType==="DELIVERY" ? 
                             <div></div>:
                             <div className="row">

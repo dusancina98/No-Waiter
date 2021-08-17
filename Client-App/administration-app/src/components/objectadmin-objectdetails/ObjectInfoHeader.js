@@ -56,7 +56,7 @@ const ObjectInfoHeader = () => {
 				handleCloseAlert={() => dispatch({ type: objectConstants.OBJECT_IMAGE_CHANGE_REQUEST })}
 			/>
 			<div
-				className="img-fluid d-flex align-items-start flex-column"
+				className="img-fluid d-flex align-items-start flex-column mb-2"
 				style={{ backgroundImage: `linear-gradient(black 10%, transparent 60%, black 100%), url(${objectState.objectInfo.showedImage})`, minHeight: "60vh", backgroundSize: "cover" }}
 			>
 				<h1 className="sticky-top d-flex justify-content-center col-12 mt-3" style={{ letterSpacing: "1.5vh", top: "50px", color: colorConstants.COLOR_WHITE, fontFamily: "Comic Sans MS" }}>

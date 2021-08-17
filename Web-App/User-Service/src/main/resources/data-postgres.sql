@@ -18,7 +18,7 @@ insert into users (id, email, name,password,surname,active,deleted) values ('c6b
 insert into users (id, email, name,password,surname,active,deleted) values ('2478a4b8-0deb-4d14-bba7-a28cf2639633','atinaadmin@example.com','Petar','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Petrovic',true, false);
 
 -- restoran waiter
-insert into users (id, email, name,password,surname,active,deleted) values ('22793162-52d3-11eb-ae93-0242ac130222','example1@example.com','Nikola','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Djuric',true, false);
+insert into users (id, email, name,password,surname,active,deleted) values ('22793162-52d3-11eb-ae93-0242ac130222','loftwaiter@example.com','Nikola','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Djuric',true, false);
 
 -- deliveres
 insert into users (id, email, name,password,surname,active,deleted) values ('29363b4f-8fb9-4d3d-8785-d7235ecc8286','example2@example.com','Petar','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Petrovic',true, false);

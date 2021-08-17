@@ -33,6 +33,7 @@ import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.JwtParseResponseDTO;
 import no_waiter.order_service.services.contracts.dto.OrderCustomerRequestDTO;
 import no_waiter.order_service.services.contracts.dto.OrderDetailsDTO;
+import no_waiter.order_service.services.contracts.dto.OrderDetailsUpdateDTO;
 import no_waiter.order_service.services.contracts.dto.OrderItemsDTO;
 import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
 import no_waiter.order_service.services.contracts.dto.ProductValidationResponseDTO;
