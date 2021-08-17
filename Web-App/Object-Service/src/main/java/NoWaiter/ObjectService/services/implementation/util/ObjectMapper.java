@@ -44,7 +44,7 @@ public class ObjectMapper {
 	public static IdentifiableDTO<CustomerObjectDTO> MapObjectToIdentifiableCustomerObjectDTO(Object object){
         if (object == null) throw new IllegalArgumentException();
         
-        return new IdentifiableDTO<CustomerObjectDTO>(object.getId(), new CustomerObjectDTO(object.getName(),object.getAddress().getAddress(),object.getImagePath()));
+        return new IdentifiableDTO<CustomerObjectDTO>(object.getId(), new CustomerObjectDTO(object.getName(),object.getAddress().getAddress(),object.getImagePath(),0.0, false, object.getWorkTime().isWorkingNow()));
     }
 
 	

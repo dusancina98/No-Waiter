@@ -228,6 +228,8 @@ export const objectsPageStyles = StyleSheet.create({
 		borderRadius: 15,
 		borderBottomLeftRadius: 0,
 		borderBottomRightRadius: 0,
+		justifyContent: "center",
+		alignItems: "center",
 	},
 	title: {
 		flex: 1,
@@ -244,6 +246,13 @@ export const objectsPageStyles = StyleSheet.create({
 		marginTop: 5,
 		marginBottom: 5,
 	},
+	textOverPhoto:{
+		color:'white',
+		alignItems: "center",
+		textAlign: "center",
+		justifyContent: "center",
+		fontSize: 32,
+	}
 });
 
 const { width: viewportWidth } = Dimensions.get("window");
