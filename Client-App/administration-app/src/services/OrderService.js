@@ -296,7 +296,7 @@ async function getOrderDetails(id,dispatch){
 }
 
 function updateOrder(order,notifyManager,dispatch){
-	Axios.put(`/order-api/api/orders/`, order, { validateStatus: () => true, headers: authHeader() })
+	Axios.put(`/order-api/api/orders`, order, { validateStatus: () => true, headers: authHeader() })
 		.then((res) => {
 			if (res.status === 200) {
 				console.log(order)
