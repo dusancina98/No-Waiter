@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.http.HttpHeaders;
-
-
 import feign.FeignException;
 import javassist.NotFoundException;
 import no_waiter.order_service.intercomm.AuthClient;
@@ -33,7 +31,6 @@ import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.JwtParseResponseDTO;
 import no_waiter.order_service.services.contracts.dto.OrderCustomerRequestDTO;
 import no_waiter.order_service.services.contracts.dto.OrderDetailsDTO;
-import no_waiter.order_service.services.contracts.dto.OrderDetailsUpdateDTO;
 import no_waiter.order_service.services.contracts.dto.OrderItemsDTO;
 import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
 import no_waiter.order_service.services.contracts.dto.ProductValidationResponseDTO;
