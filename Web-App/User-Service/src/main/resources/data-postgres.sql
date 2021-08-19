@@ -68,7 +68,10 @@ insert into waiter (id, object_id, address, phone_number) values ('fa276cbf-8d39
 insert into waiter (id, object_id, address, phone_number) values ('977afa11-964c-4eb3-a05e-5ed7d41db419', '15bf954b-c7ab-484e-9dfb-3431b9502a81', 'Novi Sad' , '064334233');
 
 -- customers
-insert into customer (id, phone_number,penalties) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0cc1', '065324235', 0);
+insert into customer (id, phone_number,penalties) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0cc1', '064345434', 0);
+insert into customer (id, phone_number,penalties) values ('57de48e1-3426-4937-8919-575efa425814', '065324235', 0);
+insert into customer (id, phone_number,penalties) values ('145ec912-797d-42ea-b130-82c1d0f7987e', '062343223', 0);
+
 -- customer addresses
 insert into address (id, name) values ('123ebff1-a0a6-4c1d-b93f-23c5225c0cc1', 'Novosadskog sajma 2');
 insert into customer_addresses (customer_id, addresses_id) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0cc1', '123ebff1-a0a6-4c1d-b93f-23c5225c0cc1');
