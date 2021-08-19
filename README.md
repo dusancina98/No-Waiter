@@ -133,23 +133,23 @@ email: customer3@example.com
 <details>
   <summary>See customer application</summary>
   <p float="left">
-  <img src="https://user-images.githubusercontent.com/57506510/130152873-6d9c78fe-58ce-40aa-a8ff-0f559e0c79ea.jpg" name="frontend" width="100">
-  <img src="https://user-images.githubusercontent.com/57506510/130152873-6d9c78fe-58ce-40aa-a8ff-0f559e0c79ea.jpg" name="frontend"  width="100">
+  <img src="https://user-images.githubusercontent.com/57506510/130152873-6d9c78fe-58ce-40aa-a8ff-0f559e0c79ea.jpg" name="frontend" width="500">
+  <img src="https://user-images.githubusercontent.com/57506510/130152878-7bf773cf-d1e7-4a71-9b03-b81d5b16d224.jpg" name="frontend"  width="500">
 </p>
 <p float="left">
-<img src="https://user-images.githubusercontent.com/57506510/130152881-34d933a3-9975-443d-91b1-07aed031f1ce.jpg" name="frontend"  width="100">
-<img src="https://user-images.githubusercontent.com/57506510/130152886-6414d5e4-828d-4c18-aca2-3aa298c970be.jpg" name="frontend" width="100">
+<img src="https://user-images.githubusercontent.com/57506510/130152881-34d933a3-9975-443d-91b1-07aed031f1ce.jpg" name="frontend"  width="500">
+<img src="https://user-images.githubusercontent.com/57506510/130152886-6414d5e4-828d-4c18-aca2-3aa298c970be.jpg" name="frontend" width="500">
 </p>
 <p float="left">
-<img src="https://user-images.githubusercontent.com/57506510/130152887-7e90a8cc-411e-4d70-a702-b571db7f3489.jpg" name="frontend" width="100">
-<img src="https://user-images.githubusercontent.com/57506510/130152890-41aa2708-e177-4706-8d01-a13db594ef21.jpg" name="frontend" width="100">
+<img src="https://user-images.githubusercontent.com/57506510/130152887-7e90a8cc-411e-4d70-a702-b571db7f3489.jpg" name="frontend" width="500">
+<img src="https://user-images.githubusercontent.com/57506510/130152890-41aa2708-e177-4706-8d01-a13db594ef21.jpg" name="frontend" width="500">
 </p>
 <p float="left">
-<img src="https://user-images.githubusercontent.com/57506510/130152891-686af51e-147a-4bb8-acf1-d80bdde5cc1d.jpg" name="frontend" width="100">
+<img src="https://user-images.githubusercontent.com/57506510/130152891-686af51e-147a-4bb8-acf1-d80bdde5cc1d.jpg" name="frontend" width="500">
 </p>
 </details>
 
 <details>
   <summary>See deliverer application</summary>
-  <img src="https://user-images.githubusercontent.com/57506510/130152941-95866e95-869a-4dc2-99b2-107125eb3db6.jpg" name="frontend"  width="100">
+  <img src="https://user-images.githubusercontent.com/57506510/130152941-95866e95-869a-4dc2-99b2-107125eb3db6.jpg" name="frontend"  width="500">
 </details>
