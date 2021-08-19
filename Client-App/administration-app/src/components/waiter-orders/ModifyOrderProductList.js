@@ -4,8 +4,8 @@ import { ProductContext } from "../../contexts/ProductContext";
 import { OrderContext } from "../../contexts/OrderContext";
 import { productService } from "../../services/ProductService";
 import CreateOrderProductItem from "../create-orders/CreateOrderProductItem";
-import ProductsTabs from "../ProductsTabs";
-import SelectedProductCategoryTitle from "../SelectedProductCategoryTitle";
+import ProductsTabs from "../objectadmin-objectdetails/ProductsTabs";
+import SelectedProductCategoryTitle from "../objectadmin-objectdetails/SelectedProductCategoryTitle";
 import { orderConstants } from "../../constants/OrderConstants";
 
 const ModifyOrderProductList = ({handleClickBack}) => {

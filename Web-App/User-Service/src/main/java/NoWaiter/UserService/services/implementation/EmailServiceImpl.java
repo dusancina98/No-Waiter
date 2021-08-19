@@ -29,11 +29,8 @@ public class EmailServiceImpl {
 	
 	@Async
 	public void sendActivationLinkAsync(User user, String token)
-			throws MailException, InterruptedException, MessagingException {
-		System.out.println("Slanje emaila...");
-		
+			throws MailException, InterruptedException, MessagingException {		
 		String url = LOCAL_URL + "/api/users/activate-user/token=" + token;
-		System.out.println(url);
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 		String htmlMsg = "<p>Hello " + user.getName() + ",</p>" +
@@ -44,13 +41,10 @@ public class EmailServiceImpl {
 		helper.setSubject("Activate account");
 		helper.setFrom(env.getProperty("spring.mail.username"));
 		javaMailSender.send(mimeMessage);
-		System.out.println("Email poslat!");
 	}
 	
 	@Async
 	public void sendResetPasswordLinkAsync(User user, String token) throws MessagingException {
-		System.out.println("Slanje emaila...");
-		System.out.println("USAO OVDE54543");
 		String url = CLIENT_APP_URL + "#/reset-password/" + user.getId() +"/"+ token;
 		
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -63,13 +57,9 @@ public class EmailServiceImpl {
 		helper.setSubject("Reset password");
 		helper.setFrom(env.getProperty("spring.mail.username"));
 		javaMailSender.send(mimeMessage);
-		System.out.println("Email poslat!");
-
 	}
 
-	public void sendDelivererActivationLinkAsync(Deliverer deliverer, String token) throws MessagingException {
-		System.out.println("Slanje emaila...");
-		
+	public void sendDelivererActivationLinkAsync(Deliverer deliverer, String token) throws MessagingException {		
 		String url = CLIENT_APP_URL + "#/reset-password/" + deliverer.getId() +"/"+ token;
 		
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -82,13 +72,9 @@ public class EmailServiceImpl {
 		helper.setSubject("Activate account");
 		helper.setFrom(env.getProperty("spring.mail.username"));
 		javaMailSender.send(mimeMessage);
-		System.out.println("Email poslat!");
 	}
 
-	public void sendDelivererRejectReasonEmailAsync(DelivererRequest delivererRequest, String reason) throws MessagingException {
-		System.out.println("Slanje emaila...");
-		
-		
+	public void sendDelivererRejectReasonEmailAsync(DelivererRequest delivererRequest, String reason) throws MessagingException {	
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 		String htmlMsg = "<p>Hello " + delivererRequest.getName() + ",</p>" +
@@ -100,13 +86,9 @@ public class EmailServiceImpl {
 		helper.setSubject("Rejected deliverer request");
 		helper.setFrom(env.getProperty("spring.mail.username"));
 		javaMailSender.send(mimeMessage);
-		System.out.println("Email poslat!");
 	}
 
 	public void sendDelivererAcceptedRequestEmailAsync(DelivererRequest delivererRequest) throws MessagingException {
-		System.out.println("Slanje emaila...");
-		
-
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 		String htmlMsg = "<p>Hello " + delivererRequest.getName() + ",</p>" +
@@ -118,7 +100,5 @@ public class EmailServiceImpl {
 		helper.setSubject("Accepted deliverer request");
 		helper.setFrom(env.getProperty("spring.mail.username"));
 		javaMailSender.send(mimeMessage);
-		System.out.println("Email poslat!");
 	}
-
 }

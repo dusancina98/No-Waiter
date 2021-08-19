@@ -5,10 +5,10 @@ import { objectConstants } from "../../constants/ObjectConstants";
 import { ObjectContext } from "../../contexts/ObjectContext";
 import { hasRoles } from "../../helpers/auth-header";
 import { objectService } from "../../services/ObjectService";
-import EditObjectForm from "../EditObjectForm";
-import EditWorkTimeForm from "../EditWorkTimeForm";
-import FailureAlert from "../FailureAlert";
-import SuccessAlert from "../SuccessAlert";
+import EditObjectForm from "../admin-objects/EditObjectForm";
+import EditWorkTimeForm from "../objectadmin-objectdetails/EditWorkTimeForm";
+import FailureAlert from "../messages/FailureAlert";
+import SuccessAlert from "../messages/SuccessAlert";
 import ObjectDetailsModalButtons from "./ObjectDetailsModalButtons";
 import ObjectDetailsModalTitle from "./ObjectDetailsModalTitle";
 

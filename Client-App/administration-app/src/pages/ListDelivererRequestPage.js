@@ -1,6 +1,6 @@
 import React from "react";
-import DelivererRequestTable from "../components/DelivererRequestTable";
-import HeaderAndSideBarWrapper from "../components/HeaderAndSideBarWrapper";
+import DelivererRequestTable from "../components/admin-deliverers/DelivererRequestTable";
+import HeaderAndSideBarWrapper from "../components/page-addons/HeaderAndSideBarWrapper";
 import UserContextProvider from "../contexts/UserContext";
 
 const ListDelivererRequestPage = () => {

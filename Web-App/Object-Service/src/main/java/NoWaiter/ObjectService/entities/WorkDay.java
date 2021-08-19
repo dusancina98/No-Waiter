@@ -19,7 +19,6 @@ public class WorkDay {
 	
 	public WorkDay() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public WorkDay(WeekDay weekDay, boolean working, LocalTime timeFrom, LocalTime timeTo) throws InvalidTimeRangeException {

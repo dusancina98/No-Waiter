@@ -34,7 +34,7 @@ function createOrder(orderDTO, dispatch) {
 function downloadReport(orderId, dispatch) {
 	const FileDownload = require("js-file-download");
 
-	Axios.get(`/order-api/api/orders/pdf/` + orderId, { validateStatus: () => true, headers: authHeader() ,responseType: "blob"   })
+	Axios.get(`/order-api/api/orders/self-ordering-report/` + orderId, { validateStatus: () => true, headers: authHeader() ,responseType: "blob"   })
 		.then((response) => {
 			FileDownload(response.data, "report.pdf")
 		})		

@@ -3,7 +3,7 @@ import { colorConstants } from '../../../constants/ColorConstants';
 import { OrderContext } from '../../../contexts/OrderContext';
 import { capitalizeFirstLetter } from "../../../helpers/string-util";
 import { v4 as uuidv4 } from "uuid";
-import MultiSelectListItems from "../../MultiSelectListItems";
+import MultiSelectListItems from "../../objectadmin-objectdetails/MultiSelectListItems";
 import { orderConstants } from '../../../constants/OrderConstants';
 
 const AddProductItemDetailsModelView = ({enableSaveButton}) => {

@@ -28,4 +28,6 @@ public interface DelivererService {
 	void deactivateDeliverer(UUID id);
 
 	void deleteDeliverer(UUID delivererId);
+
+	String getDelivererNameAndSurname(UUID delivererId);
 }

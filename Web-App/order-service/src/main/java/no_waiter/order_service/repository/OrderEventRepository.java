@@ -18,17 +18,6 @@ public interface OrderEventRepository extends PagingAndSortingRepository<OrderEv
 	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.order.id = ?1")
 	List<OrderEvent> getOrderEventsByOrderId(UUID orderId);
 	
-	//Latest status
-	//@Query("SELECT oee FROM OrderEvent oee WHERE oee.order.id = oe.order.id and oe.createdTime = (SELECT max(oeee.createdTime) FROM OrderEvent oeee WHERE oeee.order.id = oee.order.id)")
-
-	// ID: 1 TIME: 1000 STATUS: UNC
-	// ID: 1 TIME: 1001 STATUS: CON
-	// ID: 2 TIME: 1002 STATUS: UNC
-	// ID: 2 TIME: 1003 STATUS: CON
-	
-	
-	//
-	
 	@Query(value = "SELECT oee FROM OrderEvent oee WHERE oee.order.id = ?1 AND oee.orderStatus = ?2")
 	OrderEvent getOrderEventByStatusAndOrderId(UUID orderId, OrderStatus orderStatus);
 	
@@ -62,10 +51,6 @@ public interface OrderEventRepository extends PagingAndSortingRepository<OrderEv
 	@Query(value = "SELECT distinct(oee.objectId) FROM OrderEvent oee WHERE " + 
 			" oee.createdTime = (SELECT MAX(oeee.createdTime) FROM OrderEvent oeee WHERE oeee.order.id = oee.order.id) AND oee.orderStatus IN (?1) AND oee.order.orderType = 'DELIVERY' AND oee.delivererId = ?2")
 	List<UUID> getDistinctObjectIdsForOrderDeliveryByDeliverer(List<OrderStatus> orderStatus, UUID delivererId);
-	
-
-
-	
 	
 	@Query(value = "SELECT oe FROM OrderEvent oe WHERE oe.order.id = ?1 and (oe.orderStatus = 'DELIVERING' or oe.orderStatus = 'CONFIRMED_DELIVERY')"
 				+ " and oe.delivererId = ?2 and oe.order.orderType = 'DELIVERY'"

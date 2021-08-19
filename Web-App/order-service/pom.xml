@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>no-waiter</groupId>
-	<artifactId>order-service</artifactId>
+	<artifactId>Order-Service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>order-service</name>
+	<name>Order-Service</name>
 	<description>No Waiter order service</description>
 	<properties>
 		<java.version>11</java.version>

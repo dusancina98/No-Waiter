@@ -5,7 +5,7 @@ import { UserContext } from "../../contexts/UserContext";
 import DelivererRequestDetailsModalButtons from "./DelivererRequestDetailsModalButtons";
 import { userService } from "../../services/UserService";
 import { userConstants } from "../../constants/UserConstants";
-import FailureAlert from "../FailureAlert";
+import FailureAlert from "../messages/FailureAlert";
 
 const DelivererRequestDetailsModal = () => {
 	const { userState, dispatch } = useContext(UserContext);

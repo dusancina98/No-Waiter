@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { FlatList, StatusBar, View, Text, Image, SafeAreaView, TouchableOpacity } from "react-native";
+import { FlatList, StatusBar, View, Text, Image, SafeAreaView, TouchableOpacity, ImageBackground } from "react-native";
 import { ObjectContext } from "../contexts/ObjectContext";
 import { objectService } from "../services/ObjectService";
 import { objectsPageStyles } from "../styles/styles";
@@ -43,7 +43,13 @@ function HomeScreen({ navigation }) {
 				renderItem={({ item }) => (
 					<TouchableOpacity underlayColor="rgba(73,182,77,0.9)" onPress={() => handleEnterObject(item.Id)}>
 						<View style={objectsPageStyles.container}>
-							<Image style={objectsPageStyles.photo} source={{ uri: `${API_URL}${item.EntityDTO.ImagePath.substring(1, item.EntityDTO.ImagePath.length)}` }} />
+							<ImageBackground style={objectsPageStyles.photo} source={{ uri: `${API_URL}${item.EntityDTO.ImagePath.substring(1, item.EntityDTO.ImagePath.length)}` }}>
+								{item.EntityDTO.Opened === true ? 
+								<Text></Text>
+								:
+								<Text style={objectsPageStyles.textOverPhoto}>CLOSED</Text>
+								}
+							</ImageBackground>
 							<Text style={objectsPageStyles.title}>{item.EntityDTO.Name}</Text>
 							<Text style={objectsPageStyles.category}>{item.EntityDTO.Address}</Text>
 						</View>

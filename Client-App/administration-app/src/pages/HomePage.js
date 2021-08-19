@@ -1,5 +1,5 @@
 import React from "react";
-import HeaderAndSideBarWrapper from "../components/HeaderAndSideBarWrapper";
+import HeaderAndSideBarWrapper from "../components/page-addons/HeaderAndSideBarWrapper";
 
 const HomePage = () => {
 

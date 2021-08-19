@@ -15,4 +15,5 @@ public interface FeedbackService {
 	
 	Iterable<ObjectFeedbackDTO> findObjectFeedbacks(List<UUID> objectIds);
 
+	Double getFeedbackGradeForDeliverer(UUID delivererId);
 }

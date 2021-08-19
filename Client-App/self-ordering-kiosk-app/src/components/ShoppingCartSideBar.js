@@ -57,7 +57,7 @@ const ShoppingCartSideBar = () => {
 							</span>
 				</div>
 						<div className=" d-flex justify-content-end display-4 mt-3 mr-2">
-							<button onClick={() => handleClickOnFinishOrder()} type="button" style={{'backgroundColor':'rgb(17, 89, 134)'}} className="btn btn-primary btn-lg">Finish order</button>
+							<button onClick={() => handleClickOnFinishOrder()} type="button" disabled={orderState.createOrder.orderItems.length===0} style={{'backgroundColor':'rgb(17, 89, 134)'}} className="btn btn-primary btn-lg" >Finish order</button>
 						</div>
 							</div>
 							:

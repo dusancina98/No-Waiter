@@ -33,6 +33,7 @@ import no_waiter.order_service.services.contracts.dto.AcceptOrderDTO;
 import no_waiter.order_service.services.contracts.dto.JwtParseResponseDTO;
 import no_waiter.order_service.services.contracts.dto.OrderCustomerRequestDTO;
 import no_waiter.order_service.services.contracts.dto.OrderDetailsDTO;
+import no_waiter.order_service.services.contracts.dto.OrderDetailsUpdateDTO;
 import no_waiter.order_service.services.contracts.dto.OrderItemsDTO;
 import no_waiter.order_service.services.contracts.dto.OrderRequestDTO;
 import no_waiter.order_service.services.contracts.dto.ProductValidationResponseDTO;
@@ -59,15 +60,14 @@ public class Api {
 	
 	@PostMapping
 	@CrossOrigin
-	public ResponseEntity<?> createProductCategory(@RequestHeader("Authorization") String token, @RequestBody OrderRequestDTO requestDTO) {
+	public ResponseEntity<?> createOrder(@RequestHeader("Authorization") String token, @RequestBody OrderRequestDTO requestDTO) {
 		try {
 			ProductValidationResponseDTO resp = productClient.validateOrderItems(new OrderItemsDTO(requestDTO.Items));
 			
 			if(resp.Products.size() != requestDTO.Items.size()) {
-				System.out.println(resp.Products.size());
-				System.out.println("LALA"  + requestDTO.Items.size());
                 return new ResponseEntity<>("Invalid order items", HttpStatus.BAD_REQUEST);
 			}
+			
 			JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
 			UUID objectId;
 			if(hasRole(jwtResponse.getAuthorities(), "ROLE_SELF_ORDER_PULT")) {
@@ -77,7 +77,6 @@ public class Api {
 				objectId = userClient.findObjectIdByWaiterId(jwtResponse.getId());
 				return new ResponseEntity<>(orderService.createOrder(requestDTO, resp, objectId), HttpStatus.CREATED);
 			}
-			
 		} catch (FeignException e) {
         	if(e.status() == HttpStatus.NOT_FOUND.value())
                 return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);
@@ -124,7 +123,6 @@ public class Api {
 	@GetMapping("/customer/history")
     @CrossOrigin
     public ResponseEntity<?> getCustomerOrderHistory(@RequestHeader("Authorization") String token) {
-
     	try {
     		JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
 
@@ -138,7 +136,6 @@ public class Api {
 	@GetMapping("/customer/pending")
     @CrossOrigin
     public ResponseEntity<?> getCustomerPendingOrders(@RequestHeader("Authorization") String token) {
-
     	try {
     		JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
 
@@ -149,7 +146,7 @@ public class Api {
         }
     }
 	
-	@GetMapping("/pdf/{orderId}")
+	@GetMapping("/self-ordering-report/{orderId}")
 	public ResponseEntity<byte[]> getOrderReportPDF(@PathVariable String orderId) throws Exception {
 		try {
 			byte[] contents= orderService.generateReportPDF(orderId);
@@ -181,11 +178,9 @@ public class Api {
 	@PutMapping("/{orderId}/reject")
     @CrossOrigin
     public ResponseEntity<?> rejectOrder(@PathVariable String orderId) {
-
         try {
         	orderService.rejectOrder(UUID.fromString(orderId));
             return new ResponseEntity<>(HttpStatus.OK);
-
         } catch (NoSuchElementException e) {
         	e.printStackTrace();
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
@@ -198,9 +193,7 @@ public class Api {
 	@PutMapping("/accept")
     @CrossOrigin
     public ResponseEntity<?> acceptOrder(@RequestHeader("Authorization") String token,@RequestBody AcceptOrderDTO acceptOrderDTO) {
-
         try {		
-        	
         	orderService.acceptOrder(acceptOrderDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (NoSuchElementException e) {
@@ -215,7 +208,6 @@ public class Api {
 	@PutMapping("/accept/deliverer")
     @CrossOrigin
     public ResponseEntity<?> acceptOrderDeliverer(@RequestHeader("Authorization") String token, @RequestBody AcceptOrderDTO acceptOrderDTO) {
-
         try {		
         	JwtParseResponseDTO jwtResponse = authClient.getLoggedUserInfo(token);
         	orderService.acceptOrderDeliverer(acceptOrderDTO, jwtResponse.getId());
@@ -282,10 +274,9 @@ public class Api {
     @CrossOrigin
     public ResponseEntity<?> setOrderToReady(@PathVariable String orderId) {
         try {
-			
         	orderService.setOrderToReady(UUID.fromString(orderId));
-            return new ResponseEntity<>(HttpStatus.OK);
-
+            
+        	return new ResponseEntity<>(HttpStatus.OK);
         } catch (NoSuchElementException e) {
         	e.printStackTrace();
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
@@ -454,9 +445,7 @@ public class Api {
 	@PutMapping
     @CrossOrigin
     public ResponseEntity<?> updateOrder(@RequestHeader("Authorization") String token,@RequestBody OrderDetailsDTO orderDetailsDTO) {
-
         try {		
-
         	orderService.updateOrder(orderDetailsDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (NoSuchElementException e) {

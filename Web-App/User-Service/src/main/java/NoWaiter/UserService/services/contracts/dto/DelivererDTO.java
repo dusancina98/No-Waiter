@@ -13,16 +13,19 @@ public class DelivererDTO {
     
     public DelivererStatus DelivererStatus;
     
+    public Double Grade;
+    
 	public DelivererDTO() {
 		super();
 	}
 
-	public DelivererDTO(String email, String name, String surname, String phoneNumber, DelivererStatus delivererStatus) {
+	public DelivererDTO(String email, String name, String surname, String phoneNumber, DelivererStatus delivererStatus, double grade) {
 		super();
 		Email = email;
 		Name = name;
 		Surname = surname;
 		PhoneNumber = phoneNumber;
 		DelivererStatus = delivererStatus;
+		Grade = grade;
 	}
 }

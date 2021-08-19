@@ -13,11 +13,13 @@ import { OrderContext } from "../contexts/OrderContext";
 import ShoppingCartPreview from "../components/ShoppingCartPreview";
 import { DefaultTheme } from "@react-navigation/native";
 import { orderConstants } from "../constants/OrderConstants";
+import { useToast } from "react-native-toast-notifications";
 
 function ObjectScreen({ route, navigation }) {
 	const { objectState, dispatch } = useContext(ObjectContext);
 	const prdCtx = useContext(ProductContext);
 	const orderCtx = useContext(OrderContext);
+	const toast = useToast();
 
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [isFetching, setIsFetching] = useState(false);
@@ -70,7 +72,13 @@ function ObjectScreen({ route, navigation }) {
 	);
 
 	const handlePressProduct = (item) => {
-		navigation.navigate("Product Details", item);
+		if(objectState.objectDetails.object.EntityDTO.Opened){
+			navigation.navigate("Product Details", item);
+		}else{
+			toast.show("Not possible to create an order in closed object", {
+				type:"failure",
+			});
+		}
 	};
 
 	const renderProduct = ({ item }) => (

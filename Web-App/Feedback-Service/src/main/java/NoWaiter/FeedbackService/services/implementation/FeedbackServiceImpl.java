@@ -42,4 +42,15 @@ public class FeedbackServiceImpl implements FeedbackService{
 		return feedbackRepository.findObjectFeedbacks(objectIds);
 	}
 
+	@Override
+	public Double getFeedbackGradeForDeliverer(UUID delivererId) {
+		Double grade = feedbackRepository.findEntityAvgGrade(delivererId);
+		
+		if(grade== null) {
+			return 0.0;
+		}else {
+			return grade;
+		}
+	}
+
 }

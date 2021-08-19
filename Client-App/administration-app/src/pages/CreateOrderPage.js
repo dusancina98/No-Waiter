@@ -1,6 +1,6 @@
 import React from "react";
 import CreateOrderWrapper from "../components/create-orders/CreateOrderWrapper";
-import HeaderAndSideBarWrapper from "../components/HeaderAndSideBarWrapper";
+import HeaderAndSideBarWrapper from "../components/page-addons/HeaderAndSideBarWrapper";
 import ObjectContextProvider from "../contexts/ObjectContext";
 import OrderContextProvider from "../contexts/OrderContext";
 import ProductContextProvider from "../contexts/ProductContext";

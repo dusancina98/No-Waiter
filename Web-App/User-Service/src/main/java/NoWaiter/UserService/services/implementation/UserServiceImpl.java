@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.MailException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -118,10 +119,8 @@ public class UserServiceImpl implements UserService {
 		try {
 			emailService.sendActivationLinkAsync(user, accountActivation.getToken());
 		} catch (MailException | InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -199,7 +198,6 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void updateObjectAdmin(IdentifiableDTO<UpdateObjectAdminRequestDTO> entity) throws ClassFieldValidationException {
-		
 		ObjectAdmin objectAdmin = objectAdminRepository.findById(entity.Id).get();
 		objectAdmin.setAddress(entity.EntityDTO.Address);
 		objectAdmin.setName(entity.EntityDTO.Name);
@@ -212,7 +210,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public void updateObjects(UserClientObjectDTO entity) {
-		
 		ArrayList<ObjectAdmin> objectAdmins = (ArrayList<ObjectAdmin>) objectAdminRepository.findByObjectId(entity.Id);
 		for (ObjectAdmin objectAdmin : objectAdmins) {
 			objectAdmin.setObjectName(entity.Name);
@@ -234,10 +231,8 @@ public class UserServiceImpl implements UserService {
 		try {
 			emailService.sendResetPasswordLinkAsync(user, newResetPasswordToken.getToken());
 		} catch (MailException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -412,5 +407,13 @@ public class UserServiceImpl implements UserService {
 		Customer customer = customerRepository.findById(customerId).get();
 		customer.incrementPenalties();
 		customerRepository.save(customer);
+	}
+	
+	@Scheduled(cron="0 0 0 1 1/1 *") //1st day every month @ 00:00
+	private void deleteCustomerPenalties() {		
+		for(Customer customer : customerRepository.getCustomersForDeletingPenalties()) {
+			customer.deletePenalties();
+			customerRepository.save(customer);
+		}
 	}
 }

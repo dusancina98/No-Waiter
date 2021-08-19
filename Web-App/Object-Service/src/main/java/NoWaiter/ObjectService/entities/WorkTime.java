@@ -2,6 +2,8 @@ package NoWaiter.ObjectService.entities;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -24,8 +26,8 @@ public class WorkTime {
     @CollectionTable(name="WorkDays", joinColumns= @JoinColumn(name = "worktime_id", referencedColumnName = "id"))
     private Map<WeekDay, WorkDay> workDays;
 	
-	public WorkTime(){
-		super();
+	public WorkTime() throws InvalidTimeRangeException{
+		this(UUID.randomUUID(), generateDefaultWorkTime());
 	}
 
 	public WorkTime(UUID id, Map<WeekDay, WorkDay> workDays) {
@@ -41,18 +43,6 @@ public class WorkTime {
 	public Map<WeekDay, WorkDay> getWorkDays() {
 		return workDays;
 	}
-	
-	/*private Map<WeekDay, WorkDay> generateDefaultWorkDays() throws InvalidTimeRangeException {
-		Map<WeekDay, WorkDay> retVal = new HashMap<WeekDay,WorkDay>();
-		retVal.put(WeekDay.MONDAY, new WorkDay(WeekDay.MONDAY, false, LocalTime.of(9, 00), LocalTime.of(17, 00)));
-		retVal.put(WeekDay.MONDAY, new WorkDay(WeekDay.TUESDAY, false, LocalTime.of(9, 00), LocalTime.of(17, 00)));
-		retVal.put(WeekDay.MONDAY, new WorkDay(WeekDay.WEDNESDAY, false, LocalTime.of(9, 00), LocalTime.of(17, 00)));
-		retVal.put(WeekDay.MONDAY, new WorkDay(WeekDay.THURSDAY, false, LocalTime.of(9, 00), LocalTime.of(17, 00)));
-		retVal.put(WeekDay.MONDAY, new WorkDay(WeekDay.FRIDAY, false, LocalTime.of(9, 00), LocalTime.of(17, 00)));
-		retVal.put(WeekDay.MONDAY, new WorkDay(WeekDay.SATURDAY, false, LocalTime.of(9, 00), LocalTime.of(17, 00)));
-		retVal.put(WeekDay.MONDAY, new WorkDay(WeekDay.SUNDAY, false, LocalTime.of(9, 00), LocalTime.of(17, 00)));
-		return retVal;
-	}*/
 
 	public UUID getId() {
 		return id;
@@ -63,7 +53,6 @@ public class WorkTime {
 	}
 
 	public void Update(Map<WeekDay, WorkDayDTO> workDaysForUpdate) {
-		// TODO Auto-generated method stub
 		for (Entry<WeekDay, WorkDayDTO> entry : workDaysForUpdate.entrySet()) {
 			WorkDay workDayForUpdate = workDays.get(entry.getKey());
 			workDayForUpdate.setWorking(entry.getValue().Working);
@@ -79,5 +68,17 @@ public class WorkTime {
 		WorkDay workDay = workDays.get(WeekDay.valueOf(dayOfWeek.toString().toUpperCase()));
 		
 		return workDay.isWorkingNow();
+	}
+	
+	private static Map<WeekDay, WorkDay> generateDefaultWorkTime() throws InvalidTimeRangeException {
+		Map<WeekDay, WorkDay> retVal = new HashMap<WeekDay,WorkDay>();
+		retVal.put(WeekDay.MONDAY, new WorkDay(WeekDay.MONDAY, false, LocalTime.of(9, 00), LocalTime.of(17, 00)));
+		retVal.put(WeekDay.TUESDAY, new WorkDay(WeekDay.TUESDAY, false, LocalTime.of(9, 00), LocalTime.of(17, 00)));
+		retVal.put(WeekDay.WEDNESDAY, new WorkDay(WeekDay.WEDNESDAY, false, LocalTime.of(9, 00), LocalTime.of(17, 00)));
+		retVal.put(WeekDay.THURSDAY, new WorkDay(WeekDay.THURSDAY, false, LocalTime.of(9, 00), LocalTime.of(17, 00)));
+		retVal.put(WeekDay.FRIDAY, new WorkDay(WeekDay.FRIDAY, false, LocalTime.of(9, 00), LocalTime.of(17, 00)));
+		retVal.put(WeekDay.SATURDAY, new WorkDay(WeekDay.SATURDAY, false, LocalTime.of(9, 00), LocalTime.of(17, 00)));
+		retVal.put(WeekDay.SUNDAY, new WorkDay(WeekDay.SUNDAY, false, LocalTime.of(9, 00), LocalTime.of(17, 00)));
+		return retVal;
 	}
 }

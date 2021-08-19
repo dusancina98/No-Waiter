@@ -1,5 +1,5 @@
 import React from 'react';
-import FirstActivationPasswordChangeForm from '../components/FirstActivationPasswordChangeForm';
+import FirstActivationPasswordChangeForm from '../components/authorizations/FirstActivationPasswordChangeForm';
 import UserContextProvider from "../contexts/UserContext";
 
 const FirstActivationPasswordChangePage = (props) => {

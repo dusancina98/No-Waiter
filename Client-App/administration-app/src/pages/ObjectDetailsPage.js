@@ -1,11 +1,11 @@
 import React from "react";
-import HeaderAndSideBarWrapper from "../components/HeaderAndSideBarWrapper";
+import HeaderAndSideBarWrapper from "../components/page-addons/HeaderAndSideBarWrapper";
 import CreateProductCategoryModal from "../components/modals/CreateProductCategoryModal";
 import CreateProductModal from "../components/modals/CreateProductModal";
 import EditProductModal from "../components/modals/EditProductModal";
 import ObjectDetailsModal from "../components/modals/ObjectDetailsModal";
-import ObjectInfoHeader from "../components/ObjectInfoHeader";
-import ProductMenu from "../components/ProductMenu";
+import ObjectInfoHeader from "../components/objectadmin-objectdetails/ObjectInfoHeader";
+import ProductMenu from "../components/objectadmin-objectdetails/ProductMenu";
 import ObjectContextProvider from "../contexts/ObjectContext";
 import ProductContextProvider from "../contexts/ProductContext";
 

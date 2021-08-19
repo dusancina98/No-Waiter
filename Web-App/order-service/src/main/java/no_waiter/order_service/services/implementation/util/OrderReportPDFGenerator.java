@@ -128,9 +128,12 @@ public class OrderReportPDFGenerator {
         preface.add(new Paragraph(
                 "Order created: "  + new Date().toLocaleString(),
                 normalnBold));
-        preface.add(new Paragraph(
-                "Address: "  + orderAddress,
-                normalnBold));
+        if(orderAddress != null) {
+        	preface.add(new Paragraph(
+                    "Address: "  + orderAddress,
+                    normalnBold));
+        }
+
         addEmptyLine(preface, 1);
         
         document.add(preface);

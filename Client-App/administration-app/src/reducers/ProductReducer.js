@@ -405,6 +405,12 @@ export const productReducer = (state, action) => {
 						SideDishes: [],
 					},
 				},
+				selectedCategory: {
+					Id: "",
+					EntityDTO: {
+						Name: "",
+					},
+				},
 				showSuccessMessage: true,
 				successMessage: action.successMessage,
 				products: arrProd,
