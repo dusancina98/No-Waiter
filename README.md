@@ -64,6 +64,9 @@ This commands starts 8 back-end microservices and 2 React JS applications (Admin
 
 #### `docker-compose up`
 
+Before you start React Native applications, edit `docker-compose-mobile.yml`. 
+Replace `REACT_NATIVE_PACKAGER_HOSTNAME: 192.168.1.11` in line 11 and 23 with your local ip address.
+
 This commands starts 2 React Native (Expo) applications (Deliverer app and Ordering app)
 
 #### `docker-compose -f docker-compose-mobile.yml up`
