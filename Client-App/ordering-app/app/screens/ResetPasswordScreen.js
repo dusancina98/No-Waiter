@@ -37,7 +37,6 @@ function ResetPasswordScreen({ navigation }) {
 						</Text>
 					)}
 
-					{authState.resetPassword.showError && <Text style={loginStyles.errorMessage}>{authState.resetPassword.errorMessage}</Text>}
 					{!authState.resetPassword.showSuccessMessage && (
 						<TouchableOpacity style={loginStyles.loginButton} activeOpacity={0.5} onPress={handleResetPassword}>
 							<Text style={welcomeStyles.loginText}> Send reset email </Text>

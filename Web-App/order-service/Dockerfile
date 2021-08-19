@@ -6,8 +6,8 @@ RUN ["mvn", "package", "-DskipTests"]
 
 FROM openjdk:8-jdk-alpine
 WORKDIR /app
-COPY --from=appServer /usr/src/order-service/target/order-service-0.0.1-SNAPSHOT.jar ./
+COPY --from=appServer /usr/src/order-service/target/Order-Service-0.0.1-SNAPSHOT.jar ./
 
 EXPOSE 8086
 
-CMD ["java", "-jar","order-service-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar","Order-Service-0.0.1-SNAPSHOT.jar"]

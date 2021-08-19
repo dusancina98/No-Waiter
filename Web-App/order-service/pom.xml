@@ -8,7 +8,7 @@
 		<version>2.5.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>no-waiter</groupId>
+	<groupId>No-Waiter</groupId>
 	<artifactId>Order-Service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Order-Service</name>
