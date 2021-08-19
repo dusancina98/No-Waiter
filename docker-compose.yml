@@ -1,188 +1,188 @@
 services:
-  administration-app:
-    build: 
-      context: ./Client-App/administration-app
-      dockerfile: Dockerfile
-    container_name: administration-app
-    image: administration-app
-    restart: on-failure
-    ports: 
-      - 3000:3000
-    networks:
-      - demo
+    administration-app:
+        build:
+            context: ./Client-App/administration-app
+            dockerfile: Dockerfile
+        container_name: administration-app
+        image: administration-app
+        restart: on-failure
+        ports:
+            - 3000:3000
+        networks:
+            - demo
 
-  self-ordering-kiosk-app:
-    build: 
-      context: ./Client-App/self-ordering-kiosk-app
-      dockerfile: Dockerfile
-    container_name: self-ordering-kiosk-app
-    image: self-ordering-kiosk-app
-    restart: on-failure
-    ports: 
-      - 3001:3000
-    networks:
-      - demo
+    self-ordering-kiosk-app:
+        build:
+            context: ./Client-App/self-ordering-kiosk-app
+            dockerfile: Dockerfile
+        container_name: self-ordering-kiosk-app
+        image: self-ordering-kiosk-app
+        restart: on-failure
+        ports:
+            - 3001:3000
+        networks:
+            - demo
 
-  eureka-server:
-    build: 
-      context: ./Web-App/Eureka-Server
-      dockerfile: Dockerfile
-    container_name: eureka-server
-    image: eureka-server
-    restart: on-failure
-    ports: 
-      - 8761:8761
-    networks:
-      - demo
+    eureka-server:
+        build:
+            context: ./Web-App/Eureka-Server
+            dockerfile: Dockerfile
+        container_name: eureka-server
+        image: eureka-server
+        restart: on-failure
+        ports:
+            - 8761:8761
+        networks:
+            - demo
 
-  auth-service:
-    build: 
-      context: ./Web-App/Auth-Service
-      dockerfile: Dockerfile
-    container_name: auth-service
-    image: auth-service
-    restart: on-failure
-    networks:
-      - demo
-    environment:
-      DATABASE_USERNAME: no-waiter
-      DATABASE_PASSWORD: no-waiter
-      DATABASE_DOMAIN: data-postgres
-      DATABASE_SCHEMA: users
-      EUREKA_DOMAIN: eureka-server
-    depends_on: 
-      - data-postgres
-      - gateway-service
+    auth-service:
+        build:
+            context: ./Web-App/Auth-Service
+            dockerfile: Dockerfile
+        container_name: auth-service
+        image: auth-service
+        restart: on-failure
+        networks:
+            - demo
+        environment:
+            DATABASE_USERNAME: no-waiter
+            DATABASE_PASSWORD: no-waiter
+            DATABASE_DOMAIN: data-postgres
+            DATABASE_SCHEMA: users
+            EUREKA_DOMAIN: eureka-server
+        depends_on:
+            - data-postgres
+            - gateway-service
 
-  user-service:
-    build: 
-      context: ./Web-App/User-Service
-      dockerfile: Dockerfile
-    container_name: user-service
-    image: user-service
-    restart: on-failure
-    networks:
-      - demo
-    environment:
-      DATABASE_USERNAME: no-waiter
-      DATABASE_PASSWORD: no-waiter
-      DATABASE_DOMAIN: data-postgres
-      DATABASE_SCHEMA: users
-      EUREKA_DOMAIN: eureka-server
-    depends_on: 
-      - data-postgres
-      - gateway-service
+    user-service:
+        build:
+            context: ./Web-App/User-Service
+            dockerfile: Dockerfile
+        container_name: user-service
+        image: user-service
+        restart: on-failure
+        networks:
+            - demo
+        environment:
+            DATABASE_USERNAME: no-waiter
+            DATABASE_PASSWORD: no-waiter
+            DATABASE_DOMAIN: data-postgres
+            DATABASE_SCHEMA: users
+            EUREKA_DOMAIN: eureka-server
+        depends_on:
+            - data-postgres
+            - gateway-service
 
-  product-service:
-    build: 
-      context: ./Web-App/Product-Service
-      dockerfile: Dockerfile
-    container_name: product-service
-    image: product-service
-    restart: on-failure
-    networks:
-      - demo
-    environment:
-      DATABASE_USERNAME: no-waiter
-      DATABASE_PASSWORD: no-waiter
-      DATABASE_DOMAIN: data-postgres
-      DATABASE_SCHEMA: products
-      EUREKA_DOMAIN: eureka-server
-    depends_on: 
-      - data-postgres
-      - gateway-service
-  
-  order-service:
-    build: 
-      context: ./Web-App/order-service
-      dockerfile: Dockerfile
-    container_name: order-service
-    image: order-service
-    restart: on-failure
-    networks:
-      - demo
-    environment:
-      DATABASE_USERNAME: no-waiter
-      DATABASE_PASSWORD: no-waiter
-      DATABASE_DOMAIN: data-postgres
-      DATABASE_SCHEMA: orders
-      EUREKA_DOMAIN: eureka-server
-    depends_on: 
-      - data-postgres
-      - gateway-service
+    product-service:
+        build:
+            context: ./Web-App/Product-Service
+            dockerfile: Dockerfile
+        container_name: product-service
+        image: product-service
+        restart: on-failure
+        networks:
+            - demo
+        environment:
+            DATABASE_USERNAME: no-waiter
+            DATABASE_PASSWORD: no-waiter
+            DATABASE_DOMAIN: data-postgres
+            DATABASE_SCHEMA: products
+            EUREKA_DOMAIN: eureka-server
+        depends_on:
+            - data-postgres
+            - gateway-service
 
-  object-service:
-    build: 
-      context: ./Web-App/Object-Service
-      dockerfile: Dockerfile
-    container_name: object-service
-    image: object-service
-    restart: on-failure
-    networks:
-      - demo
-    environment:
-      DATABASE_USERNAME: no-waiter
-      DATABASE_PASSWORD: no-waiter
-      DATABASE_DOMAIN: data-postgres
-      DATABASE_SCHEMA: objects
-      EUREKA_DOMAIN: eureka-server
-    depends_on: 
-      - data-postgres
-      - gateway-service
+    order-service:
+        build:
+            context: ./Web-App/Order-Service
+            dockerfile: Dockerfile
+        container_name: order-service
+        image: order-service
+        restart: on-failure
+        networks:
+            - demo
+        environment:
+            DATABASE_USERNAME: no-waiter
+            DATABASE_PASSWORD: no-waiter
+            DATABASE_DOMAIN: data-postgres
+            DATABASE_SCHEMA: orders
+            EUREKA_DOMAIN: eureka-server
+        depends_on:
+            - data-postgres
+            - gateway-service
 
-  feedback-service:
-    build: 
-      context: ./Web-App/Feedback-Service
-      dockerfile: Dockerfile
-    container_name: feedback-service
-    image: feedback-service
-    restart: on-failure
-    networks:
-      - demo
-    environment:
-      DATABASE_USERNAME: no-waiter
-      DATABASE_PASSWORD: no-waiter
-      DATABASE_DOMAIN: data-postgres
-      DATABASE_SCHEMA: feedbacks
-      EUREKA_DOMAIN: eureka-server
-    depends_on: 
-      - data-postgres
-      - gateway-service
+    object-service:
+        build:
+            context: ./Web-App/Object-Service
+            dockerfile: Dockerfile
+        container_name: object-service
+        image: object-service
+        restart: on-failure
+        networks:
+            - demo
+        environment:
+            DATABASE_USERNAME: no-waiter
+            DATABASE_PASSWORD: no-waiter
+            DATABASE_DOMAIN: data-postgres
+            DATABASE_SCHEMA: objects
+            EUREKA_DOMAIN: eureka-server
+        depends_on:
+            - data-postgres
+            - gateway-service
 
-  gateway-service:
-    build: 
-      context: ./Web-App/Gateway-Service
-      dockerfile: Dockerfile
-    container_name: gateway-service
-    image: gateway-service
-    restart: on-failure
-    ports: 
-      - 8090:8090
-    networks:
-      - demo
-    environment:
-      EUREKA_DOMAIN: eureka-server
-    depends_on: 
-      - eureka-server
-      
-  data-postgres:
-    image: postgres:13
-    restart: always
-    networks:
-     - demo
-    environment:
-      POSTGRES_PASSWORD: no-waiter
-      POSTGRES_USER: no-waiter
-      POSTGRES_MULTIPLE_DATABASES: users,products,objects,orders,feedbacks
-    volumes:
-     - postgres:/var/lib/postgresql/data
-     - ./create-multiple-postgresql-databases.sh:/docker-entrypoint-initdb.d/create-multiple-postgresql-databases.sh
+    feedback-service:
+        build:
+            context: ./Web-App/Feedback-Service
+            dockerfile: Dockerfile
+        container_name: feedback-service
+        image: feedback-service
+        restart: on-failure
+        networks:
+            - demo
+        environment:
+            DATABASE_USERNAME: no-waiter
+            DATABASE_PASSWORD: no-waiter
+            DATABASE_DOMAIN: data-postgres
+            DATABASE_SCHEMA: feedbacks
+            EUREKA_DOMAIN: eureka-server
+        depends_on:
+            - data-postgres
+            - gateway-service
+
+    gateway-service:
+        build:
+            context: ./Web-App/Gateway-Service
+            dockerfile: Dockerfile
+        container_name: gateway-service
+        image: gateway-service
+        restart: on-failure
+        ports:
+            - 8090:8090
+        networks:
+            - demo
+        environment:
+            EUREKA_DOMAIN: eureka-server
+        depends_on:
+            - eureka-server
+
+    data-postgres:
+        image: postgres:13
+        restart: always
+        networks:
+            - demo
+        environment:
+            POSTGRES_PASSWORD: no-waiter
+            POSTGRES_USER: no-waiter
+            POSTGRES_MULTIPLE_DATABASES: users,products,objects,orders,feedbacks
+        volumes:
+            - postgres:/var/lib/postgresql/data
+            - ./create-multiple-postgresql-databases.sh:/docker-entrypoint-initdb.d/create-multiple-postgresql-databases.sh
 
 volumes:
-  postgres:
-  # mysql-data:
+    postgres:
+    # mysql-data:
 
 networks:
-  demo:
-    name: demo
-    driver: bridge
+    demo:
+        name: demo
+        driver: bridge
