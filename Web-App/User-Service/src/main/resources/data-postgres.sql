@@ -18,18 +18,34 @@ insert into users (id, email, name,password,surname,active,deleted) values ('c6b
 insert into users (id, email, name,password,surname,active,deleted) values ('2478a4b8-0deb-4d14-bba7-a28cf2639633','atinaadmin@example.com','Petar','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Petrovic',true, false);
 
 -- restoran waiter
+--loft
 insert into users (id, email, name,password,surname,active,deleted) values ('22793162-52d3-11eb-ae93-0242ac130222','loftwaiter@example.com','Nikola','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Djuric',true, false);
+--petrus
+insert into users (id, email, name,password,surname,active,deleted) values ('fa276cbf-8d39-46b6-9cf7-adeaaf2ab8be','petruswaiter@example.com','Petar','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Maksimovic',true, false);
+--atina
+insert into users (id, email, name,password,surname,active,deleted) values ('977afa11-964c-4eb3-a05e-5ed7d41db419','atinawaiter@example.com','Djura','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Djurovic',true, false);
 
 -- deliveres
-insert into users (id, email, name,password,surname,active,deleted) values ('29363b4f-8fb9-4d3d-8785-d7235ecc8286','example2@example.com','Petar','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Petrovic',true, false);
-insert into users (id, email, name,password,surname,active,deleted) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0ba0','example3@example.com','Dusan','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Dusanic',true, false);
+insert into users (id, email, name,password,surname,active,deleted) values ('29363b4f-8fb9-4d3d-8785-d7235ecc8286','deliverer1@example.com','Petar','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Petrovic',true, false);
+insert into users (id, email, name,password,surname,active,deleted) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0ba0','deliverer2@example.com','Dusan','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Dusanic',true, false);
 
 -- customers
-insert into users (id, email, name,password,surname,active,deleted) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0cc1','example4@example.com','Dusan','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Dusanic',true, false);
+insert into users (id, email, name,password,surname,active,deleted) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0cc1','customer1@example.com','Dusan','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Dusanic',true, false);
+insert into users (id, email, name,password,surname,active,deleted) values ('57de48e1-3426-4937-8919-575efa425814','customer2@example.com','Petar','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Petricic',true, false);
+insert into users (id, email, name,password,surname,active,deleted) values ('145ec912-797d-42ea-b130-82c1d0f7987e','customer3@example.com','Milos','$2a$10$sqes3IpPL4mBgAAmimisyOWj5DlqPRndrJFNFw9zWiJjyNa5ozKS6','Milosevic',true, false);
 
+--sys admin
 insert into user_authority (user_id, authority_id) values ('22793162-52d3-11eb-ae93-0242ac130002', '7852aa5e-7040-4d99-8255-537a0b226c75');
-insert into user_authority (user_id, authority_id) values ('22793162-52d3-11eb-ae93-0242ac130222', 'f98f5538-4d52-4e3e-bae3-598e523a6222');
+
+--customers
 insert into user_authority (user_id, authority_id) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0cc1', 'f98f5538-4d52-4e3e-bae3-598e523a6111');
+insert into user_authority (user_id, authority_id) values ('57de48e1-3426-4937-8919-575efa425814', 'f98f5538-4d52-4e3e-bae3-598e523a6111');
+insert into user_authority (user_id, authority_id) values ('145ec912-797d-42ea-b130-82c1d0f7987e', 'f98f5538-4d52-4e3e-bae3-598e523a6111');
+
+--object waiters
+insert into user_authority (user_id, authority_id) values ('22793162-52d3-11eb-ae93-0242ac130222', 'f98f5538-4d52-4e3e-bae3-598e523a6222');
+insert into user_authority (user_id, authority_id) values ('fa276cbf-8d39-46b6-9cf7-adeaaf2ab8be', 'f98f5538-4d52-4e3e-bae3-598e523a6222');
+insert into user_authority (user_id, authority_id) values ('977afa11-964c-4eb3-a05e-5ed7d41db419', 'f98f5538-4d52-4e3e-bae3-598e523a6222');
 
 --object admins authority
 insert into user_authority (user_id, authority_id) values ('22793162-52d3-11eb-ae93-0242ac130111', '563e9925-cff6-42b7-99fa-6b1235f67655');
@@ -46,7 +62,10 @@ insert into object_admin (id, object_id, object_name, address, phone_number) val
 insert into object_admin (id, object_id, object_name, address, phone_number) values ('2478a4b8-0deb-4d14-bba7-a28cf2639633', '15bf954b-c7ab-484e-9dfb-3431b9502a81', 'Atina' , 'Bulevar cara lazara 17, Novi Sad' , '064345344');
 
 
-insert into waiter (id, object_id, address, phone_number) values ('22793162-52d3-11eb-ae93-0242ac130222', '11193162-52d3-11eb-ae93-0242ac130111', 'Novi Sad' , '123123123123');
+--object waiters
+insert into waiter (id, object_id, address, phone_number) values ('22793162-52d3-11eb-ae93-0242ac130222', '11193162-52d3-11eb-ae93-0242ac130111', 'Novi Sad' , '063445554');
+insert into waiter (id, object_id, address, phone_number) values ('fa276cbf-8d39-46b6-9cf7-adeaaf2ab8be', '65256cdc-d375-4856-9a51-2dbbec4613f5', 'Novi Sad' , '062354343');
+insert into waiter (id, object_id, address, phone_number) values ('977afa11-964c-4eb3-a05e-5ed7d41db419', '15bf954b-c7ab-484e-9dfb-3431b9502a81', 'Novi Sad' , '064334233');
 
 -- customers
 insert into customer (id, phone_number,penalties) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0cc1', '065324235', 0);
@@ -67,4 +86,4 @@ insert into worker (id,phone_number) values ('29363b4f-8fb9-4d3d-8785-d7235ecc82
 insert into deliverer (id,status) values ('29363b4f-8fb9-4d3d-8785-d7235ecc8286', 'ACTIVE');
 
 insert into worker (id,phone_number) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0ba0','0655532134');
-insert into deliverer (id,status) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0ba0', 'INACTIVE');
+insert into deliverer (id,status) values ('739ebff1-a0a6-4c1d-b93f-23c5225c0ba0', 'ACTIVE');
