@@ -84,7 +84,7 @@ function ObjectScreen({ route, navigation }) {
 						</Text>
 					</View>
 					<View style={productItemStyles.priceContainer}>
-						<Text style={productItemStyles.price}>{item.EntityDTO.Price}</Text>
+						<Text style={productItemStyles.price}>{Number(item.EntityDTO.Price).toFixed(2)} RSD</Text>
 					</View>
 				</View>
 				<Image source={{ uri: `${API_URL}${item.EntityDTO.Image.substring(1, item.EntityDTO.Image.length)}` }} style={productItemStyles.image} />
